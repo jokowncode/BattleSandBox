@@ -1,6 +1,7 @@
 ﻿
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "PhantomSpirit/FighterData", fileName = "FighterData")]
 public class FighterData : ScriptableObject{
     public float Health;
     public float PhysicsAttack;
