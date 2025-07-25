@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class Hero : Fighter{
     
-    [field: SerializeField] public HeroData Data{ get; private set; }
-    
     private List<PassiveEntry> PassiveEntries;
 
-    private void Awake(){
+    protected override void Awake(){
+        base.Awake();
         PassiveEntries = new List<PassiveEntry>();
     }
 
