@@ -17,15 +17,19 @@ public class GameStart : MonoBehaviour{
 
     private void Update(){
         if (Input.GetKeyDown(KeyCode.Keypad0)) {
-            Debug.Log($"Before Remove -> Cooldown: {CHero.Cooldown}");
+            // Debug.Log($"Before Remove -> Cooldown: {CHero.Cooldown}");
             CHero.RemovePassiveEntry(0);    
-            Debug.Log($"After Remove -> Cooldown: {CHero.Cooldown}");
+            // Debug.Log($"After Remove -> Cooldown: {CHero.Cooldown}");
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad1)) {
-            Debug.Log($"Before Remove -> Cooldown: {CHero.Cooldown}");
+            // Debug.Log($"Before Remove -> Cooldown: {CHero.Cooldown}");
             CHero.RemovePassiveEntry(1);
-            Debug.Log($"After Remove -> Cooldown: {CHero.Cooldown}");
+            // Debug.Log($"After Remove -> Cooldown: {CHero.Cooldown}");
+        }
+
+        if (Input.GetMouseButtonDown(0)){
+            CHero.CastSkill();
         }
     }
 }

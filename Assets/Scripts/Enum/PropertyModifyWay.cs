@@ -1,6 +1,6 @@
 ﻿
 public enum PropertyModifyWay{
-    VALUE,
-    PERCENTAGE
+    Value,
+    Percentage
 }
 

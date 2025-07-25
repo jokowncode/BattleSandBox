@@ -9,7 +9,7 @@ public class HeroPropertyPassiveEntry : PassiveEntry{
     [SerializeField] private float Value;
 
     private void OnValidate(){
-        if (ModifyWay == PropertyModifyWay.PERCENTAGE){
+        if (ModifyWay == PropertyModifyWay.Percentage){
             Value = Mathf.Clamp(Value, -100.0f, 100.0f);
         }
     }
@@ -19,10 +19,10 @@ public class HeroPropertyPassiveEntry : PassiveEntry{
         float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, hero);
         
         switch (ModifyWay){
-            case PropertyModifyWay.VALUE:
+            case PropertyModifyWay.Value:
                 currentValue += Value;
                 break;
-            case PropertyModifyWay.PERCENTAGE:
+            case PropertyModifyWay.Percentage:
                 float percentage = Value / 100.0f;
                 float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+propertyName, hero);
                 currentValue += initialValue * percentage;
@@ -36,10 +36,10 @@ public class HeroPropertyPassiveEntry : PassiveEntry{
         float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, hero);
 
         switch (ModifyWay){
-            case PropertyModifyWay.VALUE:
+            case PropertyModifyWay.Value:
                 currentValue -= Value;
                 break;
-            case PropertyModifyWay.PERCENTAGE:
+            case PropertyModifyWay.Percentage:
                 float percentage = Value / 100.0f;
                 float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+propertyName, hero);
                 currentValue -= initialValue * percentage;
