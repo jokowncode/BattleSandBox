@@ -15,5 +15,7 @@ public class SkillData : ScriptableObject{
     // Skill Value -> ValueProperty * ValueMultiple
     public FighterProperty ValueProperty;
     public float ValueMultiple;
+    
+    public SkillDelivery SkillDeliveryPrefab;
 }
 

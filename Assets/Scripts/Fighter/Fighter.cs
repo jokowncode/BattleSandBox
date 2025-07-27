@@ -1,28 +1,48 @@
 ﻿
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Fighter : StateMachineController {
 
     [SerializeField] protected FighterData InitialData;
+    [SerializeField] private Image BloodBarImage;
+    [field: SerializeField] public Transform Center { get; private set; }
 
     private FighterData CurrentData;
-    
+    public Fighter AttackTarget { get; private set; }
+    public SkillCaster FighterSkillCaster { get; private set; }
+
     protected virtual void Awake(){
+        this.FighterSkillCaster = GetComponentInChildren<SkillCaster>();
         // Clone Fighter Data to Update
         this.CurrentData = Instantiate(this.InitialData);
         // Turn To Patrol State
-        this.ChangeState(GetComponent<PatrolState>());
+        PatrolState patrol = GetComponent<PatrolState>();
+        if (patrol != null) {
+            this.ChangeState(patrol);
+            patrol.OnFindAttackTarget += OnFindAttackTarget;
+        }
     }
 
-    public void BeDamaged(SkillEffectData skillEffect) {
-        // TODO: Fighter BeDamaged
-        Debug.Log($"Fighter Be Damaged -> {skillEffect.Value}");
+    private void OnFindAttackTarget(Fighter target) {
+        this.AttackTarget = target;
     }
 
-    public void BeHealed(SkillEffectData skillEffect) {
-        // TODO: Fighter BeHealed
-        Debug.Log($"Fighter Be Healed -> {skillEffect.Value}");
+    public void BeDamaged(EffectData effectData) {
+        this.CurrentData.Health -= effectData.Value;
+        this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
+        // TODO: Play Enemy Be Attacked Anim
+        
+        if (this.CurrentData.Health <= 0.0f) {
+            // TODO: Fighter Dead
+            return;
+        }
+    }
+
+    public void BeHealed(EffectData effectData) {
+        this.CurrentData.Health = Mathf.Min(this.InitialData.Health, this.CurrentData.Health + effectData.Value);
+        this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
     }
 
     // Initial Property
@@ -54,6 +74,10 @@ public class Fighter : StateMachineController {
         get => InitialData.Speed;
         set => InitialData.Speed=value;
     }
+    public float InitialForce{ 
+        get => InitialData.Force;
+        set => InitialData.Force=value;
+    }
     
     // Runtime Property
     public float Health{ 
@@ -83,6 +107,14 @@ public class Fighter : StateMachineController {
     public float Speed{ 
         get => CurrentData.Speed;
         set => CurrentData.Speed=value;
+    }
+    public float Force{ 
+        get => CurrentData.Force;
+        set => CurrentData.Force=value;
+    }
+    public TargetType AttackTargetType {
+        get => CurrentData.AttackTargetType;
+        set => CurrentData.AttackTargetType = value;
     }
 }
 

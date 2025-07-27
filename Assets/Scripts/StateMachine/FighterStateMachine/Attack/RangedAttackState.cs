@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RangedAttackState : AttackState {
 
-    // [SerializeField] private Bullet BulletPrefab;
+    [SerializeField] private Bullet BulletPrefab;
     
     protected override void Attack(){
         // TODO: Play Attack Anim
@@ -12,18 +12,22 @@ public class RangedAttackState : AttackState {
         
         // TODO: Cast Bullet
         // TODO: Has Up / Down ?
-        /*Vector3 attackPos = Controller.PetCenter.position;
-        float horizontalForward = Mathf.Sign(Controller.PetMove.RendererTransform.localScale.x);
-        attackPos += new Vector3(-horizontalForward, 0, 0);
+        Vector3 attackPos = Controller.Center.position;
+        
+        // TODO: According To Current Dir -> Change AttackPos
+        // float horizontalForward = Mathf.Sign(Controller.PetMove.RendererTransform.localScale.x);
+        // attackPos += new Vector3(-horizontalForward, 0, 0);
+        attackPos += new Vector3(1.0f, 0.0f, 0.0f);
 
-        Vector3 targetPos = AttackTarget.Aim.position;
+        Vector3 targetPos = AttackTarget.Center.position;
         Vector3 attackVec = (targetPos - attackPos).normalized;
         Bullet bullet = Instantiate(BulletPrefab, attackPos, Quaternion.LookRotation(attackVec));
-        bullet.SetDamageMessage(new DamageMessage{
-            Damage = Controller.Data.Damage,
-            Force = Controller.Data.Force,
+        bullet.SetDamageMessage(new EffectData{
+            Value = Controller.PhysicsAttack + Controller.MagicAttack,
+            Force = Controller.Force,
+            TargetType = Controller.AttackTargetType
         });
         
-        bullet.SetTargetPos(targetPos);*/
+        bullet.SetTargetPos(targetPos);
     }
 }
