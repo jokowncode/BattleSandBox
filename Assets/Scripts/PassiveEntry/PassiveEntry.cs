@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+// TODO: Passive Entry Condition
 public abstract class PassiveEntry : MonoBehaviour{
 
     [SerializeField] private PassiveEntryData Data;

@@ -9,5 +9,6 @@ public class FighterData : ScriptableObject{
     public float Cooldown;
     public float AttackRadius;
     public float Critical;
+    public float Speed = 15;
 }
 
