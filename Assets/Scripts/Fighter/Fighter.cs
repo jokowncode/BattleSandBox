@@ -12,9 +12,13 @@ public class Fighter : StateMachineController {
     private FighterData CurrentData;
     public Fighter AttackTarget { get; private set; }
     public SkillCaster FighterSkillCaster { get; private set; }
+    public Animator FighterAnimator{ get; private set; }
+    public FighterMove Move{ get; private set; }
 
     protected virtual void Awake(){
         this.FighterSkillCaster = GetComponentInChildren<SkillCaster>();
+        this.FighterAnimator = GetComponentInChildren<Animator>();
+        this.Move = GetComponent<FighterMove>();
         // Clone Fighter Data to Update
         this.CurrentData = Instantiate(this.InitialData);
         // Turn To Patrol State

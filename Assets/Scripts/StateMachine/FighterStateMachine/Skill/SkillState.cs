@@ -6,6 +6,8 @@ public class SkillState : FighterState {
     private Transform AttackTarget;
     private AttackState FighterAttack;
 
+    private bool IsChange = false;
+
     protected override void Awake(){
         base.Awake();
         FighterAttack = GetComponent<AttackState>();
@@ -18,7 +20,16 @@ public class SkillState : FighterState {
     }
 
     public override void Transition(){
-        Controller.ChangeState(FighterAttack);
+        // TODO: After Play Skill After-Anim -> change to AttackState
+        // Controller.ChangeState(FighterAttack);
+        if (IsChange) return;
+        IsChange = true;
+        Invoke(nameof(ChangeState), 2.0f);
+    }
+
+    private void ChangeState(){
+        IsChange = false;
+        Controller.ChangeState(this.FighterAttack);
     }
 }
 

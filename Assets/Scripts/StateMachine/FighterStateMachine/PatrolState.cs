@@ -16,8 +16,8 @@ public class PatrolState : FighterState {
     }
 
     public override void Execute() {
-        // TODO: NavMeshAgent
-        this.transform.position += Controller.Speed * Time.deltaTime * Vector3.right;
+        // TODO: Direction
+        Controller.Move.MoveByDirection(Vector3.right);
     }
     
     public override void Transition() {

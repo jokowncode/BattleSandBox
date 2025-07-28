@@ -7,15 +7,14 @@ public class StateMachineController : MonoBehaviour {
     private State CurrentState;
 
     public void ChangeState(State newState) {
-        if(CurrentState != null) CurrentState.Destruct();
+        if(CurrentState) CurrentState.Destruct();
         CurrentState = newState;
-        if(CurrentState != null) CurrentState.Construct();
+        if(CurrentState) CurrentState.Construct();
     }
 
-    protected virtual void Update() {
-        if (CurrentState) {
-            CurrentState.Execute();
-            CurrentState.Transition();
-        }
+    private void Update(){
+        if (!CurrentState) return;
+        CurrentState.Execute();
+        CurrentState.Transition();
     }
 }

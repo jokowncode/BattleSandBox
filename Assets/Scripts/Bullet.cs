@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour {
@@ -13,7 +14,7 @@ public class Bullet : MonoBehaviour {
 
     private EffectData BulletDamageMsg;
     private Vector3 TargetPos;
-    
+    private Vector3 MoveVector;
 
     public void SetDamageMessage(EffectData dm) {
         this.BulletDamageMsg = dm;
@@ -22,7 +23,11 @@ public class Bullet : MonoBehaviour {
     public void SetTargetPos(Vector3 pos) {
         this.TargetPos = pos;
     }
-    
+
+    public void SetMoveVector(Vector3 moveVec){
+        this.MoveVector = moveVec;
+    }
+
     private void Start() {
         rb = GetComponent<Rigidbody>();
         if (flash != null) {
@@ -38,22 +43,29 @@ public class Bullet : MonoBehaviour {
             }
         }
         Destroy(this.gameObject, 2.0f);
-        StartCoroutine(BulletMove());
+        // StartCoroutine(BulletMove());
     }
 
-    private IEnumerator BulletMove() {
+    private void FixedUpdate(){
+        if (speed != 0){
+            rb.velocity = this.MoveVector * speed;
+        }
+    }
+    
+    /*private IEnumerator BulletMove() {
         float distance = Vector3.Distance(transform.position,TargetPos);
         float dur = distance / speed;
         
         Vector3 startPos = transform.position;
         for (float t = 0.0f; t <= dur; t += Time.deltaTime) {
             Vector3 newPos = Vector3.Lerp(startPos, TargetPos, t);
-            rb.MovePosition(newPos);                
+            rb.MovePosition(newPos);               
             yield return null;
         }
-        rb.MovePosition(TargetPos);
+        // rb.MovePosition(TargetPos);
+        rb.position = TargetPos;
         // TODO: If Enemy Move -> Destroy ?
-    }
+    }*/
 
     private void OnCollisionEnter(Collision collision) {
 

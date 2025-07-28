@@ -14,11 +14,9 @@ public class RangedAttackState : AttackState {
         // TODO: Has Up / Down ?
         Vector3 attackPos = Controller.Center.position;
         
-        // TODO: According To Current Dir -> Change AttackPos
-        // float horizontalForward = Mathf.Sign(Controller.PetMove.RendererTransform.localScale.x);
-        // attackPos += new Vector3(-horizontalForward, 0, 0);
-        attackPos += new Vector3(1.0f, 0.0f, 0.0f);
-
+        float horizontalForward = Mathf.Sign(Controller.Move.RendererTransform.localScale.x);
+        attackPos += new Vector3(-horizontalForward, 0, 0);
+        
         Vector3 targetPos = AttackTarget.Center.position;
         Vector3 attackVec = (targetPos - attackPos).normalized;
         Bullet bullet = Instantiate(BulletPrefab, attackPos, Quaternion.LookRotation(attackVec));
@@ -27,7 +25,7 @@ public class RangedAttackState : AttackState {
             Force = Controller.Force,
             TargetType = Controller.AttackTargetType
         });
-        
-        bullet.SetTargetPos(targetPos);
+        bullet.SetMoveVector(attackVec);
+        // bullet.SetTargetPos(targetPos);
     }
 }
