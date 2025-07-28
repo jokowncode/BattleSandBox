@@ -11,6 +11,7 @@ public class TestPassiveEntry : MonoBehaviour{
         foreach (PassiveEntry entry in Entries){
             CHero.AddPassiveEntry(entry);
         }
+
     }
 
     private void Update(){
