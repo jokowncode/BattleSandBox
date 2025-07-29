@@ -14,7 +14,7 @@ public class StateMachineController : MonoBehaviour {
 
     private void Update(){
         if (!CurrentState) return;
-        CurrentState.Execute();
         CurrentState.Transition();
+        if(CurrentState) CurrentState.Execute();
     }
 }

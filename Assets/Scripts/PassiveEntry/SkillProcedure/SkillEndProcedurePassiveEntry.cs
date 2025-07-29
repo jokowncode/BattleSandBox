@@ -1,11 +1,11 @@
 ﻿
 using UnityEngine;
 
-public class SkillEndProcedurePassiveEntry : PassiveEntry {
+public class SkillEndProcedurePassiveEntry : PassiveEntry{
 
     [SerializeField] private SkillEnd End;
-    
-    public override void Construct(Hero hero) {
+
+    public override void Construct(Hero hero){
         hero.FighterSkillCaster.AddSkillEnd(this.End);
     }
 

@@ -11,7 +11,7 @@ public class AdditionalBombSkillEnd : SkillEnd {
         BombValuePercentage = Mathf.Max(BombValuePercentage, 0.0f);
     }
 
-    public override void AdditionalProcedure(Fighter influenceFighter, EffectData effectData) {
+    public override void AdditionalProcedure(Fighter influenceFighter, SkillEffect _, EffectData effectData) {
         Instantiate(BombParticlePrefab, influenceFighter.transform.position, Quaternion.identity);
         effectData.Force = 0.0f;
         effectData.Value *= BombValuePercentage;

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,12 @@ public abstract class SkillEffect : MonoBehaviour {
 
     [SerializeField] protected ParticleSystem EffectParticle;
 
-    private List<SkillEnd> SkillEndPlugins;
+    public List<SkillEnd> SkillEndPlugins{ get; private set; }
+    public SkillDelivery Delivery{ get; private set; }
+
+    private void Awake(){
+        Delivery = GetComponent<SkillDelivery>();
+    }
 
     public void SetEndPlugins(List<SkillEnd> endPlugins) {
         this.SkillEndPlugins = endPlugins;
@@ -16,7 +22,7 @@ public abstract class SkillEffect : MonoBehaviour {
         if(EffectParticle) EffectParticle.Play();
         Apply(influenceFighter, effectData);
         foreach (SkillEnd end in SkillEndPlugins) {
-            end.AdditionalProcedure(influenceFighter, effectData);
+            end.AdditionalProcedure(influenceFighter, this, effectData);
         }
     }
 

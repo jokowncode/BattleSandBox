@@ -31,11 +31,11 @@ public class BulletSkillDelivery : SkillDelivery {
                 Destroy(flashInstance, flashPsParts.main.duration);
             }
         }
-        Destroy(gameObject,5);
+        Destroy(gameObject,2.0f);
     }
 
     private void FixedUpdate() {
-        if (this.Speed != 0) {
+        if (this.Speed != 0){
             SkillRigidbody.velocity = this.Speed * this.MoveVec;
             ApplyMiddlePlugin();
         }
@@ -43,9 +43,11 @@ public class BulletSkillDelivery : SkillDelivery {
 
     protected override void CollisionTarget(Collision collision) {
         //Lock all axes movement and rotation
-        SkillRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        float currentSpeed = Speed;
+        RigidbodyConstraints currentConstraints = SkillRigidbody.constraints;
         Speed = 0;
-
+        SkillRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        
         ContactPoint contact = collision.contacts[0];
         Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
         Vector3 pos = contact.point + contact.normal * HitOffset;
@@ -70,10 +72,11 @@ public class BulletSkillDelivery : SkillDelivery {
             }
         }
 
+        Speed = currentSpeed;
+        SkillRigidbody.constraints = currentConstraints;
         if (collision.gameObject.TryGetComponent(out Fighter fighter)) {
             this.Effect.ApplyEffect(fighter, this.EffectData);
         }
-
         Destroy(gameObject);
     }
 }

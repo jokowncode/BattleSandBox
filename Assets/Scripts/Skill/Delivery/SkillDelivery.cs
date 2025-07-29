@@ -6,13 +6,14 @@ using UnityEngine;
 public abstract class SkillDelivery : MonoBehaviour {
 
     protected EffectData EffectData;
-    protected Transform Target;
+    // private Vector3 TargetPosition;
     protected SkillEffect Effect;
-    
-    private List<SkillMiddle> SkillMiddlePlugins;
 
-    protected Vector3 MoveVec => (Target.position - this.transform.position).normalized;
+    private GameObject Caster;
     
+    public List<SkillMiddle> SkillMiddlePlugins{ get; private set; }
+    protected Vector3 MoveVec;
+
     protected virtual void Awake() {
         Effect = GetComponent<SkillEffect>();
     }
@@ -23,10 +24,14 @@ public abstract class SkillDelivery : MonoBehaviour {
         }
     }
 
-    public void StartDelivery(Transform target, EffectData effectData, 
-        List<SkillMiddle> middlePlugins, List<SkillEnd> endPlugins) {
-        this.Target = target;
+    public void StartDelivery(GameObject caster, Vector3 targetPos, EffectData effectData) {
+        // this.TargetPosition = target;
+        this.Caster = caster;
+        this.MoveVec = (targetPos - this.transform.position).normalized;
         this.EffectData = effectData;
+    }
+
+    public void SetPlugins(List<SkillMiddle> middlePlugins, List<SkillEnd> endPlugins){
         this.SkillMiddlePlugins = middlePlugins;
         this.Effect.SetEndPlugins(endPlugins);
     }
@@ -37,7 +42,7 @@ public abstract class SkillDelivery : MonoBehaviour {
     protected abstract void CollisionTarget(Collision collision);
 
     private void OnCollisionEnter(Collision collision) {
-        if (CollisionCondition(collision)) {
+        if (collision.gameObject != Caster && CollisionCondition(collision)) {
             CollisionTarget(collision);
         }   
     }
