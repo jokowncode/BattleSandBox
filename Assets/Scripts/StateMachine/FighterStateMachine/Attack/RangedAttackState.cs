@@ -6,7 +6,8 @@ public class RangedAttackState : AttackState {
 
     [SerializeField] private Bullet BulletPrefab;
     
-    protected override void Attack(){
+    protected override void OnAttack(){
+        if (IsNeedTarget && !this.AttackTarget) return;
         if(AttackParticle) AttackParticle.Play();
         
         Vector3 attackPos = Controller.AttackCaster.position;

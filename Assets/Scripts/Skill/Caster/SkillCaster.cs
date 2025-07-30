@@ -27,7 +27,7 @@ public abstract class SkillCaster : MonoBehaviour{
         SkillEndPlugins = new List<SkillEnd>();
     }
 
-    private void Start(){
+    public void BattleStart(){
         LastCastTime = -1.0f;
         if (OwnedFighter.Type != FighterType.Melee){
             LastCastTime = Time.time;

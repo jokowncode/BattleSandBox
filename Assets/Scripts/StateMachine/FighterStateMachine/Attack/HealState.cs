@@ -10,7 +10,7 @@ public class HealState : AttackState{
         IsNeedTarget = false;
     }
 
-    protected override void Attack(){
+    protected override void OnAttack(){
         Fighter target = BattleManager.Instance.FindMinPercentagePropertyHero(FighterProperty.Health);
         if (!target) return;
         target.BeHealed(new EffectData{
@@ -20,7 +20,13 @@ public class HealState : AttackState{
         });
     }
 
-    public override void Transition(){
+    protected override void OnAttackEnd(){
+        if (BattleManager.Instance.IsGameOver) {
+            Controller.FighterAnimator.SetTrigger(AnimationParams.Idle);
+            Controller.ChangeState(null);
+            return;
+        }
+        
         if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill){
             Controller.ChangeState(FighterSkill);
         }

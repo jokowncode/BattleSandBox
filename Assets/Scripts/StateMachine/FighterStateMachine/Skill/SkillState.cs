@@ -1,8 +1,9 @@
 ﻿
+using System;
 using UnityEngine;
 
 public class SkillState : FighterState {
-
+    
     private Transform AttackTarget;
     private AttackState FighterAttack;
 
@@ -10,16 +11,24 @@ public class SkillState : FighterState {
         base.Awake();
         FighterAttack = GetComponent<AttackState>();
     }
-    
-    public override void Construct() {
-        if (!Controller.FighterSkillCaster.CanCastSkill) return;
-        Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
+
+    private void Start() {
+        Controller.AnimationEvent.OnSkill += OnSkill;
+        Controller.AnimationEvent.OnSkillEnd += OnSkillEnd;
+    }
+
+    private void OnSkillEnd() {
+        Controller.ChangeState(FighterAttack);
+    }
+
+    private void OnSkill() {
         this.AttackTarget = Controller.AttackTarget ? Controller.AttackTarget.Center.transform : null;
         Controller.FighterSkillCaster.CastSkill(this.AttackTarget);
     }
 
-    public override void Transition(){
-        Controller.ChangeState(FighterAttack);
+    public override void Construct() {
+        if (!Controller.FighterSkillCaster.CanCastSkill) return;
+        Controller.FighterAnimator.SetTrigger(AnimationParams.Skill);
     }
 }
 

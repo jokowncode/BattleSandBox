@@ -11,12 +11,14 @@ public class BattleManager : StateMachineController {
     [SerializeField] private EnemyDepartmentArea EnemyArea;
 
     // TODO: Get From Department
-    [field: SerializeField] public List<Hero> HeroesInBattle{ get; private set; }
-    public List<Enemy> EnemiesInBattle{ get; private set; }
+    [field: SerializeField] public List<Hero> HeroesInBattle { get; private set; }
+    [field: SerializeField] public List<Enemy> EnemiesInBattle { get; private set; }
 
     // TODO: eg:Support Passive Entry Register Action to Change Hero Property
     public Action OnHeroEnterTheField;
     public Action OnHeroExitTheField;
+    
+    public bool IsGameOver => EnemiesInBattle.Count <= 0 || HeroesInBattle.Count <= 0;
     
     private void Awake() {
         if (Instance != null) {
@@ -31,6 +33,14 @@ public class BattleManager : StateMachineController {
         
         // Turn To Prepare State
         ChangeState(GetComponent<PrepareState>());
+    }
+
+    public void RemoveHero(Hero hero) {
+        this.HeroesInBattle.Remove(hero);
+    }
+
+    public void RemoveEnemy(Enemy enemy) {
+        this.EnemiesInBattle.Remove(enemy);
     }
 
     public Fighter FindMinPercentagePropertyHero(FighterProperty property){

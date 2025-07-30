@@ -15,27 +15,33 @@ public class Fighter : StateMachineController {
     public SkillCaster FighterSkillCaster { get; private set; }
     public Animator FighterAnimator{ get; private set; }
     public FighterMove Move{ get; private set; }
+    public FighterAnimationEvent AnimationEvent { get; private set; }
+
+    private SkillState FighterSkill;
+    private PatrolState FighterPatrol;
 
     protected virtual void Awake(){
         this.FighterSkillCaster = GetComponentInChildren<SkillCaster>();
         this.FighterAnimator = GetComponentInChildren<Animator>();
+        this.AnimationEvent = GetComponentInChildren<FighterAnimationEvent>();
         this.Move = GetComponent<FighterMove>();
+        this.FighterPatrol = GetComponent<PatrolState>();
+        this.FighterSkill = GetComponent<SkillState>();
         // Clone Fighter Data to Update
         this.CurrentData = Instantiate(this.InitialData);
     }
 
-    private void Start(){
+    public void BattleStart() {
         // Turn To Patrol State / Skill State
-        State state;
-        if (FighterSkillCaster && FighterSkillCaster.CanCastSkill){
-            state = GetComponent<SkillState>();
-        } else{
-            state = GetComponent<PatrolState>();
-            if(state != null) ((PatrolState)state).OnFindAttackTarget += OnFindAttackTarget;
+        if (FighterSkillCaster) {
+            FighterSkillCaster.BattleStart();
         }
 
-        if (state != null) {
-            this.ChangeState(state);
+        if (FighterSkillCaster && FighterSkillCaster.CanCastSkill){
+            this.ChangeState(FighterSkill);
+        } else{
+            this.ChangeState(FighterPatrol);
+            if(FighterPatrol) FighterPatrol.OnFindAttackTarget += OnFindAttackTarget;
         }
     }
 
@@ -50,6 +56,12 @@ public class Fighter : StateMachineController {
         
         if (this.CurrentData.Health <= 0.0f) {
             // TODO: Fighter Dead
+            if (this is Hero hero) {
+                BattleManager.Instance.RemoveHero(hero);
+            }else if (this is Enemy enemy) {
+                BattleManager.Instance.RemoveEnemy(enemy);
+            }
+            Destroy(this.gameObject);
             return;
         }
     }

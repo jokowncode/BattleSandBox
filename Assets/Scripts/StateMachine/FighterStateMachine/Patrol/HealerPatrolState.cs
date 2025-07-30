@@ -7,7 +7,6 @@ public class HealerPatrolState : PatrolState {
         if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill){
             Controller.ChangeState(FighterSkill);
         } else {
-            // TODO : IF Need Heal -> Change
             Controller.ChangeState(FighterAttack);
         }
     }

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using UnityEngine;
 
 public abstract class AttackState : FighterState{
@@ -16,13 +17,28 @@ public abstract class AttackState : FighterState{
         base.Awake();
         FighterSkill = GetComponent<SkillState>();
         FighterPatrol = GetComponent<PatrolState>();
+    }
 
-        GetComponentInChildren<FighterAnimationEvent>().OnAttack += Attack;
+    private void Start() {
+        Controller.AnimationEvent.OnAttack += OnAttack;
+        Controller.AnimationEvent.OnAttackEnd += OnAttackEnd;
+    }
+
+    protected virtual void OnAttackEnd() {
+        if (IsNeedTarget && !this.AttackTarget) {
+            Controller.ChangeState(FighterPatrol);
+            return;
+        }
+
+        if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill) {
+            Controller.ChangeState(FighterSkill);
+        }
     }
 
     public override void Construct(){
         this.AttackTarget = Controller.AttackTarget;
         Controller.FighterAnimator.SetTrigger(AnimationParams.Attack);
+        Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
     }
 
     public override void Destruct() {
@@ -40,16 +56,6 @@ public abstract class AttackState : FighterState{
         }
     }
     
-    protected abstract void Attack();
-
-    public override void Transition(){
-        if (IsNeedTarget && !this.AttackTarget) {
-            Controller.ChangeState(FighterPatrol);
-            return;
-        }
-
-        if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill) {
-           // Controller.ChangeState(FighterSkill);
-        }
-    }
+    protected abstract void OnAttack();
+    
 }

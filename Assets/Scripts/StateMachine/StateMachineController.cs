@@ -2,6 +2,8 @@
 using System;
 using UnityEngine;
 
+// TODO: Melee Chase State
+
 public class StateMachineController : MonoBehaviour {
 
     private State CurrentState;
