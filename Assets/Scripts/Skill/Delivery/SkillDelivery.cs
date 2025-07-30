@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class SkillDelivery : MonoBehaviour {
 
     protected EffectData EffectData;
-    // private Vector3 TargetPosition;
+    protected Vector3 TargetPosition;
     protected SkillEffect Effect;
 
     private GameObject Caster;
@@ -25,7 +25,7 @@ public abstract class SkillDelivery : MonoBehaviour {
     }
 
     public void StartDelivery(GameObject caster, Vector3 targetPos, EffectData effectData) {
-        // this.TargetPosition = target;
+        this.TargetPosition = targetPos;
         this.Caster = caster;
         this.MoveVec = (targetPos - this.transform.position).normalized;
         this.EffectData = effectData;
@@ -36,14 +36,15 @@ public abstract class SkillDelivery : MonoBehaviour {
         this.Effect.SetEndPlugins(endPlugins);
     }
 
-    protected virtual bool CollisionCondition(Collision collision) {
-        return collision.gameObject.layer == LayerMask.NameToLayer(this.EffectData.TargetType.ToString());
+    protected virtual bool TriggerCondition(Collider other) {
+        return other.gameObject.layer == LayerMask.NameToLayer(this.EffectData.TargetType.ToString())
+            || other.gameObject.layer == LayerMask.NameToLayer("Border");
     }
-    protected abstract void CollisionTarget(Collision collision);
+    protected abstract void TriggerTarget(Collider other);
 
-    private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject != Caster && CollisionCondition(collision)) {
-            CollisionTarget(collision);
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject != Caster && TriggerCondition(other)) {
+            TriggerTarget(other);
         }   
     }
 }

@@ -8,6 +8,7 @@ public class Fighter : StateMachineController {
     [SerializeField] protected FighterData InitialData;
     [SerializeField] private Image BloodBarImage;
     [field: SerializeField] public Transform Center { get; private set; }
+    [field: SerializeField] public Transform AttackCaster { get; private set; }
 
     private FighterData CurrentData;
     public Fighter AttackTarget { get; private set; }
@@ -21,11 +22,20 @@ public class Fighter : StateMachineController {
         this.Move = GetComponent<FighterMove>();
         // Clone Fighter Data to Update
         this.CurrentData = Instantiate(this.InitialData);
-        // Turn To Patrol State
-        PatrolState patrol = GetComponent<PatrolState>();
-        if (patrol != null) {
-            this.ChangeState(patrol);
-            patrol.OnFindAttackTarget += OnFindAttackTarget;
+    }
+
+    private void Start(){
+        // Turn To Patrol State / Skill State
+        State state;
+        if (FighterSkillCaster && FighterSkillCaster.CanCastSkill){
+            state = GetComponent<SkillState>();
+        } else{
+            state = GetComponent<PatrolState>();
+            if(state != null) ((PatrolState)state).OnFindAttackTarget += OnFindAttackTarget;
+        }
+
+        if (state != null) {
+            this.ChangeState(state);
         }
     }
 
@@ -36,7 +46,7 @@ public class Fighter : StateMachineController {
     public void BeDamaged(EffectData effectData) {
         this.CurrentData.Health -= effectData.Value;
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
-        // TODO: Play Enemy Be Attacked Anim
+        // TODO: Play Fighter Be Attacked Anim
         
         if (this.CurrentData.Health <= 0.0f) {
             // TODO: Fighter Dead
@@ -45,6 +55,7 @@ public class Fighter : StateMachineController {
     }
 
     public void BeHealed(EffectData effectData) {
+        // TODO : Play Fighter Be Healed Anim
         this.CurrentData.Health = Mathf.Min(this.InitialData.Health, this.CurrentData.Health + effectData.Value);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
     }
@@ -119,6 +130,10 @@ public class Fighter : StateMachineController {
     public TargetType AttackTargetType {
         get => CurrentData.AttackTargetType;
         set => CurrentData.AttackTargetType = value;
+    }
+    public FighterType Type {
+        get => CurrentData.Type;
+        set => CurrentData.Type = value;
     }
 }
 

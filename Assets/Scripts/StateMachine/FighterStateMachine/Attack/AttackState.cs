@@ -2,23 +2,27 @@
 using UnityEngine;
 
 public abstract class AttackState : FighterState{
+    
 
     [SerializeField] protected ParticleSystem AttackParticle;
     
     protected Fighter AttackTarget;
-    private SkillState FighterSkill;
-    private float LastAttackTime;
+    protected SkillState FighterSkill;
+    protected bool IsNeedTarget = true;
     
-
+    private PatrolState FighterPatrol;
+    
     protected override void Awake(){
         base.Awake();
         FighterSkill = GetComponent<SkillState>();
+        FighterPatrol = GetComponent<PatrolState>();
+
+        GetComponentInChildren<FighterAnimationEvent>().OnAttack += Attack;
     }
 
     public override void Construct(){
         this.AttackTarget = Controller.AttackTarget;
-        Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
-        LastAttackTime = 0.1f;
+        Controller.FighterAnimator.SetTrigger(AnimationParams.Attack);
     }
 
     public override void Destruct() {
@@ -28,23 +32,24 @@ public abstract class AttackState : FighterState{
     }
 
     public override void Execute(){
-        if (!this.AttackTarget) return;
+        if (IsNeedTarget && !this.AttackTarget) return;
 
-        Vector3 moveVec = AttackTarget.Center.position - transform.position;
-        Controller.Move.ChangeForward(moveVec.x);
-
-        float coolDownTime = Controller.Cooldown;
-        if (LastAttackTime > 0.0f && Time.time - LastAttackTime < coolDownTime) return;
-        // TODO: After Play Attack Anim -> Attack
-        Attack();
-        LastAttackTime = Time.time;
+        if (this.AttackTarget){
+            Vector3 moveVec = AttackTarget.Center.position - transform.position;
+            Controller.Move.ChangeForward(moveVec.x);
+        }
     }
     
     protected abstract void Attack();
 
     public override void Transition(){
+        if (IsNeedTarget && !this.AttackTarget) {
+            Controller.ChangeState(FighterPatrol);
+            return;
+        }
+
         if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill) {
-            Controller.ChangeState(FighterSkill);
+           // Controller.ChangeState(FighterSkill);
         }
     }
 }

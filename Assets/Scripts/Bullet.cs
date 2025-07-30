@@ -45,7 +45,6 @@ public class Bullet : MonoBehaviour {
             }
         }
         Destroy(this.gameObject, 2.0f);
-        // StartCoroutine(BulletMove());
     }
 
     private void FixedUpdate(){
@@ -53,24 +52,8 @@ public class Bullet : MonoBehaviour {
             rb.velocity = this.MoveVector * speed;
         }
     }
-    
-    /*private IEnumerator BulletMove() {
-        float distance = Vector3.Distance(transform.position,TargetPos);
-        float dur = distance / speed;
-        
-        Vector3 startPos = transform.position;
-        for (float t = 0.0f; t <= dur; t += Time.deltaTime) {
-            Vector3 newPos = Vector3.Lerp(startPos, TargetPos, t);
-            rb.MovePosition(newPos);               
-            yield return null;
-        }
-        // rb.MovePosition(TargetPos);
-        rb.position = TargetPos;
-        // TODO: If Enemy Move -> Destroy ?
-    }*/
 
     private void OnCollisionEnter(Collision collision) {
-
         if (collision.gameObject.layer != LayerMask.NameToLayer(BulletDamageMsg.TargetType.ToString())) return;
 
         rb.constraints = RigidbodyConstraints.FreezeAll;

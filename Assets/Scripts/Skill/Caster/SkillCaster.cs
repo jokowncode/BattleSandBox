@@ -13,15 +13,25 @@ public abstract class SkillCaster : MonoBehaviour{
     private List<SkillStart> SkillStartPlugins;
     protected List<SkillMiddle> SkillMiddlePlugins;
     protected List<SkillEnd> SkillEndPlugins;
-    
-    private float LastCastTime = -1.0f;
-    public bool CanCastSkill => LastCastTime < 0.0f || Time.time - LastCastTime > Data.Cooldown;
+
+    private int CurrentSkillCastCount;
+    private float LastCastTime;
+    public bool CanCastSkill => (Data.MaxCastCount <= 0 || CurrentSkillCastCount < Data.MaxCastCount)
+                                && (!Data.SkillNeedTarget || OwnedFighter.AttackTarget != null) 
+                                && (LastCastTime < 0.0f || Time.time - LastCastTime > Data.Cooldown);
 
     private void Awake(){
         OwnedFighter = GetComponentInParent<Fighter>();
         SkillStartPlugins = new List<SkillStart>();
         SkillMiddlePlugins = new List<SkillMiddle>();
         SkillEndPlugins = new List<SkillEnd>();
+    }
+
+    private void Start(){
+        LastCastTime = -1.0f;
+        if (OwnedFighter.Type != FighterType.Melee){
+            LastCastTime = Time.time;
+        }
     }
 
     public void AddSkillStart(SkillStart skillStart) {
@@ -60,6 +70,7 @@ public abstract class SkillCaster : MonoBehaviour{
         if (!CanCastSkill) return;
         // TODO: Play Skill Pre Anim
         if (SkillStartParticle) SkillStartParticle.Play();
+        CurrentSkillCastCount++;
         Cast(attackTarget);
         foreach (SkillStart start in SkillStartPlugins) {
             start.AdditionalProcedure();

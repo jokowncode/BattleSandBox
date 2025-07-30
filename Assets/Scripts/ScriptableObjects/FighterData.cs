@@ -12,5 +12,6 @@ public class FighterData : ScriptableObject{
     public float Critical;
     public float Speed = 15;
     public TargetType AttackTargetType;
+    public FighterType Type;
 }
 

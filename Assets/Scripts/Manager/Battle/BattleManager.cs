@@ -9,9 +9,10 @@ public class BattleManager : StateMachineController {
     // TODO: Get BattleData From World Scene
     [SerializeField] private BattleData Data;
     [SerializeField] private EnemyDepartmentArea EnemyArea;
-    
-    private List<Hero> HeroesInBattle;
-    private List<Enemy> EnemiesInBattle;
+
+    // TODO: Get From Department
+    [field: SerializeField] public List<Hero> HeroesInBattle{ get; private set; }
+    public List<Enemy> EnemiesInBattle{ get; private set; }
 
     // TODO: eg:Support Passive Entry Register Action to Change Hero Property
     public Action OnHeroEnterTheField;
@@ -23,12 +24,29 @@ public class BattleManager : StateMachineController {
             return;
         }
         Instance = this;
-        EnemiesInBattle = EnemyArea.InitializeEnemy(Data.EnemiesInBattle);
-        HeroesInBattle = new List<Hero>();
+        
+        // TODO: Initiate Enemy
+        // EnemiesInBattle = EnemyArea.InitializeEnemy(Data.EnemiesInBattle);
+        // HeroesInBattle = new List<Hero>();
         
         // Turn To Prepare State
         ChangeState(GetComponent<PrepareState>());
     }
-    
+
+    public Fighter FindMinPercentagePropertyHero(FighterProperty property){
+        Fighter result = null;
+        float minPercentage = 1.0f;
+        foreach (Hero hero in HeroesInBattle){
+            float currentValue = ReflectionTools.GetObjectProperty<float>(property.ToString(), hero);
+            float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+property, hero);
+            float percentage = currentValue / initialValue;
+            if (percentage < minPercentage){
+                minPercentage = percentage;
+                result = hero;
+            }
+        }
+        return result;
+    }
+
 }
 

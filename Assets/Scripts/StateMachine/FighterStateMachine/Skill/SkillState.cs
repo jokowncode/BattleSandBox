@@ -6,30 +6,20 @@ public class SkillState : FighterState {
     private Transform AttackTarget;
     private AttackState FighterAttack;
 
-    private bool IsChange = false;
-
     protected override void Awake(){
         base.Awake();
         FighterAttack = GetComponent<AttackState>();
     }
     
     public override void Construct() {
-        if (!Controller.AttackTarget) return;
-        this.AttackTarget = Controller.AttackTarget.Center.transform;
+        if (!Controller.FighterSkillCaster.CanCastSkill) return;
+        Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
+        this.AttackTarget = Controller.AttackTarget ? Controller.AttackTarget.Center.transform : null;
         Controller.FighterSkillCaster.CastSkill(this.AttackTarget);
     }
 
     public override void Transition(){
-        // TODO: After Play Skill After-Anim -> change to AttackState
-        // Controller.ChangeState(FighterAttack);
-        if (IsChange) return;
-        IsChange = true;
-        Invoke(nameof(ChangeState), 2.0f);
-    }
-
-    private void ChangeState(){
-        IsChange = false;
-        Controller.ChangeState(this.FighterAttack);
+        Controller.ChangeState(FighterAttack);
     }
 }
 

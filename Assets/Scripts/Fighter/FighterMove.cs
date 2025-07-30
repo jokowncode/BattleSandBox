@@ -15,15 +15,15 @@ public class FighterMove : MonoBehaviour{
     public void ChangeForward(float sign) {
         float scaleX = RendererTransform.localScale.x;
         if (sign > 0.0f) {
-            scaleX = -Mathf.Abs(scaleX);
-        } else if (sign < 0.0f) {
             scaleX = Mathf.Abs(scaleX);
+        } else if (sign < 0.0f) {
+            scaleX = -Mathf.Abs(scaleX);
         }
         RendererTransform.localScale = new Vector3(scaleX, 
             RendererTransform.localScale.y, RendererTransform.localScale.z);
     }
     
-    // TODO: Auto Find Way -> NavMeshAgent / FlowField
+    // TODO: Auto Find Way -> NavMeshAgent
     public void MoveByDirection(Vector3 velocityDir) {
         
         this.Owner.FighterAnimator.SetFloat(AnimationParams.Velocity, velocityDir.sqrMagnitude);
