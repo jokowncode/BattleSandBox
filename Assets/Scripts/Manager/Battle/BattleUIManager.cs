@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class BattleUIManager : MonoBehaviour {
 
-    [SerializeField] private HeroWarehouseUI WarehouseUI;
+    [SerializeField] private HeroWarehouseUI heroWarehouseUI;
+    [SerializeField] private SkillWarehouseUI skillWarehouseUI;
 
-    private void Awake() {
-        WarehouseUI.UpdateHeroWarehouse();
+    private void Start() {
+        heroWarehouseUI.UpdateHeroWarehouse();
+        //skillWarehouseUI.UpdateHeroWarehouse();
     }
 }
 

@@ -22,11 +22,33 @@ public class Fighter : StateMachineController {
         // Clone Fighter Data to Update
         this.CurrentData = Instantiate(this.InitialData);
         // Turn To Patrol State
+        // PatrolState patrol = GetComponent<PatrolState>();
+        // if (patrol != null) {
+        //     this.ChangeState(patrol);
+        //     patrol.OnFindAttackTarget += OnFindAttackTarget;
+        // }
+    }
+
+    public void BattleStart()
+    {
+        Debug.Log("BattleStart");
+        // Turn To Patrol State / Skill State
         PatrolState patrol = GetComponent<PatrolState>();
         if (patrol != null) {
             this.ChangeState(patrol);
             patrol.OnFindAttackTarget += OnFindAttackTarget;
         }
+        /*State state;
+        if (FighterSkillCaster && FighterSkillCaster.CanCastSkill){
+            state = GetComponent<SkillState>();
+        } else{
+            state = GetComponent<PatrolState>();
+            if(state != null) ((PatrolState)state).OnFindAttackTarget += OnFindAttackTarget;
+        }
+        Debug.Log(state);
+        if (state != null) {
+            this.ChangeState(state);
+        }*/
     }
 
     private void OnFindAttackTarget(Fighter target) {

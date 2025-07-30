@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattleManager : StateMachineController {
@@ -10,7 +11,8 @@ public class BattleManager : StateMachineController {
     [SerializeField] private BattleData Data;
     [SerializeField] private EnemyDepartmentArea EnemyArea;
     
-    private List<Hero> HeroesInBattle;
+    //private List<Hero> HeroesInBattle;
+    public List<GameObject> HeroesInBattle;
     private List<Enemy> EnemiesInBattle;
 
     // TODO: eg:Support Passive Entry Register Action to Change Hero Property
@@ -23,12 +25,27 @@ public class BattleManager : StateMachineController {
             return;
         }
         Instance = this;
-        EnemiesInBattle = EnemyArea.InitializeEnemy(Data.EnemiesInBattle);
-        HeroesInBattle = new List<Hero>();
-        
-        // Turn To Prepare State
-        ChangeState(GetComponent<PrepareState>());
+        HeroesInBattle = new List<GameObject>();
+        // EnemiesInBattle = EnemyArea.InitializeEnemy(Data.EnemiesInBattle);
+        // HeroesInBattle = new List<Hero>();
+        //
+        // // Turn To Prepare State
+        // ChangeState(GetComponent<PrepareState>());
     }
+
+    public void StartBattle()
+    {
+        foreach (GameObject hero in HeroesInBattle)
+        {
+            hero.GetComponent<Hero>().BattleStart();
+        }
+    }
+
+    public void AddHero(GameObject hero)
+    {
+        HeroesInBattle.Add(hero);
+    }
+    
     
 }
 

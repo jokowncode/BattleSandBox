@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class HeroWarehouseManager : MonoBehaviour {
 
-    private List<string> OwnedHeroes;
+    //private List<string> OwnedHeroes;
+    
+    public List<GameObject> OwnedHeroes;
     
     public static HeroWarehouseManager Instance;
 
@@ -23,6 +25,7 @@ public class HeroWarehouseManager : MonoBehaviour {
     public void AddHero(string heroRef) { }
     public void RemoveHero(string heroRef) { }
 
-    public List<string> GetOwnedHeroes() { return this.OwnedHeroes; }
+    //public List<string> GetOwnedHeroes() { return this.OwnedHeroes; }
+    public List<GameObject> GetOwnedHeroes() { return this.OwnedHeroes; }
 }
 
