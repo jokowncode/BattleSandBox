@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Hero : Fighter {
-
+    
     private List<PassiveEntry> PassiveEntries;
     
     protected override void Awake(){
@@ -21,5 +21,30 @@ public class Hero : Fighter {
         PassiveEntry entry = PassiveEntries[index];
         entry.Destruct(this);
         PassiveEntries.RemoveAt(index);
+    }
+
+    public void HeroPropertyChange(FighterProperty property, PropertyModifyWay modifyWay, float value, bool isUp){
+
+        float sign = isUp ? 1.0f : -1.0f;
+        if (property == FighterProperty.CooldownPercentage){
+            float currentMultiplier = FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
+            float percentage = value / 100.0f;
+            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, currentMultiplier + sign * percentage);
+            return;
+        }
+
+        string propertyName = property.ToString();
+        float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, this);
+        switch (modifyWay){
+            case PropertyModifyWay.Value:
+                currentValue += sign * value;
+                break;
+            case PropertyModifyWay.Percentage:
+                float percentage = value / 100.0f;
+                float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+propertyName, this);
+                currentValue += sign * initialValue * percentage;
+                break;
+        }
+        ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
     }
 }
