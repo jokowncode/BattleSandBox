@@ -19,6 +19,9 @@ public class Fighter : StateMachineController {
 
     private SkillState FighterSkill;
     private PatrolState FighterPatrol;
+    
+    public float HealMultiplier { get; protected set; } = 1.0f;
+    public float ShieldMultiplier{ get; protected set; } = 1.0f;
 
     protected virtual void Awake(){
         this.FighterSkillCaster = GetComponentInChildren<SkillCaster>();

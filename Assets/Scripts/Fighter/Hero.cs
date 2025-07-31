@@ -5,7 +5,7 @@ using UnityEngine;
 public class Hero : Fighter {
     
     private List<PassiveEntry> PassiveEntries;
-    
+
     protected override void Awake(){
         base.Awake();
         PassiveEntries = new List<PassiveEntry>();
@@ -26,6 +26,18 @@ public class Hero : Fighter {
     public void HeroPropertyChange(FighterProperty property, PropertyModifyWay modifyWay, float value, bool isUp){
 
         float sign = isUp ? 1.0f : -1.0f;
+        if (property == FighterProperty.HealMultiplier) {
+            float percentage = value / 100.0f;
+            this.HealMultiplier += sign * percentage;
+            return;
+        }
+        
+        if (property == FighterProperty.ShieldMultiplier) {
+            float percentage = value / 100.0f;
+            this.ShieldMultiplier += sign * percentage;
+            return;
+        }
+        
         if (property == FighterProperty.CooldownPercentage){
             float currentMultiplier = FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
             float percentage = value / 100.0f;

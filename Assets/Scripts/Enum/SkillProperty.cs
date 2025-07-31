@@ -1,5 +1,6 @@
 ﻿
 public enum SkillProperty{
-    Duration        
+    Duration,
+    Cooldown,
 }
 

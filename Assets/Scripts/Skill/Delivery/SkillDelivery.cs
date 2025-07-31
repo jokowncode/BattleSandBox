@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = System.Object;
 
 public abstract class SkillDelivery : MonoBehaviour {
 

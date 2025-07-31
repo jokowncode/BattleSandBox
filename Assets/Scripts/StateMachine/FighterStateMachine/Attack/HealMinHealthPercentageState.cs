@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-public class HealState : AttackState{
+public class HealMinHealthPercentageState : AttackState{
 
     [SerializeField] private float HealPercentage = 0.3f;
     
@@ -16,7 +16,7 @@ public class HealState : AttackState{
         target.BeHealed(new EffectData{
             TargetType = TargetType.Hero,
             Force = 0.0f,
-            Value = Controller.Health * HealPercentage
+            Value = Controller.Health * HealPercentage * Controller.HealMultiplier
         });
     }
 

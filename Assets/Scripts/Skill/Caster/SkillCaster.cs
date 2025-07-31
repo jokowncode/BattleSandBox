@@ -8,7 +8,7 @@ public abstract class SkillCaster : MonoBehaviour{
     [SerializeField] private SkillData InitialData;
     [SerializeField] private ParticleSystem SkillStartParticle;
 
-    private Fighter OwnedFighter;
+    protected Fighter OwnedFighter;
 
     private List<SkillStart> SkillStartPlugins;
     protected List<SkillMiddle> SkillMiddlePlugins;
@@ -17,7 +17,7 @@ public abstract class SkillCaster : MonoBehaviour{
     private int CurrentSkillCastCount;
     private float LastCastTime;
 
-    public SkillData Data{ get; private set; }
+    protected SkillData Data{ get; private set; }
 
     public bool CanCastSkill => (Data.MaxCastCount <= 0 || CurrentSkillCastCount < Data.MaxCastCount)
                                 && (!Data.SkillNeedTarget || OwnedFighter.AttackTarget != null)
@@ -33,7 +33,7 @@ public abstract class SkillCaster : MonoBehaviour{
 
     public void BattleStart(){
         LastCastTime = -1.0f;
-        if (OwnedFighter.Type != FighterType.Melee){
+        if (OwnedFighter.Type != FighterType.Warrior){
             LastCastTime = Time.time;
         }
     }
@@ -76,15 +76,12 @@ public abstract class SkillCaster : MonoBehaviour{
 
     public void CastSkill(Transform attackTarget){
         if (!CanCastSkill) return;
-        // TODO: Play Skill Pre Anim
         if (SkillStartParticle) SkillStartParticle.Play();
         CurrentSkillCastCount++;
         Cast(attackTarget);
         foreach (SkillStart start in SkillStartPlugins){
             start.AdditionalProcedure();
         }
-
-        // TODO: Play Skill After Anim
         LastCastTime = Time.time;
     }
 
@@ -94,6 +91,8 @@ public abstract class SkillCaster : MonoBehaviour{
         switch (property){
             case SkillProperty.Duration:
                 return InitialData.Duration;
+            case SkillProperty.Cooldown:
+                return InitialData.Cooldown;
         }
         return -1.0f;
     }
@@ -102,6 +101,8 @@ public abstract class SkillCaster : MonoBehaviour{
         switch (property){
             case SkillProperty.Duration:
                 return Data.Duration;
+            case SkillProperty.Cooldown:
+                return Data.Cooldown;
         }
         return -1.0f;
     }
@@ -111,13 +112,16 @@ public abstract class SkillCaster : MonoBehaviour{
             case SkillProperty.Duration:
                 Data.Duration = value;
                 break;
+            case SkillProperty.Cooldown:
+                Data.Cooldown = value;
+                break;
         }
     }
 
     public void SKillPropertyChange(SkillProperty property, PropertyModifyWay modifyWay, float value, bool isUp) {
-        float currentValue = GetCurrentData(property);
+
         float sign = isUp ? 1.0f : -1.0f;
-        
+        float currentValue = GetCurrentData(property);
         switch (modifyWay){
             case PropertyModifyWay.Value:
                 currentValue += sign * value;

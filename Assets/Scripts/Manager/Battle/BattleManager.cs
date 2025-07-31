@@ -15,8 +15,8 @@ public class BattleManager : StateMachineController {
     [field: SerializeField] public List<Enemy> EnemiesInBattle { get; private set; }
 
     // TODO: eg:Support Passive Entry Register Action to Change Hero Property
-    public Action OnHeroEnterTheField;
-    public Action OnHeroExitTheField;
+    public Action<Hero> OnHeroEnterTheField;
+    public Action<Hero> OnHeroExitTheField;
     
     public bool IsGameOver => EnemiesInBattle.Count <= 0 || HeroesInBattle.Count <= 0;
     

@@ -1,5 +1,4 @@
 ﻿
-using System;
 using UnityEngine;
 
 public class RangedAttackState : AttackState {
@@ -17,8 +16,10 @@ public class RangedAttackState : AttackState {
         Vector3 targetPos = AttackTarget.Center.position;
         Vector3 attackVec = (targetPos - attackPos).normalized;
         Bullet bullet = Instantiate(BulletPrefab, attackPos, Quaternion.LookRotation(attackVec));
+        
+        float critical = Random.value < Controller.Critical ? 1.5f : 1.0f;
         bullet.SetDamageMessage(new EffectData{
-            Value = Controller.PhysicsAttack + Controller.MagicAttack,
+            Value = (Controller.PhysicsAttack + Controller.MagicAttack) * critical,
             Force = Controller.Force,
             TargetType = Controller.AttackTargetType
         });

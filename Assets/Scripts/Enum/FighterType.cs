@@ -1,6 +1,7 @@
 ﻿
 public enum FighterType{
-    Melee,
-    Ranged
+    Warrior,
+    Mage,
+    Priest
 }
 

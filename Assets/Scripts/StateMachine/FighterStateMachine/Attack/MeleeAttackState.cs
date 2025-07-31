@@ -17,10 +17,12 @@ public class MeleeAttackState : AttackState{
             AttackParticle.transform.localRotation = Quaternion.Euler(angleX, 90.0f, 90.0f);
             AttackParticle.Play();
         }
-        
+
+        float critical = Random.value < Controller.Critical ? 1.5f : 1.0f;
         Controller.AttackTarget?.BeDamaged(new EffectData{
-            Value = Controller.PhysicsAttack + Controller.MagicAttack,
+            Value = (Controller.PhysicsAttack + Controller.MagicAttack) * critical,
             Force = Controller.Force,
+            TargetType = Controller.AttackTargetType
         });
     }
 }
