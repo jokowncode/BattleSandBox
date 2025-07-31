@@ -85,10 +85,6 @@ public class Fighter : StateMachineController {
         get => InitialData.MagicAttack;
         set => InitialData.MagicAttack=value;
     }
-    public float InitialCooldown{ 
-        get => InitialData.Cooldown;
-        set => InitialData.Cooldown=value;
-    }
     public float InitialAttackRadius{ 
         get => InitialData.AttackRadius;
         set => InitialData.AttackRadius=value;
@@ -118,10 +114,6 @@ public class Fighter : StateMachineController {
     public float MagicAttack{ 
         get => CurrentData.MagicAttack;
         set => CurrentData.MagicAttack=value;
-    }
-    public float Cooldown{ 
-        get => CurrentData.Cooldown;
-        set => CurrentData.Cooldown=value;
     }
     public float AttackRadius{ 
         get => CurrentData.AttackRadius;
