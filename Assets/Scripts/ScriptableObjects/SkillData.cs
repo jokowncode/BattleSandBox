@@ -12,6 +12,8 @@ public class SkillData : ScriptableObject{
     public float Distance;
     public float Force = 0.0f;
     public int MaxCastCount = -1;  // -1 is not limit
+
+    public float Duration = 0.0f; // Magic Circle Duration
     
     // Skill Value -> ValueProperty * ValueMultiple
     public FighterProperty ValueProperty;

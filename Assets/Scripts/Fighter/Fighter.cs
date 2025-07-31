@@ -147,5 +147,10 @@ public class Fighter : StateMachineController {
         get => CurrentData.Type;
         set => CurrentData.Type = value;
     }
+
+    public string Name{
+        get => InitialData.Name;
+        set => InitialData.Name = value;
+    }
 }
 
