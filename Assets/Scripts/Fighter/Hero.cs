@@ -25,17 +25,16 @@ public class Hero : Fighter {
 
     public void HeroPropertyChange(FighterProperty property, PropertyModifyWay modifyWay, float value, bool isUp){
 
+        float sign = isUp ? 1.0f : -1.0f;
         if (property == FighterProperty.CooldownPercentage){
             float currentMultiplier = FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
             float percentage = value / 100.0f;
-            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, currentMultiplier + percentage);
+            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, currentMultiplier + sign * percentage);
             return;
         }
 
         string propertyName = property.ToString();
         float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, this);
-        float sign = isUp ? 1.0f : -1.0f;
-        
         switch (modifyWay){
             case PropertyModifyWay.Value:
                 currentValue += sign * value;

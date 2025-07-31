@@ -72,6 +72,7 @@ public class Fighter : StateMachineController {
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
     }
 
+    #region FighterProperty
     // Initial Property
     public float InitialHealth{ 
         get => InitialData.Health;
@@ -131,18 +132,10 @@ public class Fighter : StateMachineController {
         get => CurrentData.Force;
         set => CurrentData.Force=value;
     }
-    public TargetType AttackTargetType {
-        get => CurrentData.AttackTargetType;
-        set => CurrentData.AttackTargetType = value;
-    }
-    public FighterType Type {
-        get => CurrentData.Type;
-        set => CurrentData.Type = value;
-    }
+    public TargetType AttackTargetType => InitialData.AttackTargetType;
 
-    public string Name{
-        get => InitialData.Name;
-        set => InitialData.Name = value;
-    }
+    public FighterType Type => InitialData.Type;
+    public string Name => InitialData.Name;
+    #endregion
 }
 
