@@ -42,7 +42,7 @@ public class Fighter : StateMachineController {
             FighterSkillCaster.BattleStart();
         }
 
-        if (FighterSkillCaster && FighterSkillCaster.CanCastSkill){
+        if (FighterSkillCaster && FighterSkillCaster.CanCastSkill()){
             this.ChangeState(FighterSkill);
         } else{
             this.ChangeState(FighterPatrol);
@@ -70,7 +70,7 @@ public class Fighter : StateMachineController {
             return;
         }
     }
-
+    
     public void BeHealed(EffectData effectData) {
         // TODO : Play Fighter Be Healed Anim
         this.CurrentData.Health = Mathf.Min(this.InitialData.Health, this.CurrentData.Health + effectData.Value);

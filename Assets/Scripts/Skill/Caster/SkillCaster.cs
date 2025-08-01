@@ -19,10 +19,6 @@ public abstract class SkillCaster : MonoBehaviour{
 
     protected SkillData Data{ get; private set; }
 
-    public bool CanCastSkill => (Data.MaxCastCount <= 0 || CurrentSkillCastCount < Data.MaxCastCount)
-                                && (!Data.SkillNeedTarget || OwnedFighter.AttackTarget != null)
-                                && (LastCastTime < 0.0f || Time.time - LastCastTime > Data.Cooldown);
-
     private void Awake(){
         OwnedFighter = GetComponentInParent<Fighter>();
         SkillStartPlugins = new List<SkillStart>();
@@ -36,6 +32,12 @@ public abstract class SkillCaster : MonoBehaviour{
         if (OwnedFighter.Type != FighterType.Warrior){
             LastCastTime = Time.time;
         }
+    }
+
+    public virtual bool CanCastSkill(){
+        return (Data.MaxCastCount <= 0 || CurrentSkillCastCount < Data.MaxCastCount)
+               && (!Data.SkillNeedTarget || OwnedFighter.AttackTarget != null)
+               && (LastCastTime < 0.0f || Time.time - LastCastTime > Data.Cooldown);
     }
 
     #region SkillProcedurePlugin
@@ -72,18 +74,17 @@ public abstract class SkillCaster : MonoBehaviour{
         return property * percentage;
     }
 
-    protected abstract bool Cast(Transform attackTarget);
+    protected abstract void Cast(Transform attackTarget);
 
     public void CastSkill(Transform attackTarget){
-        if (!CanCastSkill) return;
+        if (!CanCastSkill()) return;
         if (SkillStartParticle) SkillStartParticle.Play();
         CurrentSkillCastCount++;
-        if (Cast(attackTarget)) {
-            foreach (SkillStart start in SkillStartPlugins){
-                start.AdditionalProcedure();
-            }
-            LastCastTime = Time.time;    
+        Cast(attackTarget);
+        foreach (SkillStart start in SkillStartPlugins){
+            start.AdditionalProcedure();
         }
+        LastCastTime = Time.time;
     }
 
     #region SkillPropretyChange

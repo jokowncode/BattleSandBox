@@ -27,7 +27,7 @@ public class SkillState : FighterState {
     }
 
     public override void Construct() {
-        if (!Controller.FighterSkillCaster.CanCastSkill) return;
+        if (!Controller.FighterSkillCaster.CanCastSkill()) return;
         Controller.FighterAnimator.SetTrigger(AnimationParams.Skill);
     }
 }

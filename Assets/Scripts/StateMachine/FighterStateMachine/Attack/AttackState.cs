@@ -30,7 +30,7 @@ public abstract class AttackState : FighterState{
             return;
         }
 
-        if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill) {
+        if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()) {
             Controller.ChangeState(FighterSkill);
         }
     }

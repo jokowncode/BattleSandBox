@@ -6,7 +6,7 @@ public class HealAllSkillCaster : SkillCaster{
 
     [SerializeField] private TargetType Type;
     
-    protected override bool Cast(Transform attackTarget){
+    protected override void Cast(Transform attackTarget){
         if (Type == TargetType.Hero){
             List<Hero> heroes = BattleManager.Instance.HeroesInBattle;
             foreach (Hero hero in heroes) {
@@ -22,7 +22,6 @@ public class HealAllSkillCaster : SkillCaster{
                 });
             }
         }
-        return true;
     }
 }
 

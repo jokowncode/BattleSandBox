@@ -40,7 +40,7 @@ public class PatrolState : FighterState{
             SearchTarget, LayerMask.GetMask(Controller.AttackTargetType.ToString()));
         if (result != 0 && SearchTarget[0].gameObject.TryGetComponent(out Fighter attackTarget)) {
             OnFindAttackTarget?.Invoke(attackTarget);
-            if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill){
+            if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()){
                 Controller.ChangeState(FighterSkill);
             } else{
                 Controller.ChangeState(FighterAttack);

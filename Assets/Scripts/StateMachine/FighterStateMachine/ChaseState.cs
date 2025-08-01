@@ -42,7 +42,7 @@ public class ChaseState : FighterState {
 
         float sqrtDistance = (this.ChaseTarget.transform.position - this.transform.position).sqrMagnitude;
         if (sqrtDistance <= Controller.AttackRadius * Controller.AttackRadius) {
-            if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill){
+            if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()){
                 Controller.ChangeState(FighterSkill);
             } else{
                 Controller.ChangeState(FighterAttack);

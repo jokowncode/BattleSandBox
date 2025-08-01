@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SingleTargetSkillCaster : SkillCaster {
     
-    protected override bool Cast(Transform attackTarget){
+    protected override void Cast(Transform attackTarget){
         Vector3 selfPos = OwnedFighter.Center.transform.position;
         selfPos.y = attackTarget.position.y;
         Vector3 moveVec = (attackTarget.position - selfPos).normalized;
@@ -14,7 +14,6 @@ public class SingleTargetSkillCaster : SkillCaster {
             Value = GetSkillEffectValue()
         });
         delivery.SetPlugins(this.SkillMiddlePlugins, this.SkillEndPlugins);
-        return true;
     }
 }
 

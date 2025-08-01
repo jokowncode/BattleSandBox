@@ -27,7 +27,7 @@ public class HealMinHealthPercentageState : AttackState{
             return;
         }
         
-        if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill){
+        if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()){
             Controller.ChangeState(FighterSkill);
         }
     }
