@@ -24,8 +24,8 @@ public class TooltipManager : MonoBehaviour
         //     tooltipPanel.SetActive(true);
         tooltipPanel.SetActive(true);
         tooltipText.text = message;
-        tooltipRect.anchoredPosition = new Vector2(Input.mousePosition.x - Screen.width / 2 + 110,
-                                                    Input.mousePosition.y - Screen.height / 2 +55);
+        tooltipRect.anchoredPosition = new Vector2(Input.mousePosition.x - Screen.width / 2,
+                                                    Input.mousePosition.y - Screen.height / 2 + 50.0f);
     }
 
     public void HideTooltip()
@@ -39,8 +39,8 @@ public class TooltipManager : MonoBehaviour
         {
             Vector2 localPos;
             //tooltipRect.anchoredPosition = Input.mousePosition/2;
-            tooltipRect.anchoredPosition = new Vector2(Input.mousePosition.x - Screen.width / 2 + 110,
-                Input.mousePosition.y - Screen.height / 2 +55);
+            tooltipRect.anchoredPosition = new Vector2(Input.mousePosition.x - Screen.width / 2,
+                Input.mousePosition.y - Screen.height / 2 + 50.0f);
         }
     }
 }

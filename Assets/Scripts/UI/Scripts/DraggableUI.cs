@@ -70,7 +70,7 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
         {
             // Debug.Log(BattleManager.Instance);
             // Debug.Log(previewInstance);
-            BattleManager.Instance.AddHero(previewInstance);
+            BattleManager.Instance.AddHero(previewInstance.GetComponent<Hero>());
             //BattleManager.Instance.AddHero(previewInstance.GetComponentInChildren<Hero>());
             Destroy(this.gameObject);
         }

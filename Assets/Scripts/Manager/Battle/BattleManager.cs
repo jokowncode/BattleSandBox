@@ -40,7 +40,7 @@ public class BattleManager : StateMachineController {
             return;
         }
         Instance = this;
-        HeroesInBattle = new List<GameObject>();
+        HeroesInBattle = new List<Hero>();
         Skills1InBattle = new Dictionary<GameObject,SkillData>();
         Skills2InBattle = new Dictionary<GameObject,SkillData>();
         // EnemiesInBattle = EnemyArea.InitializeEnemy(Data.EnemiesInBattle);
@@ -59,15 +59,15 @@ public class BattleManager : StateMachineController {
 
     public void StartBattle()
     {
-        foreach (GameObject hero in HeroesInBattle)
+        foreach (Hero hero in HeroesInBattle)
         {
-            hero.GetComponent<Hero>().BattleStart();
+            hero.gameObject.GetComponent<Hero>().BattleStart();
         }
         BattleUIManager.Instance.SetHeroWarhouseActive(false); 
         BattleUIManager.Instance.SetHeroPanelActive(false);
     }
 
-    public void AddHero(GameObject hero)
+    public void AddHero(Hero hero)
     {
         HeroesInBattle.Add(hero);
     }
@@ -136,7 +136,7 @@ public class BattleManager : StateMachineController {
     {
         RemoveSkill();
         HeroWarehouseUI.Instance.AddItem(selectedHero.GetComponentInChildren<SpriteRenderer>().sprite,selectedHero.name);
-        HeroesInBattle.Remove(selectedHero);
+        HeroesInBattle.Remove(selectedHero.GetComponent<Hero>());
         Destroy(selectedHero);
         BattleUIManager.Instance.SetHeroPanelActive(false);
     }
