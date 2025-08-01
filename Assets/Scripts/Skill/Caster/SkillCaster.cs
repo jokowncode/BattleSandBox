@@ -72,17 +72,18 @@ public abstract class SkillCaster : MonoBehaviour{
         return property * percentage;
     }
 
-    protected abstract void Cast(Transform attackTarget);
+    protected abstract bool Cast(Transform attackTarget);
 
     public void CastSkill(Transform attackTarget){
         if (!CanCastSkill) return;
         if (SkillStartParticle) SkillStartParticle.Play();
         CurrentSkillCastCount++;
-        Cast(attackTarget);
-        foreach (SkillStart start in SkillStartPlugins){
-            start.AdditionalProcedure();
+        if (Cast(attackTarget)) {
+            foreach (SkillStart start in SkillStartPlugins){
+                start.AdditionalProcedure();
+            }
+            LastCastTime = Time.time;    
         }
-        LastCastTime = Time.time;
     }
 
     #region SkillPropretyChange

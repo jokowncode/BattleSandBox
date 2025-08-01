@@ -22,6 +22,8 @@ public class ChaseState : FighterState {
 
     public override void Execute(){
         if (BattleManager.Instance.IsGameOver) return;
+        if (!ChaseTarget) return;
+
         Vector3 dir = (ChaseTarget.transform.position - this.transform.position).normalized;
         Controller.Move.MoveByDirection(dir);
     }
