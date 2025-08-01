@@ -2,17 +2,16 @@
 using System;
 using UnityEngine;
 
-public class BulletSkillDelivery : SkillDelivery {
+public class BulletSkillDelivery : SkillDelivery{
 
+    [SerializeField] private int BulletPenetrateCount = 1;
     [SerializeField] private float Speed = 5.0f;
-    [SerializeField] private float HitOffset = 0f;
-    [SerializeField] private bool UseFirePointRotation;
-    [SerializeField] private Vector3 RotationOffset = new Vector3(0, 0, 0);
     [SerializeField] private GameObject Hit;
     [SerializeField] private GameObject Flash;
     [SerializeField] private GameObject[] Detached;
     
     private Rigidbody SkillRigidbody;
+    private int CurrentBulletPenetrateCount;
 
     protected override void Awake() {
         base.Awake();
@@ -31,33 +30,28 @@ public class BulletSkillDelivery : SkillDelivery {
                 Destroy(flashInstance, flashPsParts.main.duration);
             }
         }
-        Destroy(gameObject,2.0f);
     }
 
     private void FixedUpdate() {
         if (this.Speed != 0){
-            SkillRigidbody.velocity = this.Speed * this.MoveVec;
+            // SkillRigidbody.velocity = this.Speed * this.MoveVec;
+            SkillRigidbody.MovePosition(SkillRigidbody.position + this.Speed * Time.fixedDeltaTime * this.MoveVec);
             ApplyMiddlePlugin();
         }
     }
 
-    protected override void CollisionTarget(Collision collision) {
-        //Lock all axes movement and rotation
-        float currentSpeed = Speed;
-        RigidbodyConstraints currentConstraints = SkillRigidbody.constraints;
-        Speed = 0;
-        SkillRigidbody.constraints = RigidbodyConstraints.FreezeAll;
-        
-        ContactPoint contact = collision.contacts[0];
-        Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
-        Vector3 pos = contact.point + contact.normal * HitOffset;
+    private void DestroyBullet(){
+        foreach (var detachedPrefab in Detached) {
+            if (detachedPrefab != null) {
+                detachedPrefab.transform.parent = null;
+            }
+        }
+        Destroy(gameObject);  
+    }
 
-        if (Hit != null) {
-            var hitInstance = Instantiate(Hit, pos, rot);
-            if (UseFirePointRotation) { hitInstance.transform.rotation = gameObject.transform.rotation * Quaternion.Euler(0, 180f, 0); }
-            else if (RotationOffset != Vector3.zero) { hitInstance.transform.rotation = Quaternion.Euler(RotationOffset); }
-            else { hitInstance.transform.LookAt(contact.point + contact.normal); }
-
+    protected override void TriggerTarget(Collider other) {
+        if (Hit != null){
+            var hitInstance = Instantiate(Hit, transform.position, Quaternion.LookRotation(this.MoveVec));
             var hitPs = hitInstance.GetComponent<ParticleSystem>();
             if (hitPs != null) {
                 Destroy(hitInstance, hitPs.main.duration);
@@ -66,18 +60,20 @@ public class BulletSkillDelivery : SkillDelivery {
                 Destroy(hitInstance, hitPsParts.main.duration);
             }
         }
-        foreach (var detachedPrefab in Detached) {
-            if (detachedPrefab != null) {
-                detachedPrefab.transform.parent = null;
-            }
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("Border")) {
+            DestroyBullet();
+            return;
         }
 
-        Speed = currentSpeed;
-        SkillRigidbody.constraints = currentConstraints;
-        if (collision.gameObject.TryGetComponent(out Fighter fighter)) {
+        if (other.gameObject.TryGetComponent(out Fighter fighter)) {
             this.Effect.ApplyEffect(fighter, this.EffectData);
         }
-        Destroy(gameObject);
+
+        BulletPenetrateCount--;
+        if (BulletPenetrateCount <= 0) {
+            DestroyBullet();
+        }
     }
 }
 
