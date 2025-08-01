@@ -5,8 +5,8 @@ public class HealMinHealthPercentageState : AttackState{
 
     [SerializeField] private float HealPercentage = 0.3f;
     
-    public override void Construct(){
-        base.Construct();
+    protected override void Awake(){
+        base.Awake();
         IsNeedTarget = false;
     }
 

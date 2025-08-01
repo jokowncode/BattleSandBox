@@ -14,6 +14,10 @@ public class InBattleState : BattleState {
         foreach (Hero hero in Controller.HeroesInBattle) {
             hero.BattleStart();
         }
+
+        foreach (Enemy enemy in Controller.EnemiesInBattle){
+            enemy.BattleStart();
+        }
     }
 
     public override void Transition() {

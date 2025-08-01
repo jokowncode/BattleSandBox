@@ -10,7 +10,7 @@ public class MeleeAttackState : AttackState{
             Vector3 XZ2XY = attackVec;
             XZ2XY.y = XZ2XY.z;
             XZ2XY.z = 0.0f;
-            Vector3 attackPos = Controller.Center.position + XZ2XY.normalized + Vector3.up;
+            Vector3 attackPos = Controller.Center.position + XZ2XY.normalized;
             AttackParticle.transform.position = attackPos;
 
             float angleX = Vector3.SignedAngle(Vector3.forward, attackVec.normalized, Vector3.up);
