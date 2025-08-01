@@ -1,5 +1,4 @@
 ﻿
-public class VictoryState : State{
-        
+public class VictoryState : BattleState{
 }
 

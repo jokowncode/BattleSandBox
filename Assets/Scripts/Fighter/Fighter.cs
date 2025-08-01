@@ -8,47 +8,46 @@ public class Fighter : StateMachineController {
     [SerializeField] protected FighterData InitialData;
     [SerializeField] private Image BloodBarImage;
     [field: SerializeField] public Transform Center { get; private set; }
+    [field: SerializeField] public Transform AttackCaster { get; private set; }
 
     private FighterData CurrentData;
     public Fighter AttackTarget { get; private set; }
     public SkillCaster FighterSkillCaster { get; private set; }
     public Animator FighterAnimator{ get; private set; }
     public FighterMove Move{ get; private set; }
+    public FighterAnimationEvent AnimationEvent { get; private set; }
+
+    private SkillState FighterSkill;
+    private PatrolState FighterPatrol;
+    
+    public float HealMultiplier { get; protected set; } = 1.0f;
+    public float ShieldMultiplier{ get; protected set; } = 1.0f;
 
     protected virtual void Awake(){
         this.FighterSkillCaster = GetComponentInChildren<SkillCaster>();
         this.FighterAnimator = GetComponentInChildren<Animator>();
+        this.FighterAnimator.applyRootMotion = false;
+        
+        this.AnimationEvent = GetComponentInChildren<FighterAnimationEvent>();
         this.Move = GetComponent<FighterMove>();
+        this.FighterPatrol = GetComponent<PatrolState>();
+        this.FighterSkill = GetComponent<SkillState>();
         // Clone Fighter Data to Update
         this.CurrentData = Instantiate(this.InitialData);
-        // Turn To Patrol State
-        // PatrolState patrol = GetComponent<PatrolState>();
-        // if (patrol != null) {
-        //     this.ChangeState(patrol);
-        //     patrol.OnFindAttackTarget += OnFindAttackTarget;
-        // }
     }
 
-    public void BattleStart()
-    {
-        Debug.Log("BattleStart");
+    public void BattleStart() {
         // Turn To Patrol State / Skill State
-        PatrolState patrol = GetComponent<PatrolState>();
-        if (patrol != null) {
-            this.ChangeState(patrol);
-            patrol.OnFindAttackTarget += OnFindAttackTarget;
+        if (FighterSkillCaster) {
+            FighterSkillCaster.BattleStart();
         }
-        /*State state;
+
         if (FighterSkillCaster && FighterSkillCaster.CanCastSkill){
-            state = GetComponent<SkillState>();
+            this.ChangeState(FighterSkill);
         } else{
-            state = GetComponent<PatrolState>();
-            if(state != null) ((PatrolState)state).OnFindAttackTarget += OnFindAttackTarget;
+            this.ChangeState(FighterPatrol);
+            if(FighterPatrol) FighterPatrol.OnFindAttackTarget += OnFindAttackTarget;
         }
-        Debug.Log(state);
-        if (state != null) {
-            this.ChangeState(state);
-        }*/
     }
 
     private void OnFindAttackTarget(Fighter target) {
@@ -58,19 +57,27 @@ public class Fighter : StateMachineController {
     public void BeDamaged(EffectData effectData) {
         this.CurrentData.Health -= effectData.Value;
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
-        // TODO: Play Enemy Be Attacked Anim
+        // TODO: Play Fighter Be Attacked Anim
         
         if (this.CurrentData.Health <= 0.0f) {
             // TODO: Fighter Dead
+            if (this is Hero hero) {
+                BattleManager.Instance.RemoveHero(hero);
+            }else if (this is Enemy enemy) {
+                BattleManager.Instance.RemoveEnemy(enemy);
+            }
+            Destroy(this.gameObject);
             return;
         }
     }
 
     public void BeHealed(EffectData effectData) {
+        // TODO : Play Fighter Be Healed Anim
         this.CurrentData.Health = Mathf.Min(this.InitialData.Health, this.CurrentData.Health + effectData.Value);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
     }
 
+    #region FighterProperty
     // Initial Property
     public float InitialHealth{ 
         get => InitialData.Health;
@@ -84,21 +91,9 @@ public class Fighter : StateMachineController {
         get => InitialData.MagicAttack;
         set => InitialData.MagicAttack=value;
     }
-    public float InitialCooldown{ 
-        get => InitialData.Cooldown;
-        set => InitialData.Cooldown=value;
-    }
-    public float InitialAttackRadius{ 
-        get => InitialData.AttackRadius;
-        set => InitialData.AttackRadius=value;
-    }
     public float InitialCritical{ 
         get => InitialData.Critical;
         set => InitialData.Critical=value;
-    }
-    public float InitialSpeed{ 
-        get => InitialData.Speed;
-        set => InitialData.Speed=value;
     }
     public float InitialForce{ 
         get => InitialData.Force;
@@ -118,29 +113,20 @@ public class Fighter : StateMachineController {
         get => CurrentData.MagicAttack;
         set => CurrentData.MagicAttack=value;
     }
-    public float Cooldown{ 
-        get => CurrentData.Cooldown;
-        set => CurrentData.Cooldown=value;
-    }
-    public float AttackRadius{ 
-        get => CurrentData.AttackRadius;
-        set => CurrentData.AttackRadius=value;
-    }
     public float Critical{ 
         get => CurrentData.Critical;
         set => CurrentData.Critical=value;
-    }
-    public float Speed{ 
-        get => CurrentData.Speed;
-        set => CurrentData.Speed=value;
     }
     public float Force{ 
         get => CurrentData.Force;
         set => CurrentData.Force=value;
     }
-    public TargetType AttackTargetType {
-        get => CurrentData.AttackTargetType;
-        set => CurrentData.AttackTargetType = value;
-    }
+    public TargetType AttackTargetType => InitialData.AttackTargetType;
+
+    public FighterType Type => InitialData.Type;
+    public string Name => InitialData.Name;
+    public float AttackRadius => InitialData.AttackRadius;
+    public float Speed => InitialData.Speed;
+    #endregion
 }
 

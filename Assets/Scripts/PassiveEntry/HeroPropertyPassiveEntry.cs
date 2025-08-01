@@ -15,37 +15,11 @@ public class HeroPropertyPassiveEntry : PassiveEntry{
     }
 
     public override void Construct(Hero hero){
-        string propertyName = Property.ToString();
-        float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, hero);
-        
-        switch (ModifyWay){
-            case PropertyModifyWay.Value:
-                currentValue += Value;
-                break;
-            case PropertyModifyWay.Percentage:
-                float percentage = Value / 100.0f;
-                float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+propertyName, hero);
-                currentValue += initialValue * percentage;
-                break;
-        }
-        ReflectionTools.SetObjectProperty(propertyName, hero, currentValue);
+        hero.HeroPropertyChange(this.Property, this.ModifyWay, this.Value, true);
     }
 
     public override void Destruct(Hero hero){
-        string propertyName = Property.ToString();
-        float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, hero);
-
-        switch (ModifyWay){
-            case PropertyModifyWay.Value:
-                currentValue -= Value;
-                break;
-            case PropertyModifyWay.Percentage:
-                float percentage = Value / 100.0f;
-                float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+propertyName, hero);
-                currentValue -= initialValue * percentage;
-                break;
-        }
-        ReflectionTools.SetObjectProperty(propertyName, hero, currentValue);
+        hero.HeroPropertyChange(this.Property, this.ModifyWay, this.Value, false);
     }
     
 }

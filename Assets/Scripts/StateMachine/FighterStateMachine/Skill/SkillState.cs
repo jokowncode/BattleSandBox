@@ -1,35 +1,34 @@
 ﻿
+using System;
 using UnityEngine;
 
 public class SkillState : FighterState {
-
+    
     private Transform AttackTarget;
     private AttackState FighterAttack;
-
-    private bool IsChange = false;
 
     protected override void Awake(){
         base.Awake();
         FighterAttack = GetComponent<AttackState>();
     }
-    
-    public override void Construct() {
-        if (!Controller.AttackTarget) return;
-        this.AttackTarget = Controller.AttackTarget.Center.transform;
+
+    private void Start() {
+        Controller.AnimationEvent.OnSkill += OnSkill;
+        Controller.AnimationEvent.OnSkillEnd += OnSkillEnd;
+    }
+
+    private void OnSkillEnd() {
+        Controller.ChangeState(FighterAttack);
+    }
+
+    private void OnSkill() {
+        this.AttackTarget = Controller.AttackTarget ? Controller.AttackTarget.Center.transform : null;
         Controller.FighterSkillCaster.CastSkill(this.AttackTarget);
     }
 
-    public override void Transition(){
-        // TODO: After Play Skill After-Anim -> change to AttackState
-        // Controller.ChangeState(FighterAttack);
-        if (IsChange) return;
-        IsChange = true;
-        Invoke(nameof(ChangeState), 2.0f);
-    }
-
-    private void ChangeState(){
-        IsChange = false;
-        Controller.ChangeState(this.FighterAttack);
+    public override void Construct() {
+        if (!Controller.FighterSkillCaster.CanCastSkill) return;
+        Controller.FighterAnimator.SetTrigger(AnimationParams.Skill);
     }
 }
 

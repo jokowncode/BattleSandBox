@@ -16,17 +16,20 @@ public class BattleManager : StateMachineController {
     [SerializeField] private GameObject deployPlace;
     public int width;
     public int height;
-    
-    //private List<Hero> HeroesInBattle;
-    public List<GameObject> HeroesInBattle;
-    private List<Enemy> EnemiesInBattle;
+   
     
     public Dictionary<GameObject,SkillData> Skills1InBattle;
     public Dictionary<GameObject,SkillData> Skills2InBattle;
 
+    // TODO: Get From Department
+    [field: SerializeField] public List<Hero> HeroesInBattle { get; private set; }
+    [field: SerializeField] public List<Enemy> EnemiesInBattle { get; private set; }
+
     // TODO: eg:Support Passive Entry Register Action to Change Hero Property
-    public Action OnHeroEnterTheField;
-    public Action OnHeroExitTheField;
+    public Action<Hero> OnHeroEnterTheField;
+    public Action<Hero> OnHeroExitTheField;
+    
+    public bool IsGameOver => EnemiesInBattle.Count <= 0 || HeroesInBattle.Count <= 0;
     
     [Header("Selected Hero")]
     public static GameObject selectedHero;
@@ -136,7 +139,6 @@ public class BattleManager : StateMachineController {
         HeroesInBattle.Remove(selectedHero);
         Destroy(selectedHero);
         BattleUIManager.Instance.SetHeroPanelActive(false);
-        
     }
     
     /// <summary>
@@ -247,7 +249,29 @@ public class BattleManager : StateMachineController {
         BattleUIManager.Instance.SetSkill2UIText(skill2Name);
     }
     
-    
-    
+
+    public void RemoveHero(Hero hero) {
+        this.HeroesInBattle.Remove(hero);
+    }
+
+    public void RemoveEnemy(Enemy enemy) {
+        this.EnemiesInBattle.Remove(enemy);
+    }
+
+    public Fighter FindMinPercentagePropertyHero(FighterProperty property){
+        Fighter result = null;
+        float minPercentage = 1.0f;
+        foreach (Hero hero in HeroesInBattle){
+            float currentValue = ReflectionTools.GetObjectProperty<float>(property.ToString(), hero);
+            float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+property, hero);
+            float percentage = currentValue / initialValue;
+            if (percentage < minPercentage){
+                minPercentage = percentage;
+                result = hero;
+            }
+        }
+        return result;
+    }
+
 }
 
