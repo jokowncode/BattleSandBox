@@ -52,11 +52,17 @@ public class HeroWarehouseUI : MonoBehaviour {
         //     // TODO: Update Hero Warehouse UI
         //     AddItem(hero);
         // }
-        List<GameObject> ownedHeroes = HeroWarehouseManager.Instance.GetOwnedHeroes();
-        foreach (GameObject hero in ownedHeroes)
+        // List<GameObject> ownedHeroes = HeroWarehouseManager.Instance.GetOwnedHeroes();
+        // foreach (GameObject hero in ownedHeroes)
+        // {
+        //     // TODO: Update Hero Warehouse UI
+        //     AddItem(hero.GetComponentInChildren<SpriteRenderer>().sprite,hero);
+        // }
+        List<string> ownedHeroes = HeroWarehouseManager.Instance.GetOwnedHeroesRef();
+        foreach (string heroRef in ownedHeroes)
         {
             // TODO: Update Hero Warehouse UI
-            AddItem(hero.GetComponentInChildren<SpriteRenderer>().sprite,hero);
+            AddItem(HeroWarehouseManager.Instance.GetHeroSpriteByRef(heroRef),heroRef);
         }
     }
     
@@ -68,10 +74,23 @@ public class HeroWarehouseUI : MonoBehaviour {
         }
     }
 
+    [Obsolete("use reference instead")]
     public void AddItem(Sprite sprite,GameObject draggableInstancePrefab)
     {
         GameObject go = Instantiate(heroWarehouseImageUIPrefab, heroWarehouseContent);
         go.GetComponent<DraggableUI>().previewPrefab = draggableInstancePrefab;
+        Image imageComponent = go.GetComponent<Image>();
+        if (imageComponent == null)
+        {
+            imageComponent.AddComponent<Image>();
+        }
+        imageComponent.sprite = sprite;
+    }
+    
+    public void AddItem(Sprite sprite,string reference)
+    {
+        GameObject go = Instantiate(heroWarehouseImageUIPrefab, heroWarehouseContent);
+        go.GetComponent<DraggableUI>().prefabReference = reference;
         Image imageComponent = go.GetComponent<Image>();
         if (imageComponent == null)
         {

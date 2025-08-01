@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandler
 {
     //public Sprite idleSprite;
     public GameObject previewPrefab;
     public GameObject previewInstance;
+    public string prefabReference;
     
     public Image image;
     // Start is called before the first frame update
@@ -20,23 +22,30 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
     
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("OnBeginDrag");
-        if (previewPrefab != null)
+        //Debug.Log("OnBeginDrag");
+        // if (previewPrefab != null)
+        // {
+        //     //Debug.Log("Instantiated preview");
+        //     previewInstance = Instantiate(previewPrefab);
+        //     SetAlpha(0.5f);
+        // }
+        GameObject go = HeroWarehouseManager.Instance.GetHeroByRef(prefabReference);
+        if (go !=null)
         {
-            //Debug.Log("Instantiated preview");
-            previewInstance = Instantiate(previewPrefab);
+            previewInstance = Instantiate(go);
+            previewInstance.name=prefabReference;
             SetAlpha(0.5f);
-        }
+        }else Debug.LogError("WrongRef:"+prefabReference);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("OnDrag");
+        //Debug.Log("OnDrag");
         
         if (previewInstance != null)
         {
             // TODO:Solve WorldPos Calculate
-            Debug.Log("Tracing preview");
+            //Debug.Log("Tracing preview");
             Vector3 worldPos = Vector3.one;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
@@ -44,14 +53,14 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
                 worldPos = hit.point; // 更精确点击地面或目标物体
             }
             worldPos.y = 0f;
-            //Debug.Log(worldPos);
+            // Debug.Log(worldPos);
             previewInstance.transform.position = worldPos;
         }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("OnEndDrag");
+        //Debug.Log("OnEndDrag");
         SetAlpha(1f);
         if (previewInstance != null && !ValidPosition(previewInstance.transform.position))
         {
@@ -59,8 +68,8 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
         }
         else
         {
-            Debug.Log(BattleManager.Instance);
-            Debug.Log(previewInstance);
+            // Debug.Log(BattleManager.Instance);
+            // Debug.Log(previewInstance);
             BattleManager.Instance.AddHero(previewInstance);
             //BattleManager.Instance.AddHero(previewInstance.GetComponentInChildren<Hero>());
             Destroy(this.gameObject);
@@ -75,7 +84,7 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
 
     bool ValidPosition(Vector3 pos)
     {
-        if(pos.x<5f && pos.x>-5f && pos.z<5f && pos.z>-5f)
+        if(BattleManager.Instance.IsWithinArea(pos))
         {
            return true; 
         }

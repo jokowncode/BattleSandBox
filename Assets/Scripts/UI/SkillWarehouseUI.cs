@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class SkillWarehouseUI : MonoBehaviour
+public class SkillWarehouseUI : WarehouseUI
 {
     public static SkillWarehouseUI Instance;
 
@@ -16,18 +16,6 @@ public class SkillWarehouseUI : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
     }
-    
-    
-    public GameObject skillWarehouseImageUIPrefab;
-    public Transform skillWarehouseContent;           // ScrollView 的 Content 对象
-
-    [Header("Debugger")]
-    public bool isDebugging;
-    
-    [Header("Test Sprite")]
-    public Sprite testSprite1;
-    public Sprite testSprite2;
-    public Sprite testSprite3;
 
     public void Update()
     {
@@ -44,55 +32,21 @@ public class SkillWarehouseUI : MonoBehaviour
         //     // TODO: Update Hero Warehouse UI
         //     
         // }
-    }
-    
-    public void ClearWarehouse()
-    {
-        foreach (Transform child in skillWarehouseContent)
+        List<SkillData> ownedHeroes = SkillWarehouseManager.Instance.GetOwnedHeroes();
+        foreach (SkillData skillData in ownedHeroes)
         {
-            Destroy(child.gameObject);
+            // TODO: Update Hero Warehouse UI
+            AddItem(skillData);
         }
     }
 
-    public void AddItem(Sprite sprite)
+    public override void AddItem(SkillData skillData)
     {
-        GameObject go = Instantiate(skillWarehouseImageUIPrefab, skillWarehouseContent);
-        Image imageComponent = go.GetComponent<Image>();
-        if (imageComponent == null)
-        {
-            imageComponent.AddComponent<Image>();
-        }
-        imageComponent.sprite = sprite;
+        GameObject go = Instantiate(warehouseImageUIPrefab, warehouseContent);
+        go.GetComponentInChildren<ClickableUI>().skillData = skillData;
     }
     
     
-    //-----------------------Debug-------------------------
-    public void MyDebug()
-    {
-        if (!isDebugging) return;
-        
-        DebugClearHeroWarehouse();
-        DebugAddItem();
-    }
-
-    public void DebugClearHeroWarehouse()
-    {
-        if (Input.GetKeyDown((KeyCode.C)))
-        {
-            Debug.Log("ExecuteClearHeroWarehouse");
-            ClearWarehouse();
-        }
-    }
-
-    public void DebugAddItem()
-    {
-        if (Input.GetKeyDown((KeyCode.A)))
-        {
-            Debug.Log("ExecuteAddItem");
-            AddItem(testSprite2);
-            AddItem(testSprite1);
-            AddItem(testSprite3);
-        }
-    }
+    
     
 }

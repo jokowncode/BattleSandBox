@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SkillWarehouseManager : MonoBehaviour
 {
-    private List<string> OwnedSkills;
+    [SerializeField]private List<SkillData> OwnedSkills;
     
     public static SkillWarehouseManager Instance;
 
@@ -21,5 +21,5 @@ public class SkillWarehouseManager : MonoBehaviour
     public void AddHero(string heroRef) { }
     public void RemoveHero(string heroRef) { }
 
-    public List<string> GetOwnedHeroes() { return this.OwnedSkills; }
+    public List<SkillData> GetOwnedHeroes() { return this.OwnedSkills; }
 }
