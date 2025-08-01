@@ -11,6 +11,8 @@ public class Bullet : MonoBehaviour {
     private EffectData BulletDamageMsg;
     private Vector3 MoveVector;
 
+    private bool IsHitTarget = false;
+
     public void SetDamageMessage(EffectData dm) {
         this.BulletDamageMsg = dm;
     }
@@ -41,7 +43,8 @@ public class Bullet : MonoBehaviour {
         }
     }
 
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter(Collider other){
+        if (IsHitTarget) return;
         if (other.gameObject.layer != LayerMask.NameToLayer(BulletDamageMsg.TargetType.ToString())
             && other.gameObject.layer != LayerMask.NameToLayer("Border")) return;
         
@@ -56,7 +59,8 @@ public class Bullet : MonoBehaviour {
             }
         }
         
-        if (other.gameObject.TryGetComponent(out Fighter fighter)) {
+        if (other.gameObject.TryGetComponent(out Fighter fighter)){
+            IsHitTarget = true;
             fighter.BeDamaged(this.BulletDamageMsg);
         }
         foreach (var detachedPrefab in Detached) {

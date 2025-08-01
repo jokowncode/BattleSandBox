@@ -49,7 +49,7 @@ public class PatrolState : FighterState{
         }
 
         if (this.FighterChase && Controller.Type == FighterType.Warrior) {
-            result = Physics.OverlapSphereNonAlloc(transform.position, Controller.AttackRadius * 3.0f, 
+            result = Physics.OverlapSphereNonAlloc(transform.position, 10.0f, 
                 SearchTarget, LayerMask.GetMask(Controller.AttackTargetType.ToString()));
             if (result != 0 && SearchTarget[0].gameObject.TryGetComponent(out Fighter chaseTarget)) {
                 OnFindAttackTarget?.Invoke(chaseTarget);

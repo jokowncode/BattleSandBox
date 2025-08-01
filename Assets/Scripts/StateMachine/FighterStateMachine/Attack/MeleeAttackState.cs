@@ -18,7 +18,7 @@ public class MeleeAttackState : AttackState{
             AttackParticle.Play();
         }
 
-        float critical = Random.value < Controller.Critical ? 1.5f : 1.0f;
+        float critical = Random.value < Controller.Critical / 100.0f ? 1.5f : 1.0f;
         Controller.AttackTarget?.BeDamaged(new EffectData{
             Value = (Controller.PhysicsAttack + Controller.MagicAttack) * critical,
             Force = Controller.Force,
