@@ -35,11 +35,11 @@ public class AllHeroPropertyPassiveEntry : PassiveEntry{
     }
     
     private void HeroStateUp(Hero hero){
-        if(hero.Type == TargetFighterType) hero.HeroPropertyChange(Property, ModifyWay, Value, true);
+        if(hero.Type == TargetFighterType) hero.FighterPropertyChange(Property, ModifyWay, Value, true);
     }
 
     private void HeroStateDown(Hero hero){
-        if(hero.Type == TargetFighterType) hero.HeroPropertyChange(Property, ModifyWay, Value, false);
+        if(hero.Type == TargetFighterType) hero.FighterPropertyChange(Property, ModifyWay, Value, false);
     }
 }
 

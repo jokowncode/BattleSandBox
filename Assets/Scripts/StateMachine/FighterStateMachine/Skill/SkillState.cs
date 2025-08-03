@@ -6,10 +6,12 @@ public class SkillState : FighterState {
     
     private Transform AttackTarget;
     private AttackState FighterAttack;
+    private PatrolState FighterPatrol;
 
     protected override void Awake(){
         base.Awake();
         FighterAttack = GetComponent<AttackState>();
+        FighterPatrol = GetComponent<PatrolState>();
     }
 
     private void Start() {
@@ -18,16 +20,20 @@ public class SkillState : FighterState {
     }
 
     private void OnSkillEnd() {
-        Controller.ChangeState(FighterAttack);
+        if (FighterAttack.CanAttack) {
+            Controller.ChangeState(FighterAttack);
+        } else {
+            Controller.ChangeState(FighterPatrol);   
+        }
     }
 
     private void OnSkill() {
-        this.AttackTarget = Controller.AttackTarget ? Controller.AttackTarget.Center.transform : null;
+        this.AttackTarget = Controller.AttackTarget ? Controller.AttackTarget.Center : null;
         Controller.FighterSkillCaster.CastSkill(this.AttackTarget);
     }
 
     public override void Construct() {
-        if (!Controller.FighterSkillCaster.CanCastSkill) return;
+        if (!Controller.FighterSkillCaster.CanCastSkill()) return;
         Controller.FighterAnimator.SetTrigger(AnimationParams.Skill);
     }
 }

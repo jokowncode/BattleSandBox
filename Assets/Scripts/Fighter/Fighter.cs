@@ -26,6 +26,8 @@ public class Fighter : StateMachineController {
     protected virtual void Awake(){
         this.FighterSkillCaster = GetComponentInChildren<SkillCaster>();
         this.FighterAnimator = GetComponentInChildren<Animator>();
+        this.FighterAnimator.applyRootMotion = false;
+        
         this.AnimationEvent = GetComponentInChildren<FighterAnimationEvent>();
         this.Move = GetComponent<FighterMove>();
         this.FighterPatrol = GetComponent<PatrolState>();
@@ -40,12 +42,12 @@ public class Fighter : StateMachineController {
             FighterSkillCaster.BattleStart();
         }
 
-        if (FighterSkillCaster && FighterSkillCaster.CanCastSkill){
+        if (FighterSkillCaster && FighterSkillCaster.CanCastSkill()){
             this.ChangeState(FighterSkill);
         } else{
             this.ChangeState(FighterPatrol);
-            if(FighterPatrol) FighterPatrol.OnFindAttackTarget += OnFindAttackTarget;
         }
+        if(FighterPatrol) FighterPatrol.OnFindAttackTarget += OnFindAttackTarget;
     }
 
     private void OnFindAttackTarget(Fighter target) {
@@ -68,11 +70,48 @@ public class Fighter : StateMachineController {
             return;
         }
     }
-
+    
     public void BeHealed(EffectData effectData) {
         // TODO : Play Fighter Be Healed Anim
         this.CurrentData.Health = Mathf.Min(this.InitialData.Health, this.CurrentData.Health + effectData.Value);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
+    }
+    
+    public void FighterPropertyChange(FighterProperty property, PropertyModifyWay modifyWay, float value, bool isUp){
+
+        float sign = isUp ? 1.0f : -1.0f;
+        if (property == FighterProperty.HealMultiplier) {
+            float percentage = value / 100.0f;
+            this.HealMultiplier += sign * percentage;
+            return;
+        }
+        
+        if (property == FighterProperty.ShieldMultiplier) {
+            float percentage = value / 100.0f;
+            this.ShieldMultiplier += sign * percentage;
+            return;
+        }
+        
+        if (property == FighterProperty.CooldownPercentage){
+            float currentMultiplier = FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
+            float percentage = value / 100.0f;
+            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, currentMultiplier + sign * percentage);
+            return;
+        }
+
+        string propertyName = property.ToString();
+        float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, this);
+        switch (modifyWay){
+            case PropertyModifyWay.Value:
+                currentValue += sign * value;
+                break;
+            case PropertyModifyWay.Percentage:
+                float percentage = value / 100.0f;
+                float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+propertyName, this);
+                currentValue += sign * initialValue * percentage;
+                break;
+        }
+        ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
     }
 
     #region FighterProperty
@@ -89,17 +128,9 @@ public class Fighter : StateMachineController {
         get => InitialData.MagicAttack;
         set => InitialData.MagicAttack=value;
     }
-    public float InitialAttackRadius{ 
-        get => InitialData.AttackRadius;
-        set => InitialData.AttackRadius=value;
-    }
     public float InitialCritical{ 
         get => InitialData.Critical;
         set => InitialData.Critical=value;
-    }
-    public float InitialSpeed{ 
-        get => InitialData.Speed;
-        set => InitialData.Speed=value;
     }
     public float InitialForce{ 
         get => InitialData.Force;
@@ -119,17 +150,9 @@ public class Fighter : StateMachineController {
         get => CurrentData.MagicAttack;
         set => CurrentData.MagicAttack=value;
     }
-    public float AttackRadius{ 
-        get => CurrentData.AttackRadius;
-        set => CurrentData.AttackRadius=value;
-    }
     public float Critical{ 
         get => CurrentData.Critical;
         set => CurrentData.Critical=value;
-    }
-    public float Speed{ 
-        get => CurrentData.Speed;
-        set => CurrentData.Speed=value;
     }
     public float Force{ 
         get => CurrentData.Force;
@@ -139,6 +162,8 @@ public class Fighter : StateMachineController {
 
     public FighterType Type => InitialData.Type;
     public string Name => InitialData.Name;
+    public float AttackRadius => InitialData.AttackRadius;
+    public float Speed => InitialData.Speed;
     #endregion
 }
 

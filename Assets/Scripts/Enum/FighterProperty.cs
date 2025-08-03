@@ -5,9 +5,7 @@ public enum FighterProperty{
     MagicAttack,
     Force,
     CooldownPercentage, 
-    AttackRadius,
     Critical, 
-    Speed,
     HealMultiplier,
     ShieldMultiplier
 }

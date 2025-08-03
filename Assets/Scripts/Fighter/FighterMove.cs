@@ -23,9 +23,7 @@ public class FighterMove : MonoBehaviour{
             RendererTransform.localScale.y, RendererTransform.localScale.z);
     }
     
-    // TODO: Auto Find Way -> NavMeshAgent
     public void MoveByDirection(Vector3 velocityDir) {
-        
         this.Owner.FighterAnimator.SetFloat(AnimationParams.Velocity, velocityDir.sqrMagnitude);
         if (velocityDir == Vector3.zero){
             return;
@@ -33,16 +31,9 @@ public class FighterMove : MonoBehaviour{
 
         //  Control Character Face Forward
         ChangeForward(velocityDir.x);
+        
+        // TODO: Auto Find Way -> NavMeshAgent
         this.transform.position += Owner.Speed * Time.deltaTime * velocityDir;
-
-        // TODO: Check Collision
-        /*bool isCollision = Physics.BoxCast(RendererTransform.position, Collider.size * 0.7f,
-            velocity, transform.rotation, Speed * Time.deltaTime,
-            LayerMask.GetMask(LayerName.Building, LayerName.Enemy));*/
-
-        // if (!isCollision){
-        //    this.transform.position += Speed * Time.deltaTime * velocity;    
-        //}
     }
 }
 
