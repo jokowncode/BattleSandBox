@@ -13,8 +13,6 @@ public class Fighter : StateMachineController {
 
     private FighterData CurrentData;
     
-    public float shield = 0f;
-    
     public Fighter AttackTarget { get; private set; }
     public SkillCaster FighterSkillCaster { get; private set; }
     public Animator FighterAnimator{ get; private set; }
@@ -59,10 +57,10 @@ public class Fighter : StateMachineController {
     }
 
     public void BeDamaged(EffectData effectData) {
-        if(shield > 0.0f)
+        if(Shield > 0.0f)
         {
-            this.CurrentData.Health -= (effectData.Value - shield);
-            shield = shield>effectData.Value?shield-effectData.Value:0.0f;
+            this.CurrentData.Health -= (effectData.Value - Shield);
+            Shield = Shield>effectData.Value?Shield-effectData.Value:0.0f;
         }
         else
             this.CurrentData.Health -= effectData.Value;
@@ -86,6 +84,43 @@ public class Fighter : StateMachineController {
         // TODO : Play Fighter Be Healed Anim
         this.CurrentData.Health = Mathf.Min(this.InitialData.Health, this.CurrentData.Health + effectData.Value);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
+    }
+    
+    public void PropertyChange(FighterProperty property, PropertyModifyWay modifyWay, float value, bool isUp){
+
+        float sign = isUp ? 1.0f : -1.0f;
+        if (property == FighterProperty.HealMultiplier) {
+            float percentage = value / 100.0f;
+            this.HealMultiplier += sign * percentage;
+            return;
+        }
+        
+        if (property == FighterProperty.ShieldMultiplier) {
+            float percentage = value / 100.0f;
+            this.ShieldMultiplier += sign * percentage;
+            return;
+        }
+        
+        if (property == FighterProperty.CooldownPercentage){
+            float currentMultiplier = FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
+            float percentage = value / 100.0f;
+            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, currentMultiplier + sign * percentage);
+            return;
+        }
+
+        string propertyName = property.ToString();
+        float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, this);
+        switch (modifyWay){
+            case PropertyModifyWay.Value:
+                currentValue += sign * value;
+                break;
+            case PropertyModifyWay.Percentage:
+                float percentage = value / 100.0f;
+                float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+propertyName, this);
+                currentValue += sign * initialValue * percentage;
+                break;
+        }
+        ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
     }
 
     #region FighterProperty
@@ -115,6 +150,10 @@ public class Fighter : StateMachineController {
     public float Health{ 
         get => CurrentData.Health;
         set => CurrentData.Health=value;
+    }
+    public float Shield{ 
+        get => CurrentData.Shield;
+        set => CurrentData.Shield=value;
     }
     public float PhysicsAttack{ 
         get => CurrentData.PhysicsAttack;

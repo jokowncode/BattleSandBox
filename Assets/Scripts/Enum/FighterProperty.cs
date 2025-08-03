@@ -7,6 +7,7 @@ public enum FighterProperty{
     CooldownPercentage, 
     Critical, 
     HealMultiplier,
+    Shield,
     ShieldMultiplier
 }
 

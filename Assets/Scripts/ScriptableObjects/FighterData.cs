@@ -5,6 +5,7 @@ using UnityEngine;
 public class FighterData : ScriptableObject{
     public string Name;
     public float Health;
+    public float Shield;
     public float PhysicsAttack;
     public float MagicAttack;
     public float Force;
