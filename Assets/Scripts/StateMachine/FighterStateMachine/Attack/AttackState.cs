@@ -12,6 +12,8 @@ public abstract class AttackState : FighterState{
     protected bool IsNeedTarget = true;
     
     private PatrolState FighterPatrol;
+
+    public bool CanAttack => !IsNeedTarget || Controller.AttackTarget; 
     
     protected override void Awake(){
         base.Awake();

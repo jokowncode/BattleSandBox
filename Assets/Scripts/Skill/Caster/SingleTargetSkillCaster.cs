@@ -2,18 +2,22 @@
 using UnityEngine;
 
 public class SingleTargetSkillCaster : SkillCaster {
-    
-    protected override void Cast(Transform attackTarget){
+
+    private void InitializeSkillDelivery(Vector3 attackTargetPosition) {
         Vector3 selfPos = OwnedFighter.Center.transform.position;
-        selfPos.y = attackTarget.position.y;
-        Vector3 moveVec = (attackTarget.position - selfPos).normalized;
+        selfPos.y = attackTargetPosition.y;
+        Vector3 moveVec = (attackTargetPosition - selfPos).normalized;
         SkillDelivery delivery = Instantiate(this.Data.SkillDeliveryPrefab, transform.position, Quaternion.LookRotation(moveVec));
-        delivery.StartDelivery(this.gameObject, attackTarget.position, new EffectData {
+        delivery.StartDelivery(this.gameObject, attackTargetPosition, new EffectData {
             TargetType = this.Data.TargetType,
             Force = this.Data.Force,
             Value = GetSkillEffectValue()
         });
         delivery.SetPlugins(this.SkillMiddlePlugins, this.SkillEndPlugins);
+    }
+
+    protected override void Cast(Transform attackTarget){
+        InitializeSkillDelivery(attackTarget.position);
     }
 }
 
