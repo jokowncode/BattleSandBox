@@ -104,6 +104,7 @@ public class BattleManager : StateMachineController {
             BattleUIManager.Instance.SetHeroPanelActive(true);
             UpdateSkillUI();
             HeroDetailUI.Instance.ChangeHeroDetailUIValue(selectedHero.GetComponentInChildren<SpriteRenderer>().sprite);
+            HeroDetailUI.Instance.ChangeDetailUI(selectedHero.GetComponent<Hero>());
         }
         return;
     }

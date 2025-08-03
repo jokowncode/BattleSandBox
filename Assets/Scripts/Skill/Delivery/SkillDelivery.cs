@@ -9,6 +9,8 @@ public abstract class SkillDelivery : MonoBehaviour {
     protected EffectData EffectData;
     protected Vector3 TargetPosition;
     protected SkillEffect Effect;
+    
+    public BuffData BuffData;
 
     private GameObject Caster;
     
@@ -38,6 +40,11 @@ public abstract class SkillDelivery : MonoBehaviour {
     public void SetPlugins(List<SkillMiddle> middlePlugins, List<SkillEnd> endPlugins){
         this.SkillMiddlePlugins = middlePlugins;
         this.Effect.SetEndPlugins(endPlugins);
+    }
+
+    public void InitializeBuffData(Fighter fighter)
+    {
+        BuffUtils.InitializeBuffData(fighter,ref this.BuffData);
     }
 
     protected virtual bool TriggerCondition(Collider other) {

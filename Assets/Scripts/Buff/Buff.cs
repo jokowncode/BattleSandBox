@@ -19,31 +19,35 @@ public class Buff : MonoBehaviour
     //public FighterData EffectProp;
     //public Fighter Target { get; }
     public float TimeRemaining { get; private set; }
-    
+
+    private float changedShieldValue;
     private float changedMoveSpeedValue;
     private float changedAttackSpeedValue;
     private float changedPhysicsAttackValue;
     private float changedMagicAttackValue;
     
     
-    public void AddBuff(Fighter target)
+    public void AddBuff(Fighter target,BuffData buffData)
     {
-        StartCoroutine(BuffRoutine(target));
+        StartCoroutine(BuffRoutine(target,buffData));
     }
     
-    private IEnumerator BuffRoutine(Fighter target)
+    private IEnumerator BuffRoutine(Fighter target,BuffData buffData)
     {
+        changedShieldValue = 0f;
         changedMoveSpeedValue = 0f;
         changedAttackSpeedValue = 0f;
         changedPhysicsAttackValue = 0f;
         changedMagicAttackValue = 0f;
         
         TimeRemaining = BuffDetail.duration;
-        // 立即应用一次效果
-        //ApplyBuffEffects(target);
-        CalculateChangedValue(target);
         
-        ApplyImmediateBuffEffects(target);
+        foreach (var buffMiniData in buffData.immediateEffectBuff)
+        {
+            CalculateChangedValue(target,buffMiniData);
+        }
+
+        ApplyImmediateBuffEffects(target, buffData);
         
         if (BuffDetail.tickInterval > 0)
         {
@@ -69,6 +73,7 @@ public class Buff : MonoBehaviour
         //     RemoveBuff(target);
         //     Debug.Log("Removed buff");
         // }
+        //yield return null;
     }
     
     private void ApplyLongTimeBuffEffects(Fighter target = null)
@@ -89,20 +94,20 @@ public class Buff : MonoBehaviour
         // }
     }
     
-    private void ApplyImmediateBuffEffects(Fighter target = null)
+    private void ApplyImmediateBuffEffects(Fighter target = null,BuffData buffData = null)
     {
-        // if(BuffDetail.speedMultiplier != 1.0f)
-        // {
-        //     target.PropertyChange(FighterProperty.Health,PropertyModifyWay.Value,BuffDetail.healthChangePerTick,false);
-        //     Debug.Log("SpeedBuff");
-        // }
-        // if (BuffDetail.damageMultiplier != 1.0f)
-        // {
-        //     target.PhysicsAttack += changedPhysicsAttackValue;
-        //     target.MagicAttack += changedMagicAttackValue;
-        //     Debug.Log("AttackBuff");
-        // }
-
+        // 立即应用一次效果
+        //ApplyBuffEffects(target);
+        if (changedShieldValue != 0)
+            target.Shield = changedShieldValue;
+        if(changedAttackSpeedValue!=0)
+            target.PropertyChange(FighterProperty.CooldownPercentage,PropertyModifyWay.Value,changedAttackSpeedValue,changedAttackSpeedValue>0?true:false);
+        if(changedMoveSpeedValue != 0)
+            target.PropertyChange(FighterProperty.Speed,PropertyModifyWay.Value,changedMoveSpeedValue,changedMoveSpeedValue>0?true:false);
+        if(changedPhysicsAttackValue !=0)
+            target.PropertyChange(FighterProperty.PhysicsAttack,PropertyModifyWay.Value,changedPhysicsAttackValue,changedPhysicsAttackValue>0?true:false);
+        if(changedMagicAttackValue !=0)
+            target.PropertyChange(FighterProperty.MagicAttack,PropertyModifyWay.Value,changedMagicAttackValue,changedMagicAttackValue>0?true:false);
     }
     
 
@@ -126,20 +131,37 @@ public class Buff : MonoBehaviour
         tf.Speed -= speed;
     }
 
-    public void CalculateChangedValue(Fighter target)
+    public void CalculateChangedValue(Fighter target,BuffMiniData buffMiniData)
     {
-        // if(BuffDetail.speedMultiplier != 1.0f)
-        // {
-        //     //changedSpeedValue = (BuffDetail.speedMultiplier - 1.0f) * target.Speed;
-        // }
-        // if (BuffDetail.damageMultiplier != 1.0f)
-        // {
-        //     changedPhysicsAttackValue = (BuffDetail.speedMultiplier - 1.0f) * target.PhysicsAttack;
-        // }
-        // if (BuffDetail.damageMultiplier != 1.0f)
-        // {
-        //     changedMagicAttackValue = (BuffDetail.speedMultiplier - 1.0f) * target.MagicAttack;
-        // }
+        if (buffMiniData.basicRef == BasicRef.Target)
+        {
+            if(buffMiniData.healthValue != 0)
+                changedShieldValue = buffMiniData.healthValue * target.Health;
+            if (buffMiniData.moveSpeedValue != 0)
+                changedMoveSpeedValue = buffMiniData.moveSpeedValue * target.Speed;
+            if(buffMiniData.attackSpeedValue !=0)
+                changedAttackSpeedValue = buffMiniData.attackSpeedValue * target.FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
+            if (buffMiniData.damageValue != 0)
+            {
+                changedMagicAttackValue = buffMiniData.damageValue * target.PhysicsAttack;
+                changedMagicAttackValue = buffMiniData.damageValue * target.MagicAttack;
+            }
+        }
+        else
+        {
+            if(buffMiniData.healthValue != 0)
+                changedShieldValue = buffMiniData.healthValue;
+            if (buffMiniData.moveSpeedValue != 0)
+                changedMoveSpeedValue = buffMiniData.moveSpeedValue;
+            if(buffMiniData.attackSpeedValue !=0)
+                changedAttackSpeedValue = buffMiniData.attackSpeedValue;
+            if (buffMiniData.damageValue != 0)
+            {
+                changedMagicAttackValue = buffMiniData.damageValue;
+                changedMagicAttackValue = buffMiniData.damageValue;
+            }
+        }
+        //target.HeroPropertyChange(FighterProperty.CooldownPercentage,PropertyModifyWay.Percentage,speed,true);
     }
 
     public void AddAttackSpeed(Hero tf, float speed)

@@ -8,5 +8,6 @@ public class Enemy : Fighter {
         Debug.Log("EnemyHealth" + Health);
         Debug.Log("EnemySpeed" + Speed);
         Debug.Log("EnemyAttack" + PhysicsAttack);
+        Debug.Log("EnemyShield" + Shield);
     }
 }

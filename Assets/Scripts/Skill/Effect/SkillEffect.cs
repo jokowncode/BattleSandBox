@@ -9,9 +9,11 @@ public abstract class SkillEffect : MonoBehaviour {
 
     public List<SkillEnd> SkillEndPlugins{ get; private set; }
     public SkillDelivery Delivery{ get; private set; }
+    public BuffData CurrentBuffData{ get; private set; }
 
     private void Awake(){
         Delivery = GetComponent<SkillDelivery>();
+        CurrentBuffData = Delivery.BuffData;
     }
 
     public void SetEndPlugins(List<SkillEnd> endPlugins) {

@@ -14,6 +14,7 @@ public class SingleTargetSkillCaster : SkillCaster {
             Value = GetSkillEffectValue()
         });
         delivery.SetPlugins(this.SkillMiddlePlugins, this.SkillEndPlugins);
+        delivery.InitializeBuffData(this.OwnedFighter);
     }
 }
 
