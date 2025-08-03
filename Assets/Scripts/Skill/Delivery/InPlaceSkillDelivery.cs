@@ -5,6 +5,7 @@ using UnityEngine;
 public class InPlaceSkillDelivery : SkillDelivery {
     private void Start(){
         this.transform.position = this.TargetPosition;
+		
     }
 
     protected override void TriggerTarget(Collider other){
