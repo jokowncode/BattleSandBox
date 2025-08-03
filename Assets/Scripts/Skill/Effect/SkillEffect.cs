@@ -19,7 +19,11 @@ public abstract class SkillEffect : MonoBehaviour {
     }
 
     public void ApplyEffect(Fighter influenceFighter, EffectData effectData) {
-        if(EffectParticle) EffectParticle.Play();
+        if (EffectParticle) {
+            EffectParticle.transform.position = influenceFighter.transform.position + Vector3.up;
+            EffectParticle.Play();
+        }
+
         Apply(influenceFighter, effectData);
         foreach (SkillEnd end in SkillEndPlugins) {
             end.AdditionalProcedure(influenceFighter, this, effectData);

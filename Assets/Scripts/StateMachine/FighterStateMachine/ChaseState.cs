@@ -20,17 +20,23 @@ public class ChaseState : FighterState {
         this.ChaseTarget = Controller.AttackTarget;
     }
 
+    public override void Destruct() {
+        Controller.Move.StopMove();
+    }
+
     public override void Execute(){
         if (BattleManager.Instance.IsGameOver) return;
         if (!ChaseTarget) return;
 
-        Vector3 dir = (ChaseTarget.transform.position - this.transform.position).normalized;
-        Controller.Move.MoveByDirection(dir);
+        // Vector3 dir = (ChaseTarget.transform.position - this.transform.position).normalized;
+        // Controller.Move.MoveByDirection(dir);
+        Controller.Move.MoveTo(ChaseTarget.transform.position);
     }
 
     public override void Transition(){
         if (BattleManager.Instance.IsGameOver) {
             Controller.FighterAnimator.SetTrigger(AnimationParams.Idle);
+            Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
             Controller.ChangeState(null);
             return;
         }

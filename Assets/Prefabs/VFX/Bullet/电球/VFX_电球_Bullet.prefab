@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2414129759271408078}
   - component: {fileID: 281721317104791530}
-  - component: {fileID: 3691529304732289488}
   - component: {fileID: 5958011288596852467}
   - component: {fileID: 6690576134508686345}
   - component: {fileID: 8845147986543713319}
   - component: {fileID: 8856239821254438016}
   - component: {fileID: 1660526289941576510}
+  - component: {fileID: -1421282043228057767}
   m_Layer: 0
   m_Name: "VFX_\u7535\u7403_Bullet"
   m_TagString: Untagged
@@ -4835,25 +4835,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &3691529304732289488
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1442305606285757584}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 605a456cfc02f6b499a64717539a27e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 10
-  hitOffset: 0.01
-  UseFirePointRotation: 0
-  rotationOffset: {x: 0, y: 0, z: 0}
-  hit: {fileID: 1270034117851066, guid: e46e60dfd73d7ed4fa8a4ef323af2e69, type: 3}
-  flash: {fileID: 1024167407391004, guid: 63baf4956cfa45d4aa5cd12cbc8b7689, type: 3}
-  Detached: []
 --- !u!199 &5958011288596852467
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -5013,7 +4994,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
@@ -5032,7 +5013,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -5061,6 +5042,22 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!114 &-1421282043228057767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442305606285757584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e53aa0217e17c242b8ca27b580fb8c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 30
+  hit: {fileID: 1270034117851066, guid: 8165bf966c51d09419dba050f2cbcce0, type: 3}
+  flash: {fileID: 1024167407391004, guid: 63baf4956cfa45d4aa5cd12cbc8b7689, type: 3}
+  Detached: []
 --- !u!1 &2429528592117413126
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,15 +1,23 @@
 ﻿
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class FighterMove : MonoBehaviour{
 
     [field: SerializeField] public Transform RendererTransform{ get; private set; }
 
     private Fighter Owner;
-
+    private NavMeshAgent Agent;
+    private NavMeshObstacle Obstacle;
+    
     private void Awake(){
         Owner = GetComponent<Fighter>();
+        Agent = GetComponent<NavMeshAgent>();
+        Obstacle = GetComponent<NavMeshObstacle>();
+        
+        Agent.updateRotation = false;
+        Agent.speed = Owner.Speed;
     }
 
     public void ChangeForward(float sign) {
@@ -22,8 +30,12 @@ public class FighterMove : MonoBehaviour{
         RendererTransform.localScale = new Vector3(scaleX, 
             RendererTransform.localScale.y, RendererTransform.localScale.z);
     }
-    
-    public void MoveByDirection(Vector3 velocityDir) {
+
+    public void MoveTo(Vector3 targetPos) {
+        this.Obstacle.enabled = false;
+        this.Agent.enabled = true;
+        
+        Vector3 velocityDir = (targetPos - this.transform.position).normalized;
         this.Owner.FighterAnimator.SetFloat(AnimationParams.Velocity, velocityDir.sqrMagnitude);
         if (velocityDir == Vector3.zero){
             return;
@@ -32,8 +44,14 @@ public class FighterMove : MonoBehaviour{
         //  Control Character Face Forward
         ChangeForward(velocityDir.x);
         
-        // TODO: Auto Find Way -> NavMeshAgent
-        this.transform.position += Owner.Speed * Time.deltaTime * velocityDir;
+        //this.transform.position += Owner.Speed * Time.deltaTime * velocityDir;
+        Agent.destination = targetPos;
+    }
+
+    public void StopMove() {
+        this.Agent.enabled = false;
+        this.Obstacle.enabled = true;
+        this.Obstacle.carving = true;
     }
 }
 

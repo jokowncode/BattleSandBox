@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PatrolState : FighterState{
 
-    [SerializeField] private Vector3 StartDirection = Vector3.right;
-    
     protected AttackState FighterAttack;
     protected SkillState FighterSkill;
     private ChaseState FighterChase;
@@ -13,6 +11,8 @@ public class PatrolState : FighterState{
     private Collider[] SearchTarget;
 
     public Action<Fighter> OnFindAttackTarget;
+
+    private Fighter PatrolPoint;
     
     protected override void Awake(){
         base.Awake();
@@ -22,16 +22,30 @@ public class PatrolState : FighterState{
         SearchTarget = new Collider[1];
     }
 
+    public override void Construct() {
+        this.PatrolPoint = BattleManager.Instance.GetRandomFighter(Controller.AttackTargetType);
+    }
+
     public override void Execute() {
         if (BattleManager.Instance.IsGameOver) return;
-        // TODO: Direction
-        Controller.Move.MoveByDirection(this.StartDirection);
+        if (!this.PatrolPoint) {
+            this.PatrolPoint = BattleManager.Instance.GetRandomFighter(Controller.AttackTargetType);
+        }
+        if (!this.PatrolPoint) return;
+        // Vector3 dir = (this.PatrolPoint.transform.position - this.transform.position).normalized;
+        // Controller.Move.MoveByDirection(dir);
+        Controller.Move.MoveTo(this.PatrolPoint.transform.position);
     }
-    
+
+    public override void Destruct() {
+        Controller.Move.StopMove();
+    }
+
     public override void Transition() {
 
         if (BattleManager.Instance.IsGameOver) {
             Controller.FighterAnimator.SetTrigger(AnimationParams.Idle);
+            Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
             Controller.ChangeState(null);
             return;
         }

@@ -70,6 +70,17 @@ public class BattleManager : StateMachineController {
         }
         return result;
     }
+    
+    public Fighter GetRandomFighter(TargetType type) {
+        if (IsGameOver) return null;
+        switch (type) {
+            case TargetType.Hero:
+                return this.HeroesInBattle[UnityEngine.Random.Range(0, this.HeroesInBattle.Count)];
+            case TargetType.Enemy:
+                return this.EnemiesInBattle[UnityEngine.Random.Range(0, this.EnemiesInBattle.Count)];
+        }
+        return null;
+    }
 
 }
 
