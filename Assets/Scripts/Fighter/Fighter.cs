@@ -7,10 +7,14 @@ public class Fighter : StateMachineController {
 
     [SerializeField] protected FighterData InitialData;
     [SerializeField] private Image BloodBarImage;
+    [SerializeField] private Image ShieldBarImage;
     [field: SerializeField] public Transform Center { get; private set; }
     [field: SerializeField] public Transform AttackCaster { get; private set; }
 
     private FighterData CurrentData;
+    
+    public float shield = 0f;
+    
     public Fighter AttackTarget { get; private set; }
     public SkillCaster FighterSkillCaster { get; private set; }
     public Animator FighterAnimator{ get; private set; }
@@ -55,7 +59,14 @@ public class Fighter : StateMachineController {
     }
 
     public void BeDamaged(EffectData effectData) {
-        this.CurrentData.Health -= effectData.Value;
+        if(shield > 0.0f)
+        {
+            this.CurrentData.Health -= (effectData.Value - shield);
+            shield = shield>effectData.Value?shield-effectData.Value:0.0f;
+        }
+        else
+            this.CurrentData.Health -= effectData.Value;
+        
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
         // TODO: Play Fighter Be Attacked Anim
         
@@ -126,7 +137,11 @@ public class Fighter : StateMachineController {
     public FighterType Type => InitialData.Type;
     public string Name => InitialData.Name;
     public float AttackRadius => InitialData.AttackRadius;
-    public float Speed => InitialData.Speed;
+    //public float Speed => InitialData.Speed;
+    public float Speed{ 
+        get => CurrentData.Speed;
+        set => CurrentData.Speed=value;
+    }
     #endregion
 }
 
