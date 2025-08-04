@@ -20,7 +20,7 @@ public class SkillState : FighterState {
     }
 
     private void OnSkillEnd() {
-        if (FighterAttack.CanAttack) {
+        if (FighterAttack.CanAttack()) {
             Controller.ChangeState(FighterAttack);
         } else {
             Controller.ChangeState(FighterPatrol);   
@@ -35,6 +35,7 @@ public class SkillState : FighterState {
     public override void Construct() {
         if (!Controller.FighterSkillCaster.CanCastSkill()) return;
         Controller.FighterAnimator.SetTrigger(AnimationParams.Skill);
+        Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
     }
 }
 

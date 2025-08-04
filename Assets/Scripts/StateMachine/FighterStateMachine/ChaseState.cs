@@ -9,6 +9,9 @@ public class ChaseState : FighterState {
     private SkillState FighterSkill;
     private AttackState FighterAttack;
 
+    private bool IsMoveStop;
+    private bool IsFirstFrame = true;
+
     protected override void Awake(){
         base.Awake();
         FighterPatrol = GetComponent<PatrolState>();
@@ -17,24 +20,27 @@ public class ChaseState : FighterState {
     }
 
     public override void Construct(){
+        IsMoveStop = false;
+        IsFirstFrame = true;
         this.ChaseTarget = Controller.AttackTarget;
-    }
-
-    public override void Destruct() {
-        Controller.Move.StopMove();
+        Controller.Move.StartMove();
     }
 
     public override void Execute(){
-        if (BattleManager.Instance.IsGameOver) return;
-        if (!ChaseTarget) return;
+        if (IsFirstFrame){
+            IsFirstFrame = false;
+            return;
+        }
+        if(this.ChaseTarget) Controller.Move.MoveTo(ChaseTarget.transform.position);
+    }
 
-        // Vector3 dir = (ChaseTarget.transform.position - this.transform.position).normalized;
-        // Controller.Move.MoveByDirection(dir);
-        Controller.Move.MoveTo(ChaseTarget.transform.position);
+    public override void Destruct() {
+        if(IsMoveStop) Controller.Move.StopMove();
     }
 
     public override void Transition(){
-        if (BattleManager.Instance.IsGameOver) {
+        if (BattleManager.Instance.IsGameOver){
+            IsMoveStop = true;
             Controller.FighterAnimator.SetTrigger(AnimationParams.Idle);
             Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
             Controller.ChangeState(null);
@@ -47,7 +53,8 @@ public class ChaseState : FighterState {
         }
 
         float sqrtDistance = (this.ChaseTarget.transform.position - this.transform.position).sqrMagnitude;
-        if (sqrtDistance <= Controller.AttackRadius * Controller.AttackRadius) {
+        if (sqrtDistance <= Controller.AttackRadius * Controller.AttackRadius){
+            IsMoveStop = true;
             if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()){
                 Controller.ChangeState(FighterSkill);
             } else{

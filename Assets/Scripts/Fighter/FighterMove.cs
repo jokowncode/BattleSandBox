@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,6 +19,10 @@ public class FighterMove : MonoBehaviour{
         
         Agent.updateRotation = false;
         Agent.speed = Owner.Speed;
+        // Obstacle.carveOnlyStationary = true;
+
+        Agent.enabled = true;
+        Obstacle.enabled = false;
     }
 
     public void ChangeForward(float sign) {
@@ -30,9 +35,10 @@ public class FighterMove : MonoBehaviour{
         RendererTransform.localScale = new Vector3(scaleX, 
             RendererTransform.localScale.y, RendererTransform.localScale.z);
     }
-
-    public void MoveTo(Vector3 targetPos) {
-        this.Obstacle.enabled = false;
+    
+    public void MoveTo(Vector3 targetPos){
+        // this.Obstacle.enabled = false;
+        // this.Obstacle.carving = false;
         this.Agent.enabled = true;
         
         Vector3 velocityDir = (targetPos - this.transform.position).normalized;
@@ -45,10 +51,17 @@ public class FighterMove : MonoBehaviour{
         ChangeForward(velocityDir.x);
         
         //this.transform.position += Owner.Speed * Time.deltaTime * velocityDir;
-        Agent.destination = targetPos;
+        Agent.SetDestination(targetPos);
     }
 
-    public void StopMove() {
+    public void StartMove(){
+        if (this.Agent.enabled) return;
+        this.Obstacle.carving = false;
+        this.Obstacle.enabled = false;
+    }
+
+    public void StopMove(){
+        if (!this.Agent.enabled) return;
         this.Agent.enabled = false;
         this.Obstacle.enabled = true;
         this.Obstacle.carving = true;

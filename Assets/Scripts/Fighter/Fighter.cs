@@ -7,9 +7,11 @@ public class Fighter : StateMachineController {
 
     [SerializeField] protected FighterData InitialData;
     [SerializeField] private Image BloodBarImage;
+    [SerializeField] private ParticleSystem BloodParticle;
     [field: SerializeField] public Transform Center { get; private set; }
     [field: SerializeField] public Transform AttackCaster { get; private set; }
-
+    
+    
     private FighterData CurrentData;
     public Fighter AttackTarget { get; private set; }
     public SkillCaster FighterSkillCaster { get; private set; }
@@ -57,6 +59,7 @@ public class Fighter : StateMachineController {
     public void BeDamaged(EffectData effectData) {
         this.CurrentData.Health -= effectData.Value;
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
+        if(this.BloodParticle) this.BloodParticle.Play();
         // TODO: Play Fighter Be Attacked Anim
         
         if (this.CurrentData.Health <= 0.0f) {

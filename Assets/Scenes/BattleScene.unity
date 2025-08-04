@@ -1623,8 +1623,8 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 0.20979975, b: 0.15408784, a: 1}
-  m_Intensity: 500
+  m_Color: {r: 0.5377358, g: 0, b: 0, a: 1}
+  m_Intensity: 2000
   m_Range: 120
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1683,7 +1683,7 @@ Transform:
   m_GameObject: {fileID: 530978479}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 3.4, z: 0}
+  m_LocalPosition: {x: 0, y: 12.7, z: -15.77}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1997,7 +1997,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &668361860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2032,8 +2032,8 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 0.21069163, b: 0.22851433, a: 1}
-  m_Intensity: 500
+  m_Color: {r: 0.20754719, g: 0.0009789985, b: 0.0009789985, a: 1}
+  m_Intensity: 300
   m_Range: 120
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -2092,7 +2092,7 @@ Transform:
   m_GameObject: {fileID: 668361859}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 2.74, z: 0}
+  m_LocalPosition: {x: 0, y: 2.91, z: -15.77}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2846,7 +2846,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1042922779
 Transform:
   m_ObjectHideFlags: 0
@@ -4388,7 +4388,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1523889613
 Transform:
   m_ObjectHideFlags: 0
@@ -4416,7 +4416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 332dfbe0042b4305bf5507202580eb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CHero: {fileID: 0}
+  CHero: {fileID: 154167508}
   Entries:
   - {fileID: 1114410911708242444, guid: b6738b668b5e5d14f95374c360757026, type: 3}
 --- !u!1001 &1525958891
@@ -6360,7 +6360,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2092419969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6393,9 +6393,9 @@ Light:
   m_GameObject: {fileID: 2092419968}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 2
+  m_Type: 0
   m_Shape: 0
-  m_Color: {r: 1, g: 0.40129, b: 0.19811308, a: 1}
+  m_Color: {r: 0.6886792, g: 0, b: 0, a: 1}
   m_Intensity: 500
   m_Range: 120
   m_SpotAngle: 30
@@ -6455,7 +6455,7 @@ Transform:
   m_GameObject: {fileID: 2092419968}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 4.66, z: 0}
+  m_LocalPosition: {x: 0, y: 56.6, z: -15.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6836,6 +6836,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Nyx
       objectReference: {fileID: 0}
+    - target: {fileID: 7529063800997010275, guid: 158a5b3116b4d5941b62b54f85c68a6f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6861,6 +6866,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2001711712}
     m_Modifications:
+    - target: {fileID: 4323871536435504558, guid: b00c00c703839fc4cad3911c132dbca6,
+        type: 3}
+      propertyPath: UVModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5140837952167265080, guid: b00c00c703839fc4cad3911c132dbca6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6885218144908034506, guid: b00c00c703839fc4cad3911c132dbca6,
         type: 3}
       propertyPath: m_Name
@@ -6869,7 +6884,7 @@ PrefabInstance:
     - target: {fileID: 7683419752335519906, guid: b00c00c703839fc4cad3911c132dbca6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.18
+      value: 12.82
       objectReference: {fileID: 0}
     - target: {fileID: 7683419752335519906, guid: b00c00c703839fc4cad3911c132dbca6,
         type: 3}

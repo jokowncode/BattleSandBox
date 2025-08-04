@@ -12,13 +12,23 @@ public abstract class AttackState : FighterState{
     protected bool IsNeedTarget = true;
     
     private PatrolState FighterPatrol;
-
-    public bool CanAttack => !IsNeedTarget || Controller.AttackTarget; 
+    private ChaseState FighterChase;
     
+    public bool CanAttack(){
+        if (!IsNeedTarget){
+            return true;
+        }
+
+        return Controller.AttackTarget
+               && (Controller.AttackTarget.transform.position - this.transform.position).sqrMagnitude <=
+               Controller.AttackRadius * Controller.AttackRadius;
+    }
+
     protected override void Awake(){
         base.Awake();
         FighterSkill = GetComponent<SkillState>();
         FighterPatrol = GetComponent<PatrolState>();
+        FighterChase = GetComponent<ChaseState>();
     }
 
     private void Start() {
@@ -30,6 +40,14 @@ public abstract class AttackState : FighterState{
         if (IsNeedTarget && !this.AttackTarget) {
             Controller.ChangeState(FighterPatrol);
             return;
+        }
+        
+        if (IsNeedTarget && this.AttackTarget){
+            float distance = this.AttackTarget.transform.position.x - this.transform.position.x;
+            if (distance > Controller.AttackRadius) {
+                Controller.ChangeState(FighterChase ? FighterChase : FighterPatrol);
+                return;
+            }
         }
 
         if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()) {
