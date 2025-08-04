@@ -25,15 +25,15 @@ public class CameraManager : MonoBehaviour {
         MainCamera = Camera.main;
     }
     
-    private IEnumerator ShakeCoroutine(float duration, float magnitude, float late){
+    private IEnumerator ShakeCoroutine(float duration, float magnitude, float late, Vector3 magnitudeDir){
         IsShake = true;
         if(late != 0.0f) yield return new WaitForSeconds(late);
         Vector3 originalPos = MainCamera.transform.localPosition;
         float elapsed = 0.0f;
 
         while (elapsed < duration){
-            float y = Random.Range(-1f, 1f) * magnitude;
-            MainCamera.transform.localPosition = new Vector3(originalPos.x, originalPos.y + y, originalPos.z);
+            Vector3 value = Random.Range(-1f, 1f) * magnitude * magnitudeDir;
+            MainCamera.transform.localPosition = originalPos + value;
             elapsed += Time.deltaTime;
             yield return null;
         }
@@ -42,9 +42,9 @@ public class CameraManager : MonoBehaviour {
         IsShake = false;
     }
     
-    public void ShakeCamera(float duration, float magnitude, float late = 0.0f){
+    public void ShakeCamera(float duration, float magnitude, Vector3 magnitudeDir, float late = 0.0f){
         if (IsShake) return;
-        StartCoroutine(ShakeCoroutine(duration, magnitude, late));
+        StartCoroutine(ShakeCoroutine(duration, magnitude, late, magnitudeDir));
     }
 }
 

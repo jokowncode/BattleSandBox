@@ -12,7 +12,7 @@ public class SingleTargetSkillCaster : SkillCaster {
             TargetType = this.Data.TargetType,
             Force = this.Data.Force,
             Value = GetSkillEffectValue()
-        });
+        }, OwnedFighter.Type);
         delivery.SetPlugins(this.SkillMiddlePlugins, this.SkillEndPlugins);
     }
 

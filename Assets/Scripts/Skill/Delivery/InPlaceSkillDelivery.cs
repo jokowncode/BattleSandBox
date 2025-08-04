@@ -1,8 +1,9 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class InPlaceSkillDelivery : SkillDelivery {
+public class InPlaceSkillDelivery : SkillDelivery{
     private void Start(){
         this.transform.position = this.TargetPosition;
         Destroy(gameObject, 2.0f);

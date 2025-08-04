@@ -15,7 +15,7 @@ public class SplitSkillEnd : SkillEnd{
         effectData.Value *= 1.0f / SplitCount;
         delivery.transform.rotation = effect.Delivery.transform.rotation * Quaternion.AngleAxis(angle, Vector3.up);
         
-        delivery.StartDelivery(influenceFighter.gameObject, delivery.transform.position + delivery.transform.forward, effectData);
+        delivery.StartDelivery(influenceFighter.gameObject, delivery.transform.position + delivery.transform.forward, effectData, delivery.CasterType);
         delivery.SetPlugins(effect.Delivery.SkillMiddlePlugins, effect.SkillEndPlugins);
     }
 

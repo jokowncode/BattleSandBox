@@ -25,7 +25,11 @@ public abstract class SkillEffect : MonoBehaviour {
         }
 
         Apply(influenceFighter, effectData);
-        CameraManager.Instance.ShakeCamera(0.5f, 0.25f);
+        if (Delivery.CasterType == FighterType.Warrior) {
+            CameraManager.Instance.ShakeCamera(0.5f, 0.5f, Vector3.up);
+        } else {
+            CameraManager.Instance.ShakeCamera(0.5f, 0.25f, Vector3.right);
+        }
         foreach (SkillEnd end in SkillEndPlugins) {
             end.AdditionalProcedure(influenceFighter, this, effectData);
         }

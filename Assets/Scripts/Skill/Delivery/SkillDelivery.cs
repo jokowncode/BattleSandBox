@@ -11,7 +11,8 @@ public abstract class SkillDelivery : MonoBehaviour {
     protected SkillEffect Effect;
 
     private GameObject Caster;
-    
+
+    public FighterType CasterType{ get; private set; }
     public List<SkillMiddle> SkillMiddlePlugins{ get; private set; }
     protected Vector3 MoveVec;
 
@@ -25,9 +26,10 @@ public abstract class SkillDelivery : MonoBehaviour {
         }
     }
 
-    public void StartDelivery(GameObject caster, Vector3 targetPos, EffectData effectData) {
+    public void StartDelivery(GameObject caster, Vector3 targetPos, EffectData effectData, FighterType casterType) {
         this.TargetPosition = targetPos;
         this.Caster = caster;
+        this.CasterType = casterType;
         
         this.MoveVec = targetPos - this.transform.position;
         this.MoveVec.y = 0.0f;

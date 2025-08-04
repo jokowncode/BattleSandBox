@@ -1,4 +1,4 @@
-Shader "ERB/Particles/AddTrail"
+Shader "Hovl/Particles/AddTrail"
 {
 	Properties
 	{
@@ -32,7 +32,12 @@ Shader "ERB/Particles/AddTrail"
 			
 			Pass {
 			
-				CGPROGRAM	
+				CGPROGRAM
+
+				#ifndef UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX
+				#define UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input)
+				#endif
+				
 				#pragma vertex vert
 				#pragma fragment frag
 				#pragma target 2.0
@@ -111,6 +116,9 @@ Shader "ERB/Particles/AddTrail"
 
 				fixed4 frag ( v2f i  ) : SV_Target
 				{
+					UNITY_SETUP_INSTANCE_ID( i );
+					UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX( i );
+				
 					float lp = 1;
 					#ifdef SOFTPARTICLES_ON
 						float sceneZ = LinearEyeDepth (SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.projPos)));
@@ -205,7 +213,7 @@ Node;AmplifyShaderEditor.SimpleMultiplyOpNode;54;-22.73198,-30.14677;Float;True;
 Node;AmplifyShaderEditor.ComponentMaskNode;93;263.301,96.88125;Float;False;True;True;True;False;1;0;COLOR;0,0,0,0;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.DynamicAppendNode;92;495.0742,154.525;Float;False;FLOAT4;4;0;FLOAT3;0,0,0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT4;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;38;-3298.052,358.0942;Float;False;UV;-1;True;1;0;FLOAT2;0,0;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;94;769.7286,153.8613;Float;False;True;2;Float;;0;11;ERB/Particles/AddTrail;0b6a9f8b4f707c74ca64c0be8e590de0;True;SubShader 0 Pass 0;0;0;SubShader 0 Pass 0;2;True;2;5;False;-1;10;False;-1;0;1;False;-1;0;False;-1;False;False;True;0;False;-1;True;True;True;True;False;0;False;-1;False;True;2;False;-1;True;3;False;-1;False;True;4;Queue=Transparent=Queue=0;IgnoreProjector=True;RenderType=Transparent=RenderType;PreviewType=Plane;False;0;False;False;False;False;False;False;False;False;False;False;True;0;0;;0;0;Standard;0;0;1;True;False;2;0;FLOAT4;0,0,0,0;False;1;FLOAT3;0,0,0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;94;769.7286,153.8613;Float;False;True;2;Float;;0;11;Hovl/Particles/AddTrail;0b6a9f8b4f707c74ca64c0be8e590de0;True;SubShader 0 Pass 0;0;0;SubShader 0 Pass 0;2;True;2;5;False;-1;10;False;-1;0;1;False;-1;0;False;-1;False;False;True;0;False;-1;True;True;True;True;False;0;False;-1;False;True;2;False;-1;True;3;False;-1;False;True;4;Queue=Transparent=Queue=0;IgnoreProjector=True;RenderType=Transparent=RenderType;PreviewType=Plane;False;0;False;False;False;False;False;False;False;False;False;False;True;0;0;;0;0;Standard;0;0;1;True;False;2;0;FLOAT4;0,0,0,0;False;1;FLOAT3;0,0,0;False;0
 WireConnection;6;0;1;1
 WireConnection;29;0;28;3
 WireConnection;29;1;28;4
