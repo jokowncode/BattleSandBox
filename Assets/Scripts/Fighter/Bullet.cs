@@ -1,29 +1,20 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
-using UnityEngine.Pool;
 
 public class Bullet : MonoBehaviour {
     public float speed = 15f;
-    public float hitOffset;
-    public bool UseFirePointRotation;
-    public Vector3 rotationOffset;
     public GameObject hit;
     public GameObject flash;
     private Rigidbody rb;
     public GameObject[] Detached;
 
     private EffectData BulletDamageMsg;
-    private Vector3 TargetPos;
     private Vector3 MoveVector;
+
+    private bool IsHitTarget = false;
 
     public void SetDamageMessage(EffectData dm) {
         this.BulletDamageMsg = dm;
-    }
-
-    public void SetTargetPos(Vector3 pos) {
-        this.TargetPos = pos;
     }
 
     public void SetMoveVector(Vector3 moveVec){
@@ -44,31 +35,21 @@ public class Bullet : MonoBehaviour {
                 Destroy(flashInstance, flashPsParts.main.duration);
             }
         }
-        Destroy(this.gameObject, 2.0f);
     }
 
     private void FixedUpdate(){
         if (speed != 0){
-            rb.velocity = this.MoveVector * speed;
+            rb.MovePosition(rb.position + this.speed * Time.fixedDeltaTime * this.MoveVector);
         }
     }
 
-    private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.layer != LayerMask.NameToLayer(BulletDamageMsg.TargetType.ToString())) return;
-
-        rb.constraints = RigidbodyConstraints.FreezeAll;
-        speed = 0;
-
-        ContactPoint contact = collision.contacts[0];
-        Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
-        Vector3 pos = contact.point + contact.normal * hitOffset;
-
-        if (hit != null) {
-            var hitInstance = Instantiate(hit, pos, rot);
-            if (UseFirePointRotation) { hitInstance.transform.rotation = gameObject.transform.rotation * Quaternion.Euler(0, 180f, 0); }
-            else if (rotationOffset != Vector3.zero) { hitInstance.transform.rotation = Quaternion.Euler(rotationOffset); }
-            else { hitInstance.transform.LookAt(contact.point + contact.normal); }
-
+    private void OnTriggerEnter(Collider other){
+        if (IsHitTarget) return;
+        if (other.gameObject.layer != LayerMask.NameToLayer(BulletDamageMsg.TargetType.ToString())
+            && other.gameObject.layer != LayerMask.NameToLayer("Border")) return;
+        
+        if (hit != null){
+            var hitInstance = Instantiate(hit, transform.position, Quaternion.LookRotation(this.MoveVector));
             var hitPs = hitInstance.GetComponent<ParticleSystem>();
             if (hitPs != null) {
                 Destroy(hitInstance, hitPs.main.duration);
@@ -77,14 +58,15 @@ public class Bullet : MonoBehaviour {
                 Destroy(hitInstance, hitPsParts.main.duration);
             }
         }
+        
+        if (other.gameObject.TryGetComponent(out Fighter fighter)){
+            IsHitTarget = true;
+            fighter.BeDamaged(this.BulletDamageMsg);
+        }
         foreach (var detachedPrefab in Detached) {
             if (detachedPrefab != null) {
                 detachedPrefab.transform.parent = null;
             }
-        }
-
-        if (collision.gameObject.TryGetComponent(out Fighter fighter)) {
-            fighter.BeDamaged(this.BulletDamageMsg);
         }
         Destroy(gameObject);
     }

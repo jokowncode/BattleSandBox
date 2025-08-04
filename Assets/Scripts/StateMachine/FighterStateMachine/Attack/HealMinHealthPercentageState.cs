@@ -5,8 +5,8 @@ public class HealMinHealthPercentageState : AttackState{
 
     [SerializeField] private float HealPercentage = 0.3f;
     
-    public override void Construct(){
-        base.Construct();
+    protected override void Awake(){
+        base.Awake();
         IsNeedTarget = false;
     }
 
@@ -27,7 +27,7 @@ public class HealMinHealthPercentageState : AttackState{
             return;
         }
         
-        if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill){
+        if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()){
             Controller.ChangeState(FighterSkill);
         }
     }

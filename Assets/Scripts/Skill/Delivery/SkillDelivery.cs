@@ -28,7 +28,10 @@ public abstract class SkillDelivery : MonoBehaviour {
     public void StartDelivery(GameObject caster, Vector3 targetPos, EffectData effectData) {
         this.TargetPosition = targetPos;
         this.Caster = caster;
-        this.MoveVec = (targetPos - this.transform.position).normalized;
+        
+        this.MoveVec = targetPos - this.transform.position;
+        this.MoveVec.y = 0.0f;
+        this.MoveVec.Normalize();
         this.EffectData = effectData;
     }
 

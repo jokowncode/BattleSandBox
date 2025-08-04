@@ -2,12 +2,15 @@
 using System;
 using UnityEngine;
 
-public class PatrolState : FighterState {
+public class PatrolState : FighterState{
+
+    [SerializeField] private Vector3 StartDirection = Vector3.right;
     
     protected AttackState FighterAttack;
     protected SkillState FighterSkill;
+    private ChaseState FighterChase;
     
-    private Collider[] SearchAttackTarget;
+    private Collider[] SearchTarget;
 
     public Action<Fighter> OnFindAttackTarget;
     
@@ -15,13 +18,14 @@ public class PatrolState : FighterState {
         base.Awake();
         FighterAttack = GetComponent<AttackState>();
         FighterSkill = GetComponent<SkillState>();
-        SearchAttackTarget = new Collider[1];
+        FighterChase = GetComponent<ChaseState>();
+        SearchTarget = new Collider[1];
     }
 
     public override void Execute() {
         if (BattleManager.Instance.IsGameOver) return;
         // TODO: Direction
-        Controller.Move.MoveByDirection(Vector3.right);
+        Controller.Move.MoveByDirection(this.StartDirection);
     }
     
     public override void Transition() {
@@ -33,13 +37,23 @@ public class PatrolState : FighterState {
         }
 
         int result = Physics.OverlapSphereNonAlloc(transform.position, Controller.AttackRadius, 
-            SearchAttackTarget, LayerMask.GetMask(Controller.AttackTargetType.ToString()));
-        if (result != 0 && SearchAttackTarget[0].gameObject.TryGetComponent(out Fighter fighter)) {
-            OnFindAttackTarget?.Invoke(fighter);
-            if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill){
+            SearchTarget, LayerMask.GetMask(Controller.AttackTargetType.ToString()));
+        if (result != 0 && SearchTarget[0].gameObject.TryGetComponent(out Fighter attackTarget)) {
+            OnFindAttackTarget?.Invoke(attackTarget);
+            if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()){
                 Controller.ChangeState(FighterSkill);
             } else{
                 Controller.ChangeState(FighterAttack);
+            }
+            return;
+        }
+
+        if (this.FighterChase && Controller.Type == FighterType.Warrior) {
+            result = Physics.OverlapSphereNonAlloc(transform.position, 10.0f, 
+                SearchTarget, LayerMask.GetMask(Controller.AttackTargetType.ToString()));
+            if (result != 0 && SearchTarget[0].gameObject.TryGetComponent(out Fighter chaseTarget)) {
+                OnFindAttackTarget?.Invoke(chaseTarget);
+                Controller.ChangeState(FighterChase);
             }
         }
     }

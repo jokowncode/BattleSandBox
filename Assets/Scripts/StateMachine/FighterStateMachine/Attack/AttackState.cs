@@ -12,6 +12,8 @@ public abstract class AttackState : FighterState{
     protected bool IsNeedTarget = true;
     
     private PatrolState FighterPatrol;
+
+    public bool CanAttack => !IsNeedTarget || Controller.AttackTarget; 
     
     protected override void Awake(){
         base.Awake();
@@ -30,7 +32,7 @@ public abstract class AttackState : FighterState{
             return;
         }
 
-        if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill) {
+        if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()) {
             Controller.ChangeState(FighterSkill);
         }
     }

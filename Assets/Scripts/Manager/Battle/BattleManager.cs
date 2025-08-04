@@ -58,5 +58,18 @@ public class BattleManager : StateMachineController {
         return result;
     }
 
+    public Fighter FindFurthestTarget(Vector3 position) {
+        float maxDistance = -1.0f;
+        Fighter result = null;
+        foreach (Enemy enemy in EnemiesInBattle) {
+            float distance = (position - enemy.transform.position).sqrMagnitude;
+            if (distance > maxDistance) {
+                maxDistance = distance;
+                result = enemy;
+            }
+        }
+        return result;
+    }
+
 }
 
