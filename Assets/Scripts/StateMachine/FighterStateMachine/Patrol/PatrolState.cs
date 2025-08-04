@@ -31,6 +31,7 @@ public class PatrolState : FighterState{
     }
 
     public override void Execute() {
+        // Wait One Frame -> Wait NavMesh Update
         if (IsFirstFrame){
             IsFirstFrame = false;
             return;

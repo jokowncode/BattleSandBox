@@ -1,12 +1,14 @@
 ﻿
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Fighter : StateMachineController {
-
+    
     [SerializeField] protected FighterData InitialData;
     [SerializeField] private Image BloodBarImage;
+    [field: SerializeField] public SkillNameUI SkillNameText{ get; private set; }
     [SerializeField] private ParticleSystem BloodParticle;
     [field: SerializeField] public Transform Center { get; private set; }
     [field: SerializeField] public Transform AttackCaster { get; private set; }
@@ -25,6 +27,8 @@ public class Fighter : StateMachineController {
     public float HealMultiplier { get; protected set; } = 1.0f;
     public float ShieldMultiplier{ get; protected set; } = 1.0f;
 
+    private FighterRenderer Renderer;
+
     protected virtual void Awake(){
         this.FighterSkillCaster = GetComponentInChildren<SkillCaster>();
         this.FighterAnimator = GetComponentInChildren<Animator>();
@@ -32,10 +36,15 @@ public class Fighter : StateMachineController {
         
         this.AnimationEvent = GetComponentInChildren<FighterAnimationEvent>();
         this.Move = GetComponent<FighterMove>();
+        this.Renderer = GetComponentInChildren<FighterRenderer>();
         this.FighterPatrol = GetComponent<PatrolState>();
         this.FighterSkill = GetComponent<SkillState>();
         // Clone Fighter Data to Update
         this.CurrentData = Instantiate(this.InitialData);
+        
+        if (this.FighterSkillCaster){
+            this.SkillNameText.SetSkillName(this.FighterSkillCaster.Data.Name);
+        }
     }
 
     public void BattleStart() {
@@ -60,7 +69,7 @@ public class Fighter : StateMachineController {
         this.CurrentData.Health -= effectData.Value;
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
         if(this.BloodParticle) this.BloodParticle.Play();
-        // TODO: Play Fighter Be Attacked Anim
+        this.Renderer.ChangeColor(Color.red);
         
         if (this.CurrentData.Health <= 0.0f) {
             // TODO: Fighter Dead

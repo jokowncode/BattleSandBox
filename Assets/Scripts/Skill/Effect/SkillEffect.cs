@@ -25,6 +25,7 @@ public abstract class SkillEffect : MonoBehaviour {
         }
 
         Apply(influenceFighter, effectData);
+        CameraManager.Instance.ShakeCamera(0.5f, 0.25f);
         foreach (SkillEnd end in SkillEndPlugins) {
             end.AdditionalProcedure(influenceFighter, this, effectData);
         }

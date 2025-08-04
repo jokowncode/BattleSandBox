@@ -7,5 +7,6 @@ public static class AnimationParams{
     public static readonly int Skill = Animator.StringToHash("Skill");
     public static readonly int Idle = Animator.StringToHash("Idle");
     public static readonly int AttackAnimSpeedMultiplier = Animator.StringToHash("AttackAnimSpeedMultiplier");
+    public static readonly int Hit = Animator.StringToHash("Hit");
 }
 

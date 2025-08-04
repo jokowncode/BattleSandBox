@@ -17,7 +17,7 @@ public abstract class SkillCaster : MonoBehaviour{
     private int CurrentSkillCastCount;
     private float LastCastTime;
 
-    protected SkillData Data{ get; private set; }
+    public SkillData Data{ get; private set; }
 
     private void Awake(){
         OwnedFighter = GetComponentInParent<Fighter>();
