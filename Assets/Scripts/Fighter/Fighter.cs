@@ -10,6 +10,7 @@ public class Fighter : StateMachineController {
     [SerializeField] private Image BloodBarImage;
     [field: SerializeField] public SkillNameUI SkillNameText{ get; private set; }
     [SerializeField] private ParticleSystem BloodParticle;
+    [SerializeField] private ParticleSystem HealParticlePrefab;
     [field: SerializeField] public Transform Center { get; private set; }
     [field: SerializeField] public Transform AttackCaster { get; private set; }
     
@@ -84,7 +85,10 @@ public class Fighter : StateMachineController {
     }
     
     public void BeHealed(EffectData effectData) {
-        // TODO : Play Fighter Be Healed Anim
+        if (this.HealParticlePrefab){
+            ParticleSystem healParticle = Instantiate(this.HealParticlePrefab, this.transform.position, Quaternion.identity);
+            Destroy(healParticle.gameObject, 0.7f);
+        }
         this.CurrentData.Health = Mathf.Min(this.InitialData.Health, this.CurrentData.Health + effectData.Value);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
     }

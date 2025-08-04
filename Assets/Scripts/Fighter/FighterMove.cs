@@ -48,10 +48,14 @@ public class FighterMove : MonoBehaviour{
         }
 
         //  Control Character Face Forward
-        ChangeForward(velocityDir.x);
+        // ChangeForward(velocityDir.x);
         
         //this.transform.position += Owner.Speed * Time.deltaTime * velocityDir;
         Agent.SetDestination(targetPos);
+    }
+
+    private void Update(){
+        if(this.Agent.enabled) ChangeForward(this.Agent.velocity.x);
     }
 
     public void StartMove(){
