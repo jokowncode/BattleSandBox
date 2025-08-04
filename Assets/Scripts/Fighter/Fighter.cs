@@ -36,6 +36,8 @@ public class Fighter : StateMachineController {
         this.FighterSkill = GetComponent<SkillState>();
         // Clone Fighter Data to Update
         this.CurrentData = Instantiate(this.InitialData);
+        this.CurrentData.Shield = 0.0f;
+        this.ShieldBarImage.fillAmount = 0.0f;
     }
 
     public void BattleStart() {
@@ -64,7 +66,8 @@ public class Fighter : StateMachineController {
         }
         else
             this.CurrentData.Health -= effectData.Value;
-        
+
+        this.ShieldBarImage.fillAmount = this.CurrentData.Shield / this.InitialData.Shield;
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
         // TODO: Play Fighter Be Attacked Anim
         
@@ -78,6 +81,11 @@ public class Fighter : StateMachineController {
             Destroy(this.gameObject);
             return;
         }
+    }
+
+    public void UpdateShieldAmount()
+    {
+        this.ShieldBarImage.fillAmount = this.CurrentData.Shield / this.InitialData.Shield;
     }
 
     public void BeHealed(EffectData effectData) {

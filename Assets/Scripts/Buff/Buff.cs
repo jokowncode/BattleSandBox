@@ -106,7 +106,10 @@ public class Buff : MonoBehaviour
         //ApplyBuffEffects(target);
         Debug.Log("ApplyImmediateBuffEffects: "+changedAttackSpeedValue);
         if (changedShieldValue != 0)
+        {
             target.Shield = changedShieldValue;
+            target.UpdateShieldAmount();
+        }
         if(changedAttackSpeedValue!=0)
             target.FighterPropertyChange(FighterProperty.CooldownPercentage,PropertyModifyWay.Value,changedAttackSpeedValue,true);
         if(changedMoveSpeedValue != 0)
