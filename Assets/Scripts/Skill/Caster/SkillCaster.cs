@@ -85,6 +85,11 @@ public abstract class SkillCaster : MonoBehaviour{
         LastCastTime = Time.time;
     }
 
+    public SkillData GetSkillData()
+    {
+        return InitialData;
+    }
+
     #region SkillPropretyChange
 
     private float GetInitialData(SkillProperty property){

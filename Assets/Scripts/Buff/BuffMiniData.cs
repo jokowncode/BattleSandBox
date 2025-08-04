@@ -15,18 +15,11 @@ public class BuffMiniData : ScriptableObject
     [Header("效果设置")]
     public bool isRemoveBuff;
     //public PropertyModifyWay propertyModifyWay;
-    public float healthChangePerTickValue = 0.0f; // 每次触发的生命值变化
-    public float attackSpeedChangeValue = 0.0f;// 速度乘数
-    public float moveSpeedChangeValue = 0.0f;
-    public float damageChangeValue = 0.0f;// 伤害乘数
+    public FighterProperty refProperty;
+    public FighterProperty changedProperty; // 伤害乘数
+    public float changedValue;
 
-    [Header("数值储存")] 
-    public float healthValue;
-    public float attackSpeedValue;
-    public float moveSpeedValue;
-    public float speedValue;
-    public float damageValue;
-    
-    
+    [Header("数值储存")]
+    public float value;
 }
 

@@ -59,7 +59,7 @@ public class Fighter : StateMachineController {
     public void BeDamaged(EffectData effectData) {
         if(Shield > 0.0f)
         {
-            this.CurrentData.Health -= (effectData.Value - Shield);
+            this.CurrentData.Health -= (effectData.Value - Shield)>0?effectData.Value - Shield:0.0f;
             Shield = Shield>effectData.Value?Shield-effectData.Value:0.0f;
         }
         else
@@ -86,7 +86,7 @@ public class Fighter : StateMachineController {
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
     }
     
-    public void PropertyChange(FighterProperty property, PropertyModifyWay modifyWay, float value, bool isUp){
+    public void FighterPropertyChange(FighterProperty property, PropertyModifyWay modifyWay, float value, bool isUp){
 
         float sign = isUp ? 1.0f : -1.0f;
         if (property == FighterProperty.HealMultiplier) {
@@ -121,6 +121,24 @@ public class Fighter : StateMachineController {
                 break;
         }
         ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
+    }
+    
+    public float GetPropertyData(FighterProperty property){
+        
+        if (property == FighterProperty.HealMultiplier) {
+            return this.HealMultiplier;
+        }
+        
+        if (property == FighterProperty.ShieldMultiplier) {
+            return this.ShieldMultiplier;
+        }
+        
+        if (property == FighterProperty.CooldownPercentage){
+            return FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
+        }
+
+        string propertyName = property.ToString();
+        return ReflectionTools.GetObjectProperty<float>(propertyName, this);
     }
 
     public FighterData GetInitialData()
@@ -180,6 +198,8 @@ public class Fighter : StateMachineController {
 
     public FighterType Type => InitialData.Type;
     public string Name => InitialData.Name;
+    public string Description => InitialData.Description;
+    public int StarLevel => InitialData.StarLevel;
     public float AttackRadius => InitialData.AttackRadius;
     //public float Speed => InitialData.Speed;
     public float Speed{ 

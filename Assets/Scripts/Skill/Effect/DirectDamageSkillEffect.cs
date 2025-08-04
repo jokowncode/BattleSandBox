@@ -7,7 +7,7 @@ public class DirectDamageSkillEffect : SkillEffect {
         //Buff.Instance.AddBuff(influenceFighter);
         //Debug.Log("wow");
         Debug.Log("BuffDataExecute");
-        Buff.Instance.AddBuff(influenceFighter,CurrentBuffData);
+        this.GetComponent<Buff>().AddBuff(influenceFighter,CurrentBuffData);
         
     }
 }

@@ -4,6 +4,11 @@ using UnityEngine;
 
 public static class BuffUtils
 {
+    public static float GetProperty(Fighter ft,FighterProperty prop)
+    {
+        return ReflectionTools.GetObjectProperty<float>(prop.ToString(), ft);
+    }
+    
     public static void InitializeBuffData(Fighter fighter,ref BuffData buffData)
     {
         // 参数校验
@@ -20,13 +25,11 @@ public static class BuffUtils
             Debug.LogWarning("传入的buffData未初始化，已创建默认实例");
         }
         
-           
-        
-        float healthBasic = fighter.GetInitialData().Health;
-        float attackSpeedBasic = fighter.FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
-        float moveSpeedBasic = fighter.GetInitialData().Speed;
-        float physicsAttackBasic = fighter.GetInitialData().PhysicsAttack;
-        float magicAttackBasic = fighter.GetInitialData().MagicAttack;
+        // float healthBasic = fighter.GetInitialData().Health;
+        // float attackSpeedBasic = fighter.FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
+        // float moveSpeedBasic = fighter.GetInitialData().Speed;
+        // float physicsAttackBasic = fighter.GetInitialData().PhysicsAttack;
+        // float magicAttackBasic = fighter.GetInitialData().MagicAttack;
         
         foreach (var buffMiniData in buffData.immediateEffectBuff)
         {
@@ -34,17 +37,12 @@ public static class BuffUtils
             
             if(buffMiniData.basicRef==BasicRef.Caster)
             {
-                buffMiniData.healthValue = healthBasic * buffMiniData.healthChangePerTickValue;
-                buffMiniData.attackSpeedValue = attackSpeedBasic * buffMiniData.attackSpeedChangeValue; 
-                buffMiniData.moveSpeedValue = moveSpeedBasic * buffMiniData.moveSpeedChangeValue;
-                buffMiniData.damageValue = physicsAttackBasic * buffMiniData.damageChangeValue;    
+                //if()
+                buffMiniData.value = ReflectionTools.GetObjectProperty<float>(buffMiniData.refProperty.ToString(), fighter) * buffMiniData.changedValue; 
             }
             else
             {
-                buffMiniData.healthValue = buffMiniData.healthChangePerTickValue;
-                buffMiniData.attackSpeedValue = buffMiniData.attackSpeedChangeValue; 
-                buffMiniData.moveSpeedValue = buffMiniData.moveSpeedChangeValue;
-                buffMiniData.damageValue = buffMiniData.damageChangeValue;    
+                buffMiniData.value = buffMiniData.changedValue;   
             }
         }
         foreach (var buffMiniData in buffData.longTimeEffectBuff)
@@ -52,17 +50,11 @@ public static class BuffUtils
             //InitialPrams(ref buffMiniData);
             if(buffMiniData.basicRef==BasicRef.Caster)
             {
-                buffMiniData.healthValue = healthBasic * buffMiniData.healthChangePerTickValue;
-                buffMiniData.attackSpeedValue = attackSpeedBasic * buffMiniData.attackSpeedChangeValue; 
-                buffMiniData.moveSpeedValue = moveSpeedBasic * buffMiniData.moveSpeedChangeValue;
-                buffMiniData.damageValue = physicsAttackBasic * buffMiniData.damageChangeValue;    
+                buffMiniData.value = ReflectionTools.GetObjectProperty<float>(buffMiniData.refProperty.ToString(), fighter) * buffMiniData.changedValue; 
             }
             else
             {
-                buffMiniData.healthValue = buffMiniData.healthChangePerTickValue;
-                buffMiniData.attackSpeedValue = buffMiniData.attackSpeedChangeValue; 
-                buffMiniData.moveSpeedValue = buffMiniData.moveSpeedChangeValue;
-                buffMiniData.damageValue = buffMiniData.damageChangeValue;    
+                buffMiniData.value = buffMiniData.changedValue; 
             }
         }
         foreach (var buffMiniData in buffData.lastEffectBuff)
@@ -70,26 +62,17 @@ public static class BuffUtils
             //InitialPrams(ref buffMiniData);
             if(buffMiniData.basicRef==BasicRef.Caster)
             {
-                buffMiniData.healthValue = healthBasic * buffMiniData.healthChangePerTickValue;
-                buffMiniData.attackSpeedValue = attackSpeedBasic * buffMiniData.attackSpeedChangeValue; 
-                buffMiniData.moveSpeedValue = moveSpeedBasic * buffMiniData.moveSpeedChangeValue;
-                buffMiniData.damageValue = physicsAttackBasic * buffMiniData.damageChangeValue;    
+                buffMiniData.value = ReflectionTools.GetObjectProperty<float>(buffMiniData.refProperty.ToString(), fighter) * buffMiniData.changedValue; 
             }
             else
             {
-                buffMiniData.healthValue = buffMiniData.healthChangePerTickValue;
-                buffMiniData.attackSpeedValue = buffMiniData.attackSpeedChangeValue; 
-                buffMiniData.moveSpeedValue = buffMiniData.moveSpeedChangeValue;
-                buffMiniData.damageValue = buffMiniData.damageChangeValue;    
+                buffMiniData.value = buffMiniData.changedValue;   
             }
         }
     }
 
     static void InitialPrams(ref BuffMiniData buffMiniData)
     {
-        buffMiniData.healthValue = 0;
-        buffMiniData.attackSpeedValue = 0; 
-        buffMiniData.moveSpeedValue = 0;
-        buffMiniData.damageValue = 0; 
+        buffMiniData.value = 0f;
     }
 }

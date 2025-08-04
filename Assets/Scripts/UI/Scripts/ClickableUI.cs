@@ -13,6 +13,7 @@ public class ClickableUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (skillData != null && skillNameText != null)
         {
             skillNameText.text = skillData.Name;
+            this.GetComponent<Image>().color = skillData.UIColor;
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class BattleUIManager : MonoBehaviour {
@@ -14,8 +15,22 @@ public class BattleUIManager : MonoBehaviour {
     [SerializeField] private HeroWarehouseUI heroWarehouseUI;
     [SerializeField] private SkillWarehouseUI skillWarehouseUI;
     [SerializeField] private HeroDetailUI heroDetailUI;
+    
+    [Header("Skill UI")]
+    public Sprite warriorSkillIcon;
+    public Sprite mageSkillIcon;
+    public Sprite priestSkillIcon;
+    public Sprite passiveSkillIcon;
+    
+    [SerializeField] private GameObject skillImageUI;
     [SerializeField] private GameObject skill1UI;
     [SerializeField] private GameObject skill2UI;
+    
+    [SerializeField] private GameObject attackDescription;
+    [SerializeField] private GameObject activeSkillDescription;
+    [SerializeField] private GameObject passiveSkill1Description;
+    [SerializeField] private GameObject passiveSkill2Description;
+    
 
     private void Awake() {
         if (Instance != null) {
@@ -56,14 +71,15 @@ public class BattleUIManager : MonoBehaviour {
     /// </summary>
     public void SetSkill1UIText(string text)
     {
-        TextMeshProUGUI tmp = skill1UI.GetComponentInChildren<TextMeshProUGUI>();
-        if (tmp != null)
+        passiveSkill1Description.GetComponent<TextMeshProUGUI>().text = text;
+        Color color = skill1UI.GetComponent<Image>().color;
+        if (text != "")
         {
-            tmp.text = text;
+            skill1UI.GetComponent<Image>().color = new Color(color.r, color.g, color.b, 255);
         }
         else
         {
-            Debug.LogWarning("skill1UI 下未找到 TextMeshProUGUI");
+            skill1UI.GetComponent<Image>().color =  new Color(color.r, color.g, color.b, 0);
         }
     }
 
@@ -72,15 +88,44 @@ public class BattleUIManager : MonoBehaviour {
     /// </summary>
     public void SetSkill2UIText(string text)
     {
-        TextMeshProUGUI tmp = skill2UI.GetComponentInChildren<TextMeshProUGUI>();
-        if (tmp != null)
+        passiveSkill2Description.GetComponent<TextMeshProUGUI>().text = text;
+        Color color = skill2UI.GetComponent<Image>().color;
+        if (text != "")
         {
-            tmp.text = text;
+            skill2UI.GetComponent<Image>().color = new Color(color.r, color.g, color.b, 255);
         }
         else
         {
-            Debug.LogWarning("skill2UI 下未找到 TextMeshProUGUI");
+            skill2UI.GetComponent<Image>().color =  new Color(color.r, color.g, color.b, 0);
         }
+    }
+    
+    /// <summary>
+    /// 修改 skill1UI 下的 Image
+    /// </summary>
+    public void SetSkill1UIImage()
+    {
+        
+    }
+
+    /// <summary>
+    /// 修改 skill2UI 下的 Image
+    /// </summary>
+    public void SetSkill2UIImage()
+    {
+
+    }
+
+    public void UpdateSelectedHeroSkillUI(FighterType type,string skillDesc = null)
+    {
+        if(type == FighterType.Mage)
+            skillImageUI.GetComponentInChildren<Image>().sprite = mageSkillIcon;
+        else if(type == FighterType.Priest)
+            skillImageUI.GetComponentInChildren<Image>().sprite = priestSkillIcon;
+        else
+            skillImageUI.GetComponentInChildren<Image>().sprite = warriorSkillIcon;
+        attackDescription.GetComponent<TextMeshProUGUI>().text = "普通攻击";
+        activeSkillDescription.GetComponent<TextMeshProUGUI>().text = skillDesc;
     }
     
 }

@@ -18,22 +18,12 @@ public class HeroWarehouseUI : MonoBehaviour {
         DontDestroyOnLoad(this.gameObject);
     }
     
-    public GameObject heroWarehouseImageUIPrefab;
+    public GameObject heroWarehouseWarriorUIPrefab;
+    public GameObject heroWarehouseMageUIPrefab;
+    public GameObject heroWarehousePriestUIPrefab;
     public GameObject defaultDraggableInstancePrefab;
     public Transform heroWarehouseContent;           // ScrollView 的 Content 对象
-
-    [Header("Debugger")]
-    public bool isDebugging;
     
-    [Header("Test Sprite")]
-    public Sprite testSprite1;
-    public Sprite testSprite2;
-    public Sprite testSprite3;
-
-    public void Update()
-    {
-        MyDebug();
-    }
 
     public void UpdateHeroWarehouse() {
         
@@ -75,10 +65,10 @@ public class HeroWarehouseUI : MonoBehaviour {
     }
 
     [Obsolete("use reference instead")]
-    public void AddItem(Sprite sprite,GameObject draggableInstancePrefab)
+    public void AddMageItem(Sprite sprite,string heroRef)
     {
-        GameObject go = Instantiate(heroWarehouseImageUIPrefab, heroWarehouseContent);
-        go.GetComponent<DraggableUI>().previewPrefab = draggableInstancePrefab;
+        GameObject go = Instantiate(heroWarehouseMageUIPrefab, heroWarehouseContent);
+        go.GetComponent<DraggableUI>().prefabReference = heroRef;
         Image imageComponent = go.GetComponent<Image>();
         if (imageComponent == null)
         {
@@ -87,10 +77,10 @@ public class HeroWarehouseUI : MonoBehaviour {
         imageComponent.sprite = sprite;
     }
     
-    public void AddItem(Sprite sprite,string reference)
+    public void AddWarriorItem(Sprite sprite,string heroRef)
     {
-        GameObject go = Instantiate(heroWarehouseImageUIPrefab, heroWarehouseContent);
-        go.GetComponent<DraggableUI>().prefabReference = reference;
+        GameObject go = Instantiate(heroWarehouseWarriorUIPrefab, heroWarehouseContent);
+        go.GetComponent<DraggableUI>().prefabReference = heroRef;
         Image imageComponent = go.GetComponent<Image>();
         if (imageComponent == null)
         {
@@ -99,11 +89,10 @@ public class HeroWarehouseUI : MonoBehaviour {
         imageComponent.sprite = sprite;
     }
     
-    // test
-    public void AddItem(Sprite sprite)
+    public void AddPriestItem(Sprite sprite,string heroRef)
     {
-        GameObject go = Instantiate(heroWarehouseImageUIPrefab, heroWarehouseContent);
-        go.GetComponent<DraggableUI>().previewPrefab = defaultDraggableInstancePrefab;
+        GameObject go = Instantiate(heroWarehousePriestUIPrefab, heroWarehouseContent);
+        go.GetComponent<DraggableUI>().prefabReference = heroRef;
         Image imageComponent = go.GetComponent<Image>();
         if (imageComponent == null)
         {
@@ -111,6 +100,50 @@ public class HeroWarehouseUI : MonoBehaviour {
         }
         imageComponent.sprite = sprite;
     }
+    
+    public void AddItem(Sprite sprite,string heroRef)
+    {
+        GameObject go;
+        FighterType tempType = HeroWarehouseManager.Instance.GetHeroType(heroRef);
+        if(tempType == FighterType.Warrior)
+            go = Instantiate(heroWarehouseWarriorUIPrefab, heroWarehouseContent);
+        else if (tempType == FighterType.Mage)
+            go = Instantiate(heroWarehouseMageUIPrefab, heroWarehouseContent);
+        else
+            go = Instantiate(heroWarehousePriestUIPrefab, heroWarehouseContent);
+        go.GetComponent<DraggableUI>().prefabReference = heroRef;
+        Image[] imageComponent = go.GetComponentsInChildren<Image>();
+        // if (imageComponent == null)
+        // {
+        //     imageComponent.AddComponent<Image>();
+        // }
+        imageComponent[1].sprite = sprite;
+    }
+    
+    // public void AddItem(Sprite sprite,string reference)
+    // {
+    //     GameObject go = Instantiate(heroWarehouseImageUIPrefab, heroWarehouseContent);
+    //     go.GetComponent<DraggableUI>().prefabReference = reference;
+    //     Image imageComponent = go.GetComponent<Image>();
+    //     if (imageComponent == null)
+    //     {
+    //         imageComponent.AddComponent<Image>();
+    //     }
+    //     imageComponent.sprite = sprite;
+    // }
+    //
+    // // test
+    // public void AddItem(Sprite sprite)
+    // {
+    //     GameObject go = Instantiate(heroWarehouseImageUIPrefab, heroWarehouseContent);
+    //     go.GetComponent<DraggableUI>().previewPrefab = defaultDraggableInstancePrefab;
+    //     Image imageComponent = go.GetComponent<Image>();
+    //     if (imageComponent == null)
+    //     {
+    //         imageComponent.AddComponent<Image>();
+    //     }
+    //     imageComponent.sprite = sprite;
+    // }
     
     // public void AddItem(string hero)
     // {
@@ -126,32 +159,6 @@ public class HeroWarehouseUI : MonoBehaviour {
     
     
     //-----------------------Debug-------------------------
-    public void MyDebug()
-    {
-        if (!isDebugging) return;
-        
-        DebugClearHeroWarehouse();
-        DebugAddItem();
-    }
 
-    public void DebugClearHeroWarehouse()
-    {
-        if (Input.GetKeyDown((KeyCode.C)))
-        {
-            Debug.Log("ExecuteClearHeroWarehouse");
-            ClearWarehouse();
-        }
-    }
-
-    public void DebugAddItem()
-    {
-        if (Input.GetKeyDown((KeyCode.A)))
-        {
-            Debug.Log("ExecuteAddItem");
-            AddItem(testSprite2);
-            AddItem(testSprite1);
-            AddItem(testSprite3);
-        }
-    }
     
 }

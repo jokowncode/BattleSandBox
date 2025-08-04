@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 public class SkillData : ScriptableObject{
     public string Name;
     public string Description;
+    public Color UIColor;
     public TargetType TargetType;
 
     public float Cooldown;

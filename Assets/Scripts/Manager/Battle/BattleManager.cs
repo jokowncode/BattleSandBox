@@ -105,6 +105,7 @@ public class BattleManager : StateMachineController {
             UpdateSkillUI();
             HeroDetailUI.Instance.ChangeHeroDetailUIValue(selectedHero.GetComponentInChildren<SpriteRenderer>().sprite);
             HeroDetailUI.Instance.ChangeDetailUI(selectedHero.GetComponent<Hero>());
+            BattleUIManager.Instance.UpdateSelectedHeroSkillUI(so.GetComponent<Hero>().Type,so.GetComponent<Hero>().FighterSkillCaster.GetSkillData().Description);
         }
         return;
     }
@@ -225,29 +226,29 @@ public class BattleManager : StateMachineController {
     /// </summary>
     public void UpdateSkillUI()
     {
-        string skill1Name = "";
-        string skill2Name = "";
+        string skill1Description = "";
+        string skill2Description = "";
 
         if (Skills1InBattle.TryGetValue(selectedHero, out SkillData skill1))
         {
-            skill1Name = skill1.Name;
+            skill1Description = skill1.Description;
         }
         else
         {
-            skill1Name = "无技能1";
+            skill1Description = "";
         }
 
         if (Skills2InBattle.TryGetValue(selectedHero, out SkillData skill2))
         {
-            skill2Name = skill2.Name;
+            skill2Description = skill2.Description;
         }
         else
         {
-            skill2Name = "无技能2";
+            skill2Description = "";
         }
 
-        BattleUIManager.Instance.SetSkill1UIText(skill1Name);
-        BattleUIManager.Instance.SetSkill2UIText(skill2Name);
+        BattleUIManager.Instance.SetSkill1UIText(skill1Description);
+        BattleUIManager.Instance.SetSkill2UIText(skill2Description);
     }
     
 

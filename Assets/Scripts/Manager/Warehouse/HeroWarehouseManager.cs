@@ -72,6 +72,12 @@ public class HeroWarehouseManager : MonoBehaviour {
         GameObject go = ownedHeroes[heroRef];
         return go.GetComponentInChildren<SpriteRenderer>().sprite;
     }
+    
+    public FighterType GetHeroType(string heroRef)
+    {
+        GameObject go = ownedHeroes[heroRef];
+        return go.GetComponent<Hero>().Type;
+    }
 
     /// <summary>
     /// 根据 heroRef 获取对应的英雄 GameObject

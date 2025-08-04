@@ -10,7 +10,8 @@ public abstract class SkillDelivery : MonoBehaviour {
     protected Vector3 TargetPosition;
     protected SkillEffect Effect;
     
-    public BuffData BuffData;
+    public BuffData InitBuffData;
+    private BuffData CurrentBuffData;
 
     private GameObject Caster;
     
@@ -44,7 +45,22 @@ public abstract class SkillDelivery : MonoBehaviour {
 
     public void InitializeBuffData(Fighter fighter)
     {
-        BuffUtils.InitializeBuffData(fighter,ref this.BuffData);
+        CurrentBuffData = ScriptableObject.Instantiate(InitBuffData);
+        
+        CurrentBuffData.immediateEffectBuff.Clear();
+        foreach(var miniData in InitBuffData.immediateEffectBuff)
+            CurrentBuffData.immediateEffectBuff.Add(ScriptableObject.Instantiate(miniData));
+        
+        CurrentBuffData.longTimeEffectBuff.Clear();
+        foreach(var miniData in InitBuffData.longTimeEffectBuff)
+            CurrentBuffData.longTimeEffectBuff.Add(ScriptableObject.Instantiate(miniData));
+        
+        CurrentBuffData.lastEffectBuff.Clear();
+        foreach(var miniData in InitBuffData.lastEffectBuff)
+            CurrentBuffData.lastEffectBuff.Add(ScriptableObject.Instantiate(miniData));
+        
+        BuffUtils.InitializeBuffData(fighter,ref this.CurrentBuffData);
+        Effect.CurrentBuffData = CurrentBuffData;
     }
 
     protected virtual bool TriggerCondition(Collider other) {
@@ -57,5 +73,10 @@ public abstract class SkillDelivery : MonoBehaviour {
         if (other.gameObject != Caster && TriggerCondition(other)) {
             TriggerTarget(other);
         }   
+    }
+
+    public BuffData GetCurrentBuffData()
+    {
+        return CurrentBuffData;
     }
 }
