@@ -20,6 +20,12 @@ public class AudioManager : MonoBehaviour{
         this.MainMusicAudioSource = GetComponent<AudioSource>();
     }
 
+    public void SetMainMusic(AudioClip newClip){
+        this.MainMusicAudioSource.mute = true;
+        this.MainMusicAudioSource.clip = newClip;
+        this.MainMusicAudioSource.mute = false;
+    }
+
     public void SetMainMusicVolume(float volume){
         this.MainMusicAudioSource.volume = volume;
     }

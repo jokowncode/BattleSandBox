@@ -21,7 +21,5 @@ public class MagicCircleAttackState : AttackState{
             TargetType = Controller.AttackTargetType
         });
     }
-
-    protected override void OnAttack(){ }
 }
 

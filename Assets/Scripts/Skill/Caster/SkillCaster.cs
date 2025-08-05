@@ -7,6 +7,7 @@ public abstract class SkillCaster : MonoBehaviour{
 
     [SerializeField] private SkillData InitialData;
     [SerializeField] private ParticleSystem SkillStartParticle;
+    [SerializeField] private AudioClip SkillCastSfx;
 
     protected Fighter OwnedFighter;
 
@@ -79,6 +80,9 @@ public abstract class SkillCaster : MonoBehaviour{
     public void CastSkill(Transform attackTarget){
         if (!CanCastSkill()) return;
         if (SkillStartParticle) SkillStartParticle.Play();
+        if (SkillCastSfx){
+            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.SkillCastSfx);
+        }
         CurrentSkillCastCount++;
         Cast(attackTarget);
         foreach (SkillStart start in SkillStartPlugins){

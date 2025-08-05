@@ -13,7 +13,7 @@ public class Fighter : StateMachineController {
     [SerializeField] private ParticleSystem HealParticlePrefab;
     [field: SerializeField] public Transform Center { get; private set; }
     [field: SerializeField] public Transform AttackCaster { get; private set; }
-    
+    [SerializeField] private AudioClip BeDamagedSfx;
     
     private FighterData CurrentData;
     public Fighter AttackTarget { get; private set; }
@@ -72,7 +72,9 @@ public class Fighter : StateMachineController {
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
         if(this.BloodParticle) this.BloodParticle.Play();
         this.Renderer.ChangeColor(Color.red);
-        
+        if (this.BeDamagedSfx) {
+            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.BeDamagedSfx);
+        }
         if (this.CurrentData.Health <= 0.0f && !IsDead) {
             // TODO: Fighter Dead
             IsDead = true;
