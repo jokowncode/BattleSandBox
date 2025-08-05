@@ -68,12 +68,13 @@ public class Fighter : StateMachineController {
     }
 
     public void BeDamaged(EffectData effectData) {
+        if (IsDead) return;
         this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - effectData.Value);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
         if(this.BloodParticle) this.BloodParticle.Play();
         this.Renderer.ChangeColor(Color.red);
         if (this.BeDamagedSfx) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.BeDamagedSfx);
+            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.BeDamagedSfx, 0.6f);
         }
         if (this.CurrentData.Health <= 0.0f && !IsDead) {
             // TODO: Fighter Dead
