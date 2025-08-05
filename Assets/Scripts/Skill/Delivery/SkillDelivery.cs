@@ -11,7 +11,7 @@ public abstract class SkillDelivery : MonoBehaviour {
     protected SkillEffect Effect;
 
     private GameObject Caster;
-
+    
     public FighterType CasterType{ get; private set; }
     public List<SkillMiddle> SkillMiddlePlugins{ get; private set; }
     protected Vector3 MoveVec;
@@ -46,11 +46,19 @@ public abstract class SkillDelivery : MonoBehaviour {
         return other.gameObject.layer == LayerMask.NameToLayer(this.EffectData.TargetType.ToString())
             || other.gameObject.layer == LayerMask.NameToLayer("Border");
     }
-    protected abstract void TriggerTarget(Collider other);
+    
+    protected abstract void TriggerTargetIn(Collider other);
+    protected virtual void TriggerTargetOut(Collider other){ }
 
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject != Caster && TriggerCondition(other)) {
-            TriggerTarget(other);
+            TriggerTargetIn(other);
+        }   
+    }
+
+    private void OnTriggerExit(Collider other){
+        if (other.gameObject != Caster && TriggerCondition(other)) {
+            TriggerTargetOut(other);
         }   
     }
 }

@@ -49,7 +49,7 @@ public class BulletSkillDelivery : SkillDelivery{
         Destroy(gameObject);  
     }
 
-    protected override void TriggerTarget(Collider other) {
+    protected override void TriggerTargetIn(Collider other) {
         if (Hit != null){
             var hitInstance = Instantiate(Hit, transform.position, Quaternion.LookRotation(this.MoveVec));
             var hitPs = hitInstance.GetComponent<ParticleSystem>();

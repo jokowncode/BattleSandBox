@@ -4,16 +4,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InPlaceSkillDelivery : SkillDelivery{
+
+    [SerializeField] private float DefaultDuration = 2.0f;
+
+    private float Duration;
+    private bool IsApplyEffect = false;
+
     private void Start(){
         this.transform.position = this.TargetPosition;
-        Destroy(gameObject, 2.0f);
+        this.Duration = this.EffectData.Duration > 0.0f ? this.EffectData.Duration : this.DefaultDuration;
+        Destroy(gameObject, this.Duration);
     }
 
-    protected override void TriggerTarget(Collider other){
-        if (other.gameObject.TryGetComponent(out Fighter fighter)) {
+    protected override void TriggerTargetIn(Collider other){
+        if (this.IsApplyEffect) return;
+        if (other.gameObject.TryGetComponent(out Fighter fighter)){
+            this.IsApplyEffect = true;
             this.Effect.ApplyEffect(fighter, this.EffectData);
         }
-        Destroy(gameObject, 2.0f);
     }
 }
 

@@ -37,6 +37,13 @@ public abstract class AttackState : FighterState{
     }
 
     protected virtual void OnAttackEnd() {
+        if (BattleManager.Instance.IsGameOver){
+            Controller.FighterAnimator.SetTrigger(AnimationParams.Idle);
+            Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
+            Controller.ChangeState(null);
+            return;
+        }
+        
         if (IsNeedTarget && !this.AttackTarget) {
             Controller.ChangeState(FighterPatrol);
             return;
@@ -49,7 +56,7 @@ public abstract class AttackState : FighterState{
                 return;
             }
         }
-
+        
         if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()) {
             Controller.ChangeState(FighterSkill);
         }

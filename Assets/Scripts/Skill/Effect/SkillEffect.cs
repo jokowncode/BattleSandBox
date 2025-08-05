@@ -10,7 +10,7 @@ public abstract class SkillEffect : MonoBehaviour {
     public List<SkillEnd> SkillEndPlugins{ get; private set; }
     public SkillDelivery Delivery{ get; private set; }
 
-    private void Awake(){
+    protected virtual void Awake(){
         Delivery = GetComponent<SkillDelivery>();
     }
 

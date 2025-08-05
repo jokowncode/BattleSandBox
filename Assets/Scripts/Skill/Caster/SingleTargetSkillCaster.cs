@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SingleTargetSkillCaster : SkillCaster {
 
-    private void InitializeSkillDelivery(Vector3 attackTargetPosition) {
+    protected void InitializeSkillDelivery(Vector3 attackTargetPosition) {
         Vector3 selfPos = OwnedFighter.Center.transform.position;
         selfPos.y = attackTargetPosition.y;
         Vector3 moveVec = (attackTargetPosition - selfPos).normalized;
@@ -11,7 +11,8 @@ public class SingleTargetSkillCaster : SkillCaster {
         delivery.StartDelivery(this.gameObject, attackTargetPosition, new EffectData {
             TargetType = this.Data.TargetType,
             Force = this.Data.Force,
-            Value = GetSkillEffectValue()
+            Value = GetSkillEffectValue(),
+            Duration = this.Data.Duration
         }, OwnedFighter.Type);
         delivery.SetPlugins(this.SkillMiddlePlugins, this.SkillEndPlugins);
     }
