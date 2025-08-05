@@ -114,7 +114,25 @@ public class Fighter : StateMachineController {
         this.CurrentData.Health = Mathf.Min(this.InitialData.Health, this.CurrentData.Health + effectData.Value);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
     }
-    
+
+    public float GetPropertyData(FighterProperty property){
+
+        if (property == FighterProperty.HealMultiplier) {
+            return this.HealMultiplier;
+        }
+
+        if (property == FighterProperty.ShieldMultiplier) {
+            return this.ShieldMultiplier;
+        }
+
+        if (property == FighterProperty.CooldownPercentage){
+            return FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
+        }
+
+        string propertyName = property.ToString();
+        return ReflectionTools.GetObjectProperty<float>(propertyName, this);
+    }
+
     public void FighterPropertyChange(FighterProperty property, PropertyModifyWay modifyWay, float value, bool isUp){
 
         float sign = isUp ? 1.0f : -1.0f;

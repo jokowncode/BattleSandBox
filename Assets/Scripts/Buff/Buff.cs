@@ -167,7 +167,7 @@ public class Buff : MonoBehaviour
 
     public void AddAttackSpeed(Hero tf, float speed)
     {
-        tf.HeroPropertyChange(FighterProperty.CooldownPercentage,PropertyModifyWay.Percentage,speed,true);
+        tf.FighterPropertyChange(FighterProperty.CooldownPercentage,PropertyModifyWay.Percentage,speed,true);
     }
 
     public void RemoveBuff(Fighter target)
