@@ -1,6 +1,5 @@
 ﻿
 using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,9 +7,11 @@ public class Fighter : StateMachineController {
     
     [SerializeField] protected FighterData InitialData;
     [SerializeField] private Image BloodBarImage;
+    
     [field: SerializeField] public SkillNameUI SkillNameText{ get; private set; }
     [SerializeField] private ParticleSystem BloodParticle;
     [SerializeField] private ParticleSystem HealParticlePrefab;
+    [SerializeField] private Image ShieldBarImage;
     [field: SerializeField] public Transform Center { get; private set; }
     [field: SerializeField] public Transform AttackCaster { get; private set; }
     [SerializeField] private AudioClip BeDamagedSfx;
@@ -47,6 +48,8 @@ public class Fighter : StateMachineController {
         if (this.FighterSkillCaster){
             this.SkillNameText.SetSkillName(this.FighterSkillCaster.Data.Name);
         }
+        this.CurrentData.Shield = 0.0f;
+        this.ShieldBarImage.fillAmount = 0.0f;
     }
 
     public void BattleStart() {
@@ -69,6 +72,15 @@ public class Fighter : StateMachineController {
 
     public void BeDamaged(EffectData effectData) {
         this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - effectData.Value);
+        if(Shield > 0.0f)
+        {
+            this.CurrentData.Health -= (effectData.Value - Shield)>0?effectData.Value - Shield:0.0f;
+            Shield = Shield>effectData.Value?Shield-effectData.Value:0.0f;
+        }
+        else
+            this.CurrentData.Health -= effectData.Value;
+
+        this.ShieldBarImage.fillAmount = this.CurrentData.Shield / this.InitialData.Shield;
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
         if(this.BloodParticle) this.BloodParticle.Play();
         this.Renderer.ChangeColor(Color.red);
@@ -88,6 +100,12 @@ public class Fighter : StateMachineController {
         }
     }
     
+
+    public void UpdateShieldAmount()
+    {
+        this.ShieldBarImage.fillAmount = this.CurrentData.Shield / this.InitialData.Shield;
+    }
+
     public void BeHealed(EffectData effectData) {
         if (this.HealParticlePrefab){
             ParticleSystem healParticle = Instantiate(this.HealParticlePrefab, this.transform.position, Quaternion.identity);
@@ -162,6 +180,10 @@ public class Fighter : StateMachineController {
         get => CurrentData.Health;
         set => CurrentData.Health=value;
     }
+    public float Shield{ 
+        get => CurrentData.Shield;
+        set => CurrentData.Shield=value;
+    }
     public float PhysicsAttack{ 
         get => CurrentData.PhysicsAttack;
         set => CurrentData.PhysicsAttack=value;
@@ -182,8 +204,14 @@ public class Fighter : StateMachineController {
 
     public FighterType Type => InitialData.Type;
     public string Name => InitialData.Name;
+    public string Description => InitialData.Description;
+    public int StarLevel => InitialData.StarLevel;
     public float AttackRadius => InitialData.AttackRadius;
-    public float Speed => InitialData.Speed;
+    //public float Speed => InitialData.Speed;
+    public float Speed{ 
+        get => CurrentData.Speed;
+        set => CurrentData.Speed=value;
+    }
     #endregion
 }
 

@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 public class SkillData : ScriptableObject{
     public string Name;
     public string Description;
+    public Color UIColor;
     public TargetType TargetType;
 
     public float Cooldown;
@@ -22,5 +23,8 @@ public class SkillData : ScriptableObject{
     public bool SkillNeedTarget = true;
     
     public SkillDelivery SkillDeliveryPrefab;
+
+    public bool SkillNeedBuff = false;
+    public BuffData BuffDataSO;
 }
 

@@ -9,6 +9,9 @@ public abstract class SkillDelivery : MonoBehaviour {
     protected EffectData EffectData;
     protected Vector3 TargetPosition;
     protected SkillEffect Effect;
+    
+    public BuffData InitBuffData;
+    private BuffData CurrentBuffData;
 
     private GameObject Caster;
     
@@ -42,6 +45,26 @@ public abstract class SkillDelivery : MonoBehaviour {
         this.Effect.SetEndPlugins(endPlugins);
     }
 
+    public void InitializeBuffData(Fighter fighter)
+    {
+        CurrentBuffData = ScriptableObject.Instantiate(InitBuffData);
+        
+        CurrentBuffData.immediateEffectBuff.Clear();
+        foreach(var miniData in InitBuffData.immediateEffectBuff)
+            CurrentBuffData.immediateEffectBuff.Add(ScriptableObject.Instantiate(miniData));
+        
+        CurrentBuffData.longTimeEffectBuff.Clear();
+        foreach(var miniData in InitBuffData.longTimeEffectBuff)
+            CurrentBuffData.longTimeEffectBuff.Add(ScriptableObject.Instantiate(miniData));
+        
+        CurrentBuffData.lastEffectBuff.Clear();
+        foreach(var miniData in InitBuffData.lastEffectBuff)
+            CurrentBuffData.lastEffectBuff.Add(ScriptableObject.Instantiate(miniData));
+        
+        BuffUtils.InitializeBuffData(fighter,ref this.CurrentBuffData);
+        Effect.CurrentBuffData = CurrentBuffData;
+    }
+
     protected virtual bool TriggerCondition(Collider other) {
         return other.gameObject.layer == LayerMask.NameToLayer(this.EffectData.TargetType.ToString())
             || other.gameObject.layer == LayerMask.NameToLayer("Border");
@@ -60,5 +83,10 @@ public abstract class SkillDelivery : MonoBehaviour {
         if (other.gameObject != Caster && TriggerCondition(other)) {
             TriggerTargetOut(other);
         }   
+    }
+
+    public BuffData GetCurrentBuffData()
+    {
+        return CurrentBuffData;
     }
 }
