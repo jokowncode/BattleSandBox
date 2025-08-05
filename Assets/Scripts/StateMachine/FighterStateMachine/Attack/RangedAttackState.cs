@@ -7,6 +7,7 @@ public class RangedAttackState : AttackState {
     
     protected override void OnAttack(){
         if (IsNeedTarget && !this.AttackTarget) return;
+        base.OnAttack();
         if(AttackParticle) AttackParticle.Play();
         
         Vector3 attackPos = Controller.AttackCaster.localPosition;

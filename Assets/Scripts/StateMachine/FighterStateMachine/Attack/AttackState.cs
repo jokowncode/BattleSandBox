@@ -6,6 +6,7 @@ public abstract class AttackState : FighterState{
     
 
     [SerializeField] protected ParticleSystem AttackParticle;
+    [SerializeField] private AudioClip AttackSfx;
     
     protected Fighter AttackTarget;
     protected SkillState FighterSkill;
@@ -82,7 +83,11 @@ public abstract class AttackState : FighterState{
             Controller.Move.ChangeForward(moveVec.x);
         }
     }
-    
-    protected abstract void OnAttack();
-    
+
+    protected virtual void OnAttack(){
+        if (AttackSfx) {
+            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.AttackSfx);
+        }
+    }
+
 }

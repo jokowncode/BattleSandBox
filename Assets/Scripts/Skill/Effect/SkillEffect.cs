@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class SkillEffect : MonoBehaviour {
 
     [SerializeField] protected ParticleSystem EffectParticle;
+    [SerializeField] private AudioClip SkillApplyEffectSfx;
 
     public List<SkillEnd> SkillEndPlugins{ get; private set; }
     public SkillDelivery Delivery{ get; private set; }
@@ -22,6 +23,10 @@ public abstract class SkillEffect : MonoBehaviour {
         if (EffectParticle) {
             EffectParticle.transform.position = influenceFighter.transform.position + Vector3.up;
             EffectParticle.Play();
+        }
+
+        if (SkillApplyEffectSfx) {
+            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.SkillApplyEffectSfx);
         }
 
         Apply(influenceFighter, effectData);

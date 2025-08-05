@@ -6,6 +6,7 @@ public class MeleeAttackState : AttackState{
     
     protected override void OnAttack(){
         if (IsNeedTarget && !this.AttackTarget) return;
+        base.OnAttack();
         if (AttackParticle) {
             Vector3 attackVec = AttackTarget.transform.position - transform.position;
             Vector3 XZ2XY = attackVec;
