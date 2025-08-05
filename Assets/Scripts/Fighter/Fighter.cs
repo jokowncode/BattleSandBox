@@ -29,6 +29,7 @@ public class Fighter : StateMachineController {
     public float ShieldMultiplier{ get; protected set; } = 1.0f;
 
     private FighterRenderer Renderer;
+    private bool IsDead;
 
     protected virtual void Awake(){
         this.FighterSkillCaster = GetComponentInChildren<SkillCaster>();
@@ -67,13 +68,14 @@ public class Fighter : StateMachineController {
     }
 
     public void BeDamaged(EffectData effectData) {
-        this.CurrentData.Health -= effectData.Value;
+        this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - effectData.Value);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
         if(this.BloodParticle) this.BloodParticle.Play();
         this.Renderer.ChangeColor(Color.red);
         
-        if (this.CurrentData.Health <= 0.0f) {
+        if (this.CurrentData.Health <= 0.0f && !IsDead) {
             // TODO: Fighter Dead
+            IsDead = true;
             if (this is Hero hero) {
                 BattleManager.Instance.RemoveHero(hero);
             }else if (this is Enemy enemy) {

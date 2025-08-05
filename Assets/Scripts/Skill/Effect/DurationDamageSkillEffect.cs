@@ -10,24 +10,21 @@ public class DurationDamageSkillEffect : SkillEffect{
 
     private EffectData DamageMessage;
     private List<Fighter> InMagicCircleAreaFighters;
-    private WaitForSeconds IntervalTimer;
+
+    private float LastDamageTime = -1.0f;
     
     protected override void Awake(){
         base.Awake();
         this.InMagicCircleAreaFighters = new List<Fighter>();
-        this.IntervalTimer = new WaitForSeconds(this.DamageInterval);
     }
 
-    private void Start(){
-        StartCoroutine(MagicCircleDamageCoroutine());
-    }
-    
-    private IEnumerator MagicCircleDamageCoroutine(){
-        if (InMagicCircleAreaFighters.Count == 0) yield return this.IntervalTimer;
+    private void Update(){
+        if (LastDamageTime > 0.0f && Time.time - LastDamageTime < DamageInterval) return;
+        if (InMagicCircleAreaFighters.Count == 0) return;
         foreach (Fighter fighter in InMagicCircleAreaFighters){
             fighter.BeDamaged(this.DamageMessage);
         }
-        yield return this.IntervalTimer;
+        LastDamageTime = Time.time;
     }
 
     protected override void Apply(Fighter influenceFighter, EffectData effectData){
@@ -36,7 +33,7 @@ public class DurationDamageSkillEffect : SkillEffect{
 
     private void OnTriggerEnter(Collider other){
         if (other.gameObject.layer == LayerMask.NameToLayer(this.DamageMessage.TargetType.ToString())
-            && other.gameObject.TryGetComponent(out Fighter fighter)) {
+            && other.gameObject.TryGetComponent(out Fighter fighter)){
             this.InMagicCircleAreaFighters.Add(fighter);
         }
     }
