@@ -9,7 +9,6 @@ using UnityEngine.Serialization;
 public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandler{
 
     [SerializeField] private AudioClip StartDragHeroSfx;
-    [SerializeField] private AudioClip DeployHeroSfx;
     
     //public Sprite idleSprite;
     private Hero previewInstance;
@@ -23,8 +22,7 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
     
     
     public void OnBeginDrag(PointerEventData eventData){
-        Vector3 instantiatedPosition;
-        FindNearestNavMeshPoint(Vector3.zero,10.0f,out instantiatedPosition);
+        FindNearestNavMeshPoint(Vector3.zero,10.0f,out var instantiatedPosition);
         Hero hero = HeroWarehouseManager.Instance.GetHeroByRef(prefabReference);
         if (hero !=null) {
             previewInstance = Instantiate(hero, instantiatedPosition, Quaternion.identity);
@@ -59,9 +57,6 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
             previewInstance.Deploy();
             BattleManager.Instance.AddHero(previewInstance.GetComponent<Hero>());
             Destroy(this.gameObject);
-            
-            if(DeployHeroSfx)
-                AudioManager.Instance.PlaySfxAtPoint(this.transform.position, DeployHeroSfx);
         }
     }
 
