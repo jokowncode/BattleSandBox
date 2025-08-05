@@ -44,7 +44,8 @@ public class AudioManager : MonoBehaviour{
     }
 
     public void PlaySfxAtPoint(Vector3 point, AudioClip clip, float volume = 1.0f){
-        AudioSource.PlayClipAtPoint(clip, point, volume);
+        // AudioSource.PlayClipAtPoint(clip, point, volume);
+        this.MainMusicAudioSource.PlayOneShot(clip, volume);
     }
 
 }

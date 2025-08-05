@@ -1,14 +1,25 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class Hero : Fighter {
-    
+public class Hero : Fighter{
+
     private List<PassiveEntry> PassiveEntries;
+    private NavMeshAgent HeroAgent;
+
+    public SpriteRenderer HeroRenderer{ get; private set; }
 
     protected override void Awake(){
         base.Awake();
         PassiveEntries = new List<PassiveEntry>();
+        HeroAgent = GetComponent<NavMeshAgent>();
+        HeroRenderer = GetComponentInChildren<SpriteRenderer>();
+        this.HeroAgent.enabled = false;
+    }
+
+    public void Deploy(){
+        this.HeroAgent.enabled = true;
     }
 
     public void AddPassiveEntry(PassiveEntry entry){

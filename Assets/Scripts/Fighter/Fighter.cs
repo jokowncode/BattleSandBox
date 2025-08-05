@@ -43,7 +43,9 @@ public class Fighter : StateMachineController {
         this.FighterSkill = GetComponent<SkillState>();
         // Clone Fighter Data to Update
         this.CurrentData = Instantiate(this.InitialData);
-        
+    }
+
+    private void Start(){
         if (this.FighterSkillCaster){
             this.SkillNameText.SetSkillName(this.FighterSkillCaster.Data.Name);
         }
@@ -182,6 +184,8 @@ public class Fighter : StateMachineController {
 
     public FighterType Type => InitialData.Type;
     public string Name => InitialData.Name;
+    public string Description => InitialData.Description;
+    public int StarLevel => InitialData.StarLevel;
     public float AttackRadius => InitialData.AttackRadius;
     public float Speed => InitialData.Speed;
     #endregion

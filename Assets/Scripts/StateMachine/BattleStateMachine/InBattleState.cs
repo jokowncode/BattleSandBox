@@ -1,6 +1,11 @@
 ﻿
-public class InBattleState : BattleState {
+using UnityEngine;
 
+public class InBattleState : BattleState{
+
+    [SerializeField] private AudioClip InBattleSfx;
+    [SerializeField] private AudioClip InBattleMusic;
+    
     private VictoryState Victory;
     private DefeatState Defeat;
 
@@ -10,7 +15,17 @@ public class InBattleState : BattleState {
         Defeat = GetComponent<DefeatState>();
     }
 
-    public override void Construct() {
+    public override void Construct(){
+
+        if (InBattleSfx) { 
+            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, InBattleSfx);
+        }
+        
+        if(InBattleMusic)
+            AudioManager.Instance.SetMainMusic(InBattleMusic);
+
+        BattleUIManager.Instance.heroDetailUI.Hide();
+        BattleUIManager.Instance.heroWarehouseUI.Hide();
         foreach (Hero hero in Controller.HeroesInBattle) {
             hero.BattleStart();
         }
