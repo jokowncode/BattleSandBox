@@ -11,7 +11,7 @@ public class FlashPoint : MonoBehaviour
         FlashManager.Instance.RegisterPoint(this);
     }
 
-    public void OnDestroy()
+    public void OnDisable()
     {
         if (FlashManager.HasInstance)
             FlashManager.Instance.UnregisterPoint(this);

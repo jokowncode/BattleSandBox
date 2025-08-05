@@ -26,6 +26,12 @@ public class FlashManager : MonoBehaviour
     private void Update()
     {
         Debug.Log("FlashPointCount: "+flashPoints.Count);
+
+        // if (refreshTimer >= refreshInterval)
+        // {
+        //     refreshTimer = 0f;
+        //     RefreshConnections();
+        // }
     }
 
     public void RegisterPoint(FlashPoint point)
@@ -42,7 +48,9 @@ public class FlashManager : MonoBehaviour
         if (flashPoints.Contains(point))
         {
             flashPoints.Remove(point);
-            RefreshConnections();
+            
+            
+            //RefreshConnections();
         }
     }
     
