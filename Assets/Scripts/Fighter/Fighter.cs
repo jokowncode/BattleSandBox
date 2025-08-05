@@ -116,7 +116,6 @@ public class Fighter : StateMachineController {
     }
 
     public float GetPropertyData(FighterProperty property){
-
         if (property == FighterProperty.HealMultiplier) {
             return this.HealMultiplier;
         }
@@ -130,7 +129,7 @@ public class Fighter : StateMachineController {
         }
 
         string propertyName = property.ToString();
-        return ReflectionTools.GetObjectProperty<float>(propertyName, this);
+        return ReflectionTools.GetObjectProperty<float>("Initial"+propertyName, this);
     }
 
     public void FighterPropertyChange(FighterProperty property, PropertyModifyWay modifyWay, float value, bool isUp){
