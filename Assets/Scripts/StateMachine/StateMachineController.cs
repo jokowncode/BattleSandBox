@@ -12,7 +12,7 @@ public class StateMachineController : MonoBehaviour {
         if(CurrentState) CurrentState.Construct();
     }
 
-    private void Update(){
+    protected virtual void Update(){
         if (!CurrentState) return;
         CurrentState.Execute();
         CurrentState.Transition();

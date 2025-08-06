@@ -9,6 +9,8 @@ public class BattleUIManager : MonoBehaviour {
     public static BattleUIManager Instance;
 
     [field: SerializeField] public Canvas UICanvas{ get; private set; }
+    [SerializeField] private Image GameEndBannarImage;
+    [SerializeField] private GameObject GameEndObject;
 
     [field: SerializeField] public HeroWarehouseUI heroWarehouseUI{ get; private set; }
     [field: SerializeField] public PassiveEntryWarehouseUI PassiveEntryWarehouseUI{ get; private set; }
@@ -55,6 +57,11 @@ public class BattleUIManager : MonoBehaviour {
         SkillDescText = activeSkillDescription.GetComponent<TextMeshProUGUI>();
     }
     
+    public void GameEnd(Sprite bannarSprite){
+        this.GameEndBannarImage.sprite = bannarSprite;
+        this.GameEndObject.SetActive(true);
+    }
+
     private void Start() {
         heroWarehouseUI.UpdateHeroWarehouse();
         PassiveEntryWarehouseUI.UpdateHeroWarehouse();
