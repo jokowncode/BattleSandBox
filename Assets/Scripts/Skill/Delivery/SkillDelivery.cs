@@ -6,7 +6,8 @@ using Object = System.Object;
 
 public abstract class SkillDelivery : MonoBehaviour {
 
-    protected EffectData EffectData;
+    public EffectData EffectData{ get; private set; }
+    
     protected Vector3 TargetPosition;
     protected SkillEffect Effect;
 
