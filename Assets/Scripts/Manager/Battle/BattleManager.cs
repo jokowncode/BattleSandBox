@@ -31,7 +31,8 @@ public class BattleManager : StateMachineController {
     public Action<Hero> OnHeroExitTheField;
     
     public bool IsGameOver => EnemiesInBattle.Count <= 0 || HeroesInBattle.Count <= 0;
-    private static Hero selectedHero;
+    private Hero selectedHero;
+    private PrepareState Prepare;
     
     private void Awake() {
         if (Instance != null) {
@@ -40,16 +41,15 @@ public class BattleManager : StateMachineController {
         }
         Instance = this;
         HeroesInBattle = new List<Hero>();
+        Prepare = GetComponent<PrepareState>();
         Skills1InBattle = new Dictionary<Hero,PassiveEntry>();
         Skills2InBattle = new Dictionary<Hero,PassiveEntry>();
-        HeroesInBattle = new List<Hero>();
         DeployEnemy();
     }
 
     private void Start(){
-        ChangeState(GetComponent<PrepareState>());
+        ChangeState(Prepare);
         BattleUIManager.Instance.SetHeroWarehouseActive(true);
-        BattleUIManager.Instance.SetHeroPanelActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(false);
     }
 
@@ -99,6 +99,7 @@ public class BattleManager : StateMachineController {
     }
     
     private void SelectObject(Hero so){
+        if (this.CurrentState is not PrepareState) return;
         selectedHero = so;
         if(!selectedHero){
             BattleUIManager.Instance.SetHeroPanelActive(false);

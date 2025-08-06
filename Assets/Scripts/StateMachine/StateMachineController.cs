@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StateMachineController : MonoBehaviour {
 
-    private State CurrentState;
+    protected State CurrentState;
 
     public void ChangeState(State newState) {
         if(CurrentState) CurrentState.Destruct();
