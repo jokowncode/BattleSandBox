@@ -41,10 +41,10 @@ public class BattleManager : StateMachineController {
         Skills2InBattle = new Dictionary<Hero,PassiveEntry>();
         // EnemiesInBattle = EnemyArea.InitializeEnemy(Data.EnemiesInBattle);
         HeroesInBattle = new List<Hero>();
-        ChangeState(GetComponent<PrepareState>());
     }
 
     private void Start(){
+        ChangeState(GetComponent<PrepareState>());
         BattleUIManager.Instance.SetHeroWarehouseActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(false);
