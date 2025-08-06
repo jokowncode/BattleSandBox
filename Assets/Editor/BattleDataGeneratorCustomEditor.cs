@@ -10,6 +10,14 @@ public class BattleDataGeneratorCustomEditor : Editor {
         if (GUILayout.Button("生成")){
             generator.Generate();
         }
+        
+        if (GUILayout.Button("恢复")){
+            generator.Recover();
+        }
+        
+        if (GUILayout.Button("清空")){
+            generator.Clear();
+        }
     }
 }
 
