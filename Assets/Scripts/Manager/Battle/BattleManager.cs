@@ -7,6 +7,7 @@ public class BattleManager : StateMachineController {
 
     public static BattleManager Instance;
 
+    [SerializeField] private AudioClip ErrorSfx;
     [SerializeField] private AudioClip EquipPassiveEntrySfx;
     [SerializeField] private AudioClip UndressPassiveEntrySfx;
     
@@ -51,6 +52,10 @@ public class BattleManager : StateMachineController {
     }
 
     public void StartBattle(){
+        if (this.HeroesInBattle.Count <= 0){
+            if(ErrorSfx) AudioManager.Instance.PlaySfxAtPoint(this.transform.position, ErrorSfx);
+            return;
+        }
         ChangeState(GetComponent<InBattleState>());
     }
 
