@@ -9,7 +9,7 @@ public class FighterMove : MonoBehaviour{
     [field: SerializeField] public Transform RendererTransform{ get; private set; }
 
     private Fighter Owner;
-    private NavMeshAgent Agent;
+    public NavMeshAgent Agent{ get; private set; }
     private NavMeshObstacle Obstacle;
     
     private void Awake(){

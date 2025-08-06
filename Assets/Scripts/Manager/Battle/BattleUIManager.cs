@@ -9,7 +9,7 @@ public class BattleUIManager : MonoBehaviour {
     public static BattleUIManager Instance;
 
     [field: SerializeField] public HeroWarehouseUI heroWarehouseUI{ get; private set; }
-    [field: SerializeField] public SkillWarehouseUI skillWarehouseUI{ get; private set; }
+    [field: SerializeField] public PassiveEntryWarehouseUI PassiveEntryWarehouseUI{ get; private set; }
     [field: SerializeField] public HeroDetailUI heroDetailUI{ get; private set; }
 
     [Header("Skill UI")]
@@ -55,7 +55,7 @@ public class BattleUIManager : MonoBehaviour {
     
     private void Start() {
         heroWarehouseUI.UpdateHeroWarehouse();
-        skillWarehouseUI.UpdateHeroWarehouse();
+        PassiveEntryWarehouseUI.UpdateHeroWarehouse();
     }
 
     public void SetHeroWarehouseActive(bool active)
@@ -65,7 +65,7 @@ public class BattleUIManager : MonoBehaviour {
 
     public void SetSkillWarehouseActive(bool active)
     {
-        skillWarehouseUI.gameObject.SetActive(active);
+        PassiveEntryWarehouseUI.gameObject.SetActive(active);
     }
 
     public void SetHeroPanelActive(bool active)

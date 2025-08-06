@@ -4,8 +4,8 @@ using UnityEngine;
 // TODO: Passive Entry Condition
 public abstract class PassiveEntry : MonoBehaviour{
 
-    [SerializeField] private PassiveEntryData Data;
-    
+    [field: SerializeField] public PassiveEntryData Data{ get; private set; }
+
     public abstract void Construct(Hero hero);
     public abstract void Destruct(Hero hero);
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,20 +9,22 @@ public class Hero : Fighter{
     [SerializeField] private AudioClip DeployHeroSfx;
 
     private List<PassiveEntry> PassiveEntries;
-    private NavMeshAgent HeroAgent;
 
     public SpriteRenderer HeroRenderer{ get; private set; }
 
     protected override void Awake(){
         base.Awake();
         PassiveEntries = new List<PassiveEntry>();
-        HeroAgent = GetComponent<NavMeshAgent>();
         HeroRenderer = GetComponentInChildren<SpriteRenderer>();
-        this.HeroAgent.enabled = false;
+    }
+
+    protected override void Start(){
+        base.Start();
+        this.Move.Agent.enabled = false;
     }
 
     public void Deploy(){
-        this.HeroAgent.enabled = true;
+        this.Move.Agent.enabled = true;
         if(DeployHeroSfx)
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, DeployHeroSfx);
     }

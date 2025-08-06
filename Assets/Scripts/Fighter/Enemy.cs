@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : Fighter {
-    private void Start() {
+    protected override void Start() {
+        base.Start();
         this.Move.ChangeForward(-1.0f);
     }
 }

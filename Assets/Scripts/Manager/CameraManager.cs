@@ -7,7 +7,7 @@ public class CameraManager : MonoBehaviour {
 
     public static CameraManager Instance;
 
-    private Camera MainCamera;
+    public Camera MainCamera{ get; private set; }
 
     private bool IsShake;
 

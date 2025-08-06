@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FurthestTargetSkillCaster : SkillCaster {
     protected override void Cast(Transform _) {
-        Fighter fighter = BattleManager.Instance.FindFurthestTarget(OwnedFighter.transform.position);
+        Fighter fighter = BattleManager.Instance.FindFurthestEnemyTarget(OwnedFighter.transform.position);
         OwnedFighter.transform.position = fighter.transform.position + Vector3.right * OwnedFighter.AttackRadius;
         OwnedFighter.Move.ChangeForward(-1.0f);
         

@@ -45,7 +45,7 @@ public class Fighter : StateMachineController {
         this.CurrentData = Instantiate(this.InitialData);
     }
 
-    private void Start(){
+    protected virtual void Start(){
         if (this.FighterSkillCaster){
             this.SkillNameText.SetSkillName(this.FighterSkillCaster.Data.Name);
         }
