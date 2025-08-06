@@ -24,6 +24,7 @@ public class AudioManager : MonoBehaviour{
         this.MainMusicAudioSource.mute = true;
         this.MainMusicAudioSource.clip = newClip;
         this.MainMusicAudioSource.mute = false;
+        this.MainMusicAudioSource.Play();
     }
 
     public void SetMainMusicVolume(float volume){
