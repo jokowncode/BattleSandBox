@@ -69,7 +69,8 @@ public class Fighter : StateMachineController {
         this.AttackTarget = target;
     }
 
-    public void BeDamaged(EffectData effectData) {
+    public void BeDamaged(EffectData effectData){
+        if (IsDead) return;
         this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - effectData.Value);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
         if(this.BloodParticle) this.BloodParticle.Play();
