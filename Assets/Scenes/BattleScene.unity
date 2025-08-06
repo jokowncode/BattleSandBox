@@ -4022,6 +4022,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyParent: {fileID: 1970743192}
+  HeroParent: {fileID: 1241361657}
   ErrorSfx: {fileID: 8300000, guid: 4e5f1159be1b5d443b6dc6eb09fa3712, type: 3}
   EquipPassiveEntrySfx: {fileID: 8300000, guid: 720316a1b6edac7478d8b8a5153a5d21,
     type: 3}
@@ -4029,7 +4030,6 @@ MonoBehaviour:
     type: 3}
   Data: {fileID: 11400000, guid: 6759adf9d75831642b71de6e512be66c, type: 2}
   HeroDeployPlaceArea: {fileID: 1721743852}
-  EnemyDeployPlaceCenter: {fileID: 1487905967}
 --- !u!4 &697199088
 Transform:
   m_ObjectHideFlags: 0
@@ -7119,6 +7119,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1227353704}
   m_CullTransparentMesh: 1
+--- !u!1 &1241361656
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1241361657}
+  m_Layer: 0
+  m_Name: Heros
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1241361657
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241361656}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1243669935
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8196,37 +8227,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1481260682}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1487905966
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1487905967}
-  m_Layer: 10
-  m_Name: EnemyDeployPlace
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1487905967
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1487905966}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.75, y: 0, z: -14.45}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1881768179}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1510785004
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10058,8 +10058,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 12, y: 1, z: 22.584423}
-  m_Center: {x: 0, y: 0, z: 2.7176032}
+  m_Size: {x: 12, y: 1, z: 21.918169}
+  m_Center: {x: 0, y: 0, z: 2.3844767}
 --- !u!1001 &1731747996
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11118,7 +11118,6 @@ Transform:
   - {fileID: 277277782}
   - {fileID: 47444224}
   - {fileID: 1721743851}
-  - {fileID: 1487905967}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1001 &1888379835
@@ -11570,7 +11569,7 @@ Transform:
   m_GameObject: {fileID: 1970743191}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.497462, y: -0.09040858, z: 15.992362}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12597,6 +12596,7 @@ SceneRoots:
   - {fileID: 2086156758}
   - {fileID: 1881768179}
   - {fileID: 1970743192}
+  - {fileID: 1241361657}
   - {fileID: 667903950}
   - {fileID: 781230106}
   - {fileID: 2021547334}

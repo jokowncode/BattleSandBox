@@ -8,6 +8,8 @@ public class BattleManager : StateMachineController {
     public static BattleManager Instance;
 
     [SerializeField] private Transform EnemyParent;
+    [SerializeField] private Transform HeroParent;
+    
     [SerializeField] private AudioClip ErrorSfx;
     [SerializeField] private AudioClip EquipPassiveEntrySfx;
     [SerializeField] private AudioClip UndressPassiveEntrySfx;
@@ -17,7 +19,6 @@ public class BattleManager : StateMachineController {
     
     [Header("Deploy Place Settings")]
     [SerializeField] private BoxCollider HeroDeployPlaceArea;
-    [SerializeField] private Transform EnemyDeployPlaceCenter;
     
     private Dictionary<Hero,PassiveEntry> Skills1InBattle;
     private Dictionary<Hero,PassiveEntry> Skills2InBattle;
@@ -57,15 +58,8 @@ public class BattleManager : StateMachineController {
         if (!this.Data) return;
         List<EnemyDepartmentData> departmentAreaData = this.Data.EnemiesInBattle;
         foreach (EnemyDepartmentData data in departmentAreaData){
-            Vector3 center = this.EnemyDeployPlaceCenter.transform.position;
-            center.y = 0.0f;
-
-            int x = data.X;
-            int y = data.Y;
-
-            Vector3 pos = center + new Vector3(x * 5.0f, 0.0f, y * 5.0f);
             Enemy enemy = Instantiate(data.EnemyPrefab, this.EnemyParent);
-            enemy.transform.position = pos;
+            enemy.transform.position = data.Position;
             this.EnemiesInBattle.Add(enemy);
         }
     }
@@ -79,6 +73,7 @@ public class BattleManager : StateMachineController {
     }
 
     public void AddHero(Hero hero){
+        hero.transform.parent = this.HeroParent;
         OnHeroEnterTheField?.Invoke(hero);
         HeroesInBattle.Add(hero);
     }
