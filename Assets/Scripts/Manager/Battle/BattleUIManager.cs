@@ -8,6 +8,8 @@ public class BattleUIManager : MonoBehaviour {
 
     public static BattleUIManager Instance;
 
+    [field: SerializeField] public Canvas UICanvas{ get; private set; }
+
     [field: SerializeField] public HeroWarehouseUI heroWarehouseUI{ get; private set; }
     [field: SerializeField] public PassiveEntryWarehouseUI PassiveEntryWarehouseUI{ get; private set; }
     [field: SerializeField] public HeroDetailUI heroDetailUI{ get; private set; }
