@@ -1,4 +1,5 @@
 ﻿
+[System.Serializable]
 public struct EnemyDepartmentData {
     public Enemy EnemyPrefab;
     public int X;
