@@ -1,39 +1,47 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ClickableUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler {
+public class ClickableUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler{
+
+    [SerializeField] private PassiveEntryTooltip TooltipPrefab;
     
     public PassiveEntry passiveEntryData;
-    public TextMeshProUGUI skillNameText;
+    private TextMeshProUGUI PassiveEntryNameText;
+
+    private PassiveEntryTooltip CurrentTooltip;
+    private RectTransform PassiveEntryRect;
+
+    private void Awake(){
+        PassiveEntryNameText = GetComponentInChildren<TextMeshProUGUI>();
+        PassiveEntryRect = this.GetComponent<RectTransform>();
+    }
 
     private void Start(){
-        if (passiveEntryData != null && skillNameText != null){
-            skillNameText.text = passiveEntryData.Data.Name;
-            this.GetComponent<Image>().color = passiveEntryData.Data.UIColor;
+        if (passiveEntryData != null && PassiveEntryNameText != null){
+            PassiveEntryNameText.text = passiveEntryData.Data.Name;
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData){
         if (passiveEntryData != null){
-            TooltipManager.Instance.ShowTooltip(passiveEntryData.Data.Description);
+            this.CurrentTooltip = Instantiate(TooltipPrefab, BattleUIManager.Instance.UICanvas.transform);
+            this.CurrentTooltip.ShowTooltip(passiveEntryData.Data.Description,
+                PassiveEntryRect.position + Vector3.up * (PassiveEntryRect.sizeDelta.y / 2.2f));
         }
     }
 
     public void OnPointerExit(PointerEventData eventData){
-        TooltipManager.Instance.HideTooltip();
+        this.CurrentTooltip.HideTooltip();
+        Destroy(this.CurrentTooltip.gameObject);
     }
 
     public void OnPointerClick(PointerEventData eventData){
         int recall = BattleManager.Instance.AddPassiveEntry(passiveEntryData);
-
         if (recall >= 0){
-            Debug.Log("技能添加成功，销毁当前物体");
-            Destroy(gameObject); // 销毁当前点击的UI或物体
-            TooltipManager.Instance.HideTooltip();
-        }else{
-            Debug.LogWarning("技能槽已满，未添加技能");
+            Destroy(gameObject);
         }
     }
 }
