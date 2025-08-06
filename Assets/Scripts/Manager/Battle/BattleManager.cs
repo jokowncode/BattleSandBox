@@ -59,7 +59,8 @@ public class BattleManager : StateMachineController {
         List<EnemyDepartmentData> departmentAreaData = this.Data.EnemiesInBattle;
         foreach (EnemyDepartmentData data in departmentAreaData){
             Enemy enemy = Instantiate(data.EnemyPrefab, this.EnemyParent);
-            enemy.transform.position = data.Position;
+            GetNavMeshPosition(data.Position, 1.0f, out Vector3 finalPos);
+            enemy.transform.position = finalPos;
             this.EnemiesInBattle.Add(enemy);
         }
     }
@@ -244,6 +245,14 @@ public class BattleManager : StateMachineController {
                 return this.EnemiesInBattle[UnityEngine.Random.Range(0, this.EnemiesInBattle.Count)];
         }
         return null;
+    }
+    
+    private void GetNavMeshPosition(Vector3 currentPos, float maxDistance, out Vector3 navMeshPos){
+        if (UnityEngine.AI.NavMesh.SamplePosition(currentPos, out var hit, maxDistance, UnityEngine.AI.NavMesh.AllAreas)){
+            navMeshPos = hit.position;
+            return;
+        }
+        navMeshPos = currentPos;
     }
 
 }
