@@ -7,22 +7,24 @@ public class BattleManager : StateMachineController {
 
     public static BattleManager Instance;
 
+    [SerializeField] private Transform EnemyParent;
+    [SerializeField] private Transform HeroParent;
+    
     [SerializeField] private AudioClip ErrorSfx;
     [SerializeField] private AudioClip EquipPassiveEntrySfx;
     [SerializeField] private AudioClip UndressPassiveEntrySfx;
     
     // TODO: Get BattleData From World Scene
     [SerializeField] private BattleData Data;
-    [SerializeField] private EnemyDepartmentArea EnemyArea;
     
     [Header("Deploy Place Settings")]
-    [SerializeField] private BoxCollider DeployPlaceArea;
+    [SerializeField] private BoxCollider HeroDeployPlaceArea;
     
     private Dictionary<Hero,PassiveEntry> Skills1InBattle;
     private Dictionary<Hero,PassiveEntry> Skills2InBattle;
     
     public List<Hero> HeroesInBattle { get; private set; }
-    [field: SerializeField] public List<Enemy> EnemiesInBattle { get; private set; }
+    public List<Enemy> EnemiesInBattle { get; private set; }
 
     // TODO: eg:Support Passive Entry Register Action to Change Hero Property
     public Action<Hero> OnHeroEnterTheField;
@@ -40,8 +42,8 @@ public class BattleManager : StateMachineController {
         HeroesInBattle = new List<Hero>();
         Skills1InBattle = new Dictionary<Hero,PassiveEntry>();
         Skills2InBattle = new Dictionary<Hero,PassiveEntry>();
-        // EnemiesInBattle = EnemyArea.InitializeEnemy(Data.EnemiesInBattle);
         HeroesInBattle = new List<Hero>();
+        DeployEnemy();
     }
 
     private void Start(){
@@ -49,6 +51,17 @@ public class BattleManager : StateMachineController {
         BattleUIManager.Instance.SetHeroWarehouseActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(false);
+    }
+
+    private void DeployEnemy(){
+        this.EnemiesInBattle = new List<Enemy>();
+        if (!this.Data) return;
+        List<EnemyDepartmentData> departmentAreaData = this.Data.EnemiesInBattle;
+        foreach (EnemyDepartmentData data in departmentAreaData){
+            Enemy enemy = Instantiate(data.EnemyPrefab, this.EnemyParent);
+            enemy.transform.position = data.Position;
+            this.EnemiesInBattle.Add(enemy);
+        }
     }
 
     public void StartBattle(){
@@ -60,12 +73,13 @@ public class BattleManager : StateMachineController {
     }
 
     public void AddHero(Hero hero){
+        hero.transform.parent = this.HeroParent;
         OnHeroEnterTheField?.Invoke(hero);
         HeroesInBattle.Add(hero);
     }
     
     public bool IsWithinArea(Vector3 targetPos){
-        return this.DeployPlaceArea.bounds.Contains(targetPos);
+        return this.HeroDeployPlaceArea.bounds.Contains(targetPos);
     }
     
     private void Update(){
