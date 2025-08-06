@@ -22,7 +22,7 @@ public class HeroWarehouseUI : MonoBehaviour {
         ClearWarehouse();
         List<string> ownedHeroes = HeroWarehouseManager.Instance.GetOwnedHeroesRef();
         foreach (string heroRef in ownedHeroes){
-            AddItem(HeroWarehouseManager.Instance.GetHeroSpriteByRef(heroRef),heroRef);
+            AddItem(heroRef);
         }
     }
     
@@ -32,7 +32,7 @@ public class HeroWarehouseUI : MonoBehaviour {
         }
     }
     
-    public void AddItem(Sprite sprite,string heroRef){
+    public void AddItem(string heroRef){
         GameObject go;
         FighterType tempType = HeroWarehouseManager.Instance.GetHeroType(heroRef);
         if(tempType == FighterType.Warrior)
@@ -41,8 +41,13 @@ public class HeroWarehouseUI : MonoBehaviour {
             go = Instantiate(heroWarehouseMageUIPrefab, heroWarehouseContent);
         else
             go = Instantiate(heroWarehousePriestUIPrefab, heroWarehouseContent);
+        if(go.GetComponent<DraggableUI>()==null)
+            go.AddComponent<DraggableUI>();
         go.GetComponent<DraggableUI>().prefabReference = heroRef;
+        // Image[] imageComponent = go.GetComponentsInChildren<Image>();
+        // imageComponent[1].sprite = sprite;
         Image[] imageComponent = go.GetComponentsInChildren<Image>();
-        imageComponent[1].sprite = sprite;
+        imageComponent[3].sprite = 
+            HeroWarehouseManager.Instance.GetHeroByRef(heroRef).GetFighterData().heroPortraitSprite;
     }
 }

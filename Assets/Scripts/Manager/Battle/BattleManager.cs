@@ -31,12 +31,15 @@ public class BattleManager : StateMachineController {
     public bool IsGameOver => EnemiesInBattle.Count <= 0 || HeroesInBattle.Count <= 0;
     private static Hero selectedHero;
     
+    private bool battleStarted;
+    
     private void Awake() {
         if (Instance != null) {
             Destroy(this.gameObject);
             return;
         }
         Instance = this;
+        battleStarted = false;
         HeroesInBattle = new List<Hero>();
         Skills1InBattle = new Dictionary<Hero,PassiveEntry>();
         Skills2InBattle = new Dictionary<Hero,PassiveEntry>();
@@ -49,6 +52,7 @@ public class BattleManager : StateMachineController {
         BattleUIManager.Instance.SetHeroWarehouseActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(false);
+        BattleUIManager.Instance.SetHeroPortraitActive(false);
     }
 
     public void StartBattle(){
@@ -56,7 +60,10 @@ public class BattleManager : StateMachineController {
             if(ErrorSfx) AudioManager.Instance.PlaySfxAtPoint(this.transform.position, ErrorSfx);
             return;
         }
+        battleStarted = true;
         ChangeState(GetComponent<InBattleState>());
+        BattleUIManager.Instance.SetHeroPortraitActive(true);
+        HeroPortraitUI.Instance.PushHeros(HeroesInBattle);
     }
 
     public void AddHero(Hero hero){
@@ -71,14 +78,20 @@ public class BattleManager : StateMachineController {
     private void Update(){
         if (EventSystem.current.IsPointerOverGameObject())
             return;
-
-        if (Input.GetMouseButtonDown(0)){
-            Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit,maxDistance:100f,layerMask:LayerMask.GetMask("Hero"))
-                && hit.collider.gameObject.TryGetComponent(out Hero hero)){
-                SelectObject(hero);
-            }else{
-                SelectObject(null);
+        if(!battleStarted)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit, maxDistance: 100f, layerMask: LayerMask.GetMask("Hero"))
+                    && hit.collider.gameObject.TryGetComponent(out Hero hero))
+                {
+                    SelectObject(hero);
+                }
+                else
+                {
+                    SelectObject(null);
+                }
             }
         }
     }
@@ -90,7 +103,7 @@ public class BattleManager : StateMachineController {
         }else{
             BattleUIManager.Instance.SetHeroPanelActive(true);
             UpdatePassiveEntryUI();
-            BattleUIManager.Instance.heroDetailUI.ChangeHeroDetailUIValue(selectedHero.HeroRenderer.sprite);
+            BattleUIManager.Instance.heroDetailUI.ChangeHeroDetailUIValue(selectedHero.GetFighterData().standingSprite);
             BattleUIManager.Instance.heroDetailUI.ChangeDetailUI(selectedHero);
             BattleUIManager.Instance.UpdateSelectedHeroSkillUI(selectedHero.Type,selectedHero.FighterSkillCaster.Data.Description);
         }
@@ -101,7 +114,7 @@ public class BattleManager : StateMachineController {
     /// </summary>
     public void RecallSelectedHero(){
         RemovePassiveEntry();
-        BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.HeroRenderer.sprite,selectedHero.name);
+        BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.name);
         this.RemoveHero(selectedHero);
         Destroy(selectedHero.gameObject);
         selectedHero = null;
@@ -231,6 +244,7 @@ public class BattleManager : StateMachineController {
         }
         return null;
     }
+    
 
 }
 

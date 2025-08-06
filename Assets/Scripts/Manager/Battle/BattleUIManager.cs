@@ -13,6 +13,7 @@ public class BattleUIManager : MonoBehaviour {
     [field: SerializeField] public HeroWarehouseUI heroWarehouseUI{ get; private set; }
     [field: SerializeField] public PassiveEntryWarehouseUI PassiveEntryWarehouseUI{ get; private set; }
     [field: SerializeField] public HeroDetailUI heroDetailUI{ get; private set; }
+    [field: SerializeField] public HeroPortraitUI heroPortraitUI{ get; private set; }
 
     [Header("Skill UI")]
     public Sprite warriorSkillIcon;
@@ -73,6 +74,11 @@ public class BattleUIManager : MonoBehaviour {
     public void SetHeroPanelActive(bool active)
     {
         heroDetailUI.gameObject.SetActive(active);
+    }
+
+    public void SetHeroPortraitActive(bool active)
+    {
+        heroPortraitUI.gameObject.SetActive(active);
     }
 
     public void SetSkillsNull()

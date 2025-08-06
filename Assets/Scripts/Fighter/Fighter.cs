@@ -136,6 +136,11 @@ public class Fighter : StateMachineController {
         ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
     }
 
+    public FighterData GetFighterData()
+    {
+        return this.InitialData;
+    }
+
     #region FighterProperty
     // Initial Property
     public float InitialHealth{ 
