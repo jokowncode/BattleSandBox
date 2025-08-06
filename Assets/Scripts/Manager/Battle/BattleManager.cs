@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -16,6 +17,7 @@ public class BattleManager : StateMachineController {
     
     // TODO: Get BattleData From World Scene
     [SerializeField] private BattleData Data;
+    [SerializeField] private TextMeshProUGUI BattleNameText;
     
     [Header("Deploy Place Settings")]
     [SerializeField] private BoxCollider HeroDeployPlaceArea;
@@ -49,6 +51,7 @@ public class BattleManager : StateMachineController {
 
     private void Start(){
         ChangeState(Prepare);
+        this.BattleNameText.text = this.Data.BattleName;
         BattleUIManager.Instance.SetHeroWarehouseActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(false);
     }

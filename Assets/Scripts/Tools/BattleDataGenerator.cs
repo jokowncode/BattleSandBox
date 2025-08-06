@@ -13,6 +13,7 @@ public class BattleDataGenerator : MonoBehaviour{
     public void Generate(){
         if (!EnemyParent || EnemyParent.childCount == 0) return;
         BattleData data = ScriptableObject.CreateInstance<BattleData>();
+        data.BattleName = this.AssetName;
         List<EnemyDepartmentData> enemyDepartmentDatas = new List<EnemyDepartmentData>();
         foreach (Transform enemyTrans in EnemyParent){
             if (enemyTrans.TryGetComponent(out Enemy enemy)) {

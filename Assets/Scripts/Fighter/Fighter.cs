@@ -28,6 +28,7 @@ public class Fighter : StateMachineController {
     public float HealMultiplier { get; protected set; } = 1.0f;
     public float ShieldMultiplier{ get; protected set; } = 1.0f;
 
+    private TargetType CurrentFighterType;
     private FighterRenderer Renderer;
     private bool IsDead;
 
@@ -43,6 +44,7 @@ public class Fighter : StateMachineController {
         this.FighterSkill = GetComponent<SkillState>();
         // Clone Fighter Data to Update
         this.CurrentData = Instantiate(this.InitialData);
+        this.CurrentFighterType = this.gameObject.layer == LayerMask.NameToLayer("Hero") ? TargetType.Hero : TargetType.Enemy;
     }
 
     protected virtual void Start(){
@@ -74,20 +76,27 @@ public class Fighter : StateMachineController {
         this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - effectData.Value);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
         if(this.BloodParticle) this.BloodParticle.Play();
-        this.Renderer.ChangeColor(Color.red);
+
+        if (this.CurrentFighterType == TargetType.Enemy) {
+            this.Renderer.ChangeColor(Color.red);    
+        } else{
+            this.Renderer.Flash();
+        }
+
         if (this.BeDamagedSfx) {
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.BeDamagedSfx);
         }
+        
         if (this.CurrentData.Health <= 0.0f && !IsDead) {
-            // TODO: Fighter Dead
             IsDead = true;
+            // TODO: Dissolve FX
+            // this.Renderer.Dead();
+            Destroy(this.gameObject);
             if (this is Hero hero) {
                 BattleManager.Instance.RemoveHero(hero);
             }else if (this is Enemy enemy) {
                 BattleManager.Instance.RemoveEnemy(enemy);
             }
-            Destroy(this.gameObject);
-            return;
         }
     }
     
