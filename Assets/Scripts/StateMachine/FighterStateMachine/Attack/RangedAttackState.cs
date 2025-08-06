@@ -25,6 +25,6 @@ public class RangedAttackState : AttackState {
             Force = Controller.Force,
             TargetType = Controller.AttackTargetType
         });
-        bullet.SetMoveVector(attackVec);
+        bullet.SetTarget(this.AttackTarget.Center);
     }
 }
