@@ -5,54 +5,55 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BattleManager : StateMachineController {
+public class BattleManager : StateMachineController{
 
     public static BattleManager Instance;
 
     [SerializeField] private Transform EnemyParent;
     [SerializeField] private Transform HeroParent;
-    
+
     [SerializeField] private AudioClip ErrorSfx;
     [SerializeField] private AudioClip EquipPassiveEntrySfx;
     [SerializeField] private AudioClip UndressPassiveEntrySfx;
-    
+
     // TODO: Get BattleData From World Scene
     [SerializeField] private BattleData Data;
     [SerializeField] private TextMeshProUGUI BattleNameText;
     [SerializeField] private TextMeshProUGUI BattleMessageText;
-    
-    [Header("Deploy Place Settings")]
-    [SerializeField] private BoxCollider HeroDeployPlaceArea;
-    
-    private Dictionary<Hero,PassiveEntry> Skills1InBattle;
-    private Dictionary<Hero,PassiveEntry> Skills2InBattle;
-    
-    public List<Hero> HeroesInBattle { get; private set; }
-    public List<Enemy> EnemiesInBattle { get; private set; }
-    
+
+    [Header("Deploy Place Settings")] [SerializeField]
+    private BoxCollider HeroDeployPlaceArea;
+
+    private Dictionary<Hero, PassiveEntry> Skills1InBattle;
+    private Dictionary<Hero, PassiveEntry> Skills2InBattle;
+
+    public List<Hero> HeroesInBattle{ get; private set; }
+    public List<Enemy> EnemiesInBattle{ get; private set; }
+
     public Action<Hero> OnHeroEnterTheField;
     public Action<Hero> OnHeroExitTheField;
-    
+
     public bool IsGameOver => EnemiesInBattle.Count <= 0 || HeroesInBattle.Count <= 0;
     public bool IsFullHero => this.HeroesInBattle.Count >= this.Data.MaxHeroCount;
-    
+
     private Hero selectedHero;
     private PrepareState Prepare;
-    
+
 #if DEBUG_MODE
-    public float BattleStartTime {get; private set;}    
+    public float BattleStartTime {get; private set;}
 #endif
-    
-    private void Awake() {
-        if (Instance != null) {
+
+    private void Awake(){
+        if (Instance != null){
             Destroy(this.gameObject);
             return;
         }
+
         Instance = this;
         HeroesInBattle = new List<Hero>();
         Prepare = GetComponent<PrepareState>();
-        Skills1InBattle = new Dictionary<Hero,PassiveEntry>();
-        Skills2InBattle = new Dictionary<Hero,PassiveEntry>();
+        Skills1InBattle = new Dictionary<Hero, PassiveEntry>();
+        Skills2InBattle = new Dictionary<Hero, PassiveEntry>();
         DeployEnemy();
     }
 
@@ -63,6 +64,10 @@ public class BattleManager : StateMachineController {
         BattleUIManager.Instance.SetHeroWarehouseActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(false);
         BattleUIManager.Instance.SetHeroPortraitActive(false);
+    }
+
+    public void PlayErrorSfx(){
+        if(ErrorSfx) AudioManager.Instance.PlaySfxAtPoint(this.transform.position, ErrorSfx);
     }
 
     private void DeployEnemy(){
@@ -79,7 +84,7 @@ public class BattleManager : StateMachineController {
 
     public void StartBattle(){
         if (this.HeroesInBattle.Count <= 0){
-            if(ErrorSfx) AudioManager.Instance.PlaySfxAtPoint(this.transform.position, ErrorSfx);
+            PlayErrorSfx();
             return;
         }
         this.HeroDeployPlaceArea.gameObject.SetActive(false);
