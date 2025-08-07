@@ -33,6 +33,10 @@ public class Fighter : StateMachineController {
     private bool IsDead;
 
     private Action OnDead;
+    
+#if DEBUG_MODE
+    public float TotalDamage {get; private set;}    
+#endif
 
     protected virtual void Awake(){
         this.FighterSkillCaster = GetComponentInChildren<SkillCaster>();
@@ -103,6 +107,13 @@ public class Fighter : StateMachineController {
             IsDead = true;
             OnDead?.Invoke();
             this.Renderer.Dead();
+            
+#if DEBUG_MODE
+        if (this.CurrentFighterType == TargetType.Hero) {
+            Debug.Log($"{this.gameObject.name} Dead -> Caused Total Damage: {this.TotalDamage}");    
+        }    
+#endif
+            
             if (this is Hero hero) {
                 BattleManager.Instance.RemoveHero(hero);
             }else if (this is Enemy enemy) {

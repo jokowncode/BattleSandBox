@@ -93,7 +93,7 @@ public abstract class SkillCaster : MonoBehaviour{
 
     #region SkillPropretyChange
 
-    private float GetInitialData(SkillProperty property){
+    public float GetInitialData(SkillProperty property){
         switch (property){
             case SkillProperty.Duration:
                 return InitialData.Duration;
@@ -103,7 +103,7 @@ public abstract class SkillCaster : MonoBehaviour{
         return -1.0f;
     }
 
-    private float GetCurrentData(SkillProperty property) {
+    public float GetCurrentData(SkillProperty property) {
         switch (property){
             case SkillProperty.Duration:
                 return Data.Duration;

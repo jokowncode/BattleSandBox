@@ -29,6 +29,7 @@ public class RangedAttackState : AttackState {
         bullet.SetTarget(this.AttackTarget.Center);
 #if DEBUG_MODE
         Debug.Log($"{this.gameObject.name} Attack(Ranged) : {damageMsg.Value}");
+        Controller.TotalDamage += damageMsg.Value;
 #endif
     }
 }
