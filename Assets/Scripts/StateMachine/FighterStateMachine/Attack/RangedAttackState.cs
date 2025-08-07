@@ -20,11 +20,15 @@ public class RangedAttackState : AttackState {
         Bullet bullet = Instantiate(BulletPrefab, attackPos, Quaternion.LookRotation(attackVec));
         
         float critical = Random.value < Controller.Critical / 100.0f ? 1.5f : 1.0f;
-        bullet.SetDamageMessage(new EffectData{
+        EffectData damageMsg = new EffectData{
             Value = (Controller.PhysicsAttack + Controller.MagicAttack) * critical,
             Force = Controller.Force,
             TargetType = Controller.AttackTargetType
-        });
+        };
+        bullet.SetDamageMessage(damageMsg);
         bullet.SetTarget(this.AttackTarget.Center);
+#if DEBUG_MODE
+        Debug.Log($"{this.gameObject.name} Attack(Ranged) : {damageMsg.Value}");
+#endif
     }
 }

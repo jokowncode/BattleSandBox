@@ -15,11 +15,16 @@ public class MagicCircleAttackState : AttackState{
         magicCircle.SetTargetPos(targetPos);
         
         float critical = Random.value < Controller.Critical / 100.0f ? 1.5f : 1.0f;
-        magicCircle.SetDamageMessage(new EffectData{
+        
+        EffectData damageMsg = new EffectData{
             Value = Controller.MagicAttack * critical * percentage,
             Force = Controller.Force,
             TargetType = Controller.AttackTargetType
-        });
+        };
+        magicCircle.SetDamageMessage(damageMsg);
+#if DEBUG_MODE
+        Debug.Log($"{this.gameObject.name} Attack(magic circle) : {damageMsg.Value}");
+#endif
     }
 }
 

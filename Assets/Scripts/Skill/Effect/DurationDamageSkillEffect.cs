@@ -22,6 +22,9 @@ public class DurationDamageSkillEffect : SkillEffect{
         if (InMagicCircleAreaFighters.Count == 0) return;
         foreach (Fighter fighter in InMagicCircleAreaFighters){
             if(fighter) fighter.BeDamaged(this.Delivery.EffectData);
+            #if DEBUG_MODE
+                Debug.Log($"{this.Delivery.Caster.name} Cast Skill : {this.Delivery.EffectData.Value}");
+            #endif 
         }
         LastDamageTime = Time.time;
     }

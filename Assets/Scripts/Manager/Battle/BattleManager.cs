@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class BattleManager : StateMachineController {
 
@@ -73,6 +74,7 @@ public class BattleManager : StateMachineController {
             if(ErrorSfx) AudioManager.Instance.PlaySfxAtPoint(this.transform.position, ErrorSfx);
             return;
         }
+        this.HeroDeployPlaceArea.gameObject.SetActive(false);
         ChangeState(GetComponent<InBattleState>());
     }
 
@@ -86,7 +88,8 @@ public class BattleManager : StateMachineController {
         return this.HeroDeployPlaceArea.bounds.Contains(targetPos);
     }
     
-    private void Update(){
+    protected override void Update(){
+        base.Update();
         if (EventSystem.current.IsPointerOverGameObject())
             return;
 

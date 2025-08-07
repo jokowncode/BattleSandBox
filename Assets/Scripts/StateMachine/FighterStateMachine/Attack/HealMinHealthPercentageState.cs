@@ -14,11 +14,17 @@ public class HealMinHealthPercentageState : AttackState{
         base.OnAttack();
         Fighter target = BattleManager.Instance.FindMinPercentagePropertyHero(FighterProperty.Health);
         if (!target) return;
-        target.BeHealed(new EffectData{
+        
+        float critical = Random.value < Controller.Critical / 100.0f ? 1.5f : 1.0f;
+        EffectData healMsg = new EffectData{
             TargetType = TargetType.Hero,
             Force = 0.0f,
-            Value = Controller.Health * HealPercentage * Controller.HealMultiplier
-        });
+            Value = Controller.Health * HealPercentage * Controller.HealMultiplier * critical
+        };
+        target.BeHealed(healMsg);
+#if DEBUG_MODE
+        Debug.Log($"{this.gameObject.name} Heal : {healMsg.Value}");
+#endif
     }
 
     protected override void OnAttackEnd(){

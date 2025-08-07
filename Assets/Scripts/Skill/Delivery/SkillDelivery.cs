@@ -11,8 +11,8 @@ public abstract class SkillDelivery : MonoBehaviour {
     protected Vector3 TargetPosition;
     protected SkillEffect Effect;
 
-    private GameObject Caster;
-    
+    public GameObject Caster{ get; private set; }
+
     public FighterType CasterType{ get; private set; }
     public List<SkillMiddle> SkillMiddlePlugins{ get; private set; }
     protected Vector3 MoveVec;

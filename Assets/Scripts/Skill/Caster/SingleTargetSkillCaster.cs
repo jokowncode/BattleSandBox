@@ -8,7 +8,7 @@ public class SingleTargetSkillCaster : SkillCaster {
         selfPos.y = attackTargetPosition.y;
         Vector3 moveVec = (attackTargetPosition - selfPos).normalized;
         SkillDelivery delivery = Instantiate(this.Data.SkillDeliveryPrefab, transform.position, Quaternion.LookRotation(moveVec));
-        delivery.StartDelivery(this.gameObject, attackTargetPosition, new EffectData {
+        delivery.StartDelivery(this.OwnedFighter.gameObject, attackTargetPosition, new EffectData {
             TargetType = this.Data.TargetType,
             Force = this.Data.Force,
             Value = GetSkillEffectValue(),
