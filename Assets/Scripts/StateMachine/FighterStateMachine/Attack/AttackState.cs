@@ -51,8 +51,8 @@ public abstract class AttackState : FighterState{
         }
         
         if (IsNeedTarget && this.AttackTarget){
-            float distance = this.AttackTarget.transform.position.x - this.transform.position.x;
-            if (distance > Controller.AttackRadius) {
+            float distance = (this.AttackTarget.transform.position - this.transform.position).sqrMagnitude;
+            if (distance > Controller.AttackRadius * Controller.AttackRadius) {
                 Controller.ChangeState(FighterChase ? FighterChase : FighterPatrol);
                 return;
             }

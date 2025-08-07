@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class Fighter : StateMachineController {
     
     [SerializeField] protected FighterData InitialData;
+    [SerializeField] private Canvas FighterCanvas;
     [SerializeField] private Image BloodBarImage;
     [field: SerializeField] public SkillNameUI SkillNameText{ get; private set; }
     [SerializeField] private ParticleSystem BloodParticle;
@@ -35,7 +36,7 @@ public class Fighter : StateMachineController {
     private Action OnDead;
     
 #if DEBUG_MODE
-    public float TotalDamage {get; private set;}    
+    public float TotalDamage {get; set;}    
 #endif
 
     protected virtual void Awake(){
@@ -107,14 +108,15 @@ public class Fighter : StateMachineController {
             IsDead = true;
             OnDead?.Invoke();
             this.Renderer.Dead();
+            this.FighterCanvas.gameObject.SetActive(false);
             
 #if DEBUG_MODE
         if (this.CurrentFighterType == TargetType.Hero) {
             Debug.Log($"{this.gameObject.name} Dead -> Caused Total Damage: {this.TotalDamage}");    
         }    
 #endif
-            
-            if (this is Hero hero) {
+            if (this is Hero hero){
+                BattleUIManager.Instance.heroPortraitUI.SetHeroPortraitsGray(hero);
                 BattleManager.Instance.RemoveHero(hero);
             }else if (this is Enemy enemy) {
                 BattleManager.Instance.RemoveEnemy(enemy);
@@ -220,6 +222,9 @@ public class Fighter : StateMachineController {
     public int StarLevel => InitialData.StarLevel;
     public float AttackRadius => InitialData.AttackRadius;
     public float Speed => InitialData.Speed;
+    public Sprite StandingSprite => InitialData.standingSprite;
+    public Sprite heroPortraitSprite => InitialData.heroPortraitSprite;
+
     #endregion
 }
 

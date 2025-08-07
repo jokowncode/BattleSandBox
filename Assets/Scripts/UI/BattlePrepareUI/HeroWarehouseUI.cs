@@ -7,10 +7,9 @@ using UnityEngine;
 
 public class HeroWarehouseUI : MonoBehaviour {
     
-    public GameObject heroWarehouseWarriorUIPrefab;
-    public GameObject heroWarehouseMageUIPrefab;
-    public GameObject heroWarehousePriestUIPrefab;
-    public GameObject defaultDraggableInstancePrefab;
+    public HeroPanelUI heroWarehouseWarriorUIPrefab;
+    public HeroPanelUI heroWarehouseMageUIPrefab;
+    public HeroPanelUI heroWarehousePriestUIPrefab;
     public Transform heroWarehouseContent;           // ScrollView 的 Content 对象
 
 
@@ -22,7 +21,7 @@ public class HeroWarehouseUI : MonoBehaviour {
         ClearWarehouse();
         List<string> ownedHeroes = HeroWarehouseManager.Instance.GetOwnedHeroesRef();
         foreach (string heroRef in ownedHeroes){
-            AddItem(HeroWarehouseManager.Instance.GetHeroSpriteByRef(heroRef),heroRef);
+            AddItem(heroRef);
         }
     }
     
@@ -32,8 +31,8 @@ public class HeroWarehouseUI : MonoBehaviour {
         }
     }
     
-    public void AddItem(Sprite sprite,string heroRef){
-        GameObject go;
+    public void AddItem(string heroRef){
+        HeroPanelUI go;
         FighterType tempType = HeroWarehouseManager.Instance.GetHeroType(heroRef);
         if(tempType == FighterType.Warrior)
             go = Instantiate(heroWarehouseWarriorUIPrefab, heroWarehouseContent);
@@ -41,8 +40,9 @@ public class HeroWarehouseUI : MonoBehaviour {
             go = Instantiate(heroWarehouseMageUIPrefab, heroWarehouseContent);
         else
             go = Instantiate(heroWarehousePriestUIPrefab, heroWarehouseContent);
+        if(go.GetComponent<DraggableUI>()==null)
+            go.AddComponent<DraggableUI>();
         go.GetComponent<DraggableUI>().prefabReference = heroRef;
-        Image[] imageComponent = go.GetComponentsInChildren<Image>();
-        imageComponent[1].sprite = sprite;
+        go.SetPortrait(HeroWarehouseManager.Instance.GetHeroByRef(heroRef).heroPortraitSprite);
     }
 }

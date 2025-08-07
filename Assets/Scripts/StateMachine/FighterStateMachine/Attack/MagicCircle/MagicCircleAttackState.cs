@@ -10,9 +10,9 @@ public class MagicCircleAttackState : AttackState{
         IsNeedTarget = false;
     }
 
-    protected void CastMagicCircle(Vector3 targetPos, float percentage){
+    protected void CastMagicCircle(Vector3 position, float percentage){
         MagicCircle magicCircle = Instantiate(this.MagicCirclePrefab);
-        magicCircle.SetTargetPos(targetPos);
+        magicCircle.SetTargetPos(position);
         
         float critical = Random.value < Controller.Critical / 100.0f ? 1.5f : 1.0f;
         

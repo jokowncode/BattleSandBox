@@ -24,7 +24,7 @@ public class HealMinHealthPercentageState : AttackState{
         target.BeHealed(healMsg);
 #if DEBUG_MODE
         Debug.Log($"{this.gameObject.name} Heal : {healMsg.Value}");
-        Controller.TotalDamage += damageMsg.Value;
+        Controller.TotalDamage += healMsg.Value;
 #endif
     }
 
