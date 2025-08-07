@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PassiveEntryWarehouseManager : MonoBehaviour {
-    
-    [SerializeField]private List<PassiveEntry> OwnedSkills;
+public class PassiveEntryWarehouseManager : MonoBehaviour{
+
+    [SerializeField] private List<PassiveEntry> OwnedPassiveEntries;
     
     public static PassiveEntryWarehouseManager Instance;
 
@@ -17,5 +17,5 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         DontDestroyOnLoad(this.gameObject);
     }
 
-    public List<PassiveEntry> GetOwnedHeroes() { return this.OwnedSkills; }
+    public List<PassiveEntry> GetOwnedHeroes() { return this.OwnedPassiveEntries; }
 }

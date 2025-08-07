@@ -29,6 +29,7 @@ public class MeleeAttackState : AttackState{
         Controller.AttackTarget?.BeDamaged(damageMsg);
 #if DEBUG_MODE
         Debug.Log($"{this.gameObject.name} Attack(Melee) : {damageMsg.Value}");
+        Controller.TotalDamage += damageMsg.Value;
 #endif
     }
 }

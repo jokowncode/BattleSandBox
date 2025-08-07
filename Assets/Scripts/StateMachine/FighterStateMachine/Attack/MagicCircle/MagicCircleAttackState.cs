@@ -24,6 +24,7 @@ public class MagicCircleAttackState : AttackState{
         magicCircle.SetDamageMessage(damageMsg);
 #if DEBUG_MODE
         Debug.Log($"{this.gameObject.name} Attack(magic circle) : {damageMsg.Value}");
+        Controller.TotalDamage += damageMsg.Value;
 #endif
     }
 }

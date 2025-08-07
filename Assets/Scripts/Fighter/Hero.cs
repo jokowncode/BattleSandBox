@@ -34,10 +34,8 @@ public class Hero : Fighter{
         entry.Construct(this);
     }
 
-    public void RemovePassiveEntry(int index){
-        // TODO: Index Out of Range
-        PassiveEntry entry = PassiveEntries[index];
-        entry.Destruct(this);
-        PassiveEntries.RemoveAt(index);
+    public void RemovePassiveEntry(PassiveEntry removeEntry){
+        removeEntry.Destruct(this);
+        PassiveEntries.Remove(removeEntry);
     }
 }

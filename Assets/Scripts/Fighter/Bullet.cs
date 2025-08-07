@@ -12,7 +12,7 @@ public class Bullet : MonoBehaviour {
     private Transform Target;
 
     private bool IsHitTarget = false;
-    private Vector3 MoveVec => Target ? (Target.position - transform.position).normalized : Vector3.zero;
+    private Vector3 MoveVec => Target ? (Target.position - transform.position).normalized : MoveVec;
     
     public void SetDamageMessage(EffectData dm) {
         this.BulletDamageMsg = dm;
