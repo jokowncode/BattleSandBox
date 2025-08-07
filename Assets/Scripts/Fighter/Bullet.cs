@@ -12,7 +12,8 @@ public class Bullet : MonoBehaviour {
     private Transform Target;
 
     private bool IsHitTarget = false;
-    private Vector3 MoveVec => Target ? (Target.position - transform.position).normalized : MoveVec;
+    
+    private Vector3 MoveVec => (Target.position - transform.position).normalized;
     
     public void SetDamageMessage(EffectData dm) {
         this.BulletDamageMsg = dm;
@@ -39,6 +40,11 @@ public class Bullet : MonoBehaviour {
     }
 
     private void FixedUpdate(){
+        if (!this.Target){
+            Destroy(this.gameObject);
+            return;
+        }
+        
         if (speed != 0){
             rb.MovePosition(rb.position + this.speed * Time.fixedDeltaTime * this.MoveVec);
         }
@@ -49,7 +55,7 @@ public class Bullet : MonoBehaviour {
         if (other.gameObject.layer != LayerMask.NameToLayer(BulletDamageMsg.TargetType.ToString())
             && other.gameObject.layer != LayerMask.NameToLayer("Border")) return;
         
-        if (hit != null){
+        if (hit != null && this.Target){
             var hitInstance = Instantiate(hit, transform.position, Quaternion.LookRotation(this.MoveVec));
             var hitPs = hitInstance.GetComponent<ParticleSystem>();
             if (hitPs != null) {
