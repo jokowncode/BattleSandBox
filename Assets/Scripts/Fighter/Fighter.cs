@@ -169,6 +169,23 @@ public class Fighter : StateMachineController {
         }
         ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
     }
+    
+    public float GetPropertyData(FighterProperty property){
+        if (property == FighterProperty.HealMultiplier) {
+            return this.HealMultiplier;
+        }
+
+        if (property == FighterProperty.ShieldMultiplier) {
+            return this.ShieldMultiplier;
+        }
+
+        if (property == FighterProperty.CooldownPercentage){
+            return FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
+        }
+
+        string propertyName = property.ToString();
+        return ReflectionTools.GetObjectProperty<float>("Initial"+propertyName, this);
+    }
 
     #region FighterProperty
     // Initial Property
@@ -214,6 +231,11 @@ public class Fighter : StateMachineController {
         get => CurrentData.Force;
         set => CurrentData.Force=value;
     }
+
+    public float Shield{
+        get => CurrentData.Shield;
+        set => CurrentData.Shield=value;
+    }
     public TargetType AttackTargetType => InitialData.AttackTargetType;
 
     public FighterType Type => InitialData.Type;
@@ -224,7 +246,7 @@ public class Fighter : StateMachineController {
     public float Speed => InitialData.Speed;
     public Sprite StandingSprite => InitialData.standingSprite;
     public Sprite heroPortraitSprite => InitialData.heroPortraitSprite;
-
+    
     #endregion
 }
 

@@ -7,6 +7,8 @@ public class BattleDataGenerator : MonoBehaviour{
 
     [SerializeField] private Transform EnemyParent;
     [SerializeField] private string AssetName;
+    [SerializeField] private string BattleMessage;
+    [SerializeField] private int MaxHeroCount = 6;
 
     [SerializeField] private BattleData RecoverBattleData;
 
@@ -14,6 +16,8 @@ public class BattleDataGenerator : MonoBehaviour{
         if (!EnemyParent || EnemyParent.childCount == 0) return;
         BattleData data = ScriptableObject.CreateInstance<BattleData>();
         data.BattleName = this.AssetName;
+        data.MaxHeroCount = this.MaxHeroCount;
+        data.BattleMessage = this.BattleMessage != "" ? this.BattleMessage : $"上场人数最多{MaxHeroCount}人";
         List<EnemyDepartmentData> enemyDepartmentDatas = new List<EnemyDepartmentData>();
         foreach (Transform enemyTrans in EnemyParent){
             if (enemyTrans.TryGetComponent(out Enemy enemy)) {
@@ -29,7 +33,6 @@ public class BattleDataGenerator : MonoBehaviour{
         AssetDatabase.CreateAsset(data, path);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        Debug.Log("Success Generate Battle Data");
     }
 
     public void Recover(){

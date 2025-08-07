@@ -36,7 +36,6 @@ public class ScalableCamera : MonoBehaviour
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (Mathf.Approximately(scroll, 0f)) return;
-
         Vector3 pos = camTransform.localPosition;
         pos.z += scroll * scrollSpeed; // 鼠标向前滚时scroll为正，向近处移动Z
         pos.z = Mathf.Clamp(pos.z, minZ, maxZ);

@@ -19,6 +19,11 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
     }
     
     public void OnBeginDrag(PointerEventData eventData){
+        if (BattleManager.Instance.IsFullHero){
+            BattleManager.Instance.PlayErrorSfx();
+            return;
+        }
+
         if (StartDragSfx) {
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, StartDragSfx);
         }
