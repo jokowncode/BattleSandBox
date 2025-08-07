@@ -81,7 +81,9 @@ public class HeroPortraitUI : MonoBehaviour
     {
         heroPortraitUIDict[hero].GetComponent<UIShaker>().Shake();
         Image[] image = heroPortraitUIDict[hero].GetComponentsInChildren<Image>();
-        image[3].material.SetFloat(Shader.PropertyToID("_Desaturation"),0);
+        Material newMat = new Material(image[3].material);
+        newMat.SetFloat(Shader.PropertyToID("_Desaturation"),0);
+        image[3].material = newMat;
         image[3].color = Color.gray;
     }
     

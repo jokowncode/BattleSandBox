@@ -48,7 +48,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -4809,7 +4809,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_RenderMode: 1
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -4852,12 +4852,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4623055400575438}
   - component: {fileID: 198619286141681048}
-  - component: {fileID: 114847264421750224}
   - component: {fileID: 199009954964016290}
   - component: {fileID: 108556751418608030}
   - component: {fileID: 54917258164921374}
   - component: {fileID: 135262430962562618}
   - component: {fileID: -7387177437262411485}
+  - component: {fileID: 4313680711895872964}
   m_Layer: 0
   m_Name: EnemyBullet
   m_TagString: Untagged
@@ -4897,7 +4897,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -9675,25 +9675,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &114847264421750224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1595252117517162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 605a456cfc02f6b499a64717539a27e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 10
-  hitOffset: 0.01
-  UseFirePointRotation: 0
-  rotationOffset: {x: 0, y: 0, z: 0}
-  hit: {fileID: 1270034117851066, guid: e46e60dfd73d7ed4fa8a4ef323af2e69, type: 3}
-  flash: {fileID: 1024167407391004, guid: 63baf4956cfa45d4aa5cd12cbc8b7689, type: 3}
-  Detached: []
 --- !u!199 &199009954964016290
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -9735,7 +9716,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -9901,6 +9882,22 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!114 &4313680711895872964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595252117517162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e53aa0217e17c242b8ca27b580fb8c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 15
+  hit: {fileID: 1222261759138286, guid: 1bac819d00d817844aa2138fbe280827, type: 3}
+  flash: {fileID: 0}
+  Detached: []
 --- !u!1 &1809088009161248
 GameObject:
   m_ObjectHideFlags: 0
@@ -9949,7 +9946,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -14768,7 +14765,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
