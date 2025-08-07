@@ -81,6 +81,9 @@ public class Fighter : StateMachineController {
             this.Renderer.ChangeColor(Color.red);    
         } else{
             this.Renderer.Flash();
+#if DEBUG_MODE
+            Debug.Log($"{this.gameObject.name} Be Damaged : {effectData.Value}, Current Health: {this.CurrentData.Health}");
+#endif
         }
 
         if (this.BeDamagedSfx) {
