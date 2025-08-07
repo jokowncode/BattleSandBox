@@ -39,7 +39,7 @@ public abstract class SkillDelivery : MonoBehaviour {
     }
 
     public void SetPlugins(List<SkillMiddle> middlePlugins, List<SkillEnd> endPlugins){
-        this.SkillMiddlePlugins = middlePlugins;
+        this.SkillMiddlePlugins = new List<SkillMiddle>(middlePlugins);
         this.Effect.SetEndPlugins(endPlugins);
     }
 

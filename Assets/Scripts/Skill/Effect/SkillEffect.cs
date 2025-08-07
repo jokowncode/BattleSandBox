@@ -16,7 +16,7 @@ public abstract class SkillEffect : MonoBehaviour {
     }
 
     public void SetEndPlugins(List<SkillEnd> endPlugins) {
-        this.SkillEndPlugins = endPlugins;
+        this.SkillEndPlugins = new List<SkillEnd>(endPlugins);
     }
 
     public void ApplyEffect(Fighter influenceFighter, EffectData effectData) {
