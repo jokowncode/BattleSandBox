@@ -58,6 +58,7 @@ public class BattleManager : StateMachineController {
         this.BattleNameText.text = this.Data.BattleName;
         BattleUIManager.Instance.SetHeroWarehouseActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(false);
+        BattleUIManager.Instance.SetHeroPortraitActive(false);
     }
 
     private void DeployEnemy(){
@@ -82,6 +83,8 @@ public class BattleManager : StateMachineController {
 #if DEBUG_MODE
         this.BattleStartTime = Time.time;
 #endif
+        BattleUIManager.Instance.SetHeroPortraitActive(true);
+        HeroPortraitUI.Instance.PushHeros(HeroesInBattle);
     }
 
     public void AddHero(Hero hero){
@@ -120,7 +123,7 @@ public class BattleManager : StateMachineController {
         }else{
             BattleUIManager.Instance.SetHeroPanelActive(true);
             UpdatePassiveEntryUI();
-            BattleUIManager.Instance.heroDetailUI.ChangeHeroDetailUIValue(selectedHero.HeroRenderer.sprite);
+            BattleUIManager.Instance.heroDetailUI.ChangeHeroDetailUIValue(selectedHero.GetFighterData().standingSprite);
             BattleUIManager.Instance.heroDetailUI.ChangeDetailUI(selectedHero);
             BattleUIManager.Instance.UpdateSelectedHeroSkillUI(selectedHero.Type,selectedHero.FighterSkillCaster.Data.Description);
         }
@@ -131,7 +134,7 @@ public class BattleManager : StateMachineController {
     /// </summary>
     public void RecallSelectedHero(){
         RemovePassiveEntry();
-        BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.HeroRenderer.sprite,selectedHero.name);
+        BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.name);
         this.RemoveHero(selectedHero);
         Destroy(selectedHero.gameObject);
         selectedHero = null;
