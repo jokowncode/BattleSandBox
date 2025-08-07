@@ -6,9 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HeroPortraitUI : MonoBehaviour
-{
-    [HideInInspector]public static HeroPortraitUI Instance;
+public class HeroPortraitUI : MonoBehaviour {
     
     public GameObject heroPriestPortraitUIPrefab;
     public GameObject heroWarriorPortraitUIPrefab;
@@ -16,51 +14,27 @@ public class HeroPortraitUI : MonoBehaviour
     public Transform heroPortraitContent;
     
     [SerializeField] private List<Hero> heroPortraits;
-    [SerializeField] private Dictionary<Hero,GameObject> heroPortraitUIDict;
+    private Dictionary<Hero,GameObject> heroPortraitUIDict;
     
     private void Awake() {
-        if (Instance != null) {
-            Destroy(this.gameObject);
-            return;
-        }
-        Instance = this;
         heroPortraitUIDict = new Dictionary<Hero,GameObject>();
     }
-
-    // void Start()
-    // {
-    //     heroPortraitUIDict = new Dictionary<Hero,GameObject>();
-    //     //CreateUIProtraits();
-    // }
     
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("wow");
-            SetHeroPortraitsGray(heroPortraits[0]);
-            //DoSomething(); // 👈 你要执行的函数
-        }
-    }
-    public void PushHeros(List<Hero> heroes)
-    {
+    
+    public void PushHeros(List<Hero> heroes){
         heroPortraits.Clear();
         heroPortraits.AddRange(heroes);
         //heroPortraits = heroes;
         CreateUIProtraits();
     }
 
-    void CreateUIProtraits()
-    {
-        foreach (Transform child in heroPortraitContent.transform)
-        {
+    private void CreateUIProtraits(){
+        foreach (Transform child in heroPortraitContent.transform){
             Destroy(child.gameObject);
         }
         // 清空旧字典
-        if(heroPortraitUIDict!=null)
-            heroPortraitUIDict.Clear();
-        foreach (Hero hero in heroPortraits)
-        {
+        heroPortraitUIDict.Clear();
+        foreach (Hero hero in heroPortraits){
             FighterType tempType = hero.GetFighterData().Type;
             GameObject go;
             if(tempType == FighterType.Warrior)
@@ -77,12 +51,14 @@ public class HeroPortraitUI : MonoBehaviour
         heroPortraitContent.GetComponent<UILayoutManual>().LayoutChildren();
     }
 
-    public void SetHeroPortraitsGray(Hero hero)
-    {
-        heroPortraitUIDict[hero].GetComponent<UIShaker>().Shake();
+    public void SetHeroPortraitsGray(Hero hero){
+        if (heroPortraitUIDict[hero].TryGetComponent(out UIShaker shaker)){
+            shaker.Shake();
+        }
+        
         Image[] image = heroPortraitUIDict[hero].GetComponentsInChildren<Image>();
         Material newMat = new Material(image[3].material);
-        newMat.SetFloat(Shader.PropertyToID("_Desaturation"),0);
+        newMat.SetFloat(MaterialProperty.Desaturation, 0);
         image[3].material = newMat;
         image[3].color = Color.gray;
     }

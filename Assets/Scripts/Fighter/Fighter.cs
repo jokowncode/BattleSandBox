@@ -113,8 +113,8 @@ public class Fighter : StateMachineController {
             Debug.Log($"{this.gameObject.name} Dead -> Caused Total Damage: {this.TotalDamage}");    
         }    
 #endif
-            
-            if (this is Hero hero) {
+            if (this is Hero hero){
+                BattleUIManager.Instance.heroPortraitUI.SetHeroPortraitsGray(hero);
                 BattleManager.Instance.RemoveHero(hero);
             }else if (this is Enemy enemy) {
                 BattleManager.Instance.RemoveEnemy(enemy);

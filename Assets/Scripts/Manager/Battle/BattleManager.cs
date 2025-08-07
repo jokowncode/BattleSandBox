@@ -84,7 +84,7 @@ public class BattleManager : StateMachineController {
         this.BattleStartTime = Time.time;
 #endif
         BattleUIManager.Instance.SetHeroPortraitActive(true);
-        HeroPortraitUI.Instance.PushHeros(HeroesInBattle);
+        BattleUIManager.Instance.heroPortraitUI.PushHeros(HeroesInBattle);
     }
 
     public void AddHero(Hero hero){
