@@ -32,6 +32,8 @@ public class Fighter : StateMachineController {
     private FighterRenderer Renderer;
     private bool IsDead;
 
+    private Action OnDead;
+
     protected virtual void Awake(){
         this.FighterSkillCaster = GetComponentInChildren<SkillCaster>();
         this.FighterAnimator = GetComponentInChildren<Animator>();
@@ -69,6 +71,13 @@ public class Fighter : StateMachineController {
 
     private void OnFindAttackTarget(Fighter target) {
         this.AttackTarget = target;
+        this.AttackTarget.OnDead += OnTargetDead;
+    }
+
+    private void OnTargetDead(){
+        if (!this.AttackTarget) return;
+        this.AttackTarget.gameObject.layer = LayerMask.NameToLayer("Default");
+        this.ChangeState(FighterPatrol);
     }
 
     public void BeDamaged(EffectData effectData){
@@ -92,9 +101,8 @@ public class Fighter : StateMachineController {
         
         if (this.CurrentData.Health <= 0.0f && !IsDead) {
             IsDead = true;
-            // TODO: Dissolve FX
-            // this.Renderer.Dead();
-            Destroy(this.gameObject);
+            OnDead?.Invoke();
+            this.Renderer.Dead();
             if (this is Hero hero) {
                 BattleManager.Instance.RemoveHero(hero);
             }else if (this is Enemy enemy) {

@@ -42,8 +42,8 @@ public class FighterRenderer : MonoBehaviour{
             yield return null;
         }
         this.Renderer.material.SetFloat(MaterialProperty.Dissolve, 1.0f);
+        Destroy(this.transform.parent.gameObject);
         IsDead = false;
-        // Destroy(this.transform.parent.gameObject);
     }
 
     private IEnumerator FlashingCoroutine(){

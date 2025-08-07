@@ -3,7 +3,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
+public class ButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler {
+
+    [SerializeField] private AudioClip EnterSound;
+    [SerializeField] private AudioClip ClickSound;
     
     [SerializeField] private Color NormalColor = Color.white;
     [SerializeField] private Color HoverColor = Color.yellow;
@@ -19,10 +22,19 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     }
     
     public void OnPointerEnter(PointerEventData eventData){
+        if (EnterSound){
+            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EnterSound);
+        }
         ButtonText.color = HoverColor;
     }
     
     public void OnPointerExit(PointerEventData eventData){
         ButtonText.color = NormalColor;
+    }
+
+    public void OnPointerClick(PointerEventData eventData){
+        if (ClickSound){
+            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, ClickSound);
+        }
     }
 }
