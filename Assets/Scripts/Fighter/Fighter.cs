@@ -35,7 +35,7 @@ public class Fighter : StateMachineController {
     private Action OnDead;
     
 #if DEBUG_MODE
-    public float TotalDamage {get; private set;}    
+    public float TotalDamage {get; set;}    
 #endif
 
     protected virtual void Awake(){
