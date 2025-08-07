@@ -16,7 +16,7 @@ public class SplitSkillEnd : SkillEnd{
         delivery.transform.rotation = effect.Delivery.transform.rotation * Quaternion.AngleAxis(angle, Vector3.up);
         
         delivery.StartDelivery(influenceFighter.gameObject, delivery.transform.position + delivery.transform.forward, effectData, delivery.CasterType);
-        delivery.SetPlugins(effect.Delivery.SkillMiddlePlugins, effect.SkillEndPlugins);
+        delivery.SetPlugins(effect.Delivery.SkillMiddlePlugins, effect.SkillEndPlugins, false);
     }
 
     public override void AdditionalProcedure(Fighter influenceFighter, SkillEffect effect, EffectData effectData){

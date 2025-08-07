@@ -22,6 +22,7 @@ public class SkillNameUI : MonoBehaviour{
 
     public void Show(){ 
         // this.gameObject.SetActive(true);
+        if (!this.gameObject.activeInHierarchy) return;
         StartCoroutine(FadeCoroutine(1.0f, this.FadeDuration));
     }
 

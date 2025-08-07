@@ -38,9 +38,10 @@ public abstract class SkillDelivery : MonoBehaviour {
         this.EffectData = effectData;
     }
 
-    public void SetPlugins(List<SkillMiddle> middlePlugins, List<SkillEnd> endPlugins){
-        this.SkillMiddlePlugins = new List<SkillMiddle>(middlePlugins);
-        this.Effect.SetEndPlugins(endPlugins);
+    public void SetPlugins(List<SkillMiddle> middlePlugins, List<SkillEnd> endPlugins, bool isNew){
+        this.SkillMiddlePlugins = middlePlugins;
+        if(isNew) this.SkillMiddlePlugins = new List<SkillMiddle>(middlePlugins);
+        this.Effect.SetEndPlugins(endPlugins, isNew);
     }
 
     protected virtual bool TriggerCondition(Collider other) {

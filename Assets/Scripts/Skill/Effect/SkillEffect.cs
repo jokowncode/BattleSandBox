@@ -15,8 +15,9 @@ public abstract class SkillEffect : MonoBehaviour {
         Delivery = GetComponent<SkillDelivery>();
     }
 
-    public void SetEndPlugins(List<SkillEnd> endPlugins) {
-        this.SkillEndPlugins = new List<SkillEnd>(endPlugins);
+    public void SetEndPlugins(List<SkillEnd> endPlugins, bool isNew){
+        this.SkillEndPlugins = endPlugins;
+        if(isNew) this.SkillEndPlugins = new List<SkillEnd>(endPlugins);
     }
 
     public void ApplyEffect(Fighter influenceFighter, EffectData effectData) {
@@ -35,7 +36,15 @@ public abstract class SkillEffect : MonoBehaviour {
         } else {
             CameraManager.Instance.ShakeCamera(0.5f, 0.25f, Vector3.right);
         }
-        foreach (SkillEnd end in SkillEndPlugins) {
+        
+        Dictionary<SkillEnd, bool> occurSkillEnds = new Dictionary<SkillEnd, bool>();
+        for (int i = 0; i < this.SkillEndPlugins.Count; ){
+            SkillEnd end = this.SkillEndPlugins[i];
+            if (!occurSkillEnds.TryAdd(end, true)){
+                i += 1;
+                continue;
+            }
+            this.SkillEndPlugins.Remove(end);
             end.AdditionalProcedure(influenceFighter, this, effectData);
         }
     }

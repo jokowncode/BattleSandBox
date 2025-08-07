@@ -31,7 +31,7 @@ public class Fighter : StateMachineController {
 
     private TargetType CurrentFighterType;
     private FighterRenderer Renderer;
-    private bool IsDead;
+    public bool IsDead{ get; private set; }
 
     private Action OnDead;
     
@@ -80,8 +80,6 @@ public class Fighter : StateMachineController {
     }
 
     private void OnTargetDead(){
-        if (!this.AttackTarget) return;
-        this.AttackTarget.gameObject.layer = LayerMask.NameToLayer("Default");
         this.ChangeState(FighterPatrol);
     }
 
@@ -109,6 +107,7 @@ public class Fighter : StateMachineController {
             OnDead?.Invoke();
             this.Renderer.Dead();
             this.FighterCanvas.gameObject.SetActive(false);
+            this.gameObject.layer = LayerMask.NameToLayer("Default");
             
 #if DEBUG_MODE
         if (this.CurrentFighterType == TargetType.Hero) {

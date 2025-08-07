@@ -35,6 +35,7 @@ public class SkillState : FighterState {
 
     public override void Construct() {
         if (!Controller.FighterSkillCaster.CanCastSkill()) return;
+        if (Controller.IsDead) return;
         Controller.SkillNameText.Show();
         Controller.FighterAnimator.SetTrigger(AnimationParams.Skill);
         Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);

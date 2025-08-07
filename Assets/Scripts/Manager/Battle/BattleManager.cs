@@ -182,9 +182,6 @@ public class BattleManager : StateMachineController{
     /// 清除指定 GameObject 的技能。
     /// </summary>
     private void RemovePassiveEntry(){
-        if (UndressPassiveEntrySfx) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
-        }
         RemoveSkillFromSlot1();
         RemoveSkillFromSlot2();
     }
@@ -193,6 +190,9 @@ public class BattleManager : StateMachineController{
     /// 只从第一个技能槽中移除指定 GameObject 的技能。
     /// </summary>
     public void RemoveSkillFromSlot1(){
+        if (UndressPassiveEntrySfx) {
+            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
+        }
         if (Skills1InBattle.Remove(selectedHero, out PassiveEntry removedSkillData)){
             selectedHero.RemovePassiveEntry(removedSkillData);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
@@ -205,6 +205,9 @@ public class BattleManager : StateMachineController{
     /// 只从第二个技能槽中移除指定 GameObject 的技能。
     /// </summary>
     public void RemoveSkillFromSlot2(){
+        if (UndressPassiveEntrySfx) {
+            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
+        }
         if (Skills2InBattle.Remove(selectedHero, out PassiveEntry removedSkillData)){
             selectedHero.RemovePassiveEntry(removedSkillData);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
