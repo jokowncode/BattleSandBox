@@ -7,14 +7,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_water
-  m_Shader: {fileID: -6465566751694194690, guid: 09bab31d40f920447b68a3a3d50779b5,
+  m_Name: M_StarSkyBoxIngame
+  m_Shader: {fileID: -6465566751694194690, guid: 2ccb03a495163ce4c82f4678d936d995,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -24,6 +24,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _SampleTexture2D_363e4037b4114e188aeeca73d77aa0fd_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: ac4237544a99e4d45a9e5ec425791a56, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -38,17 +42,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Emission: 46.38
-    - _FlowIntensity: 0.3
+    - _Power: 10
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _WaveEmission: 1
+    - _Speed: 0.01
+    - _StarBrightness: 0.25
     m_Colors:
-    - _Color: {r: 0.59748423, g: 0.18739788, b: 0.12588492, a: 0}
-    - _ColorSurface: {r: 0, g: 0.36437878, b: 0.52201253, a: 0}
-    - _ColorWave: {r: 0.3333333, g: 0.13917209, b: 0, a: 0}
+    - _Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _SkyColor: {r: 0, g: 0, b: 0, a: 0}
+    - _Tilling: {r: 10, g: 10, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &2015659071580393818
+--- !u!114 &7430735821249287980
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
