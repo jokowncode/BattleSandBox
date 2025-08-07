@@ -28,8 +28,7 @@ public class BattleManager : StateMachineController {
     
     public List<Hero> HeroesInBattle { get; private set; }
     public List<Enemy> EnemiesInBattle { get; private set; }
-
-    // TODO: eg:Support Passive Entry Register Action to Change Hero Property
+    
     public Action<Hero> OnHeroEnterTheField;
     public Action<Hero> OnHeroExitTheField;
     
