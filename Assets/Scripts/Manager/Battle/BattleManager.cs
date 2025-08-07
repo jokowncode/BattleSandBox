@@ -123,7 +123,7 @@ public class BattleManager : StateMachineController {
         }else{
             BattleUIManager.Instance.SetHeroPanelActive(true);
             UpdatePassiveEntryUI();
-            BattleUIManager.Instance.heroDetailUI.ChangeHeroDetailUIValue(selectedHero.GetFighterData().standingSprite);
+            BattleUIManager.Instance.heroDetailUI.ChangeHeroDetailUIValue(selectedHero.StandingSprite);
             BattleUIManager.Instance.heroDetailUI.ChangeDetailUI(selectedHero);
             BattleUIManager.Instance.UpdateSelectedHeroSkillUI(selectedHero.Type,selectedHero.FighterSkillCaster.Data.Description);
         }

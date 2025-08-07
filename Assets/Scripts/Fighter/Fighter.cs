@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class Fighter : StateMachineController {
     
     [SerializeField] protected FighterData InitialData;
+    [SerializeField] private Canvas FighterCanvas;
     [SerializeField] private Image BloodBarImage;
     [field: SerializeField] public SkillNameUI SkillNameText{ get; private set; }
     [SerializeField] private ParticleSystem BloodParticle;
@@ -107,6 +108,7 @@ public class Fighter : StateMachineController {
             IsDead = true;
             OnDead?.Invoke();
             this.Renderer.Dead();
+            this.FighterCanvas.gameObject.SetActive(false);
             
 #if DEBUG_MODE
         if (this.CurrentFighterType == TargetType.Hero) {
@@ -168,11 +170,6 @@ public class Fighter : StateMachineController {
         ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
     }
 
-    public FighterData GetFighterData()
-    {
-        return this.InitialData;
-    }
-
     #region FighterProperty
     // Initial Property
     public float InitialHealth{ 
@@ -225,6 +222,9 @@ public class Fighter : StateMachineController {
     public int StarLevel => InitialData.StarLevel;
     public float AttackRadius => InitialData.AttackRadius;
     public float Speed => InitialData.Speed;
+    public Sprite StandingSprite => InitialData.standingSprite;
+    public Sprite heroPortraitSprite => InitialData.heroPortraitSprite;
+
     #endregion
 }
 

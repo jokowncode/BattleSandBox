@@ -7,10 +7,9 @@ using UnityEngine;
 
 public class HeroWarehouseUI : MonoBehaviour {
     
-    public GameObject heroWarehouseWarriorUIPrefab;
-    public GameObject heroWarehouseMageUIPrefab;
-    public GameObject heroWarehousePriestUIPrefab;
-    public GameObject defaultDraggableInstancePrefab;
+    public HeroPanelUI heroWarehouseWarriorUIPrefab;
+    public HeroPanelUI heroWarehouseMageUIPrefab;
+    public HeroPanelUI heroWarehousePriestUIPrefab;
     public Transform heroWarehouseContent;           // ScrollView 的 Content 对象
 
 
@@ -33,7 +32,7 @@ public class HeroWarehouseUI : MonoBehaviour {
     }
     
     public void AddItem(string heroRef){
-        GameObject go;
+        HeroPanelUI go;
         FighterType tempType = HeroWarehouseManager.Instance.GetHeroType(heroRef);
         if(tempType == FighterType.Warrior)
             go = Instantiate(heroWarehouseWarriorUIPrefab, heroWarehouseContent);
@@ -44,10 +43,6 @@ public class HeroWarehouseUI : MonoBehaviour {
         if(go.GetComponent<DraggableUI>()==null)
             go.AddComponent<DraggableUI>();
         go.GetComponent<DraggableUI>().prefabReference = heroRef;
-        // Image[] imageComponent = go.GetComponentsInChildren<Image>();
-        // imageComponent[1].sprite = sprite;
-        Image[] imageComponent = go.GetComponentsInChildren<Image>();
-        imageComponent[3].sprite = 
-            HeroWarehouseManager.Instance.GetHeroByRef(heroRef).GetFighterData().heroPortraitSprite;
+        go.SetPortrait(HeroWarehouseManager.Instance.GetHeroByRef(heroRef).heroPortraitSprite);
     }
 }
