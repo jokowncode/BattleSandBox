@@ -6,6 +6,7 @@ public class FighterData : ScriptableObject{
     public string Name;
     public string Description;
     public int StarLevel;
+    public float Shield;
     public float Health;
     public float PhysicsAttack;
     public float MagicAttack;

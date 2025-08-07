@@ -4,6 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "PhantomSpirit/BattleData", fileName = "BattleData")]
 public class BattleData : ScriptableObject{
+    // public int MaxHero
     public string BattleName;
     public List<EnemyDepartmentData> EnemiesInBattle;
 }

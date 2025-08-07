@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class SkillCaster : MonoBehaviour{
 
     [SerializeField] private SkillData InitialData;
-    [SerializeField] private ParticleSystem SkillStartParticle;
+    [SerializeField] protected ParticleSystem SkillStartParticle;
     [SerializeField] private AudioClip SkillCastSfx;
 
     protected Fighter OwnedFighter;
