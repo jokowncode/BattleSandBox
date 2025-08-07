@@ -19,6 +19,7 @@ public class BattleManager : StateMachineController {
     // TODO: Get BattleData From World Scene
     [SerializeField] private BattleData Data;
     [SerializeField] private TextMeshProUGUI BattleNameText;
+    [SerializeField] private TextMeshProUGUI BattleMessageText;
     
     [Header("Deploy Place Settings")]
     [SerializeField] private BoxCollider HeroDeployPlaceArea;
@@ -33,6 +34,8 @@ public class BattleManager : StateMachineController {
     public Action<Hero> OnHeroExitTheField;
     
     public bool IsGameOver => EnemiesInBattle.Count <= 0 || HeroesInBattle.Count <= 0;
+    public bool IsFullHero => this.HeroesInBattle.Count >= this.Data.MaxHeroCount;
+    
     private Hero selectedHero;
     private PrepareState Prepare;
     
@@ -56,6 +59,7 @@ public class BattleManager : StateMachineController {
     private void Start(){
         ChangeState(Prepare);
         this.BattleNameText.text = this.Data.BattleName;
+        this.BattleMessageText.text = this.Data.BattleMessage;
         BattleUIManager.Instance.SetHeroWarehouseActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(false);
         BattleUIManager.Instance.SetHeroPortraitActive(false);
