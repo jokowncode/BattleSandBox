@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using UnityEditor.Timeline.Actions;
 using UnityEngine.VFX;
 
-public class FlashManager : MonoBehaviour
-{
+public class FlashManager : MonoBehaviour {
     public static FlashManager Instance;
     public static bool HasInstance => Instance != null;
     
     [Header("VFX Settings")]
-    public GameObject vfxPrefab;
-    [SerializeField]private List<GameObject> vfxConnections = new List<GameObject>();
-    [SerializeField]private List<FlashPoint> flashPoints = new List<FlashPoint>();
+    [SerializeField] private GameObject vfxPrefab;
+    
+    private List<GameObject> vfxConnections = new List<GameObject>();
+    private List<FlashPoint> flashPoints = new List<FlashPoint>();
     
     private void Awake() {
         if (Instance != null) {
@@ -20,7 +20,6 @@ public class FlashManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(this.gameObject);
     }
 
     private void Update()
