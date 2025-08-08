@@ -74,7 +74,8 @@ public class Fighter : StateMachineController {
         if(FighterPatrol) FighterPatrol.OnFindAttackTarget += OnFindAttackTarget;
     }
 
-    private void OnFindAttackTarget(Fighter target) {
+    private void OnFindAttackTarget(Fighter target){
+        if (!target) return; 
         this.AttackTarget = target;
         this.AttackTarget.OnDead += OnTargetDead;
     }

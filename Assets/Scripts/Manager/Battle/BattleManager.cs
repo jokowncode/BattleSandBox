@@ -268,15 +268,36 @@ public class BattleManager : StateMachineController{
         return result;
     }
     
-    public Fighter GetRandomFighter(TargetType type) {
+    public Fighter GetRandomFighter(TargetType type, Func<Fighter, bool> condition = null) {
         if (IsGameOver) return null;
+        int randomIndex = -1;
         switch (type) {
             case TargetType.Hero:
-                return this.HeroesInBattle[UnityEngine.Random.Range(0, this.HeroesInBattle.Count)];
+                randomIndex = UnityEngine.Random.Range(0, this.HeroesInBattle.Count);
+                break;
             case TargetType.Enemy:
-                return this.EnemiesInBattle[UnityEngine.Random.Range(0, this.EnemiesInBattle.Count)];
+                randomIndex = UnityEngine.Random.Range(0, this.EnemiesInBattle.Count);
+                break;
         }
-        return null;
+
+        if (randomIndex == -1) return null;
+        if (condition == null)
+            return type == TargetType.Hero ? this.HeroesInBattle[randomIndex] : this.EnemiesInBattle[randomIndex];
+
+        Fighter fighter = type == TargetType.Hero ? this.HeroesInBattle[randomIndex] : this.EnemiesInBattle[randomIndex];
+        if (condition(fighter)) return fighter;
+        int index = randomIndex + 1;
+        fighter = type == TargetType.Hero ? this.HeroesInBattle[index % this.HeroesInBattle.Count] 
+            : this.EnemiesInBattle[index % this.EnemiesInBattle.Count];
+            
+        while (index % this.HeroesInBattle.Count != randomIndex && !condition(fighter)){
+            index++;
+            fighter = type == TargetType.Hero ? this.HeroesInBattle[index % this.HeroesInBattle.Count] 
+                : this.EnemiesInBattle[index % this.EnemiesInBattle.Count];
+        }
+
+        if (index % this.HeroesInBattle.Count == randomIndex) return null;
+        return fighter;
     }
     
     private void GetNavMeshPosition(Vector3 currentPos, float maxDistance, out Vector3 navMeshPos){

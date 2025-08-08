@@ -15,6 +15,7 @@ public class PatrolState : FighterState{
     private Fighter PatrolPoint;
     private bool IsMoveStop;
     private bool IsFirstFrame = true;
+    private Vector3 CurrentTargetPos;
     
     protected override void Awake(){
         base.Awake();
@@ -37,12 +38,35 @@ public class PatrolState : FighterState{
             return;
         }
         if (BattleManager.Instance.IsGameOver) return;
-        if (!this.PatrolPoint) {
+
+        /*if (!this.PatrolPoint) {
             this.PatrolPoint = BattleManager.Instance.GetRandomFighter(Controller.AttackTargetType);
         }
-        if(this.PatrolPoint) Controller.Move.MoveTo(this.PatrolPoint.transform.position);
-        // Vector3 dir = (this.PatrolPoint.transform.position - this.transform.position).normalized;
-        // Controller.Move.MoveByDirection(dir);
+
+        if (this.PatrolPoint){
+            Controller.Move.MoveTo(this.PatrolPoint.transform.position);
+        }*/
+
+        bool IsNewPoint = false;
+        if (!this.PatrolPoint){
+            IsNewPoint = true;
+            Func<Fighter, bool> condition = null;
+            if (Controller.Type == FighterType.Warrior){
+                condition = (Fighter warrior) => FormationManager.Instance.ValidTarget(warrior);
+            }
+            this.PatrolPoint = BattleManager.Instance.GetRandomFighter(Controller.AttackTargetType, condition);
+        }
+
+        if (this.PatrolPoint){
+            if (IsNewPoint){
+                Vector3 finalPos = FormationManager.Instance.GetFormationPosition(this.PatrolPoint, Controller.AttackTarget,
+                    Controller.AttackRadius);
+                Controller.Move.MoveTo(finalPos);
+                this.CurrentTargetPos = finalPos;
+            } else{
+                Controller.Move.MoveTo(this.CurrentTargetPos);
+            }
+        }
     }
 
     public override void Destruct() {
@@ -63,7 +87,7 @@ public class PatrolState : FighterState{
             SearchTarget, LayerMask.GetMask(Controller.AttackTargetType.ToString()));
         if (result != 0 && SearchTarget[0].gameObject.TryGetComponent(out Fighter attackTarget)) {
             IsMoveStop = true;
-            OnFindAttackTarget?.Invoke(attackTarget);
+            OnFindAttackTarget?.Invoke(this.PatrolPoint);
             if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()){
                 Controller.ChangeState(FighterSkill);
             } else{
