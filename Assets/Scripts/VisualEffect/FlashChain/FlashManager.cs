@@ -50,7 +50,7 @@ public class FlashManager : MonoBehaviour
             flashPoints.Remove(point);
             
             
-            //RefreshConnections();
+            RefreshConnections();
         }
     }
     

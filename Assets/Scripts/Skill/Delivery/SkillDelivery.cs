@@ -23,7 +23,7 @@ public abstract class SkillDelivery : MonoBehaviour {
 
     protected void ApplyMiddlePlugin() {
         foreach (SkillMiddle middle in SkillMiddlePlugins) {
-            middle.AdditionalProcedure();
+            //middle.AdditionalProcedure();
         }
     }
 

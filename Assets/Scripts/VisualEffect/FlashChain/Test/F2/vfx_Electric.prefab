@@ -55,6 +55,27 @@ VisualEffect:
       - m_Value: 1
         m_Name: Thickness
         m_Overridden: 1
+      - m_Value: 0.01
+        m_Name: Cone_baseRadius
+        m_Overridden: 1
+      - m_Value: 0.1
+        m_Name: Cone_topRadius
+        m_Overridden: 1
+      - m_Value: 2
+        m_Name: DirectionElectricitySpeed
+        m_Overridden: 1
+      - m_Value: 0.5
+        m_Name: DirectionElectricityLifetime
+        m_Overridden: 1
+      - m_Value: 0.1
+        m_Name: DirectionElectricityNoisePower
+        m_Overridden: 1
+      - m_Value: 0.1
+        m_Name: Sphere_radius
+        m_Overridden: 1
+      - m_Value: 32
+        m_Name: DirectionElectricityRate
+        m_Overridden: 1
     m_Vector2f:
       m_Array: []
     m_Vector3f:
@@ -74,8 +95,14 @@ VisualEffect:
       - m_Value: {x: 10, y: 0, z: 0}
         m_Name: EndPos
         m_Overridden: 1
+      - m_Value: {x: 0, y: 0, z: 0}
+        m_Name: Cone_transform_angles
+        m_Overridden: 1
     m_Vector4f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 1.1200576, y: 1.9695276, z: 11.313708, w: 1}
+        m_Name: Color
+        m_Overridden: 1
     m_Uint:
       m_Array: []
     m_Int:
@@ -129,7 +156,7 @@ VFXRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
 --- !u!114 &7183880348285718943
 MonoBehaviour:
   m_ObjectHideFlags: 0
