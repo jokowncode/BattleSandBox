@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[ExecuteInEditMode]
 //[RequireComponent(typeof(Rigidbody))]
 public class FireTrail : MonoBehaviour
 {
