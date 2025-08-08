@@ -63,4 +63,11 @@ public abstract class SkillDelivery : MonoBehaviour {
             TriggerTargetOut(other);
         }   
     }
+
+    private void OnDisable() {
+        FireTrail trail = this.gameObject.GetComponentInChildren<FireTrail>();
+        if (trail) {
+            trail.transform.parent = null;
+        }
+    }
 }
