@@ -51,7 +51,18 @@ public class FighterMove : MonoBehaviour{
         // ChangeForward(velocityDir.x);
         
         //this.transform.position += Owner.Speed * Time.deltaTime * velocityDir;
-        Agent.SetDestination(targetPos);
+        Vector3 randomPos = GenerateRandomPoint(targetPos, this.Owner.AttackRadius);
+        Agent.SetDestination(randomPos);
+    }
+    
+    private Vector3 GenerateRandomPoint(Vector3 center, float radius) {
+        Vector2 randomDir = UnityEngine.Random.insideUnitCircle * radius;
+        Vector3 targetPos = center + new Vector3(randomDir.x, 0, randomDir.y);
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(targetPos, out hit, 1.0f, NavMesh.AllAreas)) {
+            return hit.position;
+        }
+        return center;
     }
 
     private void Update(){
