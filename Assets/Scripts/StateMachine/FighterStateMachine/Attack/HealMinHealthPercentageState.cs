@@ -30,8 +30,7 @@ public class HealMinHealthPercentageState : AttackState{
 
     protected override void OnAttackEnd(){
         if (BattleManager.Instance.IsGameOver) {
-            Controller.FighterAnimator.SetTrigger(AnimationParams.Idle);
-            Controller.ChangeState(null);
+            Controller.FighterIdle();
             return;
         }
         

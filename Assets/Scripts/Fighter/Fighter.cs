@@ -84,6 +84,12 @@ public class Fighter : StateMachineController {
         this.ChangeState(FighterPatrol);
     }
 
+    public void FighterIdle(){
+        this.FighterAnimator.SetTrigger(AnimationParams.Idle);
+        this.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
+        this.ChangeState(null);
+    }
+
     public void BeDamaged(EffectData effectData){
         if (IsDead) return;
         this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - effectData.Value);
@@ -109,6 +115,8 @@ public class Fighter : StateMachineController {
             this.Renderer.Dead();
             this.FighterCanvas.gameObject.SetActive(false);
             this.gameObject.layer = LayerMask.NameToLayer("Default");
+            this.Move.StopMove();
+            this.FighterIdle();
             
 #if DEBUG_MODE
         if (this.CurrentFighterType == TargetType.Hero) {

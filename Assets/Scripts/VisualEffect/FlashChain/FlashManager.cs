@@ -25,7 +25,7 @@ public class FlashManager : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("FlashPointCount: "+flashPoints.Count);
+        // Debug.Log("FlashPointCount: "+flashPoints.Count);
 
         // if (refreshTimer >= refreshInterval)
         // {

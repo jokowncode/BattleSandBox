@@ -39,9 +39,7 @@ public abstract class AttackState : FighterState{
 
     protected virtual void OnAttackEnd() {
         if (BattleManager.Instance.IsGameOver){
-            Controller.FighterAnimator.SetTrigger(AnimationParams.Idle);
-            Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
-            Controller.ChangeState(null);
+            Controller.FighterIdle();
             return;
         }
         

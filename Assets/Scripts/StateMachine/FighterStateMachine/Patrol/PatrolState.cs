@@ -59,8 +59,9 @@ public class PatrolState : FighterState{
 
         if (this.PatrolPoint){
             if (IsNewPoint){
-                Vector3 finalPos = FormationManager.Instance.GetFormationPosition(this.PatrolPoint, Controller.AttackTarget,
-                    Controller.AttackRadius);
+                Vector3 finalPos = Controller.Type == FighterType.Warrior ? 
+                    FormationManager.Instance.GetFormationPosition(this.PatrolPoint, Controller.AttackTarget, Controller.AttackRadius) : 
+                    this.PatrolPoint.transform.position;
                 Controller.Move.MoveTo(finalPos);
                 this.CurrentTargetPos = finalPos;
             } else{
@@ -77,9 +78,7 @@ public class PatrolState : FighterState{
 
         if (BattleManager.Instance.IsGameOver){
             IsMoveStop = true;
-            Controller.FighterAnimator.SetTrigger(AnimationParams.Idle);
-            Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
-            Controller.ChangeState(null);
+            Controller.FighterIdle();
             return;
         }
 
@@ -87,7 +86,7 @@ public class PatrolState : FighterState{
             SearchTarget, LayerMask.GetMask(Controller.AttackTargetType.ToString()));
         if (result != 0 && SearchTarget[0].gameObject.TryGetComponent(out Fighter attackTarget)) {
             IsMoveStop = true;
-            OnFindAttackTarget?.Invoke(this.PatrolPoint);
+            OnFindAttackTarget?.Invoke(attackTarget);
             if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()){
                 Controller.ChangeState(FighterSkill);
             } else{

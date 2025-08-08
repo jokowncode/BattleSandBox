@@ -42,9 +42,7 @@ public class ChaseState : FighterState {
     public override void Transition(){
         if (BattleManager.Instance.IsGameOver){
             IsMoveStop = true;
-            Controller.FighterAnimator.SetTrigger(AnimationParams.Idle);
-            Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
-            Controller.ChangeState(null);
+            Controller.FighterIdle();
             return;
         }
 

@@ -37,6 +37,7 @@ public class FighterMove : MonoBehaviour{
     }
     
     public void MoveTo(Vector3 targetPos){
+        if (this.Owner.IsDead) return;
         // this.Obstacle.enabled = false;
         // this.Obstacle.carving = false;
         this.Agent.enabled = true;

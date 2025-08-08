@@ -44,7 +44,7 @@ public class Buff : MonoBehaviour
         
         foreach (var buffMiniData in buffData.immediateEffectBuff)
         {
-            Debug.Log(buffMiniData);
+            //Debug.Log(buffMiniData);
             CalculateChangedValue(caster,target,buffMiniData);
         }
 
