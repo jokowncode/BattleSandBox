@@ -134,7 +134,9 @@ public class BattleManager : StateMachineController{
             UpdatePassiveEntryUI();
             BattleUIManager.Instance.heroDetailUI.ChangeHeroDetailUIValue(selectedHero.StandingSprite);
             BattleUIManager.Instance.heroDetailUI.ChangeDetailUI(selectedHero);
-            BattleUIManager.Instance.UpdateSelectedHeroSkillUI(selectedHero.Type,selectedHero.FighterSkillCaster.Data.Description);
+            BattleUIManager.Instance.UpdateSelectedHeroSkillUI(selectedHero.Type,
+                selectedHero.FighterSkillCaster.Data.Description,
+                selectedHero.GetPassiveEntryDesc());
         }
     }
 
@@ -234,6 +236,7 @@ public class BattleManager : StateMachineController{
     public void RemoveHero(Hero hero){
         OnHeroExitTheField?.Invoke(hero);
         this.HeroesInBattle.Remove(hero);
+        hero.Undress();
     }
 
     public void RemoveEnemy(Enemy enemy) {

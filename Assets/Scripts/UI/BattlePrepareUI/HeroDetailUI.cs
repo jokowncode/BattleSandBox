@@ -40,12 +40,12 @@ public class HeroDetailUI : MonoBehaviour {
         Name.text = hero.Name;
         Description.text = hero.Description;
         UpdateStarLevelUI(hero);
-        Hp.text = hero.Health.ToString();
-        PhysicsAttack.text = hero.PhysicsAttack.ToString();
-        MagicAttack.text = hero.MagicAttack.ToString();
+        Hp.text = hero.InitialHealth.ToString();
+        PhysicsAttack.text = hero.InitialPhysicsAttack.ToString();
+        MagicAttack.text = hero.InitialMagicAttack.ToString();
         Speed.text = hero.Speed.ToString();
-        Critical.text = hero.Critical.ToString();
-        Cooldown.text = hero.FighterSkillCaster.Data.Cooldown.ToString();
+        Critical.text = hero.InitialCritical.ToString();
+        Cooldown.text = hero.FighterSkillCaster.GetInitialData(SkillProperty.Cooldown).ToString();
         UpdateDetailUI(hero);
     }
 

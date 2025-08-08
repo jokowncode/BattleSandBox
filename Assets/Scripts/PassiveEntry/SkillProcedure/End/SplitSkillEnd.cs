@@ -2,7 +2,6 @@
 using System;
 using UnityEngine;
 
-// TODO: Max Split Times Check
 public class SplitSkillEnd : SkillEnd{
 
     [SerializeField] private int SplitCount = 3;

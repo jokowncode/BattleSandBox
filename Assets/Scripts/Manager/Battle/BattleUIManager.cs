@@ -27,20 +27,14 @@ public class BattleUIManager : MonoBehaviour {
     [SerializeField] private GameObject skill1UI;
     [SerializeField] private GameObject skill2UI;
     
-    [SerializeField] private GameObject attackDescription;
-    [SerializeField] private GameObject activeSkillDescription;
-    [SerializeField] private GameObject passiveSkill1Description;
-    [SerializeField] private GameObject passiveSkill2Description;
+    [SerializeField] private TextMeshProUGUI SkillDescription;
+    [SerializeField] private TextMeshProUGUI TalentDescription;
+    [SerializeField] private TextMeshProUGUI PassiveSkill1Description;
+    [SerializeField] private TextMeshProUGUI PassiveSkill2Description;
 
     private Image Skill1Image;
     private Image Skill2Image;
     private Image SkillBackgroundImage;
-    
-    private TextMeshProUGUI Skill1Text;
-    private TextMeshProUGUI Skill2Text;
-    private TextMeshProUGUI AttackDescText;
-    private TextMeshProUGUI SkillDescText;
-    
     
     private void Awake() {
         if (Instance != null) {
@@ -52,10 +46,6 @@ public class BattleUIManager : MonoBehaviour {
         SkillBackgroundImage = skillImageUI.GetComponentInChildren<Image>();
         Skill1Image = skill1UI.GetComponent<Image>();
         Skill2Image = skill2UI.GetComponent<Image>();
-        Skill1Text = passiveSkill1Description.GetComponent<TextMeshProUGUI>();
-        Skill2Text = passiveSkill2Description.GetComponent<TextMeshProUGUI>();
-        AttackDescText = attackDescription.GetComponent<TextMeshProUGUI>();
-        SkillDescText = activeSkillDescription.GetComponent<TextMeshProUGUI>();
     }
     
     public void GameEnd(Sprite bannarSprite){
@@ -98,7 +88,7 @@ public class BattleUIManager : MonoBehaviour {
     /// 修改 skill1UI 下的 TextMeshProUGUI 文本内容
     /// </summary>
     public void SetSkill1UIText(string text){
-        Skill1Text.text = text;
+        PassiveSkill1Description.text = text;
         Color color = Skill1Image.color;
         if (text != ""){
             Skill1Image.color = new Color(color.r, color.g, color.b, 255);
@@ -111,7 +101,7 @@ public class BattleUIManager : MonoBehaviour {
     /// 修改 skill2UI 下的 TextMeshProUGUI 文本内容
     /// </summary>
     public void SetSkill2UIText(string text){
-        Skill2Text.text = text;
+        PassiveSkill2Description.text = text;
         Color color = Skill2Image.color;
         if (text != ""){
             Skill2Image.color = new Color(color.r, color.g, color.b, 255);
@@ -120,15 +110,15 @@ public class BattleUIManager : MonoBehaviour {
         }
     }
 
-    public void UpdateSelectedHeroSkillUI(FighterType type,string skillDesc = null){
+    public void UpdateSelectedHeroSkillUI(FighterType type,string skillDesc, string talentDesc){
         if(type == FighterType.Mage)
             SkillBackgroundImage.sprite = mageSkillIcon;
         else if(type == FighterType.Priest)
             SkillBackgroundImage.sprite = priestSkillIcon;
         else
             SkillBackgroundImage.sprite = warriorSkillIcon;
-        AttackDescText.text = "普通攻击";
-        SkillDescText.text = skillDesc;
+        SkillDescription.text = skillDesc;
+        TalentDescription.text = talentDesc;
     }
     
 }
