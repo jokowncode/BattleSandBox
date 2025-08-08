@@ -1,5 +1,4 @@
 ﻿
-// TODO: Has AllHeroPassiveEntry Hero EnterField -> Construct; ExitField -> Destruct
 using System.Collections.Generic;
 using UnityEngine;
 

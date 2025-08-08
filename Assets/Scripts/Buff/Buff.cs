@@ -95,7 +95,7 @@ public class Buff : MonoBehaviour
             {
                 value = buffMiniData.changedValue;
             }
-            Debug.Log("LongTimeBuff: "+value);
+            // Debug.Log("LongTimeBuff: "+value);
             target.FighterPropertyChange(buffMiniData.changedProperty, PropertyModifyWay.Value, value, true);
         }
     }
@@ -104,7 +104,7 @@ public class Buff : MonoBehaviour
     {
         // 立即应用一次效果
         //ApplyBuffEffects(target);
-        Debug.Log("ApplyImmediateBuffEffects: "+changedAttackSpeedValue);
+        // Debug.Log("ApplyImmediateBuffEffects: "+changedAttackSpeedValue);
         if (changedShieldValue != 0)
         {
             target.Shield = changedShieldValue;
@@ -133,7 +133,7 @@ public class Buff : MonoBehaviour
             {
                 value = buffMiniData.changedValue;
             }
-            Debug.Log("LastBuff: "+value);
+            //Debug.Log("LastBuff: "+value);
             target.FighterPropertyChange(buffMiniData.changedProperty, PropertyModifyWay.Value, value, true);
         }
     }
@@ -142,7 +142,7 @@ public class Buff : MonoBehaviour
     {
         
         float value;
-        Debug.Log(buffMiniData.basicRef);
+        //Debug.Log(buffMiniData.basicRef);
         if (buffMiniData.basicRef == BasicRef.Caster)
         {
             if(buffMiniData.changedProperty == FighterProperty.Shield)
@@ -161,7 +161,7 @@ public class Buff : MonoBehaviour
         {
             value = buffMiniData.changedValue;
         }
-        Debug.Log(value);
+        //Debug.Log(value);
         //target.HeroPropertyChange(FighterProperty.CooldownPercentage,PropertyModifyWay.Percentage,speed,true);
         if (buffMiniData.changedProperty == FighterProperty.Shield)
             changedShieldValue += value;
