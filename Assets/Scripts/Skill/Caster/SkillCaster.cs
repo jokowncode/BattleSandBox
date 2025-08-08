@@ -76,6 +76,12 @@ public abstract class SkillCaster : MonoBehaviour{
     }
 
     protected abstract void Cast(Transform attackTarget);
+
+    public void ApplySkillStart(GameObject target){
+        foreach (SkillStart start in SkillStartPlugins){
+            start.AdditionalProcedure(target);
+        }
+    }
     
     public void CastSkill(Transform attackTarget){
         if (!CanCastSkill()) return;
@@ -85,9 +91,9 @@ public abstract class SkillCaster : MonoBehaviour{
         }
         CurrentSkillCastCount++;
         Cast(attackTarget);
-        foreach (SkillStart start in SkillStartPlugins){
-            start.AdditionalProcedure();
-        }
+        // foreach (SkillStart start in SkillStartPlugins){
+        //     start.AdditionalProcedure();
+        // }
         LastCastTime = Time.time;
     }
 

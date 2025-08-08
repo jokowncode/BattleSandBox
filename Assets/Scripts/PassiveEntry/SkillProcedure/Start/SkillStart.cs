@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class SkillStart : MonoBehaviour {
 
-    public abstract void AdditionalProcedure();
+    public abstract void AdditionalProcedure(GameObject target);
 
 }
 
