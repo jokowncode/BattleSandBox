@@ -44,8 +44,9 @@ public class Hero : Fighter{
     }
 
     public void AddPassiveEntry(PassiveEntry entry){
-        PassiveEntries.Add(entry);
-        entry.Construct(this);
+        PassiveEntry passiveEntry = Instantiate(entry, this.transform);
+        PassiveEntries.Add(passiveEntry);
+        passiveEntry.Construct(this);
     }
 
     public void RemovePassiveEntry(PassiveEntry removeEntry){

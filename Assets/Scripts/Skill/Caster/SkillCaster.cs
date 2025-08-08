@@ -76,7 +76,7 @@ public abstract class SkillCaster : MonoBehaviour{
     }
 
     protected abstract void Cast(Transform attackTarget);
-
+    
     public void CastSkill(Transform attackTarget){
         if (!CanCastSkill()) return;
         if (SkillStartParticle) SkillStartParticle.Play();

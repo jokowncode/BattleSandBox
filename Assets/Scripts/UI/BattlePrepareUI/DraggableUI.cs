@@ -55,8 +55,8 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
         }else{
             GetNavMeshPosition(previewInstance.transform.position, 1.0f, out Vector3 finalPos);
             previewInstance.transform.position = finalPos;
-            previewInstance.Deploy();
             BattleManager.Instance.AddHero(previewInstance);
+            previewInstance.Deploy();
             Destroy(this.gameObject);
         }
     }
