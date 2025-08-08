@@ -14,7 +14,7 @@ public class SingleTargetSkillCaster : SkillCaster {
             Value = GetSkillEffectValue(),
             Duration = this.Data.Duration
         }, OwnedFighter.Type);
-        delivery.SetPlugins(this.SkillMiddlePlugins, this.SkillEndPlugins);
+        delivery.SetPlugins(this.SkillMiddlePlugins, this.SkillEndPlugins, true);
     }
 
     protected override void Cast(Transform attackTarget){
