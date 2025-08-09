@@ -7,7 +7,7 @@ public  class FireTrailSkillStart : SkillStart{
     [SerializeField] private float DamagePercentage = 0.3f;
     [SerializeField] private FireTrailSingleVFX fireTrailPrefab;
     
-    public override void AdditionalProcedure(GameObject target, float damage){
+    public override void AdditionalProcedure(GameObject target, float damage, Fighter owner){
         FireTrail ft = target.AddComponent<FireTrail>();
         ft.spawnDistance = spawnDistance;
         ft.fireTrailPrefab = fireTrailPrefab;

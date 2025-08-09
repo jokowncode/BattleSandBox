@@ -79,7 +79,7 @@ public abstract class SkillCaster : MonoBehaviour{
 
     protected void ApplySkillStart(GameObject target, float damage){
         foreach (SkillStart start in SkillStartPlugins){
-            start.AdditionalProcedure(target, damage);
+            start.AdditionalProcedure(target, damage, this.OwnedFighter);
         }
     }
     
