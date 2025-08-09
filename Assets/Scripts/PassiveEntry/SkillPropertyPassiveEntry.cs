@@ -11,6 +11,10 @@ public class SkillPropertyPassiveEntry : PassiveEntry{
         if (ModifyWay == PropertyModifyWay.Percentage){
             Value = Mathf.Clamp(Value, -100.0f, 100.0f);
         }
+
+        if (Property == SkillProperty.SummonCount){
+            ModifyWay = PropertyModifyWay.Value;
+        }
     }
     
     public override void Construct(Hero hero){

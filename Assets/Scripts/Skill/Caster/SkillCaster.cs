@@ -20,7 +20,7 @@ public abstract class SkillCaster : MonoBehaviour{
 
     public SkillData Data{ get; private set; }
 
-    private void Awake(){
+    protected virtual void Awake(){
         OwnedFighter = GetComponentInParent<Fighter>();
         SkillStartPlugins = new List<SkillStart>();
         SkillMiddlePlugins = new List<SkillMiddle>();
@@ -133,6 +133,11 @@ public abstract class SkillCaster : MonoBehaviour{
     public void SKillPropertyChange(SkillProperty property, PropertyModifyWay modifyWay, float value, bool isUp) {
 
         float sign = isUp ? 1.0f : -1.0f;
+        if (property == SkillProperty.SummonCount && this is SummonSkillCaster summonSkill){
+            summonSkill.MaxSummonCount += (int)sign * (int)value;
+            return;
+        }
+        
         float currentValue = GetCurrentData(property);
         switch (modifyWay){
             case PropertyModifyWay.Value:

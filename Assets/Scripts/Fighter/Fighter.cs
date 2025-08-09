@@ -33,7 +33,7 @@ public class Fighter : StateMachineController {
     private FighterRenderer Renderer;
     public bool IsDead{ get; private set; }
 
-    private Action OnDead;
+    public Action OnDead;
     
 #if DEBUG_MODE
     public float TotalDamage {get; set;}    
