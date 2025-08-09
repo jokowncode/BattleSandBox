@@ -29,7 +29,7 @@ public class Buff : MonoBehaviour
     
     public void AddBuff(Fighter caster,Fighter target,BuffData buffData)
     {
-        Debug.Log("AddBuff");
+        // Debug.Log("AddBuff");
         StartCoroutine(BuffRoutine(caster,target,buffData));
     }
     
@@ -46,7 +46,7 @@ public class Buff : MonoBehaviour
         
         foreach (var buffMiniData in buffData.immediateEffectBuff)
         {
-            Debug.Log("AddBuffMiniData"+buffMiniData);
+            // Debug.Log("AddBuffMiniData"+buffMiniData);
             CalculateChangedValue(caster,target,buffMiniData);
         }
 
@@ -63,7 +63,7 @@ public class Buff : MonoBehaviour
                 TimeRemaining -= buffData.tickInterval;
                 
                 ApplyLongTimeBuffEffects(target,buffData);
-                Debug.Log("Dot");
+                // Debug.Log("Dot");
             }
         }
         else
@@ -81,7 +81,7 @@ public class Buff : MonoBehaviour
         // }
         //yield return null;
         
-        Debug.Log("BuffEnd");
+        // Debug.Log("BuffEnd");
     }
     
     private void ApplyLongTimeBuffEffects(Fighter target = null,BuffData buffData = null)
@@ -106,7 +106,7 @@ public class Buff : MonoBehaviour
     {
         // 立即应用一次效果
         //ApplyBuffEffects(target);
-        Debug.Log("ApplyImmediateBuffEffects: "+changedAttackSpeedValue);
+        // Debug.Log("ApplyImmediateBuffEffects: "+changedAttackSpeedValue);
         if (changedShieldValue != 0)
         {
             target.Shield = changedShieldValue;
@@ -165,7 +165,7 @@ public class Buff : MonoBehaviour
         {
             value = buffMiniData.changedValue;
         }
-        Debug.Log("CalculateValue"+value);
+        // Debug.Log("CalculateValue"+value);
         //target.HeroPropertyChange(FighterProperty.CooldownPercentage,PropertyModifyWay.Percentage,speed,true);
         if (buffMiniData.changedProperty == FighterProperty.Shield)
             changedShieldValue += value;
