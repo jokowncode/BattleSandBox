@@ -14,7 +14,7 @@ public class SingleTargetSkillCaster : SkillCaster {
             Value = GetSkillEffectValue(),
             Duration = this.Data.Duration
         }, OwnedFighter.Type);
-        ApplySkillStart(delivery);
+        ApplySkillStart(delivery.gameObject, delivery.EffectData.Value);
         delivery.SetPlugins(this.SkillMiddlePlugins, this.SkillEndPlugins, true);
     }
 

@@ -17,6 +17,8 @@ public class SummonSkillCaster : SkillCaster{
         this.SummonPet.PhysicsAttack = SummonPet.Type == FighterType.Warrior ? OwnedFighter.MagicAttack * AttackPercentage : 0.0f;
         this.SummonPet.MagicAttack = SummonPet.Type != FighterType.Warrior ? OwnedFighter.MagicAttack * AttackPercentage : 0.0f;
         this.SummonPet.BattleStart();
+        ApplySkillStart(this.SummonPet.gameObject, 
+            SummonPet.Type == FighterType.Warrior ? this.SummonPet.PhysicsAttack : this.SummonPet.MagicAttack);
     }
 
     private void OnDestroy(){
