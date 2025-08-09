@@ -1,13 +1,19 @@
 ﻿
 using UnityEngine;
 
-public  class FireTrailSkillStart : SkillStart {
+public  class FireTrailSkillStart : SkillStart{
 
-    public GameObject fireTrailPrefab;
+    [SerializeField] private float spawnDistance = 1.0f;
+    [SerializeField] private float DamagePercentage = 0.3f;
+    [SerializeField] private FireTrailSingleVFX fireTrailPrefab;
     
     public override void AdditionalProcedure(GameObject target, float damage){
-        GameObject trailInstance = Instantiate(fireTrailPrefab, target.transform.position, Quaternion.identity);
-        trailInstance.transform.SetParent(target.transform, worldPositionStays: true);
+        FireTrail ft = target.AddComponent<FireTrail>();
+        ft.spawnDistance = spawnDistance;
+        ft.fireTrailPrefab = fireTrailPrefab;
+        ft.SetDamage(damage * this.DamagePercentage);
+        // GameObject trailInstance = Instantiate(fireTrailPrefab, target.transform.position, Quaternion.identity);
+        // trailInstance.transform.SetParent(target.transform, worldPositionStays: true);
     }
 
 }

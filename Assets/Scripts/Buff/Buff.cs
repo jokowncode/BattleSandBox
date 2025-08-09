@@ -25,9 +25,11 @@ public class Buff : MonoBehaviour
     private float changedAttackSpeedValue;
     private float changedPhysicsAttackValue;
     private float changedMagicAttackValue;
+    private float changedCriticalValue;
     
     public void AddBuff(Fighter caster,Fighter target,BuffData buffData)
     {
+        Debug.Log("AddBuff");
         StartCoroutine(BuffRoutine(caster,target,buffData));
     }
     
@@ -44,7 +46,7 @@ public class Buff : MonoBehaviour
         
         foreach (var buffMiniData in buffData.immediateEffectBuff)
         {
-            //Debug.Log(buffMiniData);
+            Debug.Log("AddBuffMiniData"+buffMiniData);
             CalculateChangedValue(caster,target,buffMiniData);
         }
 
@@ -104,7 +106,7 @@ public class Buff : MonoBehaviour
     {
         // 立即应用一次效果
         //ApplyBuffEffects(target);
-        // Debug.Log("ApplyImmediateBuffEffects: "+changedAttackSpeedValue);
+        Debug.Log("ApplyImmediateBuffEffects: "+changedAttackSpeedValue);
         if (changedShieldValue != 0)
         {
             target.Shield = changedShieldValue;
@@ -118,6 +120,8 @@ public class Buff : MonoBehaviour
             target.FighterPropertyChange(FighterProperty.PhysicsAttack,PropertyModifyWay.Value,changedPhysicsAttackValue,true);
         if(changedMagicAttackValue !=0)
             target.FighterPropertyChange(FighterProperty.MagicAttack,PropertyModifyWay.Value,changedMagicAttackValue,true);
+        if(changedCriticalValue !=0)
+            target.FighterPropertyChange(FighterProperty.Critical,PropertyModifyWay.Value,changedCriticalValue,true);
     }
     
     private void ApplyLastBuffEffects(Fighter target = null,BuffData buffData = null)
@@ -161,7 +165,7 @@ public class Buff : MonoBehaviour
         {
             value = buffMiniData.changedValue;
         }
-        //Debug.Log(value);
+        Debug.Log("CalculateValue"+value);
         //target.HeroPropertyChange(FighterProperty.CooldownPercentage,PropertyModifyWay.Percentage,speed,true);
         if (buffMiniData.changedProperty == FighterProperty.Shield)
             changedShieldValue += value;
@@ -173,6 +177,8 @@ public class Buff : MonoBehaviour
             changedPhysicsAttackValue += value;
         if (buffMiniData.changedProperty == FighterProperty.MagicAttack)
             changedMagicAttackValue += value;
+        if (buffMiniData.changedProperty == FighterProperty.Critical)
+            changedCriticalValue += value;
     }
 
     public void AddAttackSpeed(Hero tf, float speed)
@@ -192,6 +198,8 @@ public class Buff : MonoBehaviour
             target.FighterPropertyChange(FighterProperty.PhysicsAttack,PropertyModifyWay.Value,changedPhysicsAttackValue,false);
         if(changedMagicAttackValue !=0)
             target.FighterPropertyChange(FighterProperty.MagicAttack,PropertyModifyWay.Value,changedMagicAttackValue,false);
+        if(changedCriticalValue !=0)
+            target.FighterPropertyChange(FighterProperty.Critical,PropertyModifyWay.Value,changedCriticalValue,false);
     }
     
     

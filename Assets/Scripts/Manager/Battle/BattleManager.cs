@@ -64,6 +64,9 @@ public class BattleManager : StateMachineController{
         BattleUIManager.Instance.SetHeroWarehouseActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(false);
         BattleUIManager.Instance.SetHeroPortraitActive(false);
+        
+        // TODO: Optimize Framerate
+        Application.targetFrameRate = 120;
     }
 
     public void PlayErrorSfx(){

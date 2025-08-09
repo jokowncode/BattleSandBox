@@ -157,6 +157,7 @@ public class Fighter : StateMachineController {
         }
         
         if (property == FighterProperty.CooldownPercentage){
+            Debug.Log("技能速度"+ value);
             float currentMultiplier = FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
             float percentage = value / 100.0f;
             FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, currentMultiplier + sign * percentage);
@@ -176,6 +177,7 @@ public class Fighter : StateMachineController {
                 break;
         }
         ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
+        Debug.Log(propertyName + currentValue);
     }
     
     public float GetPropertyData(FighterProperty property){
