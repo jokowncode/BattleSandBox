@@ -9,6 +9,9 @@ public class VictoryState : BattleState{
     public override void Construct(){
         if (VictoryMusics.Length != 0) AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.VictoryMusics[Random.Range(0, this.VictoryMusics.Length)]);
         BattleUIManager.Instance.GameEnd(this.GameVictoryBannarSprite);
+        Controller.ReturnButton.onClick.AddListener(() => {
+            GameManager.Instance.GoToMap(true, true);
+        });
         
 #if DEBUG_MODE
         float duration = Time.time - Controller.BattleStartTime;

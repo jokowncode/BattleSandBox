@@ -15,11 +15,7 @@ public class LiftTransfer : MonoBehaviour
     public Button transferButton;
     
     [Header("UI及淡入淡出设置")]
-    [Tooltip("需要淡入淡出的主UI面板（需挂载CanvasGroup组件）")]
-    public GameObject panelToFade;
-
-    [Tooltip("需要同步淡入淡出的次要UI面板（需挂载CanvasGroup组件）")]
-    public GameObject secondaryPanelToFade;
+    public CanvasGroup HUDCanvasGroup;
 
     [Tooltip("用于黑屏效果的UI Image面板")]
     public Image fadePanel;
@@ -44,7 +40,7 @@ public class LiftTransfer : MonoBehaviour
         if (transferButton == null) Debug.LogError("请在Inspector中设置'transferButton'。", this);
         if (fadePanel == null) Debug.LogError("请在Inspector中设置'fadePanel'。", this);
 
-        if (panelToFade == null) 
+        /*if (panelToFade == null) 
         {
             Debug.LogError("请在Inspector中设置'panelToFade'。", this);
         }
@@ -64,7 +60,7 @@ public class LiftTransfer : MonoBehaviour
             {
                 Debug.LogError($"'secondaryPanelToFade' ({secondaryPanelToFade.name}) 上没有找到CanvasGroup组件，请为其添加一个。", this);
             }
-        }
+        }*/
         
         SetupButtonEvent();
         InitializeUI();

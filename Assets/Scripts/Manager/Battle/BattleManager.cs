@@ -15,14 +15,14 @@ public class BattleManager : StateMachineController{
     [SerializeField] private AudioClip ErrorSfx;
     [SerializeField] private AudioClip EquipPassiveEntrySfx;
     [SerializeField] private AudioClip UndressPassiveEntrySfx;
-
-    // TODO: Get BattleData From World Scene
-    [SerializeField] private BattleData Data;
+    
     [SerializeField] private TextMeshProUGUI BattleNameText;
     [SerializeField] private TextMeshProUGUI BattleMessageText;
 
-    [Header("Deploy Place Settings")] [SerializeField]
-    private BoxCollider HeroDeployPlaceArea;
+    [field: SerializeField] public Button ReturnButton{ get; private set; }
+
+    [Header("Deploy Place Settings")] 
+    [SerializeField] private BoxCollider HeroDeployPlaceArea;
 
     private Dictionary<Hero, PassiveEntry> Skills1InBattle;
     private Dictionary<Hero, PassiveEntry> Skills2InBattle;
@@ -38,6 +38,7 @@ public class BattleManager : StateMachineController{
 
     private Hero selectedHero;
     private PrepareState Prepare;
+    private BattleData Data;
 
 #if DEBUG_MODE
     public float BattleStartTime {get; private set;}
@@ -54,7 +55,6 @@ public class BattleManager : StateMachineController{
         Prepare = GetComponent<PrepareState>();
         Skills1InBattle = new Dictionary<Hero, PassiveEntry>();
         Skills2InBattle = new Dictionary<Hero, PassiveEntry>();
-        DeployEnemy();
     }
 
     private void Start(){
@@ -67,6 +67,11 @@ public class BattleManager : StateMachineController{
         
         // TODO: Optimize Framerate
         Application.targetFrameRate = 120;
+    }
+
+    public void SetBattleData(BattleData data){
+        this.Data = data;
+        DeployEnemy();
     }
 
     public void PlayErrorSfx(){

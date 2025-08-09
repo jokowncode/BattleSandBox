@@ -916,7 +916,8 @@ GameObject:
   - component: {fileID: 663867101134787158}
   - component: {fileID: 3925950214483521276}
   - component: {fileID: 6458108548007448901}
-  - component: {fileID: 7800520070295130006}
+  - component: {fileID: -191682395307458450}
+  - component: {fileID: 8715672205422380044}
   m_Layer: 3
   m_Name: Prefab_Room1
   m_TagString: Untagged
@@ -974,7 +975,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.9, y: 16.690252, z: 6.2652016}
+  m_Size: {x: 2.9, y: 15.17, z: 6.2652016}
   m_Center: {x: 0.22282743, y: 21.039354, z: -7.683169}
 --- !u!114 &6458108548007448901
 MonoBehaviour:
@@ -1003,7 +1004,7 @@ MonoBehaviour:
   alarmColor: {r: 1, g: 0, b: 0, a: 1}
   alarmFlashFrequency: 1
   alarmHighIntensity: 10
---- !u!114 &7800520070295130006
+--- !u!114 &-191682395307458450
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1012,10 +1013,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 6823999950229919671}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b746d41bd4348118803878e33b6564f, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b0b8c9f16c9440395c94d6672517cba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnterSfx: {fileID: 8300000, guid: 4e5f1159be1b5d443b6dc6eb09fa3712, type: 3}
+  EnterRoomSfx: {fileID: 8300000, guid: 4e5f1159be1b5d443b6dc6eb09fa3712, type: 3}
+--- !u!114 &8715672205422380044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6823999950229919671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2e632f496d548518e1506a6a7dfbac6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data: {fileID: 11400000, guid: 4dd368fac6c5c744cbe3aae1c03a6ab2, type: 2}
 --- !u!1 &7708801833753289103
 GameObject:
   m_ObjectHideFlags: 0

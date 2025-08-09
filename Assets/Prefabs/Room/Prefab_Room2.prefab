@@ -532,7 +532,6 @@ GameObject:
   - component: {fileID: 5068719869008868649}
   - component: {fileID: 2830449107304995084}
   - component: {fileID: 53747409676061304}
-  - component: {fileID: 7222612561220767337}
   m_Layer: 3
   m_Name: LightManager
   m_TagString: Untagged
@@ -603,19 +602,6 @@ MonoBehaviour:
   alarmColor: {r: 1, g: 0, b: 0, a: 1}
   alarmFlashFrequency: 1
   alarmHighIntensity: 10
---- !u!114 &7222612561220767337
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3832878839751656623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b746d41bd4348118803878e33b6564f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnterSfx: {fileID: 8300000, guid: 4e5f1159be1b5d443b6dc6eb09fa3712, type: 3}
 --- !u!1 &4537332969821063507
 GameObject:
   m_ObjectHideFlags: 0
@@ -710,6 +696,7 @@ GameObject:
   - component: {fileID: 8537172293861202321}
   - component: {fileID: 1961235424125617250}
   - component: {fileID: 13824741983516609}
+  - component: {fileID: -8630334770457941512}
   m_Layer: 3
   m_Name: Prefab_Room2
   m_TagString: Untagged
@@ -799,6 +786,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-8630334770457941512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5025713291611583212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b0b8c9f16c9440395c94d6672517cba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnterRoomSfx: {fileID: 8300000, guid: 4e5f1159be1b5d443b6dc6eb09fa3712, type: 3}
 --- !u!1 &5053466589763371306
 GameObject:
   m_ObjectHideFlags: 0
