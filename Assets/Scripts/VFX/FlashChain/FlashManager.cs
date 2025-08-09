@@ -24,8 +24,24 @@ public class FlashManager : MonoBehaviour {
 
     public void RegisterPoint(FlashPoint point){
         if (!flashPoints.Contains(point)){
-            flashPoints.Add(point);
-            RefreshConnections();
+            if (flashPoints.Count == 0){
+                flashPoints.Add(point);
+                return;
+            }
+            
+            float minDist = float.MaxValue;
+            FlashPoint nearest = null;
+            foreach (FlashPoint candidate in flashPoints){
+                float dist = Vector3.Distance(point.transform.position, candidate.transform.position);
+                if (dist < minDist){
+                    minDist = dist;
+                    nearest = candidate;
+                }
+            }
+            if (nearest){
+                CreateVFXConnection(point, nearest);
+                flashPoints.Add(point);
+            }
         }
     }
 
