@@ -77,7 +77,7 @@ public abstract class SkillCaster : MonoBehaviour{
 
     protected abstract void Cast(Transform attackTarget);
 
-    public void ApplySkillStart(GameObject target){
+    protected void ApplySkillStart(SkillDelivery target){
         foreach (SkillStart start in SkillStartPlugins){
             start.AdditionalProcedure(target);
         }

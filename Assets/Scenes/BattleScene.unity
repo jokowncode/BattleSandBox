@@ -29294,59 +29294,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1023836321}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1042922778
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1042922779}
-  - component: {fileID: 1042922780}
-  m_Layer: 0
-  m_Name: LightManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1042922779
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042922778}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1042922780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042922778}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42d5c6ca563cadc4faa84b577ce06b81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startOnAwake: 1
-  alarmLights:
-  - {fileID: 530978481}
-  - {fileID: 2092419970}
-  - {fileID: 668361861}
-  alarmColor: {r: 1, g: 0, b: 0, a: 1}
-  flashFrequency: 0.5
-  highIntensity: 500
-  lowIntensity: 200
 --- !u!1 &1051642381
 GameObject:
   m_ObjectHideFlags: 0
@@ -38744,55 +38691,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1406885908}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1418908745
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1418908746}
-  - component: {fileID: 1418908747}
-  m_Layer: 0
-  m_Name: BattleDataGenerator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1418908746
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1418908745}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1418908747
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1418908745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcf61cc0a7834be0aff2147e8377c76a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemyParent: {fileID: 1970743192}
-  AssetName: Level2
-  BattleMessage: 
-  MaxHeroCount: 6
-  RecoverBattleData: {fileID: 0}
 --- !u!1 &1423417170
 GameObject:
   m_ObjectHideFlags: 0
@@ -38957,10 +38855,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b23c10663165ab344b948f052e6a80d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vfxPrefab: {fileID: 7495097803429637505, guid: 4a64bfefcf745864ba128533022774fe,
+  vfxPrefab: {fileID: 8067813036770949825, guid: 4a64bfefcf745864ba128533022774fe,
     type: 3}
-  vfxConnections: []
-  flashPoints: []
 --- !u!4 &1427771814
 Transform:
   m_ObjectHideFlags: 0
@@ -60710,6 +60606,4 @@ SceneRoots:
   - {fileID: 2101366852}
   - {fileID: 68141561}
   - {fileID: 796721365}
-  - {fileID: 1042922779}
-  - {fileID: 1418908746}
   - {fileID: 1427771814}

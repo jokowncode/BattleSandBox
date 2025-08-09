@@ -9,9 +9,9 @@ public class FlashManager : MonoBehaviour {
     public static bool HasInstance => Instance != null;
     
     [Header("VFX Settings")]
-    [SerializeField] private GameObject vfxPrefab;
+    [SerializeField] private PositionBinder vfxPrefab;
     
-    private List<GameObject> vfxConnections = new List<GameObject>();
+    private List<PositionBinder> vfxConnections = new List<PositionBinder>();
     private List<FlashPoint> flashPoints = new List<FlashPoint>();
     
     private void Awake() {
@@ -22,43 +22,24 @@ public class FlashManager : MonoBehaviour {
         Instance = this;
     }
 
-    private void Update()
-    {
-        // Debug.Log("FlashPointCount: "+flashPoints.Count);
-
-        // if (refreshTimer >= refreshInterval)
-        // {
-        //     refreshTimer = 0f;
-        //     RefreshConnections();
-        // }
-    }
-
-    public void RegisterPoint(FlashPoint point)
-    {
-        if (!flashPoints.Contains(point))
-        {
+    public void RegisterPoint(FlashPoint point){
+        if (!flashPoints.Contains(point)){
             flashPoints.Add(point);
             RefreshConnections();
         }
     }
 
-    public void UnregisterPoint(FlashPoint point)
-    {
-        if (flashPoints.Contains(point))
-        {
+    public void UnregisterPoint(FlashPoint point){
+        if (flashPoints.Contains(point)){
             flashPoints.Remove(point);
-            
-            
             RefreshConnections();
         }
     }
     
-    public void RefreshConnections()
-    {
+    private void RefreshConnections(){
         // 清除现有连接
-        foreach (var obj in vfxConnections)
-        {
-            Destroy(obj);
+        foreach (var obj in vfxConnections){
+            Destroy(obj.gameObject);
         }
         vfxConnections.Clear();
 
@@ -71,94 +52,54 @@ public class FlashManager : MonoBehaviour {
         FlashPoint current = unvisited[0];
         FlashPoint first = current;
 
+        
         visited.Add(current);
         unvisited.Remove(current);
 
-        while (unvisited.Count > 0)
-        {
+        while (unvisited.Count > 0){
             FlashPoint nearest = null;
             float minDist = float.MaxValue;
 
-            foreach (var candidate in unvisited)
-            {
+            foreach (var candidate in unvisited){
                 float dist = Vector3.Distance(current.transform.position, candidate.transform.position);
-                if (dist < minDist)
-                {
+                if (dist < minDist){
                     minDist = dist;
                     nearest = candidate;
                 }
             }
 
-            if (nearest != null)
-            {
+            if (nearest != null){
                 CreateVFXConnection(current, nearest);
                 current = nearest;
 
                 visited.Add(current);
                 unvisited.Remove(current);
-            }
-            else
-            {
+            }else{
                 break;
             }
         }
 
         // 最后一个点与起点相连，形成闭环
-        if (visited.Count >= 2)
-        {
+        if (visited.Count > 2){
             CreateVFXConnection(current, first);
         }
     }
 
-    private void CreateVFXConnection(FlashPoint from, FlashPoint to)
-    {
-        GameObject vfxObj = Instantiate(vfxPrefab);
-        var vfx = vfxObj.GetComponentInChildren<VisualEffect>();
-        if (vfx == null)
-        {
+    private void CreateVFXConnection(FlashPoint from, FlashPoint to){
+        PositionBinder vfxObj = Instantiate(vfxPrefab);
+        var vfx = vfxObj.GetComponent<VisualEffect>();
+        if (vfx == null){
             Debug.LogError("VFX prefab 上缺少 VisualEffect 组件", vfxObj);
             return;
         }
-        SetPosition(vfx, from.gameObject ,to.gameObject);
+        SetPosition(vfx, from, to);
         vfxConnections.Add(vfxObj);
     }
     
-    void SetPosition(VisualEffect vfx,GameObject startPos, GameObject endPos)
-    {
-        if (vfx == null)
-            vfx = GetComponent<VisualEffect>();
-
-        var positionBinder = vfx.gameObject.GetComponentInChildren<PositionBinder>();
-        positionBinder.startPosition = startPos;
-        positionBinder.endPosition = endPos;
-        // vfx.SetVector3("Pos1", startPos);
-        // vfx.SetVector3("Pos2", Vector3.Lerp(startPos,endPos,0.3f));
-        // vfx.SetVector3("Pos3", Vector3.Lerp(startPos,endPos,0.7f));
-        // vfx.SetVector3("Pos4", endPos);
+    void SetPosition(VisualEffect vfx, FlashPoint from, FlashPoint to){
+        var positionBinder = vfx.gameObject.GetComponent<PositionBinder>();
+        positionBinder.SetEndPoints(new[]{
+            from, to
+        });
     }
-
-    // public void SetPosition(Transform startPos, Transform endPos)
-    // {
-    //     if (lineRenderers.Count > 0)
-    //     {
-    //         for (int i = 0; i < lineRenderers.Count; i++)
-    //         {
-    //             if (lineRenderers[i].positionCount >= 2)
-    //             {
-    //                 lineRenderers[i].SetPosition(0,startPos.position);
-    //                 lineRenderers[i].SetPosition(1,endPos.position);
-    //             }
-    //             else
-    //             {
-    //                 Debug.Log("The Line renderer should have at least 2 positions");
-    //             }
-    //         }
-    //     }
-    //     else
-    //     {
-    //         Debug.Log("Line renderer is empty");
-    //     }
-    // }
-    
-    
 }

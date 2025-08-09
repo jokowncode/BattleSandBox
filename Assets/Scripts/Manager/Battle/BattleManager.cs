@@ -130,14 +130,18 @@ public class BattleManager : StateMachineController{
         if(!selectedHero){
             BattleUIManager.Instance.SetHeroPanelActive(false);
         }else{
-            BattleUIManager.Instance.SetHeroPanelActive(true);
-            UpdatePassiveEntryUI();
-            BattleUIManager.Instance.heroDetailUI.ChangeHeroDetailUIValue(selectedHero.StandingSprite);
-            BattleUIManager.Instance.heroDetailUI.ChangeDetailUI(selectedHero);
-            BattleUIManager.Instance.UpdateSelectedHeroSkillUI(selectedHero.Type,
-                selectedHero.FighterSkillCaster.Data.Description,
-                selectedHero.GetPassiveEntryDesc());
+            ShowHeroDetail(selectedHero);
         }
+    }
+
+    public void ShowHeroDetail(Hero hero){
+        BattleUIManager.Instance.SetHeroPanelActive(true);
+        UpdatePassiveEntryUI(hero);
+        BattleUIManager.Instance.heroDetailUI.ChangeHeroDetailUIValue(hero.StandingSprite);
+        BattleUIManager.Instance.heroDetailUI.ChangeDetailUI(hero);
+        BattleUIManager.Instance.UpdateSelectedHeroSkillUI(hero.Type,
+            hero.FighterSkillCaster.Data.Description,
+            hero.GetPassiveEntryDesc());
     }
 
     /// <summary>
@@ -166,14 +170,14 @@ public class BattleManager : StateMachineController{
         if (Skills1InBattle.TryAdd(selectedHero, data)){
             selectedHero.AddPassiveEntry(data);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
-            UpdatePassiveEntryUI();
+            UpdatePassiveEntryUI(selectedHero);
             return 0;
         }
         
         if (Skills2InBattle.TryAdd(selectedHero, data)){
             selectedHero.AddPassiveEntry(data);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
-            UpdatePassiveEntryUI();
+            UpdatePassiveEntryUI(selectedHero);
             return 1;
         }
 
@@ -199,7 +203,7 @@ public class BattleManager : StateMachineController{
             selectedHero.RemovePassiveEntry(removedSkillData);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             RecallSelectedPassiveEntry(removedSkillData);
-            UpdatePassiveEntryUI();
+            UpdatePassiveEntryUI(selectedHero);
         }
     }
     
@@ -214,7 +218,7 @@ public class BattleManager : StateMachineController{
             selectedHero.RemovePassiveEntry(removedSkillData);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             RecallSelectedPassiveEntry(removedSkillData);
-            UpdatePassiveEntryUI();
+            UpdatePassiveEntryUI(selectedHero);
         }
     }
 
@@ -225,9 +229,9 @@ public class BattleManager : StateMachineController{
     /// <summary>
     /// 根据 selectedHero 查找其两个技能，并更新 skill1UI 和 skill2UI 上的文本
     /// </summary>
-    private void UpdatePassiveEntryUI(){
-        string skill1Description = Skills1InBattle.TryGetValue(selectedHero, out PassiveEntry skill1) ? skill1.Data.Description : "";
-        string skill2Description = Skills2InBattle.TryGetValue(selectedHero, out PassiveEntry skill2) ? skill2.Data.Description : "";
+    private void UpdatePassiveEntryUI(Hero hero){
+        string skill1Description = Skills1InBattle.TryGetValue(hero, out PassiveEntry skill1) ? skill1.Data.Description : "";
+        string skill2Description = Skills2InBattle.TryGetValue(hero, out PassiveEntry skill2) ? skill2.Data.Description : "";
         BattleUIManager.Instance.SetSkill1UIText(skill1Description);
         BattleUIManager.Instance.SetSkill2UIText(skill2Description);
     }

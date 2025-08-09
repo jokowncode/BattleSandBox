@@ -35,6 +35,7 @@ public class Hero : Fighter{
                 AddPassiveEntry(entry);
             }
         }
+        BattleManager.Instance.ShowHeroDetail(this);
     }
 
     public void Undress(){
