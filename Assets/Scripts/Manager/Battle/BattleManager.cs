@@ -138,6 +138,7 @@ public class BattleManager : StateMachineController{
     }
 
     public void ShowHeroDetail(Hero hero){
+        this.selectedHero = hero;
         BattleUIManager.Instance.SetHeroPanelActive(true);
         UpdatePassiveEntryUI(hero);
         BattleUIManager.Instance.heroDetailUI.ChangeHeroDetailUIValue(hero.StandingSprite);

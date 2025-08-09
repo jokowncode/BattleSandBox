@@ -4,7 +4,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Fighter : StateMachineController {
+public class Fighter : StateMachineController{
+
+    [SerializeField] private Color InitialColor = Color.green;
+    [SerializeField] private Color FinalColor = Color.red;
     
     [SerializeField] protected FighterData InitialData;
     [SerializeField] private Canvas FighterCanvas;
@@ -52,6 +55,7 @@ public class Fighter : StateMachineController {
         // Clone Fighter Data to Update
         this.CurrentData = Instantiate(this.InitialData);
         this.CurrentFighterType = this.gameObject.layer == LayerMask.NameToLayer("Hero") ? TargetType.Hero : TargetType.Enemy;
+        this.BloodBarImage.color = InitialColor;
     }
 
     protected virtual void Start(){
@@ -94,6 +98,8 @@ public class Fighter : StateMachineController {
         if (IsDead) return;
         this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - effectData.Value);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
+        this.BloodBarImage.color = Color.Lerp(this.InitialColor, this.FinalColor, 1.0f - this.BloodBarImage.fillAmount);
+        
         if(this.BloodParticle) this.BloodParticle.Play();
 
         if (this.CurrentFighterType == TargetType.Enemy) {
