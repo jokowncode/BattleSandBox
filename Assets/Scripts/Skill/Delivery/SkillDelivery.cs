@@ -22,9 +22,9 @@ public abstract class SkillDelivery : MonoBehaviour {
     }
 
     protected void ApplyMiddlePlugin() {
-        foreach (SkillMiddle middle in SkillMiddlePlugins) {
+        //foreach (SkillMiddle middle in SkillMiddlePlugins) {
             //middle.AdditionalProcedure();
-        }
+        //}
     }
 
     public void StartDelivery(GameObject caster, Vector3 targetPos, EffectData effectData, FighterType casterType) {

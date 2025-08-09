@@ -9,6 +9,7 @@ public class Fighter : StateMachineController {
     [SerializeField] protected FighterData InitialData;
     [SerializeField] private Canvas FighterCanvas;
     [SerializeField] private Image BloodBarImage;
+    [SerializeField] private Image ShieldBarImage;
     [field: SerializeField] public SkillNameUI SkillNameText{ get; private set; }
     [SerializeField] private ParticleSystem BloodParticle;
     [SerializeField] private ParticleSystem HealParticlePrefab;
@@ -52,6 +53,7 @@ public class Fighter : StateMachineController {
         // Clone Fighter Data to Update
         this.CurrentData = Instantiate(this.InitialData);
         this.CurrentFighterType = this.gameObject.layer == LayerMask.NameToLayer("Hero") ? TargetType.Hero : TargetType.Enemy;
+        this.CurrentData.Shield = 0;
     }
 
     protected virtual void Start(){
@@ -92,8 +94,18 @@ public class Fighter : StateMachineController {
 
     public void BeDamaged(EffectData effectData){
         if (IsDead) return;
-        this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - effectData.Value);
+
+        float finalHealthValue = effectData.Value;
+        if (Shield > 0) {
+            finalHealthValue = Mathf.Max(0,effectData.Value - Shield);
+            Shield = Mathf.Max(0,Shield - effectData.Value);
+        }
+        this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - finalHealthValue);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
+        
+        if(this.ShieldBarImage != null)
+            this.ShieldBarImage.fillAmount = this.CurrentData.Shield / this.InitialData.Shield;
+        
         if(this.BloodParticle) this.BloodParticle.Play();
 
         if (this.CurrentFighterType == TargetType.Enemy) {
@@ -144,6 +156,15 @@ public class Fighter : StateMachineController {
     public void FighterPropertyChange(FighterProperty property, PropertyModifyWay modifyWay, float value, bool isUp){
 
         float sign = isUp ? 1.0f : -1.0f;
+        // TODO: Change Speed
+        if (property == FighterProperty.Speed) {
+            if(value < 0.0f) this.Move.StopMove();
+            else this.Move.StartMove();
+            Debug.Log("Speed"+value);
+            return;
+        }
+        
+        
         if (property == FighterProperty.HealMultiplier) {
             float percentage = value / 100.0f;
             this.HealMultiplier += sign * percentage;
@@ -160,11 +181,14 @@ public class Fighter : StateMachineController {
             float currentMultiplier = FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
             float percentage = value / 100.0f;
             FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, currentMultiplier + sign * percentage);
+            Debug.Log(this.name);
+            Debug.Log("AttackSpeedChanged"+ value);
             return;
         }
 
         string propertyName = property.ToString();
         float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, this);
+        Debug.Log("initial Value"+propertyName + currentValue);
         switch (modifyWay){
             case PropertyModifyWay.Value:
                 currentValue += sign * value;
@@ -176,7 +200,9 @@ public class Fighter : StateMachineController {
                 break;
         }
         ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
-        // Debug.Log(propertyName + currentValue);
+        
+        Debug.Log("current Value"+propertyName + currentValue);
+        Debug.Log("changed Value"+propertyName + value);
     }
     
     public float GetPropertyData(FighterProperty property){
@@ -194,6 +220,13 @@ public class Fighter : StateMachineController {
 
         string propertyName = property.ToString();
         return ReflectionTools.GetObjectProperty<float>("Initial"+propertyName, this);
+    }
+
+    public void UpdateShieldAmount()
+    {
+        this.ShieldBarImage.fillAmount = this.CurrentData.Shield / this.InitialData.Shield;
+        Debug.Log(this.ShieldBarImage.fillAmount);
+        Debug.Log(this.CurrentData.Shield);
     }
 
     #region FighterProperty
