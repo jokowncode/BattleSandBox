@@ -27,6 +27,11 @@ public class AdvancedLightController : MonoBehaviour
     [SerializeField]
     private List<ControlledLight> controlledLights;
 
+    [Header("触发时显隐的物体")]
+    [Tooltip("玩家进入触发区域时显示的物体列表")]
+    [SerializeField]
+    private List<GameObject> objectsToShowOnEnter;
+
     [Tooltip("灯光强度变化的过渡时间")]
     [SerializeField]
     private float transitionDuration = 1.0f;
@@ -69,12 +74,30 @@ public class AdvancedLightController : MonoBehaviour
                 light.intensity = inactiveIntensity;
             }
         }
+        
+        // 初始化时隐藏所有指定的物体
+        foreach (var obj in objectsToShowOnEnter)
+        {
+            if (obj != null)
+            {
+                obj.SetActive(false);
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            // 激活指定的物体
+            foreach (var obj in objectsToShowOnEnter)
+            {
+                if (obj != null)
+                {
+                    obj.SetActive(true);
+                }
+            }
+
             foreach (var controlledLight in controlledLights)
             {
                 Light light = controlledLight.lightSource;
@@ -98,6 +121,15 @@ public class AdvancedLightController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            // 隐藏指定的物体
+            foreach (var obj in objectsToShowOnEnter)
+            {
+                if (obj != null)
+                {
+                    obj.SetActive(false);
+                }
+            }
+            
             // 玩家离开，所有灯光统一恢复到待机状态
             foreach (var controlledLight in controlledLights)
             {
