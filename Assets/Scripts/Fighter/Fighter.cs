@@ -12,6 +12,7 @@ public class Fighter : StateMachineController{
     [SerializeField] protected FighterData InitialData;
     [SerializeField] private Canvas FighterCanvas;
     [SerializeField] private Image BloodBarImage;
+    [SerializeField] private Image ShieldBarImage;
     [field: SerializeField] public SkillNameUI SkillNameText{ get; private set; }
     [SerializeField] private ParticleSystem BloodParticle;
     [SerializeField] private ParticleSystem HealParticlePrefab;
@@ -56,6 +57,7 @@ public class Fighter : StateMachineController{
         this.CurrentData = Instantiate(this.InitialData);
         this.CurrentFighterType = this.gameObject.layer == LayerMask.NameToLayer("Hero") ? TargetType.Hero : TargetType.Enemy;
         this.BloodBarImage.color = InitialColor;
+        this.CurrentData.Shield = 0;
     }
 
     protected virtual void Start(){
@@ -96,9 +98,23 @@ public class Fighter : StateMachineController{
 
     public void BeDamaged(EffectData effectData){
         if (IsDead) return;
-        this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - effectData.Value);
+
+        float finalHealthValue = effectData.Value;
+        if (Shield > 0) {
+            finalHealthValue = Mathf.Max(0,effectData.Value - Shield);
+            Shield = Mathf.Max(0,Shield - effectData.Value);
+            if (Shield <= 0)
+            {
+                this.GetComponent<Buff>().DestroyShieldParticles();
+            }
+        }
+        this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - finalHealthValue);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
         this.BloodBarImage.color = Color.Lerp(this.InitialColor, this.FinalColor, 1.0f - this.BloodBarImage.fillAmount);
+        
+        
+        if(this.ShieldBarImage != null)
+            this.ShieldBarImage.fillAmount = this.CurrentData.Shield / this.InitialData.Shield;
         
         if(this.BloodParticle) this.BloodParticle.Play();
 
@@ -150,6 +166,15 @@ public class Fighter : StateMachineController{
     public void FighterPropertyChange(FighterProperty property, PropertyModifyWay modifyWay, float value, bool isUp){
 
         float sign = isUp ? 1.0f : -1.0f;
+        // TODO: Change Speed
+        if (property == FighterProperty.Speed) {
+            if(value < 0.0f) this.Move.StopMove();
+            else this.Move.StartMove();
+            //Debug.Log("Speed"+value);
+            return;
+        }
+        
+        
         if (property == FighterProperty.HealMultiplier) {
             float percentage = value / 100.0f;
             this.HealMultiplier += sign * percentage;
@@ -200,6 +225,20 @@ public class Fighter : StateMachineController{
 
         string propertyName = property.ToString();
         return ReflectionTools.GetObjectProperty<float>("Initial"+propertyName, this);
+    }
+
+    public void UpdateShieldAmount()
+    {
+        this.ShieldBarImage.fillAmount = this.CurrentData.Shield / this.InitialData.Shield;
+        // Debug.Log(this.ShieldBarImage.fillAmount);
+        // Debug.Log(this.CurrentData.Shield);
+    }
+    
+    public void UpdateBloodAmount()
+    {
+        this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
+        // Debug.Log(this.BloodBarImage.fillAmount);
+        // Debug.Log(this.CurrentData.Health);
     }
 
     #region FighterProperty

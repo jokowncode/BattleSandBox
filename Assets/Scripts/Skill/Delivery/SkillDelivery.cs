@@ -15,7 +15,6 @@ public abstract class SkillDelivery : MonoBehaviour {
 
     public FighterType CasterType{ get; private set; }
     public List<SkillMiddle> SkillMiddlePlugins{ get; private set; }
-
     protected Vector3 MoveVec;
 
     protected virtual void Awake() {

@@ -46,6 +46,7 @@ public abstract class SkillEffect : MonoBehaviour {
                 continue;
             }
             this.SkillEndPlugins.Remove(end);
+            end.gameObject.SetActive(true);
             end.AdditionalProcedure(influenceFighter, this, effectData);
         }
     }

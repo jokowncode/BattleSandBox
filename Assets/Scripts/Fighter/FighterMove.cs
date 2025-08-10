@@ -11,6 +11,8 @@ public class FighterMove : MonoBehaviour{
     private Fighter Owner;
     public NavMeshAgent Agent{ get; private set; }
     private NavMeshObstacle Obstacle;
+
+    private bool CanMove = true;
     
     private void Awake(){
         Owner = GetComponent<Fighter>();
@@ -36,7 +38,8 @@ public class FighterMove : MonoBehaviour{
             RendererTransform.localScale.y, RendererTransform.localScale.z);
     }
     
-    public void MoveTo(Vector3 targetPos){
+    public void MoveTo(Vector3 targetPos) {
+        if (!CanMove) return;
         if (this.Owner.IsDead) return;
         // this.Obstacle.enabled = false;
         // this.Obstacle.carving = false;
@@ -74,6 +77,7 @@ public class FighterMove : MonoBehaviour{
         if (this.Agent.enabled) return;
         this.Obstacle.carving = false;
         this.Obstacle.enabled = false;
+        this.CanMove = true;
     }
 
     public void StopMove(){
@@ -81,6 +85,7 @@ public class FighterMove : MonoBehaviour{
         this.Agent.enabled = false;
         this.Obstacle.enabled = true;
         this.Obstacle.carving = true;
+        this.CanMove = false;
     }
 }
 
