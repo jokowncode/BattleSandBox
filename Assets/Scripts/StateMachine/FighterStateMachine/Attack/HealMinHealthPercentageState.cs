@@ -12,12 +12,12 @@ public class HealMinHealthPercentageState : AttackState{
 
     protected override void OnAttack(){
         base.OnAttack();
-        Fighter target = BattleManager.Instance.FindMinPercentagePropertyHero(FighterProperty.Health);
+        Fighter target = BattleManager.Instance.FindMinPercentagePropertyHero(FighterProperty.Health, Controller.AttackTargetType);
         if (!target) return;
         
         float critical = Random.value < Controller.Critical / 100.0f ? 1.5f : 1.0f;
         EffectData healMsg = new EffectData{
-            TargetType = TargetType.Hero,
+            TargetType = Controller.AttackTargetType,
             Force = 0.0f,
             Value = Controller.Health * HealPercentage * Controller.HealMultiplier * critical
         };

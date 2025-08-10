@@ -256,17 +256,29 @@ public class BattleManager : StateMachineController{
         this.EnemiesInBattle.Remove(enemy);
     }
 
-    public Fighter FindMinPercentagePropertyHero(FighterProperty property){
+    public Fighter FindMinPercentagePropertyHero(FighterProperty property, TargetType type){
         Fighter result = null;
         float minPercentage = 1.0f;
-        foreach (Hero hero in HeroesInBattle){
-            float currentValue = ReflectionTools.GetObjectProperty<float>(property.ToString(), hero);
-            float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+property, hero);
-            float percentage = currentValue / initialValue;
-            if (percentage < minPercentage){
-                minPercentage = percentage;
-                result = hero;
-            }
+        if (type == TargetType.Hero){
+            foreach (Hero hero in HeroesInBattle){
+                float currentValue = ReflectionTools.GetObjectProperty<float>(property.ToString(), hero);
+                float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+property, hero);
+                float percentage = currentValue / initialValue;
+                if (percentage < minPercentage){
+                    minPercentage = percentage;
+                    result = hero;
+                }
+            }    
+        }else if (type == TargetType.Enemy){
+            foreach (Enemy enemy in EnemiesInBattle){
+                float currentValue = ReflectionTools.GetObjectProperty<float>(property.ToString(), enemy);
+                float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+property, enemy);
+                float percentage = currentValue / initialValue;
+                if (percentage < minPercentage){
+                    minPercentage = percentage;
+                    result = enemy;
+                }
+            }    
         }
         return result;
     }
