@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Buff : MonoBehaviour
@@ -7,7 +8,7 @@ public class Buff : MonoBehaviour
 
     public GameObject immediateEffectPrefab;  // 立即效果粒子预制体
     public GameObject tickEffectPrefab;       // 持续效果粒子预制体
-    public float TimeRemaining { get; private set; }
+    //public float TimeRemaining { get; private set; }
 
     private float changedShieldValue;
     private float changedMoveSpeedValue;
@@ -26,7 +27,9 @@ public class Buff : MonoBehaviour
     
     private IEnumerator BuffRoutine(Fighter caster,Fighter target,BuffData buffData)
     {
-        spawnedParticles.Clear();
+        //spawnedParticles.Clear();
+        List<GameObject> routineSpawnedParticles = new List<GameObject>();
+        int routineId = GetInstanceID(); // 或自己生成唯一 ID
         
         changedShieldValue = 0f;
         changedMoveSpeedValue = 0f;
@@ -34,7 +37,7 @@ public class Buff : MonoBehaviour
         changedPhysicsAttackValue = 0f;
         changedMagicAttackValue = 0f;
         
-        TimeRemaining = buffData.duration;
+        float TimeRemaining = buffData.duration;
         
         foreach (var buffMiniData in buffData.immediateEffectBuff)
         {
@@ -43,13 +46,18 @@ public class Buff : MonoBehaviour
         }
 
         ApplyImmediateBuffEffects(target, buffData);
-        
+        target.UpdateShieldAmount();
+        target.UpdateBloodAmount();
+
+        // GameObject effect = null;
         // 立即生成一次粒子特效
         if (immediateEffectPrefab != null)
         {
-            var effect = Instantiate(immediateEffectPrefab, target.Center.position, Quaternion.identity);
-            Debug.Log("wow");
-            spawnedParticles.Add(effect.gameObject);
+            GameObject effect = Instantiate(immediateEffectPrefab, target.Center.position, Quaternion.identity);
+            //Debug.Log("bbb" + effect.name);
+            routineSpawnedParticles.Add(effect);
+            //Debug.Log("wow");
+            spawnedParticles.Add(effect);
         }
         
         if (buffData.tickInterval > 0)
@@ -63,12 +71,17 @@ public class Buff : MonoBehaviour
                 TimeRemaining -= buffData.tickInterval;
                 
                 ApplyLongTimeBuffEffects(caster,target,buffData);
+                target.UpdateShieldAmount();
+                target.UpdateBloodAmount();
                 // Debug.Log("Dot");
                 // 每次 tick 生成一次粒子
-                if (tickEffectPrefab != null)
+                if (tickEffectPrefab != null&&target!=null)
                 {
-                    var effect = Instantiate(tickEffectPrefab, target.Center.position, Quaternion.identity);
-                    spawnedParticles.Add(effect.gameObject);
+                    GameObject effect = Instantiate(tickEffectPrefab, target.Center.position, Quaternion.identity);
+                    Debug.Log("ccc" + effect.name);
+                    routineSpawnedParticles.Add(effect);
+                    spawnedParticles.Add(effect);
+                    Debug.Log("携程 "+routineId+" 持续伤害开始");
                 }
             }
         }
@@ -83,20 +96,32 @@ public class Buff : MonoBehaviour
         // {
         RemoveBuff(target);
         ApplyLastBuffEffects(target, buffData);
+        target.UpdateShieldAmount();
+        target.UpdateBloodAmount();
         //Debug.Log("Removed buff");
         // }
         //yield return null;
         
         // Debug.Log("BuffEnd");
         // 删除所有粒子特效
-        foreach (var particle in spawnedParticles)
+        Debug.Log(routineSpawnedParticles.Count);
+        foreach (GameObject effect in routineSpawnedParticles) {
+            Debug.Log(effect.name);
+            Destroy(effect);
+            spawnedParticles.Remove(effect);
+        }
+        
+        
+        /*foreach (var particle in spawnedParticles)
         {
             if (particle != null)
             {
                 Destroy(particle);
+                spawnedParticles.Remove(particle);
             }
-        }
-        spawnedParticles.Clear();
+        }*/
+        //routineSpawnedParticles.Clear();
+        Debug.Log("当前携程 "+ routineId+" 粒子销毁");
     }
     
     private void ApplyLongTimeBuffEffects(Fighter caster =null,Fighter target = null,BuffData buffData = null)
@@ -237,7 +262,43 @@ public class Buff : MonoBehaviour
         if(changedCriticalValue !=0)
             target.FighterPropertyChange(FighterProperty.Critical,PropertyModifyWay.Value,changedCriticalValue,false);
     }
+
+    private void OnDestroy()
+    {
+        foreach (var particle in spawnedParticles)
+        {
+            if (particle != null)
+            {
+                //if(particle.layer)
+                Destroy(particle);
+            }
+        }
+        Debug.Log("消除所有粒子");
+        spawnedParticles.Clear();
+    }
     
+    public void DestroyShieldParticles()
+    {
+        // 用临时列表记录要移除的粒子
+        List<GameObject> toRemove = new List<GameObject>();
+
+        foreach (var particle in spawnedParticles)
+        {
+            if (particle != null && particle.CompareTag("Shield"))
+            {
+                Destroy(particle);
+                toRemove.Add(particle);
+            }
+        }
+
+        // 从spawnedParticles移除这些粒子
+        foreach (var particle in toRemove)
+        {
+            spawnedParticles.Remove(particle);
+        }
+
+        Debug.Log("已销毁所有 Shield 粒子");
+    }
     
     
 }

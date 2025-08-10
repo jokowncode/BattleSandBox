@@ -99,6 +99,10 @@ public class Fighter : StateMachineController {
         if (Shield > 0) {
             finalHealthValue = Mathf.Max(0,effectData.Value - Shield);
             Shield = Mathf.Max(0,Shield - effectData.Value);
+            if (Shield <= 0)
+            {
+                this.GetComponent<Buff>().DestroyShieldParticles();
+            }
         }
         this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - finalHealthValue);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
@@ -225,8 +229,15 @@ public class Fighter : StateMachineController {
     public void UpdateShieldAmount()
     {
         this.ShieldBarImage.fillAmount = this.CurrentData.Shield / this.InitialData.Shield;
-        Debug.Log(this.ShieldBarImage.fillAmount);
-        Debug.Log(this.CurrentData.Shield);
+        // Debug.Log(this.ShieldBarImage.fillAmount);
+        // Debug.Log(this.CurrentData.Shield);
+    }
+    
+    public void UpdateBloodAmount()
+    {
+        this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
+        // Debug.Log(this.BloodBarImage.fillAmount);
+        // Debug.Log(this.CurrentData.Health);
     }
 
     #region FighterProperty
