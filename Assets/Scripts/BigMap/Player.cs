@@ -19,5 +19,9 @@ public class Player : MonoBehaviour{
     public void SetCollider(BoxCollider inAreaCollider){
         Move.SetInAreaCollider(inAreaCollider);
     }
+
+    public void TransMove(bool canMove){
+        this.Move.enabled = canMove;
+    }
 }
 
