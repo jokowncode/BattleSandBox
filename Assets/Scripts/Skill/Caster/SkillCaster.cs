@@ -78,8 +78,12 @@ public abstract class SkillCaster : MonoBehaviour{
     protected abstract void Cast(Transform attackTarget);
 
     protected void ApplySkillStart(GameObject target, float damage){
+        Dictionary<SkillStart, int> skillStartDic = new Dictionary<SkillStart, int>();
         foreach (SkillStart start in SkillStartPlugins){
-            start.AdditionalProcedure(target, damage, this.OwnedFighter);
+            if (!skillStartDic.TryAdd(start, 1)){
+                skillStartDic[start] += 1;
+            }
+            start.AdditionalProcedure(target, damage, this.OwnedFighter, skillStartDic[start]);
         }
     }
     

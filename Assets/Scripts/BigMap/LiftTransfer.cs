@@ -35,7 +35,7 @@ public class LiftTransfer : MonoBehaviour
         
         if (player == null) Debug.LogError("场景中未找到带有'Player'标签的对象！", this);
         if (targetPosition == null) Debug.LogError("请在Inspector中设置'targetPosition'。", this);
-        if (transferButton == null) Debug.LogError("请在Inspector中设置'transferButton'。", this);
+        // if (transferButton == null) Debug.LogError("请在Inspector中设置'transferButton'。", this);
         // if (fadePanel == null) Debug.LogError("请在Inspector中设置'fadePanel'。", this);
         
         SetupButtonEvent();

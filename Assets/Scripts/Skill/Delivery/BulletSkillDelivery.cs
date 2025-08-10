@@ -32,7 +32,7 @@ public class BulletSkillDelivery : SkillDelivery{
         }
     }
 
-    private void FixedUpdate() {
+    private void FixedUpdate(){
         if (this.Speed != 0){
             // SkillRigidbody.velocity = this.Speed * this.MoveVec;
             SkillRigidbody.MovePosition(SkillRigidbody.position + this.Speed * Time.fixedDeltaTime * this.MoveVec);
@@ -49,7 +49,7 @@ public class BulletSkillDelivery : SkillDelivery{
         Destroy(gameObject);  
     }
 
-    protected override void TriggerTargetIn(Collider other) {
+    protected override void TriggerTargetIn(Collider other){
         if (Hit != null){
             var hitInstance = Instantiate(Hit, transform.position, Quaternion.LookRotation(this.MoveVec));
             var hitPs = hitInstance.GetComponent<ParticleSystem>();
