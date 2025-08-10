@@ -28,8 +28,6 @@ public class LiftTransfer : MonoBehaviour
 
     private bool isTransferring = false;
     private GameObject player;
-    private CanvasGroup mainCanvasGroup;
-    private CanvasGroup secondaryCanvasGroup;
 
     private void Start()
     {
@@ -38,29 +36,7 @@ public class LiftTransfer : MonoBehaviour
         if (player == null) Debug.LogError("场景中未找到带有'Player'标签的对象！", this);
         if (targetPosition == null) Debug.LogError("请在Inspector中设置'targetPosition'。", this);
         if (transferButton == null) Debug.LogError("请在Inspector中设置'transferButton'。", this);
-        if (fadePanel == null) Debug.LogError("请在Inspector中设置'fadePanel'。", this);
-
-        /*if (panelToFade == null) 
-        {
-            Debug.LogError("请在Inspector中设置'panelToFade'。", this);
-        }
-        else
-        {
-            mainCanvasGroup = panelToFade.GetComponent<CanvasGroup>();
-            if (mainCanvasGroup == null)
-            {
-                Debug.LogError($"'panelToFade' ({panelToFade.name}) 上没有找到CanvasGroup组件，请为其添加一个。", this);
-            }
-        }
-
-        if (secondaryPanelToFade != null)
-        {
-            secondaryCanvasGroup = secondaryPanelToFade.GetComponent<CanvasGroup>();
-            if (secondaryCanvasGroup == null)
-            {
-                Debug.LogError($"'secondaryPanelToFade' ({secondaryPanelToFade.name}) 上没有找到CanvasGroup组件，请为其添加一个。", this);
-            }
-        }*/
+        // if (fadePanel == null) Debug.LogError("请在Inspector中设置'fadePanel'。", this);
         
         SetupButtonEvent();
         InitializeUI();
@@ -69,22 +45,15 @@ public class LiftTransfer : MonoBehaviour
     /// <summary>
     /// 初始化UI状态。
     /// </summary>
-    private void InitializeUI()
-    {
-        if (fadePanel != null)
-        {
+    private void InitializeUI(){
+        if (fadePanel != null){
             Color color = fadePanel.color;
             color.a = 0;
             fadePanel.color = color;
             fadePanel.raycastTarget = false;
         }
-        if (mainCanvasGroup != null)
-        {
-            mainCanvasGroup.alpha = 1;
-        }
-        if (secondaryCanvasGroup != null)
-        {
-            secondaryCanvasGroup.alpha = 1;
+        if (HUDCanvasGroup != null){
+            HUDCanvasGroup.alpha = 1;
         }
     }
 
@@ -105,7 +74,7 @@ public class LiftTransfer : MonoBehaviour
     /// </summary>
     public void OnTransferButtonClicked()
     {
-        if (!isTransferring && player != null && targetPosition != null && mainCanvasGroup != null)
+        if (!isTransferring && player != null && targetPosition != null && HUDCanvasGroup != null)
         {
             StartCoroutine(TransferPlayer());
         }
@@ -149,9 +118,9 @@ public class LiftTransfer : MonoBehaviour
     /// </summary>
     private IEnumerator FadeCanvas(float targetAlpha, float duration)
     {
-        if (mainCanvasGroup == null) yield break;
+        if (HUDCanvasGroup == null) yield break;
 
-        float startAlpha = mainCanvasGroup.alpha;
+        float startAlpha = HUDCanvasGroup.alpha;
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
@@ -159,18 +128,18 @@ public class LiftTransfer : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float currentAlpha = Mathf.Lerp(startAlpha, targetAlpha, elapsedTime / duration);
             
-            mainCanvasGroup.alpha = currentAlpha;
-            if (secondaryCanvasGroup != null)
+            HUDCanvasGroup.alpha = currentAlpha;
+            if (HUDCanvasGroup != null)
             {
-                secondaryCanvasGroup.alpha = currentAlpha;
+                HUDCanvasGroup.alpha = currentAlpha;
             }
             yield return null;
         }
 
-        mainCanvasGroup.alpha = targetAlpha;
-        if (secondaryCanvasGroup != null)
+        HUDCanvasGroup.alpha = targetAlpha;
+        if (HUDCanvasGroup != null)
         {
-            secondaryCanvasGroup.alpha = targetAlpha;
+            HUDCanvasGroup.alpha = targetAlpha;
         }
     }
 
