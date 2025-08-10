@@ -27,13 +27,13 @@ public class LiftTransfer : MonoBehaviour
     public float transferDelay = 0.5f;
 
     private bool isTransferring = false;
-    private GameObject player;
+    [SerializeField] private GameObject player;
 
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        // player = GameObject.FindGameObjectWithTag("Player");
         
-        if (player == null) Debug.LogError("场景中未找到带有'Player'标签的对象！", this);
+        // if (player == null) Debug.LogError("场景中未找到带有'Player'标签的对象！", this);
         if (targetPosition == null) Debug.LogError("请在Inspector中设置'targetPosition'。", this);
         // if (transferButton == null) Debug.LogError("请在Inspector中设置'transferButton'。", this);
         // if (fadePanel == null) Debug.LogError("请在Inspector中设置'fadePanel'。", this);
@@ -99,7 +99,7 @@ public class LiftTransfer : MonoBehaviour
 
         yield return StartCoroutine(FadeCanvas(0f, fadeTime));
         yield return StartCoroutine(FadeScreen(1f, 0.2f));
-
+        
         player.transform.position = targetPosition.position;
         player.transform.rotation = targetPosition.rotation;
         

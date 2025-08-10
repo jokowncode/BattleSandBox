@@ -504,8 +504,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0708f8166ab588419a897337fa50541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnterSound: {fileID: 0}
-  ClickSound: {fileID: 0}
+  EnterSound: {fileID: 8300000, guid: 387b3143448f274498b6568795bad2e0, type: 3}
+  ClickSound: {fileID: 8300000, guid: 720316a1b6edac7478d8b8a5153a5d21, type: 3}
   ExitSound: {fileID: 0}
   NormalColor: {r: 0.6509804, g: 0.69411767, b: 0.47058827, a: 1}
   HoverColor: {r: 0, g: 0, b: 0, a: 1}
@@ -569,6 +569,36 @@ MonoBehaviour:
   - {fileID: -3029684952017078590, guid: 1933b902dd63bf6499169690dc699aec, type: 3}
   - {fileID: -2113372724213363571, guid: b0cbb1d0520b51640a682d1ab215f8b1, type: 3}
   - {fileID: -2113372724213363571, guid: b0cbb1d0520b51640a682d1ab215f8b1, type: 3}
+  - {fileID: -699249013782204887, guid: 03cf36102ec31294c81e4d2b931a5177, type: 3}
+  - {fileID: 1114410911708242444, guid: 02c21fde51796524d9999cc4c0713cfc, type: 3}
+  - {fileID: 6871971962811847076, guid: 86a4de15e111f52438d0bbc2b3681910, type: 3}
+  - {fileID: -699249013782204887, guid: 2ab798592548282449d026bed32f9bc5, type: 3}
+  - {fileID: -8278694799271364354, guid: a1784d2ff03b88546824b054ee421977, type: 3}
+  - {fileID: -419415938324774539, guid: 53f9192128cb56741979f3de7acf77c0, type: 3}
+  - {fileID: 5753463981200129177, guid: 7df12f4d46356f249a2b9064f4c9b641, type: 3}
+  - {fileID: 7134807797621479081, guid: b8e6a1d03736ba64486f8f3fb9eabd27, type: 3}
+  - {fileID: 5740127603016724252, guid: 5483b233eaa6b6941a624591eb612ca4, type: 3}
+  - {fileID: 4999639018508381407, guid: dd685484e711f0c4aacfb9838b5a974a, type: 3}
+  - {fileID: 3732834520691388110, guid: ef932b2b549f13145850165ca7ac557b, type: 3}
+  - {fileID: 3732834520691388110, guid: 01dd39d06abeab747b6fb513a6e6e596, type: 3}
+  - {fileID: 3732834520691388110, guid: 2de727e9ecfd44f459b161e22a05e8ba, type: 3}
+  - {fileID: 4999639018508381407, guid: 172cfb7eccc25584dbcbe298120d5483, type: 3}
+  - {fileID: 233420429930969886, guid: 82db818c6b67ee24280744d23a60a80d, type: 3}
+  - {fileID: 233420429930969886, guid: 017c4ec7946e3f148992995a33be7cc2, type: 3}
+  - {fileID: 233420429930969886, guid: 13aeb256cec3a7548afc876e33730fb6, type: 3}
+  - {fileID: 2592380837837640289, guid: b96f8ba51e13f604f81d0fa1e2d43e27, type: 3}
+  - {fileID: 5740127603016724252, guid: 5483b233eaa6b6941a624591eb612ca4, type: 3}
+  - {fileID: 3732834520691388110, guid: 2de727e9ecfd44f459b161e22a05e8ba, type: 3}
+  - {fileID: 233420429930969886, guid: 13aeb256cec3a7548afc876e33730fb6, type: 3}
+  - {fileID: 233420429930969886, guid: 13aeb256cec3a7548afc876e33730fb6, type: 3}
+  - {fileID: 1114410911708242444, guid: 02c21fde51796524d9999cc4c0713cfc, type: 3}
+  - {fileID: -699249013782204887, guid: 03cf36102ec31294c81e4d2b931a5177, type: 3}
+  - {fileID: -699249013782204887, guid: 2ab798592548282449d026bed32f9bc5, type: 3}
+  - {fileID: -419415938324774539, guid: 53f9192128cb56741979f3de7acf77c0, type: 3}
+  - {fileID: 1276431740558974356, guid: ae3a8ee9c704fa14eb66e89caaf6fda7, type: 3}
+  - {fileID: 1276431740558974356, guid: 345fa61294d133542be5d99e555e1bf0, type: 3}
+  - {fileID: 1276431740558974356, guid: 3fe93011cf0b4e94a86a9ab724199434, type: 3}
+  - {fileID: 1276431740558974356, guid: f3efc44b56ed66743bb237a9856aee42, type: 3}
 --- !u!1 &705168847
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,7 +1061,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 796696751}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1547040530}
+        m_TargetAssemblyTypeName: StartButtonUI, Assembly-CSharp
+        m_MethodName: AboutUs
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &796696751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1082,8 +1124,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0708f8166ab588419a897337fa50541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnterSound: {fileID: 0}
-  ClickSound: {fileID: 0}
+  EnterSound: {fileID: 8300000, guid: 387b3143448f274498b6568795bad2e0, type: 3}
+  ClickSound: {fileID: 8300000, guid: 720316a1b6edac7478d8b8a5153a5d21, type: 3}
   ExitSound: {fileID: 0}
   NormalColor: {r: 0.6509804, g: 0.69411767, b: 0.47058827, a: 1}
   HoverColor: {r: 0, g: 0, b: 0, a: 1}
@@ -1131,6 +1173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 903df04dfc3a437880281d8e69d75687, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GoToBattleSfx: {fileID: 8300000, guid: b11e83ed102f3a54083a7c1b61369e92, type: 3}
   MouseCursor: {fileID: 2800000, guid: 9b60d62c3f8f33342b9157bc5dbe4189, type: 3}
 --- !u!1 &1033740177
 GameObject:
@@ -1279,8 +1322,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0708f8166ab588419a897337fa50541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnterSound: {fileID: 0}
-  ClickSound: {fileID: 0}
+  EnterSound: {fileID: 8300000, guid: 387b3143448f274498b6568795bad2e0, type: 3}
+  ClickSound: {fileID: 8300000, guid: 720316a1b6edac7478d8b8a5153a5d21, type: 3}
   ExitSound: {fileID: 0}
   NormalColor: {r: 0.6509804, g: 0.69411767, b: 0.47058827, a: 1}
   HoverColor: {r: 0, g: 0, b: 0, a: 1}
@@ -1566,8 +1609,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0708f8166ab588419a897337fa50541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnterSound: {fileID: 0}
-  ClickSound: {fileID: 0}
+  EnterSound: {fileID: 8300000, guid: 387b3143448f274498b6568795bad2e0, type: 3}
+  ClickSound: {fileID: 8300000, guid: 720316a1b6edac7478d8b8a5153a5d21, type: 3}
   ExitSound: {fileID: 0}
   NormalColor: {r: 0.6509804, g: 0.69411767, b: 0.47058827, a: 1}
   HoverColor: {r: 0, g: 0, b: 0, a: 1}
@@ -2219,6 +2262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainMenuBGM: {fileID: 8300000, guid: a97d5f74dae580d42bc15a31cb465e6d, type: 3}
   BigMapBGM: {fileID: 8300000, guid: 67de046a338e0b84c9dd054dd4145e4f, type: 3}
+  AboutUsBGM: {fileID: 8300000, guid: 2cf13d8e484ba66429a55d86b754ff96, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

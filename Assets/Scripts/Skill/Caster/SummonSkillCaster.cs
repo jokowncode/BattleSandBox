@@ -22,6 +22,7 @@ public class SummonSkillCaster : SkillCaster{
     protected override void Cast(Transform _){
         Fighter pet = Instantiate(SummonPetPrefab, this.transform.position, Quaternion.identity);
         pet.Health = OwnedFighter.Health * HealthPercentage;
+        pet.Shield = pet.Health;
         
         pet.PhysicsAttack = pet.Type == FighterType.Warrior ? OwnedFighter.MagicAttack * AttackPercentage : 0.0f;
         pet.MagicAttack = pet.Type != FighterType.Warrior ? OwnedFighter.MagicAttack * AttackPercentage : 0.0f;

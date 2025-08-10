@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEditor.Timeline.Actions;
 using UnityEngine.VFX;
 
 public class FlashManager : MonoBehaviour {

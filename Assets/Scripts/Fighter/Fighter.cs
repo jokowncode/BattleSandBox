@@ -113,7 +113,7 @@ public class Fighter : StateMachineController{
         this.BloodBarImage.color = Color.Lerp(this.InitialColor, this.FinalColor, 1.0f - this.BloodBarImage.fillAmount);
         
         
-        if(this.ShieldBarImage != null)
+        if(this.ShieldBarImage != null && this.InitialData.Shield != 0.0f)
             this.ShieldBarImage.fillAmount = this.CurrentData.Shield / this.InitialData.Shield;
         
         if(this.BloodParticle) this.BloodParticle.Play();
@@ -263,7 +263,12 @@ public class Fighter : StateMachineController{
         get => InitialData.Force;
         set => InitialData.Force=value;
     }
-    
+
+    public float InitialShield{
+        get => InitialData.Shield;
+        set => InitialData.Shield=value;
+    }
+
     // Runtime Property
     public float Health{ 
         get => CurrentData.Health;

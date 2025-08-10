@@ -11,6 +11,10 @@ public class StartButtonUI : MonoBehaviour {
         GameManager.Instance.GoToTutorial();
     }
 
+    public void AboutUs(){
+        GameManager.Instance.GoToAboutUs();
+    }
+
     public void Quit(){
         Application.Quit();
     }

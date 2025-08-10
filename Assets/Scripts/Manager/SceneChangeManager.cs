@@ -7,6 +7,7 @@ public class SceneChangeManager : MonoBehaviour{
 
     [SerializeField] private AudioClip MainMenuBGM;
     [SerializeField] private AudioClip BigMapBGM;
+    [SerializeField] private AudioClip AboutUsBGM;
     
     public static SceneChangeManager Instance;
     public SceneType CurrentScene{ get; private set; }
@@ -28,6 +29,10 @@ public class SceneChangeManager : MonoBehaviour{
 
         if (this.CurrentScene == SceneType.BigMap){
             AudioManager.Instance.SetMainMusic(this.BigMapBGM);
+        }
+
+        if (this.CurrentScene == SceneType.AboutUs){
+            AudioManager.Instance.SetMainMusic(this.AboutUsBGM);
         }
     }
 

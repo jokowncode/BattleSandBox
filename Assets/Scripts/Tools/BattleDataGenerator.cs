@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 public class BattleDataGenerator : MonoBehaviour{
 
     [SerializeField] private Transform EnemyParent;
@@ -51,5 +52,5 @@ public class BattleDataGenerator : MonoBehaviour{
         }
     }
 }
-
+#endif
 

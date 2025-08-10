@@ -170,6 +170,7 @@ public class Buff : MonoBehaviour
         Debug.Log("ApplyImmediateBuffEffects: "+changedShieldValue);
         if (changedShieldValue != 0)
         {
+            target.InitialShield = changedShieldValue;
             target.Shield = changedShieldValue;
             target.UpdateShieldAmount();
         }

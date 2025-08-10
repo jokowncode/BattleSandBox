@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour{
 
+    [SerializeField] private AudioClip GoToBattleSfx;
     [SerializeField] private Texture2D MouseCursor;
     
     public static GameManager Instance;
@@ -46,6 +47,8 @@ public class GameManager : MonoBehaviour{
     public void GoToBattle(BattleData battleData){
         this.NextBattleData = battleData;
         this.InBigMapPlayerPosition = this.CurrentPlayer.transform.position;
+        if(GoToBattleSfx)
+            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.GoToBattleSfx);
         BigMapUIManager.Instance.ShowBattleStartUI(battleData.BattleImage, battleData.BattleText);
         // SceneChangeManager.Instance.GoToScene(SceneType.Battle);
     }
@@ -66,6 +69,10 @@ public class GameManager : MonoBehaviour{
 
     public void GoToTutorial(){
         SceneChangeManager.Instance.GoToScene(SceneType.Tutorial);
+    }
+
+    public void GoToAboutUs(){
+        SceneChangeManager.Instance.GoToScene(SceneType.AboutUs);
     }
 
     public void ResetBattleFlag(){
