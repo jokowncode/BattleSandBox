@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour{
 
+    [SerializeField] private Texture2D MouseCursor;
+    
     public static GameManager Instance;
 
     private Player CurrentPlayer;
@@ -23,6 +25,10 @@ public class GameManager : MonoBehaviour{
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void Update(){
+        Cursor.SetCursor(this.MouseCursor, Vector2.zero, CursorMode.Auto);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode){
