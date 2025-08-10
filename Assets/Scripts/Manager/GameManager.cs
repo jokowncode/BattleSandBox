@@ -55,6 +55,14 @@ public class GameManager : MonoBehaviour{
         SceneChangeManager.Instance.GoToScene(SceneType.BigMap);
     }
 
+    public void GoToMainMenu(){
+        SceneChangeManager.Instance.GoToScene(SceneType.Main);
+    }
+
+    public void GoToTutorial(){
+        SceneChangeManager.Instance.GoToScene(SceneType.Tutorial);
+    }
+
     public void ResetBattleFlag(){
         this.IsBattleEnd = false;
         this.IsBattleVictory = false;

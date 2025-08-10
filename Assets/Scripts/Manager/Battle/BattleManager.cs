@@ -61,7 +61,7 @@ public class BattleManager : StateMachineController{
         ChangeState(Prepare);
         this.BattleNameText.text = this.Data.BattleName;
         this.BattleMessageText.text = this.Data.BattleMessage;
-        BattleUIManager.Instance.SetHeroWarehouseActive(true);
+        // BattleUIManager.Instance.SetHeroWarehouseActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(false);
         BattleUIManager.Instance.SetHeroPortraitActive(false);
         
