@@ -6,6 +6,7 @@ public class BigMapUIManager : MonoBehaviour{
 
     [SerializeField] private CanvasGroup HUDCanvasGroup;
     [SerializeField] private CanvasGroup StoreCanvasGroup;
+    [SerializeField] private BattleStartUI BattleStartBannar;
     
     public static BigMapUIManager Instance;
 
@@ -35,6 +36,10 @@ public class BigMapUIManager : MonoBehaviour{
         } else {
             HideCanvasGroup(StoreCanvasGroup);
         }
+    }
+
+    public void ShowBattleStartUI(Sprite battleImage, string battleText){
+        this.BattleStartBannar.ShowBattleStartUI(battleImage, battleText);
     }
 }
 

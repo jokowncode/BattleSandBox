@@ -4,7 +4,6 @@ using UnityEngine;
 public class InBattleState : BattleState{
 
     [SerializeField] private AudioClip InBattleSfx;
-    [SerializeField] private AudioClip InBattleMusic;
     
     private VictoryState Victory;
     private DefeatState Defeat;
@@ -21,8 +20,8 @@ public class InBattleState : BattleState{
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, InBattleSfx);
         }
         
-        if(InBattleMusic)
-            AudioManager.Instance.SetMainMusic(InBattleMusic);
+        if(Controller.Data.BattleBGM)
+            AudioManager.Instance.SetMainMusic(Controller.Data.BattleBGM);
 
         BattleUIManager.Instance.heroDetailUI.Hide();
         BattleUIManager.Instance.heroWarehouseUI.Hide();

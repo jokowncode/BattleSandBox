@@ -7,6 +7,7 @@ public class ButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     [SerializeField] private AudioClip EnterSound;
     [SerializeField] private AudioClip ClickSound;
+    [SerializeField] private AudioClip ExitSound;
     
     [SerializeField] private Color NormalColor = Color.white;
     [SerializeField] private Color HoverColor = Color.yellow;
@@ -29,6 +30,9 @@ public class ButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     }
     
     public void OnPointerExit(PointerEventData eventData){
+        if (ExitSound){
+            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, ExitSound);
+        }
         ButtonText.color = NormalColor;
     }
 

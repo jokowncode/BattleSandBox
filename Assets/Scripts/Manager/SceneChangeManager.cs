@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class SceneChangeManager : MonoBehaviour{
 
+    [SerializeField] private AudioClip MainMenuBGM;
+    [SerializeField] private AudioClip BigMapBGM;
+    
     public static SceneChangeManager Instance;
     public SceneType CurrentScene{ get; private set; }
 
@@ -15,6 +18,17 @@ public class SceneChangeManager : MonoBehaviour{
         }
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode){
+        if (this.CurrentScene is SceneType.Main or SceneType.Tutorial){
+            AudioManager.Instance.SetMainMusic(this.MainMenuBGM);
+        }
+
+        if (this.CurrentScene == SceneType.BigMap){
+            AudioManager.Instance.SetMainMusic(this.BigMapBGM);
+        }
     }
 
     public void GoToScene(SceneType type){

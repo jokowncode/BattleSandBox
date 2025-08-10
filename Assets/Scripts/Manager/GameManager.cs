@@ -34,15 +34,14 @@ public class GameManager : MonoBehaviour{
             this.CurrentPlayer = FindAnyObjectByType<Player>();
             if (this.IsBattleEnd)
                 this.CurrentPlayer.transform.position = this.InBigMapPlayerPosition;
-
-
         }
     }
 
     public void GoToBattle(BattleData battleData){
         this.NextBattleData = battleData;
         this.InBigMapPlayerPosition = this.CurrentPlayer.transform.position;
-        SceneChangeManager.Instance.GoToScene(SceneType.Battle);
+        BigMapUIManager.Instance.ShowBattleStartUI(battleData.BattleImage, battleData.BattleText);
+        // SceneChangeManager.Instance.GoToScene(SceneType.Battle);
     }
 
     public void StartGame(){

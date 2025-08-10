@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour{
 
+    [SerializeField] private float FootstepCycle = 4.0f;
     [SerializeField] private float Speed = 5.0f;
     [SerializeField] private Transform RendererTransform;
-    [SerializeField] private AudioClip FootstepSfx;
-
+    
     private Animator PlayerAnimator;
     private BoxCollider PlayerInAreaCollider;
+    private float LastPlayFootstepTime = -1.0f;
     
     private void Awake(){
         PlayerAnimator = GetComponentInChildren<Animator>();
@@ -30,8 +31,14 @@ public class PlayerMove : MonoBehaviour{
 
         this.transform.position = newPos;
         PlayerAnimator.SetFloat(AnimationParams.Velocity, Mathf.Abs(x));
-        if (x != 0 && this.FootstepSfx){
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.FootstepSfx);
+        if (Mathf.Abs(x) != 0){
+            if (LastPlayFootstepTime < 0.0f || Time.time - LastPlayFootstepTime >= FootstepCycle){
+                LastPlayFootstepTime = Time.time;
+                AudioManager.Instance.PlayFootstep();    
+            }
+        } else{
+            LastPlayFootstepTime = -1.0f;
+            AudioManager.Instance.StopFootstep();
         }
         // this.transform.position += Speed * Time.deltaTime * velocity;
         

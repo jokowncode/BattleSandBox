@@ -2,12 +2,15 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class AudioManager : MonoBehaviour{
 
     public static AudioManager Instance;
 
-    private AudioSource MainMusicAudioSource;
+    [SerializeField] private AudioSource MainMusicAudioSource;
+    [SerializeField] private AudioSource FootstepAudioSource;
+    [SerializeField] private AudioClip[] FootstepAudios;
 
     private void Awake(){
         if (Instance != null) {
@@ -47,6 +50,18 @@ public class AudioManager : MonoBehaviour{
     public void PlaySfxAtPoint(Vector3 point, AudioClip clip, float volume = 1.0f){
         // AudioSource.PlayClipAtPoint(clip, point, volume);
         this.MainMusicAudioSource.PlayOneShot(clip, 0.5f);
+    }
+
+    public void PlayFootstep(){
+        if (this.FootstepAudios.Length == 0) return;
+        int index = Random.Range(0, this.FootstepAudios.Length);
+        this.FootstepAudioSource.clip = this.FootstepAudios[index];
+        this.FootstepAudioSource.Play();
+    }
+
+    public void StopFootstep(){
+        this.FootstepAudioSource.Stop();
+        this.FootstepAudioSource.clip = null;
     }
 
 }

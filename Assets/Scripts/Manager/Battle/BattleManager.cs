@@ -38,7 +38,7 @@ public class BattleManager : StateMachineController{
 
     private Hero selectedHero;
     private PrepareState Prepare;
-    private BattleData Data;
+    public BattleData Data{ get; private set; }
 
 #if DEBUG_MODE
     public float BattleStartTime {get; private set;}
@@ -61,7 +61,7 @@ public class BattleManager : StateMachineController{
         ChangeState(Prepare);
         this.BattleNameText.text = this.Data.BattleName;
         this.BattleMessageText.text = this.Data.BattleMessage;
-        // BattleUIManager.Instance.SetHeroWarehouseActive(true);
+        BattleUIManager.Instance.SetHeroWarehouseActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(false);
         BattleUIManager.Instance.SetHeroPortraitActive(false);
         

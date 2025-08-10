@@ -27,7 +27,8 @@ public class TutorialUI : MonoBehaviour{
 
     public void PrePage(){
         if (TutorialImages.Length <= 0) return;
-        Index--;
+        if (Index == 0) Index = TutorialImages.Length - 1;
+        else Index--;
         Tutorial.sprite = TutorialImages[Index % TutorialImages.Length];
     }
 
