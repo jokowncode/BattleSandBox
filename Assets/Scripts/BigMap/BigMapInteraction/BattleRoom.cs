@@ -20,6 +20,13 @@ public class BattleRoom : InteractionObject{
         GameManager.Instance.GoToBattle(this.Data);
     }
 
+    protected override void Update(){
+        base.Update();
+        if (this.Collider.bounds.Contains(this.InAreaPlayer.transform.position)){
+            this.InAreaPlayer.SetCollider(this.Collider);
+        }
+    }
+
     protected override void OnTriggerEnter(Collider other){
         base.OnTriggerEnter(other);
         if (this.IsEnd || (GameManager.Instance.IsBattleEnd && GameManager.Instance.IsBattleVictory)){
@@ -27,7 +34,6 @@ public class BattleRoom : InteractionObject{
             this.InAreaPlayer.TransitionInteractionTip(false);
             return;
         }
-        this.InAreaPlayer.SetCollider(this.Collider);
     }
 
     protected override void OnTriggerExit(Collider other){

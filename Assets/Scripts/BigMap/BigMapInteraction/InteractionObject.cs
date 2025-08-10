@@ -26,7 +26,7 @@ public abstract class InteractionObject : MonoBehaviour{
 
     protected abstract void Interaction();
     
-    private void Update(){
+    protected virtual void Update(){
         if (Input.GetKeyDown(KeyCode.E)){
             Interaction();
         }
