@@ -45,12 +45,14 @@ public class Hero : Fighter{
     }
 
     public void AddPassiveEntry(PassiveEntry entry){
+        if (!entry) return;
         PassiveEntry passiveEntry = Instantiate(entry, this.transform);
         PassiveEntries.Add(passiveEntry);
         passiveEntry.Construct(this);
     }
 
     public void RemovePassiveEntry(PassiveEntry removeEntry){
+        if (!removeEntry) return;
         removeEntry.Destruct(this);
         PassiveEntries.Remove(removeEntry);
     }
@@ -59,6 +61,7 @@ public class Hero : Fighter{
         string desc = "";
         int index = 1;
         foreach (PassiveEntry entry in HeroSelfPassiveEntries){
+            if (!entry) continue;
             desc += $"·{entry.Data.Description};\n";
             index++;
         }

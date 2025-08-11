@@ -4,7 +4,8 @@ using UnityEngine;
 public class BattleRoom : InteractionObject{
 
     [SerializeField] private BattleData Data;
-
+    [SerializeField] private Transform Enemies;
+    
     private BoxCollider Collider;
     private bool IsEnd;
     
@@ -24,7 +25,7 @@ public class BattleRoom : InteractionObject{
         base.Update();
         if (!this.IsEnd && this.Collider.bounds.Contains(this.InAreaPlayer.transform.position)){
             this.InAreaPlayer.SetCollider(this.Collider);
-        }
+        } 
     }
 
     protected override void OnTriggerEnter(Collider other){
@@ -32,6 +33,8 @@ public class BattleRoom : InteractionObject{
         if (this.IsEnd || (GameManager.Instance.IsBattleEnd && GameManager.Instance.IsBattleVictory)){
             this.IsEnd = true;
             this.InAreaPlayer.TransitionInteractionTip(false);
+            this.enabled = false;
+            if(this.Enemies) Destroy(this.Enemies.gameObject);
             return;
         }
     }

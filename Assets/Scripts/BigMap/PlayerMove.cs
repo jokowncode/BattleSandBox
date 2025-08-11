@@ -7,6 +7,9 @@ public class PlayerMove : MonoBehaviour{
     [SerializeField] private float FootstepCycle = 4.0f;
     [SerializeField] private float Speed = 5.0f;
     [SerializeField] private Transform RendererTransform;
+
+    [SerializeField] private Collider LeftBorder;
+    [SerializeField] private Collider RightBorder;
     
     private Animator PlayerAnimator;
     private BoxCollider PlayerInAreaCollider;
@@ -26,6 +29,10 @@ public class PlayerMove : MonoBehaviour{
 
         Vector3 newPos = this.transform.position + Speed * Time.deltaTime * velocity;
         if (PlayerInAreaCollider && !PlayerInAreaCollider.bounds.Contains(newPos)){
+            return;
+        }
+
+        if (newPos.x - 1.5f <= LeftBorder.bounds.min.x || newPos.x + 1.5f >= RightBorder.bounds.max.x){
             return;
         }
 

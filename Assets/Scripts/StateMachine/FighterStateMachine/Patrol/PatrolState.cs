@@ -15,7 +15,7 @@ public class PatrolState : FighterState{
     private Fighter PatrolPoint;
     private bool IsMoveStop;
     private bool IsFirstFrame = true;
-    private Vector3 CurrentTargetPos;
+    private Fighter LastPatrolPoint;
     
     protected override void Awake(){
         base.Awake();
@@ -46,27 +46,21 @@ public class PatrolState : FighterState{
         if (this.PatrolPoint){
             Controller.Move.MoveTo(this.PatrolPoint.transform.position);
         }*/
-
-        bool IsNewPoint = false;
+        
         if (!this.PatrolPoint){
-            IsNewPoint = true;
             Func<Fighter, bool> condition = null;
             if (Controller.Type == FighterType.Warrior){
                 condition = (Fighter warrior) => FormationManager.Instance.ValidTarget(warrior);
             }
             this.PatrolPoint = BattleManager.Instance.GetRandomFighter(Controller.AttackTargetType, condition);
+            this.LastPatrolPoint = this.PatrolPoint;
         }
 
         if (this.PatrolPoint){
-            if (IsNewPoint){
-                Vector3 finalPos = Controller.Type == FighterType.Warrior ? 
-                    FormationManager.Instance.GetFormationPosition(this.PatrolPoint, Controller.AttackTarget, Controller.AttackRadius) : 
-                    this.PatrolPoint.transform.position;
-                Controller.Move.MoveTo(finalPos);
-                this.CurrentTargetPos = finalPos;
-            } else{
-                Controller.Move.MoveTo(this.CurrentTargetPos);
-            }
+            Vector3 finalPos = Controller.Type == FighterType.Warrior ? 
+                FormationManager.Instance.GetFormationPosition(this.PatrolPoint, this.LastPatrolPoint, Controller.AttackRadius) : 
+                this.PatrolPoint.transform.position;
+            Controller.Move.MoveTo(finalPos);
         }
     }
 

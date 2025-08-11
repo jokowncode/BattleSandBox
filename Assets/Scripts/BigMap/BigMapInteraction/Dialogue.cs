@@ -7,6 +7,7 @@ public class Dialogue : InteractionObject{
 
     [SerializeField] private NPCConversation Dialog;
     [SerializeField] private bool CanRepeat = true;
+    [SerializeField] private bool IsForce = false;
 
     private bool IsCurrentConversation;
     private bool IsDialogue;
@@ -17,6 +18,10 @@ public class Dialogue : InteractionObject{
 
     protected override void OnTriggerEnter(Collider other){
         if (this.IsDialogue && !CanRepeat) return;
+        if (this.IsForce){
+            TriggerDialogue();
+            return;
+        }
         base.OnTriggerEnter(other);
     }
 
@@ -34,6 +39,10 @@ public class Dialogue : InteractionObject{
     protected override void Interaction(){
         if (this.IsDialogue && !CanRepeat) return;
         if (IsCurrentConversation) return;
+        TriggerDialogue();
+    }
+
+    private void TriggerDialogue(){
         IsCurrentConversation = true;
         ConversationManager.Instance.StartConversation(this.Dialog);
         this.InAreaPlayer.TransitionInteractionTip(false);

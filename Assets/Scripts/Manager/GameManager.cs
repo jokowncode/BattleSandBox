@@ -42,6 +42,10 @@ public class GameManager : MonoBehaviour{
             if (this.IsBattleEnd)
                 this.CurrentPlayer.transform.position = this.InBigMapPlayerPosition;
         }
+
+        if (SceneChangeManager.Instance.CurrentScene != SceneType.BigMap){
+            ResetBattleFlag();
+        }
     }
 
     public void GoToBattle(BattleData battleData){

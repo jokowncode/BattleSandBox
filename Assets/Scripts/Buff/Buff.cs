@@ -21,7 +21,7 @@ public class Buff : MonoBehaviour
     
     public void AddBuff(Fighter caster,Fighter target,BuffData buffData)
     {
-        Debug.Log("AddBuff");
+        // Debug.Log("AddBuff");
         StartCoroutine(BuffRoutine(caster,target,buffData));
     }
     
@@ -78,10 +78,10 @@ public class Buff : MonoBehaviour
                 if (tickEffectPrefab != null&&target!=null)
                 {
                     GameObject effect = Instantiate(tickEffectPrefab, target.Center.position, Quaternion.identity);
-                    Debug.Log("ccc" + effect.name);
+                    // Debug.Log("ccc" + effect.name);
                     routineSpawnedParticles.Add(effect);
                     spawnedParticles.Add(effect);
-                    Debug.Log("携程 "+routineId+" 持续伤害开始");
+                    // Debug.Log("携程 "+routineId+" 持续伤害开始");
                 }
             }
         }
@@ -104,9 +104,10 @@ public class Buff : MonoBehaviour
         
         // Debug.Log("BuffEnd");
         // 删除所有粒子特效
-        Debug.Log(routineSpawnedParticles.Count);
+        // Debug.Log(routineSpawnedParticles.Count);
         foreach (GameObject effect in routineSpawnedParticles) {
-            Debug.Log(effect.name);
+            // Debug.Log(effect.name);
+            if (effect == null) continue;
             Destroy(effect);
             spawnedParticles.Remove(effect);
         }
@@ -121,12 +122,12 @@ public class Buff : MonoBehaviour
             }
         }*/
         //routineSpawnedParticles.Clear();
-        Debug.Log("当前携程 "+ routineId+" 粒子销毁");
+        // Debug.Log("当前携程 "+ routineId+" 粒子销毁");
     }
     
     private void ApplyLongTimeBuffEffects(Fighter caster =null,Fighter target = null,BuffData buffData = null)
     {
-        Debug.Log("ApplyLongTimeBuffEffects");
+        // Debug.Log("ApplyLongTimeBuffEffects");
         foreach (var buffMiniData in buffData.longTimeEffectBuff)
         {
             float value = 0f;
@@ -167,7 +168,7 @@ public class Buff : MonoBehaviour
     {
         // 立即应用一次效果
         //ApplyBuffEffects(target);
-        Debug.Log("ApplyImmediateBuffEffects: "+changedShieldValue);
+        // Debug.Log("ApplyImmediateBuffEffects: "+changedShieldValue);
         if (changedShieldValue != 0)
         {
             target.InitialShield = changedShieldValue;
@@ -274,7 +275,7 @@ public class Buff : MonoBehaviour
                 Destroy(particle);
             }
         }
-        Debug.Log("消除所有粒子");
+        // Debug.Log("消除所有粒子");
         spawnedParticles.Clear();
     }
     
@@ -298,7 +299,7 @@ public class Buff : MonoBehaviour
             spawnedParticles.Remove(particle);
         }
 
-        Debug.Log("已销毁所有 Shield 粒子");
+        // Debug.Log("已销毁所有 Shield 粒子");
     }
     
     
