@@ -18,11 +18,11 @@ public class Dialogue : InteractionObject{
 
     protected override void OnTriggerEnter(Collider other){
         if (this.IsDialogue && !CanRepeat) return;
+        if (!other.CompareTag("Player")) return;
+        base.OnTriggerEnter(other);
         if (this.IsForce){
             TriggerDialogue();
-            return;
         }
-        base.OnTriggerEnter(other);
     }
 
     private void OnConversationEnded(){

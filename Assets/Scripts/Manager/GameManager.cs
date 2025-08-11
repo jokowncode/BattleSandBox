@@ -53,12 +53,17 @@ public class GameManager : MonoBehaviour{
         this.InBigMapPlayerPosition = this.CurrentPlayer.transform.position;
         if(GoToBattleSfx)
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.GoToBattleSfx);
-        BigMapUIManager.Instance.ShowBattleStartUI(battleData.BattleImage, battleData.BattleText);
+        BigMapUIManager.Instance.ShowBattleStartUI(battleData.BattleBannarBackground, battleData.BattleImage, battleData.BattleText);
         // SceneChangeManager.Instance.GoToScene(SceneType.Battle);
     }
 
     public void StartGame(){
-        GoToMap(false, false);    
+        // GoToMap(false, false);    
+        GoToLoading();
+    }
+
+    private void GoToLoading(){
+        SceneChangeManager.Instance.GoToScene(SceneType.Loading);
     }
 
     public void GoToMap(bool isBattleEnd, bool isBattleVictory){

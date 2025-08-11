@@ -38,8 +38,8 @@ public class BigMapUIManager : MonoBehaviour{
         }
     }
 
-    public void ShowBattleStartUI(Sprite battleImage, string battleText){
-        this.BattleStartBannar.ShowBattleStartUI(battleImage, battleText);
+    public void ShowBattleStartUI(Sprite background, Sprite battleImage, string battleText){
+        this.BattleStartBannar.ShowBattleStartUI(background, battleImage, battleText);
     }
 }
 

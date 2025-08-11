@@ -22,17 +22,23 @@ public class PlayerMove : MonoBehaviour{
     public void SetInAreaCollider(BoxCollider inAreaCollider){
         this.PlayerInAreaCollider = inAreaCollider;
     }
-    
+
+    private void OnDisable(){
+        PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
+    }
+
     private void Update(){
         float x = Input.GetAxisRaw("Horizontal");
         Vector3 velocity = new Vector3(x, 0.0f, 0.0f);
 
         Vector3 newPos = this.transform.position + Speed * Time.deltaTime * velocity;
         if (PlayerInAreaCollider && !PlayerInAreaCollider.bounds.Contains(newPos)){
+            PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
             return;
         }
 
         if (newPos.x - 1.5f <= LeftBorder.bounds.min.x || newPos.x + 1.5f >= RightBorder.bounds.max.x){
+            PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
             return;
         }
 

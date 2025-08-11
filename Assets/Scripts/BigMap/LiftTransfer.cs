@@ -27,8 +27,11 @@ public class LiftTransfer : MonoBehaviour
     public float transferDelay = 0.5f;
 
     private bool isTransferring = false;
+    
     [SerializeField] private GameObject player;
-
+    [SerializeField] private LevelUI Level;
+    [SerializeField] private string LevelText;
+    
     private void Start()
     {
         // player = GameObject.FindGameObjectWithTag("Player");
@@ -102,6 +105,8 @@ public class LiftTransfer : MonoBehaviour
         
         player.transform.position = targetPosition.position;
         player.transform.rotation = targetPosition.rotation;
+        
+        this.Level.ShowLevelText(this.LevelText);
         
         yield return new WaitForSeconds(transferDelay);
         
