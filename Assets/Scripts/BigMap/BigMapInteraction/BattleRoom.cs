@@ -24,7 +24,7 @@ public class BattleRoom : InteractionObject{
     protected override void Update(){
         base.Update();
         if (!this.IsEnd && this.Collider.bounds.Contains(this.InAreaPlayer.transform.position)){
-            // this.InAreaPlayer.SetCollider(this.Collider);
+            this.InAreaPlayer.SetCollider(this.Collider);
         } 
     }
 
