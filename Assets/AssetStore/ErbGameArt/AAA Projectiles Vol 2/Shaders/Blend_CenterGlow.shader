@@ -100,7 +100,7 @@ Shader "Hovl/Particles/Blend_CenterGlow"
 					UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 					UNITY_TRANSFER_INSTANCE_ID(v, o);
 					
-					v.vertex.xyz -=  normalize(_WorldSpaceCameraPos - v.vertex.xyz) * 5.0f ;
+					v.vertex.xyz +=  float3( 0, 0, 0 ) ;
 					o.vertex = UnityObjectToClipPos(v.vertex);
 					#ifdef SOFTPARTICLES_ON
 						o.projPos = ComputeScreenPos (o.vertex);

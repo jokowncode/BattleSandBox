@@ -34,6 +34,7 @@ public class SceneChangeManager : MonoBehaviour{
         if (this.CurrentScene == SceneType.AboutUs){
             AudioManager.Instance.SetMainMusic(this.AboutUsBGM);
         }
+        AudioManager.Instance.StopFootstep();
     }
 
     public void GoToScene(SceneType type){

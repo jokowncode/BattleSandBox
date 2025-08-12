@@ -58,6 +58,7 @@ public class Fighter : StateMachineController{
         this.CurrentFighterType = this.gameObject.layer == LayerMask.NameToLayer("Hero") ? TargetType.Hero : TargetType.Enemy;
         this.BloodBarImage.color = InitialColor;
         this.CurrentData.Shield = 0;
+        this.InitialData.Shield = 0;
     }
 
     protected virtual void Start(){
@@ -108,12 +109,16 @@ public class Fighter : StateMachineController{
             }
         }
         this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - finalHealthValue);
+        //Debug.Log(this.name + "curHp: " +this.CurrentData.Health + "changedHp:" +finalHealthValue);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
         this.BloodBarImage.color = Color.Lerp(this.InitialColor, this.FinalColor, 1.0f - this.BloodBarImage.fillAmount);
         
         
-        if(this.ShieldBarImage != null && this.InitialData.Shield != 0.0f)
+        if(this.ShieldBarImage != null && this.InitialData.Shield != 0.0f){
             this.ShieldBarImage.fillAmount = this.CurrentData.Shield / this.InitialData.Shield;
+        }else if (this.InitialData.Shield == 0.0f){
+            this.ShieldBarImage.fillAmount = 0.0f;
+        }
         
         if(this.BloodParticle) this.BloodParticle.Play();
 

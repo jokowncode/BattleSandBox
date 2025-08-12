@@ -33,7 +33,7 @@ public class Dialogue : InteractionObject{
         }
 
         this.IsDialogue = true;
-        this.InAreaPlayer.TransMove(true);
+        // this.InAreaPlayer.TransMove(true);
     }
 
     protected override void Interaction(){
@@ -46,7 +46,8 @@ public class Dialogue : InteractionObject{
         IsCurrentConversation = true;
         ConversationManager.Instance.StartConversation(this.Dialog);
         this.InAreaPlayer.TransitionInteractionTip(false);
-        this.InAreaPlayer.TransMove(false);
+        // TODO
+        // this.InAreaPlayer.TransMove(false);
     }
 }
 

@@ -171,8 +171,11 @@ public class Buff : MonoBehaviour
         // Debug.Log("ApplyImmediateBuffEffects: "+changedShieldValue);
         if (changedShieldValue != 0)
         {
-            target.InitialShield = changedShieldValue;
-            target.Shield = changedShieldValue;
+            target.InitialShield += changedShieldValue;
+            target.Shield += changedShieldValue;
+            // Debug.Log("init: "+target.InitialShield);
+            // Debug.Log(target.Shield);
+            
             target.UpdateShieldAmount();
         }
         if(changedAttackSpeedValue!=0)
@@ -251,8 +254,11 @@ public class Buff : MonoBehaviour
 
     public void RemoveBuff(Fighter target)
     {
-        if (changedShieldValue != 0)
-            target.Shield = 0;
+        if (changedShieldValue != 0){
+            target.Shield = Mathf.Max(target.Shield-changedShieldValue,0);
+            if (target.Shield == 0)
+                target.InitialShield= 0;
+        }
         if(changedAttackSpeedValue!=0)
             target.FighterPropertyChange(FighterProperty.CooldownPercentage,PropertyModifyWay.Value,changedAttackSpeedValue,false);
         if(changedMoveSpeedValue != 0)
