@@ -14,12 +14,14 @@ public class MagicCircleAttackState : AttackState{
         MagicCircle magicCircle = Instantiate(this.MagicCirclePrefab);
         magicCircle.SetTargetPos(position);
         
-        float critical = Random.value < Controller.Critical / 100.0f ? 1.5f : 1.0f;
+        bool criticalTest = Random.value < Controller.Critical / 100.0f;
+        float critical = criticalTest ? 1.5f : 1.0f;
         
         EffectData damageMsg = new EffectData{
             Value = Controller.MagicAttack * critical * percentage,
             Force = Controller.Force,
-            TargetType = Controller.AttackTargetType
+            TargetType = Controller.AttackTargetType,
+            IsCritical = criticalTest
         };
         magicCircle.SetDamageMessage(damageMsg);
 #if DEBUG_MODE

@@ -1,7 +1,9 @@
 ﻿
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public abstract class SkillCaster : MonoBehaviour{
 
@@ -69,10 +71,13 @@ public abstract class SkillCaster : MonoBehaviour{
 
     #endregion
 
-    protected float GetSkillEffectValue(){
+    protected float GetSkillEffectValue(out bool isCritical){
+        isCritical = Random.value < OwnedFighter.Critical / 100.0f;
+        float critical = isCritical ? 1.5f : 1.0f;
+        
         float property = ReflectionTools.GetObjectProperty<float>(Data.ValueProperty.ToString(), this.OwnedFighter);
         float percentage = Data.ValueMultiple / 100.0f;
-        return property * percentage;
+        return property * percentage * critical;
     }
 
     protected abstract void Cast(Transform attackTarget);

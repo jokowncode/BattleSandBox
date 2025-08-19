@@ -8,11 +8,13 @@ public class SingleTargetSkillCaster : SkillCaster {
         selfPos.y = attackTargetPosition.y;
         Vector3 moveVec = (attackTargetPosition - selfPos).normalized;
         SkillDelivery delivery = Instantiate(this.Data.SkillDeliveryPrefab, transform.position, Quaternion.LookRotation(moveVec));
+        float value = GetSkillEffectValue(out bool isCritical);
         delivery.StartDelivery(this.OwnedFighter.gameObject, attackTargetPosition, new EffectData {
             TargetType = this.Data.TargetType,
             Force = this.Data.Force,
-            Value = GetSkillEffectValue(),
-            Duration = this.Data.Duration
+            Value = value,
+            Duration = this.Data.Duration,
+            IsCritical = isCritical
         }, OwnedFighter.Type);
         ApplySkillStart(delivery.gameObject, delivery.EffectData.Value);
         delivery.SetPlugins(this.SkillMiddlePlugins, this.SkillEndPlugins, true);

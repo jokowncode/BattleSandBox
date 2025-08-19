@@ -19,12 +19,14 @@ public class MeleeAttackState : AttackState{
             AttackParticle.transform.localRotation = Quaternion.Euler(angleX, 90.0f, 90.0f);
             AttackParticle.Play();
         }
-        
-        float critical = Random.value < Controller.Critical / 100.0f ? 1.5f : 1.0f;
+
+        bool criticalTest = Random.value < Controller.Critical / 100.0f;
+        float critical = criticalTest ? 1.5f : 1.0f;
         EffectData damageMsg = new EffectData{
             Value = (Controller.PhysicsAttack + Controller.MagicAttack) * critical,
             Force = Controller.Force,
-            TargetType = Controller.AttackTargetType
+            TargetType = Controller.AttackTargetType,
+            IsCritical = criticalTest
         };
         Controller.AttackTarget?.BeDamaged(damageMsg);
 #if DEBUG_MODE

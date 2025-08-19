@@ -16,6 +16,7 @@ public class Fighter : StateMachineController{
     [field: SerializeField] public SkillNameUI SkillNameText{ get; private set; }
     [SerializeField] private ParticleSystem BloodParticle;
     [SerializeField] private ParticleSystem HealParticlePrefab;
+    [SerializeField] private DamageUI DamageUIPrefab;
     [field: SerializeField] public Transform Center { get; private set; }
     [field: SerializeField] public Transform AttackCaster { get; private set; }
     [SerializeField] private AudioClip BeDamagedSfx;
@@ -90,6 +91,16 @@ public class Fighter : StateMachineController{
     private void OnTargetDead(){
         this.ChangeState(FighterPatrol);
     }
+    
+    private void ShowDamage(float damage, bool isCritical){
+        if (!DamageUIPrefab) return; 
+        DamageUI ui = Instantiate(DamageUIPrefab, FighterCanvas.transform);
+        RectTransform rectTrans = (RectTransform)ui.transform;
+        Vector3 anchoredPos = rectTrans.anchoredPosition;
+        anchoredPos += Center.localPosition;
+        rectTrans.anchoredPosition = anchoredPos;
+        ui.Show(damage, isCritical);
+    }
 
     public void FighterIdle(){
         this.FighterAnimator.SetTrigger(AnimationParams.Idle);
@@ -99,7 +110,7 @@ public class Fighter : StateMachineController{
 
     public void BeDamaged(EffectData effectData){
         if (IsDead) return;
-
+        
         float finalHealthValue = effectData.Value;
         if (Shield > 0) {
             finalHealthValue = Mathf.Max(0,effectData.Value - Shield);
@@ -108,6 +119,8 @@ public class Fighter : StateMachineController{
                 this.GetComponent<Buff>().DestroyShieldParticles();
             }
         }
+        
+        ShowDamage(finalHealthValue, effectData.IsCritical);
         this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - finalHealthValue);
         //Debug.Log(this.name + "curHp: " +this.CurrentData.Health + "changedHp:" +finalHealthValue);
         this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;

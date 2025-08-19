@@ -4,5 +4,6 @@ public struct EffectData {
     public float Force;
     public float Duration; // Magic Circle  
     public TargetType TargetType;
+    public bool IsCritical;
 }
 
