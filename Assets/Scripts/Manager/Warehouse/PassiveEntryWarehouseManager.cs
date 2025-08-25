@@ -28,7 +28,7 @@ public class PassiveEntryWarehouseManager : MonoBehaviour{
     }
 
     public void AddPassiveEntry(PassiveEntry passiveEntry) {
-        if(!this.OwnedPassiveEntries.Contains(passiveEntry)) this.OwnedPassiveEntries.Add(passiveEntry);
+        this.OwnedPassiveEntries.Add(passiveEntry);
     }
 
     public void RemovePassiveEntry(PassiveEntry passiveEntry) {
