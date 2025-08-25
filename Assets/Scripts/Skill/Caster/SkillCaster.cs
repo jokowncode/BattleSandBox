@@ -10,6 +10,7 @@ public abstract class SkillCaster : MonoBehaviour{
     [SerializeField] private SkillData InitialData;
     [SerializeField] protected ParticleSystem SkillStartParticle;
     [SerializeField] private AudioClip SkillCastSfx;
+    [field: SerializeField] public PassiveEntrySort Sort { get; private set; } = PassiveEntrySort.General;
 
     protected Fighter OwnedFighter;
 

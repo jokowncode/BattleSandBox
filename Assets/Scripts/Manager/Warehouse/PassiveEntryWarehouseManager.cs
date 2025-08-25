@@ -5,7 +5,6 @@ using UnityEngine;
 public class PassiveEntryWarehouseManager : MonoBehaviour{
 
     [SerializeField] private List<PassiveEntry> OwnedPassiveEntries;
-    
     public static PassiveEntryWarehouseManager Instance;
 
     private void Awake() {
@@ -17,5 +16,23 @@ public class PassiveEntryWarehouseManager : MonoBehaviour{
         DontDestroyOnLoad(this.gameObject);
     }
 
-    public List<PassiveEntry> GetOwnedHeroes() { return this.OwnedPassiveEntries; }
+    public List<PassiveEntry> GetOwnedPassiveEntries() { return this.OwnedPassiveEntries; }
+
+    public List<PassiveEntry> GetPassiveEntryFilterBySort(int sortCode) {
+        List<PassiveEntry> result = new List<PassiveEntry>();
+        foreach (PassiveEntry passiveEntry in this.OwnedPassiveEntries) {
+            if ((passiveEntry.GetSortCode() & sortCode) == 0) continue;
+            result.Add(passiveEntry);
+        }
+        return result;
+    }
+
+    public void AddPassiveEntry(PassiveEntry passiveEntry) {
+        if(!this.OwnedPassiveEntries.Contains(passiveEntry)) this.OwnedPassiveEntries.Add(passiveEntry);
+    }
+
+    public void RemovePassiveEntry(PassiveEntry passiveEntry) {
+        if(this.OwnedPassiveEntries.Contains(passiveEntry)) this.OwnedPassiveEntries.Remove(passiveEntry);
+    }
+    
 }
