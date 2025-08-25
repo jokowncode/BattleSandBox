@@ -144,7 +144,7 @@ public abstract class SkillCaster : MonoBehaviour{
 
         float sign = isUp ? 1.0f : -1.0f;
         if (property == SkillProperty.SummonCount && this is SummonSkillCaster summonSkill){
-            summonSkill.MaxSummonCount += (int)sign * (int)value;
+            summonSkill.MaxSummonMeanwhileCount += (int)sign * (int)value;
             return;
         }
         
