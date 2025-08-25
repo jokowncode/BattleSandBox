@@ -123,14 +123,12 @@ public class Fighter : StateMachineController{
         ShowDamage(finalHealthValue, effectData.IsCritical);
         this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - finalHealthValue);
         //Debug.Log(this.name + "curHp: " +this.CurrentData.Health + "changedHp:" +finalHealthValue);
-        this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
+        this.BloodBarImage.fillAmount = this.InitialData.Health == 0.0f ? 0.0f : this.CurrentData.Health / this.InitialData.Health;
         this.BloodBarImage.color = Color.Lerp(this.InitialColor, this.FinalColor, 1.0f - this.BloodBarImage.fillAmount);
         
         
-        if(this.ShieldBarImage != null && this.InitialData.Shield != 0.0f){
-            this.ShieldBarImage.fillAmount = this.CurrentData.Shield / this.InitialData.Shield;
-        }else if (this.InitialData.Shield == 0.0f){
-            this.ShieldBarImage.fillAmount = 0.0f;
+        if(this.ShieldBarImage){
+            this.ShieldBarImage.fillAmount = this.InitialData.Shield == 0.0f ? 0.0f : this.CurrentData.Shield / this.InitialData.Shield;
         }
         
         if(this.BloodParticle) this.BloodParticle.Play();
