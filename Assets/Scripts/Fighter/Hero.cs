@@ -13,11 +13,18 @@ public class Hero : Fighter{
     private List<PassiveEntry> PassiveEntries;
 
     public SpriteRenderer HeroRenderer{ get; private set; }
-
+    public int HeroAvailablePassiveEntrySortCode { get; private set; }
+    
     protected override void Awake(){
         base.Awake();
         PassiveEntries = new List<PassiveEntry>();
         HeroRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        if (this.FighterSkillCaster) {
+            this.HeroAvailablePassiveEntrySortCode =
+                (int)PassiveEntrySort.General | (int)PassiveEntrySort.Talent | (int)this.FighterSkillCaster.Sort;
+        }
+        
     }
 
     protected override void Start(){
@@ -59,11 +66,9 @@ public class Hero : Fighter{
 
     public string GetPassiveEntryDesc(){
         string desc = "";
-        int index = 1;
         foreach (PassiveEntry entry in HeroSelfPassiveEntries){
             if (!entry) continue;
             desc += $"·{entry.Data.Description};\n";
-            index++;
         }
         return desc;
     }

@@ -55,31 +55,26 @@ public class BattleUIManager : MonoBehaviour {
 
     private void Start() {
         heroWarehouseUI.UpdateHeroWarehouse();
-        PassiveEntryWarehouseUI.UpdateHeroWarehouse();
+        // PassiveEntryWarehouseUI.UpdatePassiveEntryWarehouse();
     }
 
-    public void SetHeroWarehouseActive(bool active)
-    {
+    public void UpdatePassiveEntryWarehouse(int passiveEntrySortCode) {
+        PassiveEntryWarehouseUI.UpdatePassiveEntryWarehouse(passiveEntrySortCode);
+    }
+
+    public void SetHeroWarehouseActive(bool active) {
         heroWarehouseUI.gameObject.SetActive(active);
     }
 
-    public void SetSkillWarehouseActive(bool active)
-    {
-        PassiveEntryWarehouseUI.gameObject.SetActive(active);
-    }
-
-    public void SetHeroPanelActive(bool active)
-    {
+    public void SetHeroPanelActive(bool active) {
         heroDetailUI.gameObject.SetActive(active);
     }
 
-    public void SetHeroPortraitActive(bool active)
-    {
+    public void SetHeroPortraitActive(bool active) {
         heroPortraitUI.gameObject.SetActive(active);
     }
 
-    public void SetSkillsNull()
-    {
+    public void SetSkillsNull() {
         SetSkill1UIText("Slot1");
         SetSkill2UIText("Slot2");
     }

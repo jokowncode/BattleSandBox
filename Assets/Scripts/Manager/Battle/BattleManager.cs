@@ -152,6 +152,7 @@ public class BattleManager : StateMachineController{
         this.selectedHero = hero;
         BattleUIManager.Instance.SetHeroPanelActive(true);
         UpdatePassiveEntryUI(hero);
+        BattleUIManager.Instance.UpdatePassiveEntryWarehouse(hero.HeroAvailablePassiveEntrySortCode);
         BattleUIManager.Instance.heroDetailUI.ChangeHeroDetailUIValue(hero.StandingSprite);
         BattleUIManager.Instance.heroDetailUI.ChangeDetailUI(hero);
         BattleUIManager.Instance.UpdateSelectedHeroSkillUI(hero.Type,
@@ -186,6 +187,7 @@ public class BattleManager : StateMachineController{
             selectedHero.AddPassiveEntry(data);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
+            PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data);
             return 0;
         }
         
@@ -193,6 +195,7 @@ public class BattleManager : StateMachineController{
             selectedHero.AddPassiveEntry(data);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
+            PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data);
             return 1;
         }
 
@@ -238,7 +241,7 @@ public class BattleManager : StateMachineController{
     }
 
     private void RecallSelectedPassiveEntry(PassiveEntry passiveEntry){
-        BattleUIManager.Instance.PassiveEntryWarehouseUI.AddItem(passiveEntry);
+        BattleUIManager.Instance.PassiveEntryWarehouseUI.AddItem(passiveEntry, true);
     }
     
     /// <summary>

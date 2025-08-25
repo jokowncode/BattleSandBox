@@ -6,16 +6,17 @@ using UnityEngine;
 
 public class PassiveEntryWarehouseUI : WarehouseUI {
     
-    public void UpdateHeroWarehouse() {
+    public void UpdatePassiveEntryWarehouse(int passiveEntrySortCode) {
         ClearWarehouse();
-        List<PassiveEntry> ownedHeroes = PassiveEntryWarehouseManager.Instance.GetOwnedHeroes();
-        foreach (PassiveEntry skillData in ownedHeroes){
-            AddItem(skillData);
+        List<PassiveEntry> ownedPassiveEntries = PassiveEntryWarehouseManager.Instance.GetPassiveEntryFilterBySort(passiveEntrySortCode);
+        foreach (PassiveEntry passiveEntryData in ownedPassiveEntries){
+            AddItem(passiveEntryData, false);
         }
     }
 
-    public override void AddItem(PassiveEntry passiveEntry){
-        GameObject go = Instantiate(warehouseImageUIPrefab, warehouseContent);
-        go.GetComponentInChildren<ClickableUI>().passiveEntryData = passiveEntry;
+    public void AddItem(PassiveEntry passiveEntry, bool isNewItem){
+        ClickableUI go = Instantiate(warehouseImageUIPrefab, warehouseContent);
+        go.passiveEntryData = passiveEntry;
+        if(isNewItem) PassiveEntryWarehouseManager.Instance.AddPassiveEntry(passiveEntry);
     }
 }
