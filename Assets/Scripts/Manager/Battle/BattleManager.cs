@@ -38,7 +38,10 @@ public class BattleManager : StateMachineController{
 
     private Hero selectedHero;
     private PrepareState Prepare;
-    public BattleData Data{ get; private set; }
+
+    [field: SerializeField] public BattleData Data { get; private set; }
+    // TODO: Link Scene
+    // public BattleData Data{ get; private set; }
 
 #if DEBUG_MODE
     public float BattleStartTime {get; private set;}
@@ -67,6 +70,9 @@ public class BattleManager : StateMachineController{
         
         // TODO: Optimize Framerate
         Application.targetFrameRate = 120;
+        
+        // TODO: Link Scene
+        SetBattleData(this.Data);
     }
 
     public void SetBattleData(BattleData data){
