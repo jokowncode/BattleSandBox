@@ -32,6 +32,7 @@ public class BattleManager : StateMachineController{
 
     public Action<Hero> OnHeroEnterTheField;
     public Action<Hero> OnHeroExitTheField;
+    public Action OnBattleStart;
 
     public bool IsGameOver => EnemiesInBattle.Count <= 0 || HeroesInBattle.Count <= 0;
     public bool IsFullHero => this.HeroesInBattle.Count >= this.Data.MaxHeroCount;
@@ -108,6 +109,7 @@ public class BattleManager : StateMachineController{
 #endif
         BattleUIManager.Instance.SetHeroPortraitActive(true);
         BattleUIManager.Instance.heroPortraitUI.PushHeros(HeroesInBattle);
+        OnBattleStart?.Invoke();
     }
 
     public void AddHero(Hero hero){

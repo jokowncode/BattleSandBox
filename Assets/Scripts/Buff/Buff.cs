@@ -38,6 +38,7 @@ public class Buff : MonoBehaviour
         changedMagicAttackValue = 0f;
         
         float TimeRemaining = buffData.duration;
+        bool isUnlimited = TimeRemaining < 0.0f;
         
         foreach (var buffMiniData in buffData.immediateEffectBuff)
         {
@@ -65,7 +66,7 @@ public class Buff : MonoBehaviour
             // 间隔触发效果
             WaitForSeconds wait = new WaitForSeconds(buffData.tickInterval);
             
-            while (TimeRemaining > 0)
+            while (isUnlimited || TimeRemaining > 0)
             {
                 yield return wait;
                 TimeRemaining -= buffData.tickInterval;

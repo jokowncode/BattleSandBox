@@ -17,7 +17,7 @@ public class BuffData : ScriptableObject
     [TextArea] public string description;
     
     [Header("时间设置")]
-    public float duration = 5f;       // Buff持续时间
+    public float duration = 5f;       // Buff持续时间 （-1表示不限时间）
     public float tickInterval = 1f;   // 效果触发间隔（0表示只触发一次）
     
     [Header("效果设置")]
