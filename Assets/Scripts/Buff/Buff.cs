@@ -79,9 +79,10 @@ public class Buff : MonoBehaviour
                 if (tickEffectPrefab != null&&target!=null)
                 {
                     GameObject effect = Instantiate(tickEffectPrefab, target.Center.position, Quaternion.identity);
+                    Destroy(effect, 1.0f);
                     // Debug.Log("ccc" + effect.name);
-                    routineSpawnedParticles.Add(effect);
-                    spawnedParticles.Add(effect);
+                    // routineSpawnedParticles.Add(effect);
+                    // spawnedParticles.Add(effect);
                     // Debug.Log("携程 "+routineId+" 持续伤害开始");
                 }
             }

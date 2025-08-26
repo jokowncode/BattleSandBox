@@ -32,6 +32,8 @@ public class AllHeroRecoverPassiveEntry : PassiveEntry {
         RecoverBuff.changedValue = this.TargetFighterCount * RecoverMultiplier;
         BuffData buffData = ScriptableObject.CreateInstance<BuffData>();
         buffData.longTimeEffectBuff = new List<BuffMiniData> { RecoverBuff };
+        buffData.immediateEffectBuff = new List<BuffMiniData>();
+        buffData.lastEffectBuff = new List<BuffMiniData>();
         buffData.duration = -1.0f;
 
         foreach(Hero hero in BattleManager.Instance.HeroesInBattle) {
@@ -40,7 +42,7 @@ public class AllHeroRecoverPassiveEntry : PassiveEntry {
             }
             if(tickEffectPrefab!=null)
                 buff.tickEffectPrefab = tickEffectPrefab;
-            buff.AddBuff(this.OwnedHero, this.OwnedHero, buffData);
+            buff.AddBuff(this.OwnedHero, hero, buffData);
         }
     }
 
