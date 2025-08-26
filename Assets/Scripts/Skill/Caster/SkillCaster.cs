@@ -18,7 +18,7 @@ public abstract class SkillCaster : MonoBehaviour{
     protected List<SkillMiddle> SkillMiddlePlugins;
     protected List<SkillEnd> SkillEndPlugins;
 
-    private int CurrentSkillCastCount;
+    protected int CurrentSkillCastCount;
     private float LastCastTime;
 
     public SkillData Data{ get; private set; }
@@ -29,6 +29,10 @@ public abstract class SkillCaster : MonoBehaviour{
         SkillMiddlePlugins = new List<SkillMiddle>();
         SkillEndPlugins = new List<SkillEnd>();
         this.Data = Instantiate(InitialData);
+    }
+
+    public void SetSkillCastCount(int count) {
+        this.CurrentSkillCastCount = count;
     }
 
     public void BattleStart(){

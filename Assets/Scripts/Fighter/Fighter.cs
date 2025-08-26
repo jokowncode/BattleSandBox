@@ -221,6 +221,11 @@ public class Fighter : StateMachineController{
                 currentValue += sign * initialValue * percentage;
                 break;
         }
+
+        if (property == FighterProperty.Health) {
+            currentValue = Mathf.Max(Mathf.Min(currentValue, this.InitialData.Health), 0.0f);
+        }
+
         ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
         // Debug.Log(propertyName + currentValue);
     }
