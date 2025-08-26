@@ -88,7 +88,8 @@ public class Fighter : StateMachineController{
         this.AttackTarget.OnDead += OnTargetDead;
     }
 
-    private void OnTargetDead(){
+    private void OnTargetDead() {
+        this.AttackTarget = null;
         this.ChangeState(FighterPatrol);
     }
     
@@ -147,28 +148,32 @@ public class Fighter : StateMachineController{
         }
         
         if (this.CurrentData.Health <= 0.0f && !IsDead) {
-            IsDead = true;
-            OnDead?.Invoke();
-            this.Renderer.Dead();
-            this.FighterCanvas.gameObject.SetActive(false);
-            this.gameObject.layer = LayerMask.NameToLayer("Default");
-            this.Move.StopMove();
-            this.FighterIdle();
+            FighterDead();
+        }
+    }
+
+    private void FighterDead() {
+        IsDead = true;
+        OnDead?.Invoke();
+        this.Renderer.Dead();
+        this.FighterCanvas.gameObject.SetActive(false);
+        this.gameObject.layer = LayerMask.NameToLayer("Default");
+        this.Move.StopMove();
+        this.FighterIdle();
             
 #if DEBUG_MODE
         if (this.CurrentFighterType == TargetType.Hero) {
             Debug.Log($"{this.gameObject.name} Dead -> Caused Total Damage: {this.TotalDamage}");    
         }    
 #endif
-            if (this is Hero hero){
-                BattleUIManager.Instance.heroPortraitUI.SetHeroPortraitsGray(hero);
-                BattleManager.Instance.RemoveHero(hero);
-            }else if (this is Enemy enemy) {
-                BattleManager.Instance.RemoveEnemy(enemy);
-            }
+        if (this is Hero hero){
+            BattleUIManager.Instance.heroPortraitUI.SetHeroPortraitsGray(hero);
+            BattleManager.Instance.RemoveHero(hero);
+        }else if (this is Enemy enemy) {
+            BattleManager.Instance.RemoveEnemy(enemy);
         }
     }
-    
+
     public void BeHealed(EffectData effectData) {
         if (this.HealParticlePrefab){
             ParticleSystem healParticle = Instantiate(this.HealParticlePrefab, this.transform.position, Quaternion.identity);
@@ -224,6 +229,9 @@ public class Fighter : StateMachineController{
 
         if (property == FighterProperty.Health) {
             currentValue = Mathf.Max(Mathf.Min(currentValue, this.InitialData.Health), 0.0f);
+            if (currentValue <= 0.0f && !IsDead) {
+                FighterDead();
+            }
         }
 
         ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
