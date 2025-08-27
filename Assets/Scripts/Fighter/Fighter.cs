@@ -80,6 +80,7 @@ public class Fighter : StateMachineController{
             this.ChangeState(FighterPatrol);
         }
         if(FighterPatrol) FighterPatrol.OnFindAttackTarget += OnFindAttackTarget;
+        if (SkillNameText) SkillNameText.Hide(true);
     }
 
     private void OnFindAttackTarget(Fighter target){
