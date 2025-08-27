@@ -144,7 +144,7 @@ public class BattleManager : StateMachineController{
         if (this.CurrentState is not PrepareState) return;
         selectedHero = so;
         if(!selectedHero){
-            BattleUIManager.Instance.SetHeroPanelActive(false);
+            BattleUIManager.Instance.HideHeroDetail();
         }else{
             ShowHeroDetail(selectedHero);
         }
@@ -152,26 +152,21 @@ public class BattleManager : StateMachineController{
 
     public void ShowHeroDetail(Hero hero){
         this.selectedHero = hero;
-        BattleUIManager.Instance.SetHeroPanelActive(true);
         UpdatePassiveEntryUI(hero);
-        BattleUIManager.Instance.UpdatePassiveEntryWarehouse(hero.HeroAvailablePassiveEntrySortCode);
-        BattleUIManager.Instance.heroDetailUI.ChangeHeroDetailUIValue(hero.StandingSprite);
-        BattleUIManager.Instance.heroDetailUI.ChangeDetailUI(hero);
-        BattleUIManager.Instance.UpdateSelectedHeroSkillUI(hero.Type,
-            hero.FighterSkillCaster.Data.Description,
-            hero.GetPassiveEntryDesc());
+        BattleUIManager.Instance.ShowHeroDetail(hero);
     }
 
     /// <summary>
     /// 召回英雄
     /// </summary>
-    public void RecallSelectedHero(){
+    public void RecallSelectedHero() {
+        if (!selectedHero) return;
         RemovePassiveEntry();
         BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.name);
         this.RemoveHero(selectedHero);
         Destroy(selectedHero.gameObject);
         selectedHero = null;
-        BattleUIManager.Instance.SetHeroPanelActive(false);
+        BattleUIManager.Instance.HideHeroDetail();
     }
     
     /// <summary>

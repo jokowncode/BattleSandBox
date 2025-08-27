@@ -8,25 +8,25 @@ public class BattleUIManager : MonoBehaviour {
 
     public static BattleUIManager Instance;
 
-    [field: SerializeField] public Canvas UICanvas{ get; private set; }
+    [field: SerializeField] public Canvas UICanvas { get; private set; }
     [SerializeField] private Image GameEndBannarImage;
     [SerializeField] private GameObject GameEndObject;
+    [SerializeField] private Button RecallHeroButton;
 
-    [field: SerializeField] public HeroWarehouseUI heroWarehouseUI{ get; private set; }
-    [field: SerializeField] public PassiveEntryWarehouseUI PassiveEntryWarehouseUI{ get; private set; }
-    [field: SerializeField] public HeroDetailUI heroDetailUI{ get; private set; }
-    [field: SerializeField] public HeroPortraitUI heroPortraitUI{ get; private set; }
+    [field: SerializeField] public HeroWarehouseUI heroWarehouseUI { get; private set; }
+    [field: SerializeField] public PassiveEntryWarehouseUI PassiveEntryWarehouseUI { get; private set; }
+    [field: SerializeField] public HeroDetailUI heroDetailUI { get; private set; }
+    [field: SerializeField] public HeroPortraitUI heroPortraitUI { get; private set; }
 
-    [Header("Skill UI")]
-    public Sprite warriorSkillIcon;
+    [Header("Skill UI")] public Sprite warriorSkillIcon;
     public Sprite mageSkillIcon;
     public Sprite priestSkillIcon;
     public Sprite passiveSkillIcon;
-    
+
     [SerializeField] private GameObject skillImageUI;
     [SerializeField] private GameObject skill1UI;
     [SerializeField] private GameObject skill2UI;
-    
+
     [SerializeField] private TextMeshProUGUI SkillDescription;
     [SerializeField] private TextMeshProUGUI TalentDescription;
     [SerializeField] private TextMeshProUGUI PassiveSkill1Description;
@@ -35,20 +35,21 @@ public class BattleUIManager : MonoBehaviour {
     private Image Skill1Image;
     private Image Skill2Image;
     private Image SkillBackgroundImage;
-    
+
     private void Awake() {
         if (Instance != null) {
             Destroy(this.gameObject);
             return;
         }
+
         Instance = this;
 
         SkillBackgroundImage = skillImageUI.GetComponentInChildren<Image>();
         Skill1Image = skill1UI.GetComponent<Image>();
         Skill2Image = skill2UI.GetComponent<Image>();
     }
-    
-    public void GameEnd(Sprite bannarSprite){
+
+    public void GameEnd(Sprite bannarSprite) {
         this.GameEndBannarImage.sprite = bannarSprite;
         this.GameEndObject.SetActive(true);
     }
@@ -60,6 +61,23 @@ public class BattleUIManager : MonoBehaviour {
 
     public void UpdatePassiveEntryWarehouse(int passiveEntrySortCode) {
         PassiveEntryWarehouseUI.UpdatePassiveEntryWarehouse(passiveEntrySortCode);
+    }
+
+    public void ShowHeroDetail(Hero hero) {
+        if (!hero) return;
+        this.RecallHeroButton.gameObject.SetActive(true);
+        SetHeroPanelActive(true);
+        UpdatePassiveEntryWarehouse(hero.HeroAvailablePassiveEntrySortCode);
+        heroDetailUI.ChangeHeroDetailUIValue(hero.StandingSprite);
+        heroDetailUI.ChangeDetailUI(hero);
+        UpdateSelectedHeroSkillUI(hero.Type,
+            hero.FighterSkillCaster.Data.Description,
+            hero.GetPassiveEntryDesc());
+    }
+
+    public void HideHeroDetail() {
+        SetHeroPanelActive(false);
+        this.RecallHeroButton.gameObject.SetActive(false);
     }
 
     public void SetHeroWarehouseActive(bool active) {
