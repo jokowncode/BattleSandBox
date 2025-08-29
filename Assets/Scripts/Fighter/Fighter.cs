@@ -118,7 +118,7 @@ public class Fighter : StateMachineController{
             finalHealthValue = Mathf.Max(0,effectData.Value - Shield);
             Shield = Mathf.Max(0,Shield - effectData.Value);
             if (Shield <= 0){
-                this.GetComponent<Buff>().DestroyShieldParticles();
+                this.GetComponent<Buff>()?.DestroyShieldParticles();
             }
         }
         
