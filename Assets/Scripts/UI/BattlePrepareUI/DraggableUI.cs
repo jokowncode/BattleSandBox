@@ -40,8 +40,7 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
     public void OnDrag(PointerEventData eventData){
         if (!previewInstance) return;
         Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, LayerMask.GetMask("Deploy"))
-            && BattleManager.Instance.IsWithinArea(hit.point)){
+        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, LayerMask.GetMask("Deploy"))){
             Vector3 worldPos = hit.point;
             previewInstance.transform.position = worldPos;
         }
@@ -50,14 +49,15 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
     public void OnEndDrag(PointerEventData eventData){
         if (!previewInstance) return;
         SetAlpha(1f);
-        if (!BattleManager.Instance.IsWithinArea(previewInstance.transform.position)){
-            Destroy(previewInstance.gameObject);
-        }else{
+        int deploAreaIndex = BattleManager.Instance.IsWithinArea(previewInstance.transform.position);
+        if (deploAreaIndex != -1){
             GetNavMeshPosition(previewInstance.transform.position, 1.0f, out Vector3 finalPos);
             previewInstance.transform.position = finalPos;
             BattleManager.Instance.AddHero(previewInstance);
-            previewInstance.Deploy();
+            previewInstance.Deploy(deploAreaIndex);
             Destroy(this.gameObject);
+        }else{
+            Destroy(previewInstance.gameObject);
         }
     }
 

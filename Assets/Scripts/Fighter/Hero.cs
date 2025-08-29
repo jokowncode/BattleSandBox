@@ -14,7 +14,8 @@ public class Hero : Fighter{
 
     public SpriteRenderer HeroRenderer{ get; private set; }
     public int HeroAvailablePassiveEntrySortCode { get; private set; }
-    
+    public int DeployAreaIndex { get; private set; }
+
     protected override void Awake(){
         base.Awake();
         PassiveEntries = new List<PassiveEntry>();
@@ -32,7 +33,8 @@ public class Hero : Fighter{
         this.Move.Agent.enabled = false;
     }
 
-    public void Deploy(){
+    public void Deploy(int deployAreaIndex) {
+        this.DeployAreaIndex = deployAreaIndex;
         this.Move.Agent.enabled = true;
         if(DeployHeroSfx)
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, DeployHeroSfx);

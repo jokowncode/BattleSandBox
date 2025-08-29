@@ -22,8 +22,9 @@ public class BattleManager : StateMachineController{
     [field: SerializeField] public Button ReturnButton{ get; private set; }
 
     [Header("Deploy Place Settings")] 
-    [SerializeField] private BoxCollider HeroDeployPlaceArea;
-
+    [SerializeField] private HeroDeployAreaData[] HeroDeployPlaceArea;
+    private int[] DeployAreaCurrentHeroCount;
+    
     private Dictionary<Hero, PassiveEntry> Skills1InBattle;
     private Dictionary<Hero, PassiveEntry> Skills2InBattle;
 
@@ -59,6 +60,19 @@ public class BattleManager : StateMachineController{
         Prepare = GetComponent<PrepareState>();
         Skills1InBattle = new Dictionary<Hero, PassiveEntry>();
         Skills2InBattle = new Dictionary<Hero, PassiveEntry>();
+
+        if (this.HeroDeployPlaceArea != null && this.HeroDeployPlaceArea.Length != 0) {
+            this.DeployAreaCurrentHeroCount = new int[this.HeroDeployPlaceArea.Length];    
+        }
+        
+        // For Scene Already Exist Hero
+        if (this.HeroParent.childCount != 0) {
+            foreach (Transform child in this.HeroParent.transform) {
+                if (child.TryGetComponent(out Hero hero)) {
+                    this.HeroesInBattle.Add(hero);
+                }
+            }
+        }
     }
 
     private void Start(){
@@ -92,7 +106,7 @@ public class BattleManager : StateMachineController{
         foreach (EnemyDepartmentData data in departmentAreaData){
             Enemy enemy = Instantiate(data.EnemyPrefab, this.EnemyParent);
             GetNavMeshPosition(data.Position, 1.0f, out Vector3 finalPos);
-            enemy.transform.position = finalPos;
+            enemy.Deploy(finalPos);
             this.EnemiesInBattle.Add(enemy);
         }
     }
@@ -102,7 +116,11 @@ public class BattleManager : StateMachineController{
             PlayErrorSfx();
             return;
         }
-        this.HeroDeployPlaceArea.gameObject.SetActive(false);
+
+        foreach (HeroDeployAreaData area in this.HeroDeployPlaceArea) {
+            area.DeployArea.gameObject.SetActive(false);    
+        }
+        
         ChangeState(GetComponent<InBattleState>());
 #if DEBUG_MODE
         this.BattleStartTime = Time.time;
@@ -118,8 +136,15 @@ public class BattleManager : StateMachineController{
         HeroesInBattle.Add(hero);
     }
     
-    public bool IsWithinArea(Vector3 targetPos){
-        return this.HeroDeployPlaceArea.bounds.Contains(targetPos);
+    public int IsWithinArea(Vector3 targetPos) {
+        for (int i = 0; i < HeroDeployPlaceArea.Length; i++) {
+            HeroDeployAreaData areaData = HeroDeployPlaceArea[i];
+            if (areaData.DeployArea.bounds.Contains(targetPos) && this.DeployAreaCurrentHeroCount[i] < areaData.MaxHeroCount) {
+                this.DeployAreaCurrentHeroCount[i]++;
+                return i;
+            }
+        }
+        return -1;
     }
     
     protected override void Update(){
@@ -161,6 +186,7 @@ public class BattleManager : StateMachineController{
     /// </summary>
     public void RecallSelectedHero() {
         if (!selectedHero) return;
+        this.DeployAreaCurrentHeroCount[selectedHero.DeployAreaIndex]--;
         RemovePassiveEntry();
         BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.name);
         this.RemoveHero(selectedHero);
