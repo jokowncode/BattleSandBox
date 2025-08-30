@@ -41,6 +41,8 @@ public class BattleManager : StateMachineController{
     private Hero selectedHero;
     private PrepareState Prepare;
 
+    public bool IsBattleStart { get; private set; }
+
     [field: SerializeField] public BattleData Data { get; private set; }
     // TODO: Link Scene
     // public BattleData Data{ get; private set; }
@@ -117,6 +119,7 @@ public class BattleManager : StateMachineController{
             return;
         }
 
+        IsBattleStart = true;
         foreach (HeroDeployAreaData area in this.HeroDeployPlaceArea) {
             area.DeployArea.gameObject.SetActive(false);    
         }
