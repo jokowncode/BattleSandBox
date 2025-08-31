@@ -39,7 +39,6 @@ public class Fighter : StateMachineController{
     public bool IsDead{ get; private set; }
 
     public Action OnDead;
-    private bool IsBattleStart;
     
 #if DEBUG_MODE
     public float TotalDamage {get; set;}    
@@ -53,7 +52,6 @@ public class Fighter : StateMachineController{
         this.AnimationEvent = GetComponentInChildren<FighterAnimationEvent>();
         this.Move = GetComponent<FighterMove>();
         this.Renderer = GetComponentInChildren<FighterRenderer>();
-        this.Renderer.OnInView += OnInView;
         
         this.FighterPatrol = GetComponent<PatrolState>();
         this.FighterSkill = GetComponent<SkillState>();
@@ -65,10 +63,6 @@ public class Fighter : StateMachineController{
         this.InitialData.Shield = 0;
     }
 
-    private void OnInView() {
-        if (IsBattleStart) BattleStart();
-    }
-
     protected virtual void Start(){
         if (this.FighterSkillCaster){
             this.SkillNameText.SetSkillName(this.FighterSkillCaster.Data.Name);
@@ -76,9 +70,6 @@ public class Fighter : StateMachineController{
     }
 
     public void BattleStart() {
-        IsBattleStart = true;
-        if (!Renderer.IsInView) return;
-
         // Turn To Patrol State / Skill State
         if (FighterSkillCaster) {
             FighterSkillCaster.BattleStart();

@@ -14,17 +14,9 @@ public class FighterRenderer : MonoBehaviour{
     private bool IsChangeColor = false;
     private bool IsFlashing = false;
     private bool IsDead = false;
-
-    public bool IsInView { get; private set; }
-    public Action OnInView;
     
     private void Awake(){
         Renderer = GetComponent<SpriteRenderer>();
-    }
-
-    private void OnBecameVisible() {
-        IsInView = true;
-        OnInView?.Invoke();
     }
 
     public void ChangeColor(Color color){
