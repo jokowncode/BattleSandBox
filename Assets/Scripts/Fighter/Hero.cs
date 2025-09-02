@@ -15,6 +15,7 @@ public class Hero : Fighter{
     public SpriteRenderer HeroRenderer{ get; private set; }
     public int HeroAvailablePassiveEntrySortCode { get; private set; }
     public int DeployAreaIndex { get; private set; }
+    public Vector3 StartPosition { get; private set; }
 
     protected override void Awake(){
         base.Awake();
@@ -34,6 +35,7 @@ public class Hero : Fighter{
     }
 
     public void Deploy(int deployAreaIndex) {
+        this.StartPosition = this.transform.position;
         this.DeployAreaIndex = deployAreaIndex;
         this.Move.Agent.enabled = true;
         if(DeployHeroSfx)

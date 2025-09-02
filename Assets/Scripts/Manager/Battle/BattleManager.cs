@@ -9,7 +9,7 @@ public class BattleManager : StateMachineController{
 
     public static BattleManager Instance;
 
-    [SerializeField] private Transform EnemyParent;
+    [field: SerializeField] public Transform EnemyParent { get; private set; }
     [SerializeField] private Transform HeroParent;
 
     [SerializeField] private AudioClip ErrorSfx;
@@ -40,12 +40,15 @@ public class BattleManager : StateMachineController{
 
     private Hero selectedHero;
     private PrepareState Prepare;
+    private InBattleState InBattle;
 
     public bool IsBattleStart { get; private set; }
 
     [field: SerializeField] public BattleData Data { get; private set; }
     // TODO: Link Scene
     // public BattleData Data{ get; private set; }
+
+    public Action OnEnemyBeClear;
 
 #if DEBUG_MODE
     public float BattleStartTime {get; private set;}
@@ -60,6 +63,11 @@ public class BattleManager : StateMachineController{
         Instance = this;
         HeroesInBattle = new List<Hero>();
         Prepare = GetComponent<PrepareState>();
+        InBattle = GetComponent<InBattleState>();
+        if (InBattle is CorridorInBattleState corridorInBattle) {
+            corridorInBattle.OnEnemyBeClear += () => OnEnemyBeClear?.Invoke();
+        }
+
         Skills1InBattle = new Dictionary<Hero, PassiveEntry>();
         Skills2InBattle = new Dictionary<Hero, PassiveEntry>();
 
@@ -113,6 +121,14 @@ public class BattleManager : StateMachineController{
         }
     }
 
+    public void AddEnemiesInParent(Transform parent) {
+        foreach (Transform child in parent.transform) {
+            if (child.TryGetComponent(out Enemy enemy)) {
+                this.EnemiesInBattle.Add(enemy);
+            }
+        }
+    }
+
     public void StartBattle(){
         if (this.HeroesInBattle.Count <= 0){
             PlayErrorSfx();
@@ -124,7 +140,7 @@ public class BattleManager : StateMachineController{
             area.DeployArea.gameObject.SetActive(false);    
         }
         
-        ChangeState(GetComponent<InBattleState>());
+        ChangeState(InBattle);
 #if DEBUG_MODE
         this.BattleStartTime = Time.time;
 #endif
@@ -133,17 +149,23 @@ public class BattleManager : StateMachineController{
         OnBattleStart?.Invoke();
     }
 
+    public void BattleVictory() {
+        if (TryGetComponent(out VictoryState victory)) {
+            ChangeState(victory);    
+        }
+    }
+
     public void AddHero(Hero hero){
         hero.transform.parent = this.HeroParent;
+        this.DeployAreaCurrentHeroCount[hero.DeployAreaIndex]++;
         OnHeroEnterTheField?.Invoke(hero);
         HeroesInBattle.Add(hero);
     }
-    
+
     public int IsWithinArea(Vector3 targetPos) {
         for (int i = 0; i < HeroDeployPlaceArea.Length; i++) {
             HeroDeployAreaData areaData = HeroDeployPlaceArea[i];
             if (areaData.DeployArea.bounds.Contains(targetPos) && this.DeployAreaCurrentHeroCount[i] < areaData.MaxHeroCount) {
-                this.DeployAreaCurrentHeroCount[i]++;
                 return i;
             }
         }

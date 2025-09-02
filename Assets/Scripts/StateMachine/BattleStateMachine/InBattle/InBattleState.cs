@@ -1,4 +1,5 @@
 ﻿
+using System;
 using UnityEngine;
 
 public class InBattleState : BattleState{
@@ -25,12 +26,22 @@ public class InBattleState : BattleState{
 
         BattleUIManager.Instance.heroDetailUI.Hide();
         BattleUIManager.Instance.heroWarehouseUI.Hide();
+        
+        InitializeFighters();
+    }
+
+    protected virtual void InitializeFighters() {
+        foreach (Enemy enemy in Controller.EnemiesInBattle){
+            enemy.BattleStart();
+        }
         foreach (Hero hero in Controller.HeroesInBattle) {
             hero.BattleStart();
         }
+    }
 
-        foreach (Enemy enemy in Controller.EnemiesInBattle){
-            enemy.BattleStart();
+    protected virtual void VictoryTransition() {
+        if (Controller.EnemiesInBattle.Count <= 0) {
+            Controller.ChangeState(Victory);  
         }
     }
 
@@ -38,11 +49,9 @@ public class InBattleState : BattleState{
         // Go to Victory or Defeat
         if (Controller.HeroesInBattle.Count <= 0) {
             Controller.ChangeState(Defeat);
+            return;
         }
-
-        if (Controller.EnemiesInBattle.Count <= 0) {
-            Controller.ChangeState(Victory);
-        }
+        VictoryTransition();
     }
 }
 

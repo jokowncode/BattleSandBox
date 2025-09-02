@@ -40,9 +40,9 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
     public void OnDrag(PointerEventData eventData){
         if (!previewInstance) return;
         Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, LayerMask.GetMask("Deploy"))){
-            Vector3 worldPos = hit.point;
-            previewInstance.transform.position = worldPos;
+        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, LayerMask.GetMask("Deploy"))
+            && BattleManager.Instance.IsWithinArea(hit.point) != -1){
+            previewInstance.transform.position = hit.point;
         }
     }
 

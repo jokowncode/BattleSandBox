@@ -52,7 +52,7 @@ public class Fighter : StateMachineController{
         this.AnimationEvent = GetComponentInChildren<FighterAnimationEvent>();
         this.Move = GetComponent<FighterMove>();
         this.Renderer = GetComponentInChildren<FighterRenderer>();
-        
+
         this.FighterPatrol = GetComponent<PatrolState>();
         this.FighterSkill = GetComponent<SkillState>();
         // Clone Fighter Data to Update
@@ -109,6 +109,11 @@ public class Fighter : StateMachineController{
         this.FighterAnimator.SetTrigger(AnimationParams.Idle);
         this.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
         this.ChangeState(null);
+
+        // TODO: Temp
+        if (this.FighterSkillCaster is SummonSkillCaster summonSkill) {
+            summonSkill.ClearPet();
+        }
     }
 
     public void BeDamaged(EffectData effectData){

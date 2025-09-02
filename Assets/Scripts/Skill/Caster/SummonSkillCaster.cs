@@ -68,6 +68,15 @@ public class SummonSkillCaster : SkillCaster{
         }
     }
 
+    public void ClearPet() {
+        if (this.SummonPets.Count != 0){
+            foreach (Fighter pet in SummonPets){
+                if(pet) Destroy(pet.gameObject);
+            }
+            this.SummonPets.Clear();
+        }
+    }
+
     public override bool CanCastSkill(){
         return base.CanCastSkill() && this.SummonPets.Count < MaxSummonCount;
     }

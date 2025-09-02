@@ -38,7 +38,9 @@ public class SkillNameUI : MonoBehaviour{
     public void Hide(bool immediate = false){
         // this.gameObject.SetActive(false);
         if (!this.gameObject.activeInHierarchy) return;
-        if (immediate) this.SkillNameCanvasGroup.alpha = 0.0f;
-        else StartCoroutine(FadeCoroutine(0.0f, this.FadeDuration));
+        if (immediate) {
+            StopAllCoroutines();
+            this.SkillNameCanvasGroup.alpha = 0.0f;
+        } else StartCoroutine(FadeCoroutine(0.0f, this.FadeDuration));
     }
 }

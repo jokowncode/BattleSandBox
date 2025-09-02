@@ -40,5 +40,9 @@ public class SkillState : FighterState {
         Controller.FighterAnimator.SetTrigger(AnimationParams.Skill);
         Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
     }
+
+    public override void Destruct() {
+        Controller.SkillNameText.Hide(true);
+    }
 }
 

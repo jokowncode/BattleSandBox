@@ -13,6 +13,10 @@ public class FighterMove : MonoBehaviour{
     private NavMeshObstacle Obstacle;
 
     private bool CanMove = true;
+    private Vector3 CurrentTargetPos;
+    private bool IsArrive = false;
+
+    public Action<Fighter> OnArriveDestination;
     
     private void Awake(){
         Owner = GetComponent<Fighter>();
@@ -56,6 +60,8 @@ public class FighterMove : MonoBehaviour{
         
         //this.transform.position += Owner.Speed * Time.deltaTime * velocityDir;
         // Vector3 randomPos = GenerateRandomPoint(targetPos, this.Owner.AttackRadius);
+        IsArrive = false;
+        CurrentTargetPos = targetPos;
         Agent.SetDestination(targetPos);
     }
 
@@ -70,7 +76,13 @@ public class FighterMove : MonoBehaviour{
     }
 
     private void Update(){
-        if(this.Agent.enabled) ChangeForward(this.Agent.velocity.x);
+        if (this.Agent.enabled) {
+            ChangeForward(this.Agent.velocity.x);
+            if (!IsArrive && (CurrentTargetPos - this.transform.position).sqrMagnitude <= 0.005f) {
+                IsArrive = true;
+                OnArriveDestination?.Invoke(this.Owner);
+            }
+        }
     }
 
     public void StartMove(){
