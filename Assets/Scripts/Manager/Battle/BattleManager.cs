@@ -147,6 +147,45 @@ public class BattleManager : StateMachineController{
         BattleUIManager.Instance.SetHeroPortraitActive(true);
         BattleUIManager.Instance.heroPortraitUI.PushHeros(HeroesInBattle);
         OnBattleStart?.Invoke();
+        SaveHeroPassiveEntry();
+    }
+    
+    private void SaveHeroPassiveEntry() {
+        // TODO: Optimize Speed
+        foreach (Hero hero in this.HeroesInBattle) {
+            List<PassiveEntry> passiveEntries = hero.GetHeroPassiveEntries();
+            if (passiveEntries == null || passiveEntries.Count == 0) continue;
+            string saveContent = passiveEntries[0].Data.Name;
+            for (int i = 1; i < passiveEntries.Count; i++) {
+                saveContent += "|" + passiveEntries[i].Data.Name;
+            }
+
+            string key = hero.Name + "PassiveEntry";
+            if (PlayerPrefs.HasKey(key)) {
+                PlayerPrefs.DeleteKey(key);
+            }
+            PlayerPrefs.SetString(key, saveContent);
+        }
+    }
+
+    public void LoadHeroPassiveEntry(Hero hero) {
+        // TODO: Optimize Speed
+        string result = PlayerPrefs.GetString(hero.Name + "PassiveEntry", "");
+        if (result == "") {
+            return;
+        }
+
+        string[] passiveEntries = result.Split("|");
+        List<PassiveEntry> warehousePassiveEntries = PassiveEntryWarehouseManager.Instance.GetOwnedPassiveEntries();
+
+        foreach (string entryName in passiveEntries) {
+            foreach (PassiveEntry entry in warehousePassiveEntries) {
+                if (entry.Data.Name == entryName) {
+                    AddPassiveEntry(entry);
+                    break;
+                }
+            }
+        }
     }
 
     public void BattleVictory() {
@@ -232,7 +271,7 @@ public class BattleManager : StateMachineController{
         }
 
         if (Skills1InBattle.TryAdd(selectedHero, data)){
-            selectedHero.AddPassiveEntry(data);
+            selectedHero.AddPassiveEntry(data, false);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
             PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data);
@@ -240,7 +279,7 @@ public class BattleManager : StateMachineController{
         }
         
         if (Skills2InBattle.TryAdd(selectedHero, data)){
-            selectedHero.AddPassiveEntry(data);
+            selectedHero.AddPassiveEntry(data, false);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
             PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data);
@@ -266,7 +305,7 @@ public class BattleManager : StateMachineController{
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
         }
         if (Skills1InBattle.Remove(selectedHero, out PassiveEntry removedSkillData)){
-            selectedHero.RemovePassiveEntry(removedSkillData);
+            selectedHero.RemovePassiveEntry(removedSkillData, false);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             RecallSelectedPassiveEntry(removedSkillData);
             UpdatePassiveEntryUI(selectedHero);
@@ -281,7 +320,7 @@ public class BattleManager : StateMachineController{
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
         }
         if (Skills2InBattle.Remove(selectedHero, out PassiveEntry removedSkillData)){
-            selectedHero.RemovePassiveEntry(removedSkillData);
+            selectedHero.RemovePassiveEntry(removedSkillData, false);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             RecallSelectedPassiveEntry(removedSkillData);
             UpdatePassiveEntryUI(selectedHero);

@@ -39,6 +39,7 @@ public class Fighter : StateMachineController{
     public bool IsDead{ get; private set; }
 
     public Action OnDead;
+    private float BattleStartHealth;
     
 #if DEBUG_MODE
     public float TotalDamage {get; set;}    
@@ -235,7 +236,12 @@ public class Fighter : StateMachineController{
         }
 
         if (property == FighterProperty.Health) {
-            currentValue = Mathf.Max(Mathf.Min(currentValue, this.InitialData.Health), 0.0f);
+            currentValue = Mathf.Max(currentValue, 0.0f);
+            if (BattleManager.Instance.IsBattleStart) {
+                currentValue = Mathf.Min(currentValue, this.BattleStartHealth);
+            } else {
+                this.BattleStartHealth = currentValue;
+            }
             if (currentValue <= 0.0f && !IsDead) {
                 FighterDead();
             }

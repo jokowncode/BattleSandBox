@@ -10,8 +10,9 @@ public class Hero : Fighter{
     [SerializeField] private AudioClip DeployHeroSfx;
     [SerializeField] private PassiveEntry[] HeroSelfPassiveEntries;
 
-    private List<PassiveEntry> PassiveEntries;
-
+    private List<PassiveEntry> EquipPassiveEntries;
+    private List<PassiveEntry> SelfPassiveEntries;
+    
     public SpriteRenderer HeroRenderer{ get; private set; }
     public int HeroAvailablePassiveEntrySortCode { get; private set; }
     public int DeployAreaIndex { get; private set; }
@@ -19,7 +20,8 @@ public class Hero : Fighter{
 
     protected override void Awake(){
         base.Awake();
-        PassiveEntries = new List<PassiveEntry>();
+        EquipPassiveEntries = new List<PassiveEntry>();
+        SelfPassiveEntries = new List<PassiveEntry>();
         HeroRenderer = GetComponentInChildren<SpriteRenderer>();
 
         if (this.FighterSkillCaster) {
@@ -27,6 +29,10 @@ public class Hero : Fighter{
                 (int)PassiveEntrySort.General | (int)PassiveEntrySort.Talent | (int)this.FighterSkillCaster.Sort;
         }
         
+    }
+
+    public List<PassiveEntry> GetHeroPassiveEntries() {
+        return this.EquipPassiveEntries;
     }
 
     protected override void Start(){
@@ -43,29 +49,42 @@ public class Hero : Fighter{
 
         if (HeroSelfPassiveEntries.Length != 0){
             foreach (PassiveEntry entry in HeroSelfPassiveEntries) {
-                AddPassiveEntry(entry);
+                AddPassiveEntry(entry, true);
             }
         }
         BattleManager.Instance.ShowHeroDetail(this);
+        BattleManager.Instance.LoadHeroPassiveEntry(this);
     }
 
     public void Undress(){
-        for (int i = 0; i < PassiveEntries.Count; ) {
-            RemovePassiveEntry(PassiveEntries[i]);
+        for (int i = 0; i < EquipPassiveEntries.Count; ) {
+            RemovePassiveEntry(EquipPassiveEntries[i], false);
+        }
+        for (int i = 0; i < SelfPassiveEntries.Count; ) {
+            RemovePassiveEntry(SelfPassiveEntries[i], true);
         }
     }
 
-    public void AddPassiveEntry(PassiveEntry entry){
+    public void AddPassiveEntry(PassiveEntry entry, bool isSelfOwned){
         if (!entry) return;
         PassiveEntry passiveEntry = Instantiate(entry, this.transform);
-        PassiveEntries.Add(passiveEntry);
+        if (isSelfOwned) {
+            SelfPassiveEntries.Add(passiveEntry);
+        } else {
+            EquipPassiveEntries.Add(passiveEntry);
+        }
         passiveEntry.Construct(this);
     }
 
-    public void RemovePassiveEntry(PassiveEntry removeEntry){
+    public void RemovePassiveEntry(PassiveEntry removeEntry, bool isSelfOwned){
         if (!removeEntry) return;
         removeEntry.Destruct(this);
-        PassiveEntries.Remove(removeEntry);
+
+        if (isSelfOwned) {
+            SelfPassiveEntries.Remove(removeEntry);
+        } else {
+            EquipPassiveEntries.Remove(removeEntry);
+        }
     }
 
     public string GetPassiveEntryDesc(){
