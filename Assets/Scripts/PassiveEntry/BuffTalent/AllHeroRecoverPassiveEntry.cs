@@ -29,20 +29,15 @@ public class AllHeroRecoverPassiveEntry : PassiveEntry {
 
     private void OnBattleStart() {
         // 场上每存在一名牧师，所有单位每秒回复5点*N的生命值
-        RecoverBuff.changedValue = this.TargetFighterCount * RecoverMultiplier;
+        RecoverBuff.ChangedValue = this.TargetFighterCount * RecoverMultiplier;
         BuffData buffData = ScriptableObject.CreateInstance<BuffData>();
-        buffData.longTimeEffectBuff = new List<BuffMiniData> { RecoverBuff };
-        buffData.immediateEffectBuff = new List<BuffMiniData>();
-        buffData.lastEffectBuff = new List<BuffMiniData>();
-        buffData.duration = -1.0f;
+        buffData.LongTimeEffectBuff = new List<BuffMiniData> { RecoverBuff };
+        buffData.ImmediateEffectBuff = new List<BuffMiniData>();
+        buffData.LastEffectBuff = new List<BuffData>();
+        buffData.Duration = -1.0f;
 
         foreach(Hero hero in BattleManager.Instance.HeroesInBattle) {
-            if (!hero.TryGetComponent(out Buff buff)) {
-                buff = hero.AddComponent<Buff>();
-            }
-            if(tickEffectPrefab!=null)
-                buff.tickEffectPrefab = tickEffectPrefab;
-            buff.AddBuff(this.OwnedHero, hero, buffData);
+            BuffManager.Instance.AddBuff(this.OwnedHero, hero, buffData);
         }
     }
 

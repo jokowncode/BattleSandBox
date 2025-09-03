@@ -1,7 +1,6 @@
 ﻿
 using UnityEngine;
 
-[RequireComponent(typeof(Buff))]
 public class TransportSkillCaster : SkillCaster {
     
     [SerializeField] private BuffData BuffData;
@@ -42,6 +41,6 @@ public class TransportSkillCaster : SkillCaster {
             Destroy(ps.gameObject, ps.main.duration + ps.main.startLifetime.constantMax);
         }
         
-        if(BuffData) this.GetComponent<Buff>().AddBuff(this.OwnedFighter,this.OwnedFighter,BuffData);
+        if(BuffData) BuffManager.Instance.AddBuff(this.OwnedFighter,this.OwnedFighter,BuffData);
     }
 }

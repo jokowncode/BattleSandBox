@@ -9,6 +9,7 @@ public enum FighterProperty{
     HealMultiplier,
     ShieldMultiplier,
     Shield,
-    Speed
+    Speed,
+    Attack
 }
 

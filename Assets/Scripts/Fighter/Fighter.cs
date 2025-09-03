@@ -39,7 +39,9 @@ public class Fighter : StateMachineController{
     public bool IsDead{ get; private set; }
 
     public Action OnDead;
-    private float BattleStartHealth;
+
+    private float InBattleHealth;
+    private float InBattleShield;
     
 #if DEBUG_MODE
     public float TotalDamage {get; set;}    
@@ -60,8 +62,6 @@ public class Fighter : StateMachineController{
         this.CurrentData = Instantiate(this.InitialData);
         this.CurrentFighterType = this.gameObject.layer == LayerMask.NameToLayer("Hero") ? TargetType.Hero : TargetType.Enemy;
         this.BloodBarImage.color = InitialColor;
-        this.CurrentData.Shield = 0;
-        this.InitialData.Shield = 0;
     }
 
     protected virtual void Start(){
@@ -83,6 +83,7 @@ public class Fighter : StateMachineController{
         }
         if(FighterPatrol) FighterPatrol.OnFindAttackTarget += OnFindAttackTarget;
         if (SkillNameText) SkillNameText.Hide(true);
+        this.InBattleHealth = this.CurrentData.Health;
     }
 
     private void OnFindAttackTarget(Fighter target){
@@ -119,25 +120,28 @@ public class Fighter : StateMachineController{
 
     public void BeDamaged(EffectData effectData){
         if (IsDead) return;
-        
-        float finalHealthValue = effectData.Value;
-        if (Shield > 0) {
-            finalHealthValue = Mathf.Max(0,effectData.Value - Shield);
-            Shield = Mathf.Max(0,Shield - effectData.Value);
-            if (Shield <= 0){
-                this.GetComponent<Buff>()?.DestroyShieldParticles();
-            }
+
+        float finalDamage = effectData.Value;
+        if (this.InBattleShield > 0.0f) {
+            finalDamage = Mathf.Max(0, effectData.Value - this.InBattleShield);
+            this.InBattleShield = Mathf.Max(0, this.InBattleShield - effectData.Value);
+            if (this.InBattleShield <= 0){
+                foreach (Transform child in this.transform) {
+                    if (child.CompareTag("Shield")) {
+                        Destroy(child.gameObject);
+                        break;
+                    }
+                }
+            }    
         }
         
-        ShowDamage(finalHealthValue, effectData.IsCritical);
-        this.CurrentData.Health = Mathf.Max(0.0f, this.CurrentData.Health - finalHealthValue);
-        //Debug.Log(this.name + "curHp: " +this.CurrentData.Health + "changedHp:" +finalHealthValue);
-        this.BloodBarImage.fillAmount = this.InitialData.Health == 0.0f ? 0.0f : this.CurrentData.Health / this.InitialData.Health;
-        this.BloodBarImage.color = Color.Lerp(this.InitialColor, this.FinalColor, 1.0f - this.BloodBarImage.fillAmount);
+        ShowDamage(finalDamage, effectData.IsCritical);
         
+        this.InBattleHealth = Mathf.Min(this.CurrentData.Health, this.InBattleHealth - finalDamage);
+        UpdateBloodBar();
         
-        if(this.ShieldBarImage){
-            this.ShieldBarImage.fillAmount = this.InitialData.Shield == 0.0f ? 0.0f : this.CurrentData.Shield / this.InitialData.Shield;
+        if (this.ShieldBarImage) {
+            UpdateShieldBar();
         }
         
         if(this.BloodParticle) this.BloodParticle.Play();
@@ -155,7 +159,7 @@ public class Fighter : StateMachineController{
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.BeDamagedSfx);
         }
         
-        if (this.CurrentData.Health <= 0.0f && !IsDead) {
+        if (this.InBattleHealth <= 0.0f && !IsDead) {
             FighterDead();
         }
     }
@@ -187,15 +191,27 @@ public class Fighter : StateMachineController{
             ParticleSystem healParticle = Instantiate(this.HealParticlePrefab, this.transform.position, Quaternion.identity);
             Destroy(healParticle.gameObject, 0.7f);
         }
-        this.CurrentData.Health = Mathf.Min(this.InitialData.Health, this.CurrentData.Health + effectData.Value);
-        this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
+        
+        this.InBattleHealth = Mathf.Min(this.CurrentData.Health, this.InBattleHealth + effectData.Value);
+        UpdateBloodBar();
     }
-    
-    public void FighterPropertyChange(FighterProperty property, PropertyModifyWay modifyWay, float value, bool isUp){
+
+    private void UpdateBloodBar() {
+        this.BloodBarImage.fillAmount = this.CurrentData.Health == 0.0f ? 0.0f : this.InBattleHealth / this.CurrentData.Health;
+        this.BloodBarImage.color = Color.Lerp(this.InitialColor, this.FinalColor, 1.0f - this.BloodBarImage.fillAmount);
+    }
+
+    private void UpdateShieldBar() {
+        this.ShieldBarImage.fillAmount = this.CurrentData.Shield == 0.0f ? 0.0f : this.InBattleShield / this.CurrentData.Shield;
+    }
+
+    public void FighterPropertyChange(FighterProperty updateProperty, FighterProperty refProperty,
+        PropertyModifyWay modifyWay, float value, bool isUp, 
+        Fighter refFighter = null){
 
         float sign = isUp ? 1.0f : -1.0f;
         // TODO: Change Speed
-        if (property == FighterProperty.Speed) {
+        if (updateProperty == FighterProperty.Speed) {
             if(value < 0.0f) this.Move.StopMove();
             else this.Move.StartMove();
             //Debug.Log("Speed"+value);
@@ -203,83 +219,58 @@ public class Fighter : StateMachineController{
         }
         
         
-        if (property == FighterProperty.HealMultiplier) {
+        if (updateProperty == FighterProperty.HealMultiplier) {
             float percentage = value / 100.0f;
             this.HealMultiplier += sign * percentage;
             return;
         }
         
-        if (property == FighterProperty.ShieldMultiplier) {
+        if (updateProperty == FighterProperty.ShieldMultiplier) {
             float percentage = value / 100.0f;
             this.ShieldMultiplier += sign * percentage;
             return;
         }
         
-        if (property == FighterProperty.CooldownPercentage){
+        if (updateProperty == FighterProperty.CooldownPercentage){
             float currentMultiplier = FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
             float percentage = value / 100.0f;
             FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, currentMultiplier + sign * percentage);
             return;
         }
 
-        string propertyName = property.ToString();
+        string propertyName = updateProperty.ToString();
         float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, this);
+        currentValue += GetPropertyChangeValue(refProperty, modifyWay, value, isUp, refFighter);
+
+        if (updateProperty == FighterProperty.Shield) {
+            currentValue *= this.ShieldMultiplier;
+        }
+        ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
+        if (updateProperty == FighterProperty.Shield) {
+            this.InBattleShield = currentValue <= 0.0f ? 0.0f : Mathf.Min(this.InBattleShield, currentValue);
+            UpdateShieldBar();
+        }
+
+        if (updateProperty == FighterProperty.Health) {
+            this.InBattleHealth = currentValue <= 0.0f ? 0.0f : Mathf.Min(this.InBattleHealth, currentValue);
+            UpdateBloodBar();
+        }
+    }
+
+    public float GetPropertyChangeValue(FighterProperty refProperty, PropertyModifyWay modifyWay, float value, bool isUp, Fighter refFighter) {
+        float sign = isUp ? 1.0f : -1.0f;
         switch (modifyWay){
             case PropertyModifyWay.Value:
-                currentValue += sign * value;
-                break;
+                return sign * value;
             case PropertyModifyWay.Percentage:
                 float percentage = value / 100.0f;
-                float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+propertyName, this);
-                currentValue += sign * initialValue * percentage;
-                break;
+                
+                Fighter reference = refFighter ? refFighter : this;
+                string refPropertyName = refProperty.ToString();
+                float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+refPropertyName, reference);
+                return sign * initialValue * percentage;
         }
-
-        if (property == FighterProperty.Health) {
-            currentValue = Mathf.Max(currentValue, 0.0f);
-            if (BattleManager.Instance.IsBattleStart) {
-                currentValue = Mathf.Min(currentValue, this.BattleStartHealth);
-            } else {
-                this.BattleStartHealth = currentValue;
-            }
-            if (currentValue <= 0.0f && !IsDead) {
-                FighterDead();
-            }
-        }
-
-        ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
-        // Debug.Log(propertyName + currentValue);
-    }
-    
-    public float GetPropertyData(FighterProperty property){
-        if (property == FighterProperty.HealMultiplier) {
-            return this.HealMultiplier;
-        }
-
-        if (property == FighterProperty.ShieldMultiplier) {
-            return this.ShieldMultiplier;
-        }
-
-        if (property == FighterProperty.CooldownPercentage){
-            return FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
-        }
-
-        string propertyName = property.ToString();
-        return ReflectionTools.GetObjectProperty<float>("Initial"+propertyName, this);
-    }
-
-    public void UpdateShieldAmount()
-    {
-        this.ShieldBarImage.fillAmount = this.CurrentData.Shield / this.InitialData.Shield;
-        // Debug.Log(this.ShieldBarImage.fillAmount);
-        // Debug.Log(this.CurrentData.Shield);
-    }
-    
-    public void UpdateBloodAmount()
-    {
-        this.BloodBarImage.fillAmount = this.CurrentData.Health / this.InitialData.Health;
-        // Debug.Log(this.BloodBarImage.fillAmount);
-        // Debug.Log(this.CurrentData.Health);
+        return -1;
     }
 
     #region FighterProperty
@@ -309,6 +300,14 @@ public class Fighter : StateMachineController{
         get => InitialData.Shield;
         set => InitialData.Shield=value;
     }
+    
+    public float InitialAttack {
+        get => Type == FighterType.Warrior ? InitialData.PhysicsAttack : InitialData.MagicAttack;
+        set {
+            if (Type == FighterType.Warrior) InitialData.PhysicsAttack = value;
+            else InitialData.MagicAttack = value;
+        }
+    }
 
     // Runtime Property
     public float Health{ 
@@ -323,6 +322,15 @@ public class Fighter : StateMachineController{
         get => CurrentData.MagicAttack;
         set => CurrentData.MagicAttack=value;
     }
+
+    public float Attack {
+        get => Type == FighterType.Warrior ? CurrentData.PhysicsAttack : CurrentData.MagicAttack;
+        set {
+            if (Type == FighterType.Warrior) CurrentData.PhysicsAttack = value;
+            else CurrentData.MagicAttack = value;
+        }
+    }
+
     public float Critical{ 
         get => CurrentData.Critical;
         set => CurrentData.Critical=value;

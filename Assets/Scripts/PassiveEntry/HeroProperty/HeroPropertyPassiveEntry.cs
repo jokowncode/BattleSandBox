@@ -15,11 +15,11 @@ public class HeroPropertyPassiveEntry : PassiveEntry{
     }
 
     public override void Construct(Hero hero){
-        hero.FighterPropertyChange(this.Property, this.ModifyWay, this.Value, true);
+        hero.FighterPropertyChange(this.Property, Property, this.ModifyWay, this.Value, true);
     }
 
     public override void Destruct(Hero hero){
-        hero.FighterPropertyChange(this.Property, this.ModifyWay, this.Value, false);
+        hero.FighterPropertyChange(this.Property, Property, this.ModifyWay, this.Value, false);
     }
     
 }
