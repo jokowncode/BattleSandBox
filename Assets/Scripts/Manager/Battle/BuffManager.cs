@@ -44,7 +44,7 @@ public class BuffManager : MonoBehaviour {
                     float changeValue = ApplyBuff(caster, target, data, true, particles, buffChangeProperty);
                     longTimeBuffChangeValue.Add(data, changeValue);
                 } else {
-                    ApplyBuff(data, target, longTimeBuffChangeValue[data], false, particles);
+                    ApplyBuff(data, target, longTimeBuffChangeValue[data], false, particles, buffChangeProperty);
                 }
             }
             yield return wait;
@@ -77,12 +77,16 @@ public class BuffManager : MonoBehaviour {
         }
     }
 
-    private void ApplyBuff(BuffMiniData data, Fighter target, float changeValue, bool isFirstTime, List<GameObject> particles) {
+    private void ApplyBuff(BuffMiniData data, Fighter target, float changeValue, bool isFirstTime,
+        List<GameObject> particles, Dictionary<FighterProperty, float> record) {
         ApplyParticle(data, target, isFirstTime, particles);
         
         if (data.TargetUpdateProperty != FighterProperty.Health || data.IsChangeProperty) {
             target.FighterPropertyChange(data.TargetUpdateProperty, data.TargetUpdateProperty, 
                 PropertyModifyWay.Value, data.PropertyRef, changeValue, true);
+            if (!record.TryAdd(data.TargetUpdateProperty, changeValue)) {
+                record[data.TargetUpdateProperty] += changeValue;
+            }
             return;
         }
         
