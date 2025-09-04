@@ -43,7 +43,7 @@ public class BuffManager : MonoBehaviour {
         
         // Remove Property Change
         foreach (KeyValuePair<FighterProperty, float> pair in immediateBuffChangeValue) {
-            target.FighterPropertyChange(pair.Key, pair.Key, PropertyModifyWay.Value, pair.Value, false);
+            target.FighterPropertyChange(pair.Key, pair.Key, PropertyModifyWay.Value, PropertyRef.Initial, pair.Value, false);
         }
         
         // Remove Particle
@@ -73,14 +73,14 @@ public class BuffManager : MonoBehaviour {
         Fighter refFighter = data.Ref == BuffRef.Caster ? caster : target;
         FighterProperty refProperty = data.Ref == BuffRef.Caster ? data.CasterProperty : data.TargetRefProperty;
         if (data.TargetUpdateProperty != FighterProperty.Health || data.IsChangeProperty) {
-            float changeValue = target.FighterPropertyChange(data.TargetUpdateProperty, refProperty, data.ModifyWay, data.ChangedValue, true, refFighter);
+            float changeValue = target.FighterPropertyChange(data.TargetUpdateProperty, refProperty, data.ModifyWay, data.PropertyRef, data.ChangedValue, true, refFighter);
             if (!record.TryAdd(data.TargetUpdateProperty, changeValue)) {
                 record[data.TargetUpdateProperty] += changeValue;
             }
             return;
         }
         
-        float value = target.GetPropertyChangeValue(refProperty, data.ModifyWay, data.ChangedValue, true, refFighter);
+        float value = target.GetPropertyChangeValue(refProperty, data.ModifyWay, data.PropertyRef, data.ChangedValue, true, refFighter);
         EffectData effect = new EffectData {
             Value = Mathf.Abs(value),
             IsCritical = false

@@ -36,11 +36,11 @@ public class HeroPropertyByFighterTypeCountPassiveEntry : PassiveEntry {
     }
 
     private void HeroPropertyChangeUp(Hero currentHero){
-        currentHero.FighterPropertyChange(Property, Property, ModifyWay, CurrentChangeValue, true);
+        currentHero.FighterPropertyChange(Property, Property, ModifyWay, PropertyRef.Initial, CurrentChangeValue, true);
     }
     
     private void HeroPropertyChangeDown(Hero currentHero){
-        currentHero.FighterPropertyChange(Property, Property, ModifyWay, CurrentChangeValue, false);
+        currentHero.FighterPropertyChange(Property, Property, ModifyWay, PropertyRef.Initial, CurrentChangeValue, false);
     }
 
     private void OnHeroEnterField(Hero hero){

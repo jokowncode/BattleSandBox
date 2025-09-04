@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewBuff", menuName = "PhantomSpirit/BuffData")]
+[CreateAssetMenu(fileName = "NewBuff", menuName = "PhantomSpirit/Buff/BuffData")]
 public class BuffData : ScriptableObject {
     [Header("时间设置")]
     public float Duration = 5f;       // Buff持续时间 （-1表示不限时间）

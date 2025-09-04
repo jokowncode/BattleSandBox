@@ -43,7 +43,7 @@ public class Fighter : StateMachineController{
     private float InBattleHealth;
     private float InBattleShield;
 
-    private bool IsAlreadyStart;
+    private bool IsBattleStart;
     
 #if DEBUG_MODE
     public float TotalDamage {get; set;}    
@@ -86,8 +86,8 @@ public class Fighter : StateMachineController{
         if(FighterPatrol) FighterPatrol.OnFindAttackTarget += OnFindAttackTarget;
         if (SkillNameText) SkillNameText.Hide(true);
 
-        if (!IsAlreadyStart) {
-            IsAlreadyStart = true;
+        if (!IsBattleStart) {
+            IsBattleStart = true;
             this.InBattleHealth = this.CurrentData.Health;
             this.InBattleShield = this.CurrentData.Shield;
         }
@@ -212,13 +212,13 @@ public class Fighter : StateMachineController{
     }
 
     public float FighterPropertyChange(FighterProperty updateProperty, FighterProperty refProperty,
-        PropertyModifyWay modifyWay, float value, bool isUp, 
+        PropertyModifyWay modifyWay, PropertyRef propertyRef, float value, bool isUp, 
         Fighter refFighter = null){
 
         float sign = isUp ? 1.0f : -1.0f;
         // TODO: Change Speed
         if (updateProperty == FighterProperty.Speed) {
-            if(value < 0.0f) this.Move.StopMove();
+            if(sign * value < 0.0f) this.Move.StopMove();
             else this.Move.StartMove();
             //Debug.Log("Speed"+value);
             return value;
@@ -248,35 +248,37 @@ public class Fighter : StateMachineController{
 
         string propertyName = updateProperty.ToString();
         float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, this);
-        float changeValue =  GetPropertyChangeValue(refProperty, modifyWay, value, isUp, refFighter);
-        float increasePercentage = changeValue / currentValue;
+        float changeValue =  GetPropertyChangeValue(refProperty, modifyWay, propertyRef, value, isUp, refFighter);
+        float increasePercentage = currentValue == 0.0f ? -1.0f : changeValue / currentValue;
         if (updateProperty == FighterProperty.Shield) {
             changeValue *= this.ShieldMultiplier;
         }
         currentValue += changeValue;
         
         ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
-        if (updateProperty == FighterProperty.Shield) {
+        if (updateProperty == FighterProperty.Shield && IsBattleStart) {
             if (currentValue <= 0.0f) {
                 this.InBattleShield = 0.0f;
             } else {
-                this.InBattleShield += this.InBattleShield * increasePercentage;
+                this.InBattleShield = increasePercentage > 0.0f ? 
+                    this.InBattleShield + this.InBattleShield * increasePercentage : changeValue;
             }
             UpdateShieldBar();
         }
 
-        if (updateProperty == FighterProperty.Health) {
+        if (updateProperty == FighterProperty.Health && IsBattleStart) {
             if (currentValue <= 0.0f) {
                 this.InBattleHealth = 0.0f;
             } else {
-                this.InBattleHealth += this.InBattleHealth * increasePercentage;
+                this.InBattleHealth = increasePercentage > 0.0f ? 
+                    this.InBattleHealth + this.InBattleHealth * increasePercentage : changeValue;
             }
             UpdateBloodBar();
         }
         return changeValue;
     }
 
-    public float GetPropertyChangeValue(FighterProperty refProperty, PropertyModifyWay modifyWay, float value, bool isUp, Fighter refFighter) {
+    public float GetPropertyChangeValue(FighterProperty refProperty, PropertyModifyWay modifyWay, PropertyRef propertyRef, float value, bool isUp, Fighter refFighter) {
         float sign = isUp ? 1.0f : -1.0f;
         switch (modifyWay){
             case PropertyModifyWay.Value:
@@ -286,7 +288,8 @@ public class Fighter : StateMachineController{
                 
                 Fighter reference = refFighter ? refFighter : this;
                 string refPropertyName = refProperty.ToString();
-                float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+refPropertyName, reference);
+                string finalName = propertyRef == PropertyRef.Initial ? "Initial" + refPropertyName : refPropertyName;
+                float initialValue = ReflectionTools.GetObjectProperty<float>(finalName, reference);
                 return sign * initialValue * percentage;
         }
         return -1;
