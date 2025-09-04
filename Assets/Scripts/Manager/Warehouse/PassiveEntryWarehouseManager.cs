@@ -32,7 +32,13 @@ public class PassiveEntryWarehouseManager : MonoBehaviour{
     }
 
     public void RemovePassiveEntry(PassiveEntry passiveEntry) {
-        if(this.OwnedPassiveEntries.Contains(passiveEntry)) this.OwnedPassiveEntries.Remove(passiveEntry);
+        if (ContainsPassiveEntry(passiveEntry)) {
+            this.OwnedPassiveEntries.Remove(passiveEntry);
+        }
+    }
+
+    public bool ContainsPassiveEntry(PassiveEntry passiveEntry) {
+        return this.OwnedPassiveEntries.Contains(passiveEntry);
     }
     
 }

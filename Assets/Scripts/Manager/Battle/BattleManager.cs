@@ -11,6 +11,7 @@ public class BattleManager : StateMachineController{
 
     [field: SerializeField] public Transform EnemyParent { get; private set; }
     [SerializeField] private Transform HeroParent;
+    [SerializeField] private Transform PassiveEntryParent;
 
     [SerializeField] private AudioClip ErrorSfx;
     [SerializeField] private AudioClip EquipPassiveEntrySfx;
@@ -159,7 +160,6 @@ public class BattleManager : StateMachineController{
             for (int i = 1; i < passiveEntries.Count; i++) {
                 saveContent += "|" + passiveEntries[i].Data.Name;
             }
-
             string key = hero.Name + "PassiveEntry";
             if (PlayerPrefs.HasKey(key)) {
                 PlayerPrefs.DeleteKey(key);
@@ -176,15 +176,14 @@ public class BattleManager : StateMachineController{
         }
 
         string[] passiveEntries = result.Split("|");
-        List<PassiveEntry> warehousePassiveEntries = PassiveEntryWarehouseManager.Instance.GetOwnedPassiveEntries();
-
         foreach (string entryName in passiveEntries) {
-            foreach (PassiveEntry entry in warehousePassiveEntries) {
-                if (entry.Data.Name == entryName) {
-                    AddPassiveEntry(entry);
+            foreach (Transform child in PassiveEntryParent) {
+                if (child.TryGetComponent(out ClickableUI clickableUI) 
+                    && clickableUI.passiveEntryData.Data.Name == entryName) {
+                    clickableUI.Click();
                     break;
                 }
-            }
+            }    
         }
     }
 
@@ -270,16 +269,19 @@ public class BattleManager : StateMachineController{
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EquipPassiveEntrySfx);
         }
 
-        if (Skills1InBattle.TryAdd(selectedHero, data)){
-            selectedHero.AddPassiveEntry(data, false);
+        PassiveEntry entry = Instantiate(data);
+        if (Skills1InBattle.TryAdd(selectedHero, entry) 
+            && PassiveEntryWarehouseManager.Instance.ContainsPassiveEntry(data)){
+            selectedHero.AddPassiveEntry(entry, false);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
             PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data);
             return 0;
         }
         
-        if (Skills2InBattle.TryAdd(selectedHero, data)){
-            selectedHero.AddPassiveEntry(data, false);
+        if (Skills2InBattle.TryAdd(selectedHero, entry)
+            && PassiveEntryWarehouseManager.Instance.ContainsPassiveEntry(data)){
+            selectedHero.AddPassiveEntry(entry, false);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
             PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data);

@@ -38,7 +38,11 @@ public class ClickableUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         Destroy(this.CurrentTooltip.gameObject);
     }
 
-    public void OnPointerClick(PointerEventData eventData){
+    public void OnPointerClick(PointerEventData eventData) {
+        Click();
+    }
+
+    public void Click() {
         int recall = BattleManager.Instance.AddPassiveEntry(passiveEntryData);
         if (recall >= 0){
             if(this.CurrentTooltip) Destroy(this.CurrentTooltip.gameObject);

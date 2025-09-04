@@ -5,5 +5,6 @@ public struct EffectData {
     public float Duration; // Magic Circle  
     public TargetType TargetType;
     public bool IsCritical;
+    public bool NotShowParticle;
 }
 

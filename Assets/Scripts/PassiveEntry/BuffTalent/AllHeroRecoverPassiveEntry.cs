@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -6,14 +7,17 @@ using UnityEngine;
 public class AllHeroRecoverPassiveEntry : PassiveEntry {
 
     [SerializeField] private BuffMiniData RecoverBuff;
-    [SerializeField] private GameObject tickEffectPrefab;
-    
     [SerializeField] private FighterType TargetFighterType;
     [SerializeField] private float RecoverMultiplier = 5.0f;
 
+    private BuffMiniData CurrentRecoverBuff;
     private int TargetFighterCount;
     private Hero OwnedHero;
-    
+
+    private void Awake() {
+        this.CurrentRecoverBuff = Instantiate(RecoverBuff);
+    }
+
     public override void Construct(Hero ownedHero) {
         this.OwnedHero = ownedHero;
         foreach (Hero hero in BattleManager.Instance.HeroesInBattle) {
@@ -29,20 +33,15 @@ public class AllHeroRecoverPassiveEntry : PassiveEntry {
 
     private void OnBattleStart() {
         // 场上每存在一名牧师，所有单位每秒回复5点*N的生命值
-        RecoverBuff.changedValue = this.TargetFighterCount * RecoverMultiplier;
+        CurrentRecoverBuff.ChangedValue = this.TargetFighterCount * RecoverMultiplier;
         BuffData buffData = ScriptableObject.CreateInstance<BuffData>();
-        buffData.longTimeEffectBuff = new List<BuffMiniData> { RecoverBuff };
-        buffData.immediateEffectBuff = new List<BuffMiniData>();
-        buffData.lastEffectBuff = new List<BuffMiniData>();
-        buffData.duration = -1.0f;
+        buffData.LongTimeEffectBuff = new List<BuffMiniData> { CurrentRecoverBuff };
+        buffData.ImmediateEffectBuff = new List<BuffMiniData>();
+        buffData.LastEffectBuff = new List<BuffData>();
+        buffData.Duration = -1.0f;
 
         foreach(Hero hero in BattleManager.Instance.HeroesInBattle) {
-            if (!hero.TryGetComponent(out Buff buff)) {
-                buff = hero.AddComponent<Buff>();
-            }
-            if(tickEffectPrefab!=null)
-                buff.tickEffectPrefab = tickEffectPrefab;
-            buff.AddBuff(this.OwnedHero, hero, buffData);
+            BuffManager.Instance.AddBuff(this.OwnedHero, hero, buffData);
         }
     }
 
