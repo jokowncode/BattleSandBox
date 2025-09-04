@@ -6,8 +6,6 @@ using UnityEngine;
 public class AllHeroRecoverPassiveEntry : PassiveEntry {
 
     [SerializeField] private BuffMiniData RecoverBuff;
-    [SerializeField] private GameObject tickEffectPrefab;
-    
     [SerializeField] private FighterType TargetFighterType;
     [SerializeField] private float RecoverMultiplier = 5.0f;
 

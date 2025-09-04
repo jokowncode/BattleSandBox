@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BuffManager : MonoBehaviour {
@@ -17,6 +18,8 @@ public class BuffManager : MonoBehaviour {
     }
 
     public void AddBuff(Fighter caster, Fighter target, BuffData buffData) {
+        if (!target || target.IsDead) return;
+        if (!caster || caster.IsDead) return;
         Coroutine coroutine = StartCoroutine(BuffCoroutine(caster, target, buffData));
         target.OnDead += () => StopCoroutine(coroutine);
     }
@@ -24,25 +27,31 @@ public class BuffManager : MonoBehaviour {
     private IEnumerator BuffCoroutine(Fighter caster, Fighter target, BuffData buffData) {
         
         List<GameObject> particles = new List<GameObject>();
-        Dictionary<FighterProperty, float> immediateBuffChangeValue = new Dictionary<FighterProperty, float>();
+        Dictionary<FighterProperty, float> buffChangeProperty = new Dictionary<FighterProperty, float>();
         
         // Apply Immediate Buff
         foreach (BuffMiniData data in buffData.ImmediateEffectBuff) {
-            ApplyBuff(caster, target, data, true, particles, immediateBuffChangeValue);
+            ApplyBuff(caster, target, data, true, particles, buffChangeProperty);
         }
         
         // Apply Long Time Buff
+        Dictionary<BuffMiniData, float> longTimeBuffChangeValue = new Dictionary<BuffMiniData, float>();
         WaitForSeconds wait = new WaitForSeconds(buffData.TickInterval);
         for (float t = 0.0f; buffData.Duration < 0.0f || t < buffData.Duration; t += buffData.TickInterval) {
+            bool isFirstTime = t == 0.0f;
             foreach (BuffMiniData data in buffData.LongTimeEffectBuff) {
-                bool isFirstTime = t == 0.0f;
-                ApplyBuff(caster, target, data, isFirstTime, particles, immediateBuffChangeValue);
+                if (isFirstTime) {
+                    float changeValue = ApplyBuff(caster, target, data, true, particles, buffChangeProperty);
+                    longTimeBuffChangeValue.Add(data, changeValue);
+                } else {
+                    ApplyBuff(data, target, longTimeBuffChangeValue[data], false, particles);
+                }
             }
             yield return wait;
         }
         
         // Remove Property Change
-        foreach (KeyValuePair<FighterProperty, float> pair in immediateBuffChangeValue) {
+        foreach (KeyValuePair<FighterProperty, float> pair in buffChangeProperty) {
             target.FighterPropertyChange(pair.Key, pair.Key, PropertyModifyWay.Value, PropertyRef.Initial, pair.Value, false);
         }
         
@@ -57,18 +66,33 @@ public class BuffManager : MonoBehaviour {
         }
     }
 
-    private void ApplyBuff(Fighter caster, Fighter target, BuffMiniData data, bool isFirstTime,
-        List<GameObject> particles, Dictionary<FighterProperty, float> record) {
-        if (data.EffectParticlePrefab) {
-            if (data.IsDestroyImmediate || isFirstTime) {
-                GameObject particle = Instantiate(data.EffectParticlePrefab, target.transform);
-                if (data.IsDestroyImmediate) {
-                    Destroy(particle, data.DestroyDelay);    
-                } else {
-                    particles.Add(particle);    
-                }
-            }
+    private void ApplyParticle(BuffMiniData data, Fighter target, bool isFirstTime, List<GameObject> particles) {
+        if (!data.EffectParticlePrefab) return;
+        if (!data.IsDestroyImmediate && !isFirstTime) return;
+        GameObject particle = Instantiate(data.EffectParticlePrefab, target.transform);
+        if (data.IsDestroyImmediate) {
+            Destroy(particle, data.DestroyDelay);    
+        } else {
+            particles.Add(particle);    
         }
+    }
+
+    private void ApplyBuff(BuffMiniData data, Fighter target, float changeValue, bool isFirstTime, List<GameObject> particles) {
+        ApplyParticle(data, target, isFirstTime, particles);
+        
+        if (data.TargetUpdateProperty != FighterProperty.Health || data.IsChangeProperty) {
+            target.FighterPropertyChange(data.TargetUpdateProperty, data.TargetUpdateProperty, 
+                PropertyModifyWay.Value, data.PropertyRef, changeValue, true);
+            return;
+        }
+        
+        HealOrDamageTarget(target, changeValue);
+    }
+
+    private float ApplyBuff(Fighter caster, Fighter target, BuffMiniData data, bool isFirstTime,
+        List<GameObject> particles, Dictionary<FighterProperty, float> record) {
+        
+        ApplyParticle(data, target, isFirstTime, particles);
         
         Fighter refFighter = data.Ref == BuffRef.Caster ? caster : target;
         FighterProperty refProperty = data.Ref == BuffRef.Caster ? data.CasterProperty : data.TargetRefProperty;
@@ -77,13 +101,19 @@ public class BuffManager : MonoBehaviour {
             if (!record.TryAdd(data.TargetUpdateProperty, changeValue)) {
                 record[data.TargetUpdateProperty] += changeValue;
             }
-            return;
+            return changeValue;
         }
         
         float value = target.GetPropertyChangeValue(refProperty, data.ModifyWay, data.PropertyRef, data.ChangedValue, true, refFighter);
+        HealOrDamageTarget(target, value);
+        return value;
+    }
+
+    private void HealOrDamageTarget(Fighter target, float value) {
         EffectData effect = new EffectData {
             Value = Mathf.Abs(value),
-            IsCritical = false
+            IsCritical = false,
+            NotShowParticle = true
         };
         if (value > 0.0f) {
             target.BeHealed(effect);

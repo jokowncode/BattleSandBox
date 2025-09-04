@@ -150,7 +150,7 @@ public class Fighter : StateMachineController{
             UpdateShieldBar();
         }
         
-        if(this.BloodParticle) this.BloodParticle.Play();
+        if(this.BloodParticle && !effectData.NotShowParticle) this.BloodParticle.Play();
 
         if (this.CurrentFighterType == TargetType.Enemy) {
             this.Renderer.ChangeColor(Color.red);    
@@ -193,7 +193,7 @@ public class Fighter : StateMachineController{
     }
 
     public void BeHealed(EffectData effectData) {
-        if (this.HealParticlePrefab){
+        if (this.HealParticlePrefab&& !effectData.NotShowParticle){
             ParticleSystem healParticle = Instantiate(this.HealParticlePrefab, this.transform.position, Quaternion.identity);
             Destroy(healParticle.gameObject, 0.7f);
         }
@@ -221,7 +221,7 @@ public class Fighter : StateMachineController{
             if(sign * value < 0.0f) this.Move.StopMove();
             else this.Move.StartMove();
             //Debug.Log("Speed"+value);
-            return value;
+            return sign * value;
         }
         
         if (updateProperty == FighterProperty.HealMultiplier) {
