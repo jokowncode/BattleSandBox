@@ -42,6 +42,8 @@ public class Fighter : StateMachineController{
 
     private float InBattleHealth;
     private float InBattleShield;
+
+    private bool IsAlreadyStart;
     
 #if DEBUG_MODE
     public float TotalDamage {get; set;}    
@@ -83,7 +85,12 @@ public class Fighter : StateMachineController{
         }
         if(FighterPatrol) FighterPatrol.OnFindAttackTarget += OnFindAttackTarget;
         if (SkillNameText) SkillNameText.Hide(true);
-        this.InBattleHealth = this.CurrentData.Health;
+
+        if (!IsAlreadyStart) {
+            IsAlreadyStart = true;
+            this.InBattleHealth = this.CurrentData.Health;
+            this.InBattleShield = this.CurrentData.Shield;
+        }
     }
 
     private void OnFindAttackTarget(Fighter target){
@@ -129,7 +136,6 @@ public class Fighter : StateMachineController{
                 foreach (Transform child in this.transform) {
                     if (child.CompareTag("Shield")) {
                         Destroy(child.gameObject);
-                        break;
                     }
                 }
             }    
@@ -205,7 +211,7 @@ public class Fighter : StateMachineController{
         this.ShieldBarImage.fillAmount = this.CurrentData.Shield == 0.0f ? 0.0f : this.InBattleShield / this.CurrentData.Shield;
     }
 
-    public void FighterPropertyChange(FighterProperty updateProperty, FighterProperty refProperty,
+    public float FighterPropertyChange(FighterProperty updateProperty, FighterProperty refProperty,
         PropertyModifyWay modifyWay, float value, bool isUp, 
         Fighter refFighter = null){
 
@@ -215,46 +221,59 @@ public class Fighter : StateMachineController{
             if(value < 0.0f) this.Move.StopMove();
             else this.Move.StartMove();
             //Debug.Log("Speed"+value);
-            return;
+            return value;
         }
-        
         
         if (updateProperty == FighterProperty.HealMultiplier) {
             float percentage = value / 100.0f;
-            this.HealMultiplier += sign * percentage;
-            return;
+            float change = sign * percentage;
+            this.HealMultiplier += change;
+            return change;
         }
         
         if (updateProperty == FighterProperty.ShieldMultiplier) {
             float percentage = value / 100.0f;
-            this.ShieldMultiplier += sign * percentage;
-            return;
+            float change = sign * percentage;
+            this.ShieldMultiplier += change;
+            return change;
         }
         
         if (updateProperty == FighterProperty.CooldownPercentage){
             float currentMultiplier = FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
             float percentage = value / 100.0f;
-            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, currentMultiplier + sign * percentage);
-            return;
+            float change = sign * percentage;
+            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, currentMultiplier + change);
+            return change;
         }
 
         string propertyName = updateProperty.ToString();
         float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, this);
-        currentValue += GetPropertyChangeValue(refProperty, modifyWay, value, isUp, refFighter);
-
+        float changeValue =  GetPropertyChangeValue(refProperty, modifyWay, value, isUp, refFighter);
+        float increasePercentage = changeValue / currentValue;
         if (updateProperty == FighterProperty.Shield) {
-            currentValue *= this.ShieldMultiplier;
+            changeValue *= this.ShieldMultiplier;
         }
+        currentValue += changeValue;
+        
         ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
         if (updateProperty == FighterProperty.Shield) {
-            this.InBattleShield = currentValue <= 0.0f ? 0.0f : Mathf.Min(this.InBattleShield, currentValue);
+            if (currentValue <= 0.0f) {
+                this.InBattleShield = 0.0f;
+            } else {
+                this.InBattleShield += this.InBattleShield * increasePercentage;
+            }
             UpdateShieldBar();
         }
 
         if (updateProperty == FighterProperty.Health) {
-            this.InBattleHealth = currentValue <= 0.0f ? 0.0f : Mathf.Min(this.InBattleHealth, currentValue);
+            if (currentValue <= 0.0f) {
+                this.InBattleHealth = 0.0f;
+            } else {
+                this.InBattleHealth += this.InBattleHealth * increasePercentage;
+            }
             UpdateBloodBar();
         }
+        return changeValue;
     }
 
     public float GetPropertyChangeValue(FighterProperty refProperty, PropertyModifyWay modifyWay, float value, bool isUp, Fighter refFighter) {

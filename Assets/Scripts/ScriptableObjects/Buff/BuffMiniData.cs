@@ -16,6 +16,7 @@ public class BuffMiniData : ScriptableObject {
 
     [Header("Particle")] 
     public bool IsDestroyImmediate = true;
+    public float DestroyDelay = 0.5f;
     public GameObject EffectParticlePrefab;
 }
 

@@ -17,30 +17,33 @@ public class BuffManager : MonoBehaviour {
     }
 
     public void AddBuff(Fighter caster, Fighter target, BuffData buffData) {
-        StartCoroutine(BuffCoroutine(caster, target, buffData));
+        Coroutine coroutine = StartCoroutine(BuffCoroutine(caster, target, buffData));
+        target.OnDead += () => StopCoroutine(coroutine);
     }
 
     private IEnumerator BuffCoroutine(Fighter caster, Fighter target, BuffData buffData) {
-
+        
         List<GameObject> particles = new List<GameObject>();
+        Dictionary<FighterProperty, float> immediateBuffChangeValue = new Dictionary<FighterProperty, float>();
         
         // Apply Immediate Buff
         foreach (BuffMiniData data in buffData.ImmediateEffectBuff) {
-            ApplyBuff(caster, target, data, particles);
+            ApplyBuff(caster, target, data, true, particles, immediateBuffChangeValue);
         }
         
         // Apply Long Time Buff
         WaitForSeconds wait = new WaitForSeconds(buffData.TickInterval);
-        for (float t = 0.0f; t < buffData.Duration; t += buffData.TickInterval) {
+        for (float t = 0.0f; buffData.Duration < 0.0f || t < buffData.Duration; t += buffData.TickInterval) {
             foreach (BuffMiniData data in buffData.LongTimeEffectBuff) {
-                ApplyBuff(caster, target, data, particles);
+                bool isFirstTime = t == 0.0f;
+                ApplyBuff(caster, target, data, isFirstTime, particles, immediateBuffChangeValue);
             }
             yield return wait;
         }
         
-        // Remove Immediate Buff
-        foreach (BuffMiniData data in buffData.ImmediateEffectBuff) {
-            RemoveImmediateBuff(caster, target, data);
+        // Remove Property Change
+        foreach (KeyValuePair<FighterProperty, float> pair in immediateBuffChangeValue) {
+            target.FighterPropertyChange(pair.Key, pair.Key, PropertyModifyWay.Value, pair.Value, false);
         }
         
         // Remove Particle
@@ -54,26 +57,26 @@ public class BuffManager : MonoBehaviour {
         }
     }
 
-    private void RemoveImmediateBuff(Fighter caster, Fighter target, BuffMiniData data) {
-        Fighter refFighter = data.Ref == BuffRef.Caster ? caster : target;
-        FighterProperty refProperty = data.Ref == BuffRef.Caster ? data.CasterProperty : data.TargetRefProperty;
-        target.FighterPropertyChange(data.TargetUpdateProperty, refProperty, data.ModifyWay, data.ChangedValue, false, refFighter);
-    }
-
-    private void ApplyBuff(Fighter caster, Fighter target, BuffMiniData data, List<GameObject> particles) {
+    private void ApplyBuff(Fighter caster, Fighter target, BuffMiniData data, bool isFirstTime,
+        List<GameObject> particles, Dictionary<FighterProperty, float> record) {
         if (data.EffectParticlePrefab) {
-            GameObject particle = Instantiate(data.EffectParticlePrefab, target.transform);
-            if (data.IsDestroyImmediate) {
-                Destroy(particle, 1.0f);
-            } else {
-                particles.Add(particle);   
+            if (data.IsDestroyImmediate || isFirstTime) {
+                GameObject particle = Instantiate(data.EffectParticlePrefab, target.transform);
+                if (data.IsDestroyImmediate) {
+                    Destroy(particle, data.DestroyDelay);    
+                } else {
+                    particles.Add(particle);    
+                }
             }
         }
         
         Fighter refFighter = data.Ref == BuffRef.Caster ? caster : target;
         FighterProperty refProperty = data.Ref == BuffRef.Caster ? data.CasterProperty : data.TargetRefProperty;
         if (data.TargetUpdateProperty != FighterProperty.Health || data.IsChangeProperty) {
-            target.FighterPropertyChange(data.TargetUpdateProperty, refProperty, data.ModifyWay, data.ChangedValue, true, refFighter);
+            float changeValue = target.FighterPropertyChange(data.TargetUpdateProperty, refProperty, data.ModifyWay, data.ChangedValue, true, refFighter);
+            if (!record.TryAdd(data.TargetUpdateProperty, changeValue)) {
+                record[data.TargetUpdateProperty] += changeValue;
+            }
             return;
         }
         
