@@ -70,6 +70,7 @@ public class BuffManager : MonoBehaviour {
         if (!data.EffectParticlePrefab) return;
         if (!data.IsDestroyImmediate && !isFirstTime) return;
         GameObject particle = Instantiate(data.EffectParticlePrefab, target.transform);
+        particle.transform.localPosition = target.Center.localPosition;
         if (data.IsDestroyImmediate) {
             Destroy(particle, data.DestroyDelay);    
         } else {
@@ -90,7 +91,7 @@ public class BuffManager : MonoBehaviour {
             return;
         }
         
-        HealOrDamageTarget(target, changeValue);
+        HealOrDamageTarget(target, data.EffectParticlePrefab, changeValue);
     }
 
     private float ApplyBuff(Fighter caster, Fighter target, BuffMiniData data, bool isFirstTime,
@@ -109,15 +110,15 @@ public class BuffManager : MonoBehaviour {
         }
         
         float value = target.GetPropertyChangeValue(refProperty, data.ModifyWay, data.PropertyRef, data.ChangedValue, true, refFighter);
-        HealOrDamageTarget(target, value);
+        HealOrDamageTarget(target, data.EffectParticlePrefab, value);
         return value;
     }
 
-    private void HealOrDamageTarget(Fighter target, float value) {
+    private void HealOrDamageTarget(Fighter target, bool hasParticle, float value) {
         EffectData effect = new EffectData {
             Value = Mathf.Abs(value),
             IsCritical = false,
-            NotShowParticle = true
+            NotShowParticle = hasParticle
         };
         if (value > 0.0f) {
             target.BeHealed(effect);

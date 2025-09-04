@@ -49,7 +49,8 @@ public class Hero : Fighter{
 
         if (HeroSelfPassiveEntries.Length != 0){
             foreach (PassiveEntry entry in HeroSelfPassiveEntries) {
-                AddPassiveEntry(entry, true);
+                PassiveEntry addEntry = Instantiate(entry);
+                AddPassiveEntry(addEntry, true);
             }
         }
         BattleManager.Instance.ShowHeroDetail(this);
@@ -67,13 +68,13 @@ public class Hero : Fighter{
 
     public void AddPassiveEntry(PassiveEntry entry, bool isSelfOwned){
         if (!entry) return;
-        PassiveEntry passiveEntry = Instantiate(entry, this.transform);
+        entry.transform.parent = this.transform;
         if (isSelfOwned) {
-            SelfPassiveEntries.Add(passiveEntry);
+            SelfPassiveEntries.Add(entry);
         } else {
-            EquipPassiveEntries.Add(passiveEntry);
+            EquipPassiveEntries.Add(entry);
         }
-        passiveEntry.Construct(this);
+        entry.Construct(this);
     }
 
     public void RemovePassiveEntry(PassiveEntry removeEntry, bool isSelfOwned){
@@ -85,6 +86,7 @@ public class Hero : Fighter{
         } else {
             EquipPassiveEntries.Remove(removeEntry);
         }
+        Destroy(removeEntry.gameObject);
     }
 
     public string GetPassiveEntryDesc(){

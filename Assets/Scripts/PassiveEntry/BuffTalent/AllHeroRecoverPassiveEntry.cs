@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,9 +10,14 @@ public class AllHeroRecoverPassiveEntry : PassiveEntry {
     [SerializeField] private FighterType TargetFighterType;
     [SerializeField] private float RecoverMultiplier = 5.0f;
 
+    private BuffMiniData CurrentRecoverBuff;
     private int TargetFighterCount;
     private Hero OwnedHero;
-    
+
+    private void Awake() {
+        this.CurrentRecoverBuff = Instantiate(RecoverBuff);
+    }
+
     public override void Construct(Hero ownedHero) {
         this.OwnedHero = ownedHero;
         foreach (Hero hero in BattleManager.Instance.HeroesInBattle) {
@@ -27,9 +33,9 @@ public class AllHeroRecoverPassiveEntry : PassiveEntry {
 
     private void OnBattleStart() {
         // 场上每存在一名牧师，所有单位每秒回复5点*N的生命值
-        RecoverBuff.ChangedValue = this.TargetFighterCount * RecoverMultiplier;
+        CurrentRecoverBuff.ChangedValue = this.TargetFighterCount * RecoverMultiplier;
         BuffData buffData = ScriptableObject.CreateInstance<BuffData>();
-        buffData.LongTimeEffectBuff = new List<BuffMiniData> { RecoverBuff };
+        buffData.LongTimeEffectBuff = new List<BuffMiniData> { CurrentRecoverBuff };
         buffData.ImmediateEffectBuff = new List<BuffMiniData>();
         buffData.LastEffectBuff = new List<BuffData>();
         buffData.Duration = -1.0f;

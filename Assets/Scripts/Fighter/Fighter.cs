@@ -138,18 +138,16 @@ public class Fighter : StateMachineController{
                         Destroy(child.gameObject);
                     }
                 }
-            }    
+            }   
+            if (this.ShieldBarImage) {
+                UpdateShieldBar();
+            }
         }
         
         ShowDamage(finalDamage, effectData.IsCritical);
         
         this.InBattleHealth = Mathf.Min(this.CurrentData.Health, this.InBattleHealth - finalDamage);
         UpdateBloodBar();
-        
-        if (this.ShieldBarImage) {
-            UpdateShieldBar();
-        }
-        
         if(this.BloodParticle && !effectData.NotShowParticle) this.BloodParticle.Play();
 
         if (this.CurrentFighterType == TargetType.Enemy) {
@@ -225,23 +223,29 @@ public class Fighter : StateMachineController{
         }
         
         if (updateProperty == FighterProperty.HealMultiplier) {
-            float percentage = value / 100.0f;
-            float change = sign * percentage;
+            float change = sign * value;
+            if (modifyWay == PropertyModifyWay.Percentage) {
+                change = sign * value / 100.0f;
+            }
             this.HealMultiplier += change;
             return change;
         }
         
         if (updateProperty == FighterProperty.ShieldMultiplier) {
-            float percentage = value / 100.0f;
-            float change = sign * percentage;
+            float change = sign * value;
+            if (modifyWay == PropertyModifyWay.Percentage) {
+                change = sign * value / 100.0f;
+            }
             this.ShieldMultiplier += change;
             return change;
         }
         
         if (updateProperty == FighterProperty.CooldownPercentage){
             float currentMultiplier = FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
-            float percentage = value / 100.0f;
-            float change = sign * percentage;
+            float change = sign * value;
+            if (modifyWay == PropertyModifyWay.Percentage) {
+                change = sign * value / 100.0f;
+            }
             FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, currentMultiplier + change);
             return change;
         }
@@ -249,28 +253,29 @@ public class Fighter : StateMachineController{
         string propertyName = updateProperty.ToString();
         float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, this);
         float changeValue =  GetPropertyChangeValue(refProperty, modifyWay, propertyRef, value, isUp, refFighter);
-        float increasePercentage = currentValue == 0.0f ? -1.0f : changeValue / currentValue;
+        float increasePercentage = currentValue == 0.0f ? 0.0f : changeValue / currentValue;
         if (updateProperty == FighterProperty.Shield) {
             changeValue *= this.ShieldMultiplier;
         }
-        currentValue += changeValue;
+
+        float finalValue = currentValue + changeValue;
         
-        ReflectionTools.SetObjectProperty(propertyName, this, currentValue);
+        ReflectionTools.SetObjectProperty(propertyName, this, finalValue);
         if (updateProperty == FighterProperty.Shield && IsBattleStart) {
-            if (currentValue <= 0.0f) {
+            if (finalValue <= 0.0f) {
                 this.InBattleShield = 0.0f;
             } else {
-                this.InBattleShield = increasePercentage > 0.0f ? 
+                this.InBattleShield = currentValue != 0.0f ? 
                     this.InBattleShield + this.InBattleShield * increasePercentage : changeValue;
             }
             UpdateShieldBar();
         }
 
         if (updateProperty == FighterProperty.Health && IsBattleStart) {
-            if (currentValue <= 0.0f) {
+            if (finalValue <= 0.0f) {
                 this.InBattleHealth = 0.0f;
             } else {
-                this.InBattleHealth = increasePercentage > 0.0f ? 
+                this.InBattleHealth = currentValue != 0.0f ? 
                     this.InBattleHealth + this.InBattleHealth * increasePercentage : changeValue;
             }
             UpdateBloodBar();
