@@ -15,8 +15,11 @@ public class SkillState : FighterState {
     }
 
     private void Start() {
-        Controller.AnimationEvent.OnSkill += OnSkill;
-        Controller.AnimationEvent.OnSkillEnd += OnSkillEnd;
+        FighterAnimationEvent[] animEvents = Controller.GetComponentsInChildren<FighterAnimationEvent>(true);
+        foreach (FighterAnimationEvent animEvent in animEvents) {
+            animEvent.OnSkill += OnSkill;
+            animEvent.OnSkillEnd += OnSkillEnd;
+        }
     }
 
     private void OnSkillEnd() {

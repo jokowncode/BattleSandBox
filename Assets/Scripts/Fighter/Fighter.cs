@@ -50,14 +50,9 @@ public class Fighter : StateMachineController{
 #endif
 
     protected virtual void Awake(){
+        GetRendererComponent();
         this.FighterSkillCaster = GetComponentInChildren<SkillCaster>();
-        this.FighterAnimator = GetComponentInChildren<Animator>();
-        this.FighterAnimator.applyRootMotion = false;
-        
-        this.AnimationEvent = GetComponentInChildren<FighterAnimationEvent>();
         this.Move = GetComponent<FighterMove>();
-        this.Renderer = GetComponentInChildren<FighterRenderer>();
-
         this.FighterPatrol = GetComponent<PatrolState>();
         this.FighterSkill = GetComponent<SkillState>();
         // Clone Fighter Data to Update
@@ -66,13 +61,24 @@ public class Fighter : StateMachineController{
         this.BloodBarImage.color = InitialColor;
     }
 
+    public void GetRendererComponent() {
+        this.FighterAnimator = GetComponentInChildren<Animator>(false);
+        this.FighterAnimator.applyRootMotion = false;
+        this.AnimationEvent = GetComponentInChildren<FighterAnimationEvent>(false);
+        this.Renderer = GetComponentInChildren<FighterRenderer>(false);
+    }
+
+    public void ResetCurrentState() {
+        ChangeState(this.CurrentState);
+    }
+
     protected virtual void Start(){
         if (this.FighterSkillCaster){
             this.SkillNameText.SetSkillName(this.FighterSkillCaster.Data.Name);
         }
     }
 
-    public void BattleStart() {
+    public void BattleStart(bool isSummon = false) {
         // Turn To Patrol State / Skill State
         if (FighterSkillCaster) {
             FighterSkillCaster.BattleStart();
@@ -90,6 +96,10 @@ public class Fighter : StateMachineController{
             IsBattleStart = true;
             this.InBattleHealth = this.CurrentData.Health;
             this.InBattleShield = this.CurrentData.Shield;
+        }
+
+        if (isSummon) {
+            this.InBattleHealth = this.CurrentData.Health;
         }
     }
 

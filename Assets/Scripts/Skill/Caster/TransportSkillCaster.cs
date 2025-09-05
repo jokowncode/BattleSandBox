@@ -15,7 +15,7 @@ public class TransportSkillCaster : SkillCaster {
         Vector3 summonPos = OwnedFighter.transform.position + rotVector * OwnedFighter.AttackRadius;
         Fighter summon = Instantiate(OwnedFighter, summonPos, Quaternion.identity);
         summon.FighterSkillCaster.SetSkillCastCount(this.CurrentSkillCastCount);
-        summon.BattleStart();
+        summon.BattleStart(true);
         Destroy(summon.gameObject, this.SummonDuration);
     }
 

@@ -155,14 +155,16 @@ public class BattleManager : StateMachineController{
         // TODO: Optimize Speed
         foreach (Hero hero in this.HeroesInBattle) {
             List<PassiveEntry> passiveEntries = hero.GetHeroPassiveEntries();
-            if (passiveEntries == null || passiveEntries.Count == 0) continue;
-            string saveContent = passiveEntries[0].Data.Name;
-            for (int i = 1; i < passiveEntries.Count; i++) {
-                saveContent += "|" + passiveEntries[i].Data.Name;
-            }
             string key = hero.Name + "PassiveEntry";
             if (PlayerPrefs.HasKey(key)) {
                 PlayerPrefs.DeleteKey(key);
+            }
+            if (passiveEntries == null || passiveEntries.Count == 0) {
+                continue;
+            }
+            string saveContent = passiveEntries[0].Data.Name;
+            for (int i = 1; i < passiveEntries.Count; i++) {
+                saveContent += "|" + passiveEntries[i].Data.Name;
             }
             PlayerPrefs.SetString(key, saveContent);
         }

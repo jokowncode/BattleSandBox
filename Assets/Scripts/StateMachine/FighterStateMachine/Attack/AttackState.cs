@@ -33,8 +33,11 @@ public abstract class AttackState : FighterState{
     }
 
     private void Start() {
-        Controller.AnimationEvent.OnAttack += OnAttack;
-        Controller.AnimationEvent.OnAttackEnd += OnAttackEnd;
+        FighterAnimationEvent[] animEvents = Controller.GetComponentsInChildren<FighterAnimationEvent>(true);
+        foreach (FighterAnimationEvent animEvent in animEvents) {
+            animEvent.OnAttack += OnAttack;
+            animEvent.OnAttackEnd += OnAttackEnd;
+        }
     }
 
     protected virtual void OnAttackEnd() {

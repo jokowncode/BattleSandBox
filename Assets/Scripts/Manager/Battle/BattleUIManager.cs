@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class BattleUIManager : MonoBehaviour {
 
@@ -70,9 +71,7 @@ public class BattleUIManager : MonoBehaviour {
         UpdatePassiveEntryWarehouse(hero.HeroAvailablePassiveEntrySortCode);
         heroDetailUI.ChangeHeroDetailUIValue(hero.StandingSprite);
         heroDetailUI.ChangeDetailUI(hero);
-        UpdateSelectedHeroSkillUI(hero.Type,
-            hero.FighterSkillCaster.Data.Description,
-            hero.GetPassiveEntryDesc());
+        UpdateSelectedHeroSkillUI(hero);
     }
 
     public void HideHeroDetail() {
@@ -123,15 +122,17 @@ public class BattleUIManager : MonoBehaviour {
         }
     }
 
-    public void UpdateSelectedHeroSkillUI(FighterType type,string skillDesc, string talentDesc){
-        if(type == FighterType.Mage)
+    private void UpdateSelectedHeroSkillUI(Hero hero){
+        if(hero.Type == FighterType.Mage)
             SkillBackgroundImage.sprite = mageSkillIcon;
-        else if(type == FighterType.Priest)
+        else if(hero.Type == FighterType.Priest)
             SkillBackgroundImage.sprite = priestSkillIcon;
         else
             SkillBackgroundImage.sprite = warriorSkillIcon;
-        SkillDescription.text = skillDesc;
-        TalentDescription.text = talentDesc;
+        if (hero.FighterSkillCaster) {
+            SkillDescription.text = hero.FighterSkillCaster.Data.Description;
+        }
+        TalentDescription.text = hero.GetPassiveEntryDesc();
     }
     
 }

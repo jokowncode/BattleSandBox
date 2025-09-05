@@ -48,11 +48,8 @@ public class SummonSkillCaster : SkillCaster{
     private void SummonPet() {
         Fighter pet = Instantiate(SummonPetPrefab, GetSummonPetPosition(this.SummonPets.Count+1), Quaternion.identity);
         pet.Health = OwnedFighter.Health * HealthPercentage;
-        pet.Shield = pet.Health;
-        
-        pet.PhysicsAttack = pet.Type == FighterType.Warrior ? OwnedFighter.MagicAttack * AttackPercentage : 0.0f;
-        pet.MagicAttack = pet.Type != FighterType.Warrior ? OwnedFighter.MagicAttack * AttackPercentage : 0.0f;
-        pet.BattleStart();
+        pet.Attack = OwnedFighter.Attack * AttackPercentage;
+        pet.BattleStart(true);
         ApplySkillStart(pet.gameObject, 
             pet.Type == FighterType.Warrior ? pet.PhysicsAttack : pet.MagicAttack);
 

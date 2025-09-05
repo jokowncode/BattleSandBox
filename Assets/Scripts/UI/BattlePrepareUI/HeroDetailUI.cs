@@ -45,7 +45,9 @@ public class HeroDetailUI : MonoBehaviour {
         MagicAttack.text = hero.InitialMagicAttack.ToString();
         Speed.text = hero.Speed.ToString();
         Critical.text = hero.InitialCritical.ToString();
-        Cooldown.text = hero.FighterSkillCaster.GetInitialData(SkillProperty.Cooldown).ToString();
+        if (hero.FighterSkillCaster) {
+            Cooldown.text = hero.FighterSkillCaster.GetInitialData(SkillProperty.Cooldown).ToString();
+        }
         UpdateDetailUI(hero);
     }
 
@@ -63,8 +65,10 @@ public class HeroDetailUI : MonoBehaviour {
         PhysicsAttackChange.text = GetPropertyDiff(hero.PhysicsAttack, hero.InitialPhysicsAttack);
         MagicAttackChange.text = GetPropertyDiff(hero.MagicAttack, hero.InitialMagicAttack);
         CriticalChange.text = GetPropertyDiff(hero.Critical, hero.InitialCritical);
-        CooldownChange.text = GetPropertyDiff(hero.FighterSkillCaster.GetCurrentData(SkillProperty.Cooldown),
-            hero.FighterSkillCaster.GetInitialData(SkillProperty.Cooldown));
+        if (hero.FighterSkillCaster) {
+            CooldownChange.text = GetPropertyDiff(hero.FighterSkillCaster.GetCurrentData(SkillProperty.Cooldown),
+                hero.FighterSkillCaster.GetInitialData(SkillProperty.Cooldown));
+        }
     }
 
     private void UpdateStarLevelUI(Hero hero){
