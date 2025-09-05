@@ -99,7 +99,11 @@ public abstract class SkillCaster : MonoBehaviour{
     
     public void CastSkill(Transform attackTarget){
         if (!CanCastSkill()) return;
-        if (SkillStartParticle) SkillStartParticle.Play();
+        if (SkillStartParticle) {
+            ParticleSystem particle = Instantiate(this.SkillStartParticle, this.OwnedFighter.Center);
+            Destroy(particle, 1.0f);
+        }
+
         if (SkillCastSfx){
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.SkillCastSfx);
         }
