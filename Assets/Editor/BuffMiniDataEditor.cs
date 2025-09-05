@@ -21,16 +21,20 @@ public class BuffMiniDataEditor : Editor {
 
     public override void OnInspectorGUI() {
         // base.OnInspectorGUI();
+        Obj.Update();
         Target = (BuffMiniData)target;
         
         GUILayout.Label("Property Change", this.TitleStyle);
         Target.ModifyWay = (PropertyModifyWay)EditorGUILayout.EnumPopup("ModifyWay", Target.ModifyWay);
         
         if (Target.ModifyWay == PropertyModifyWay.Percentage) {
-            EditorGUILayout.PropertyField(Obj.FindProperty("Ref"));
             EditorGUILayout.PropertyField(Obj.FindProperty("PropertyRef"));
-            EditorGUILayout.PropertyField(Obj.FindProperty("CasterProperty"));
-            EditorGUILayout.PropertyField(Obj.FindProperty("TargetRefProperty"));
+            Target.Ref = (BuffRef)EditorGUILayout.EnumPopup("Ref", Target.Ref);
+            if (Target.Ref == BuffRef.Caster) {
+                EditorGUILayout.PropertyField(Obj.FindProperty("CasterProperty"));
+            } else {
+                EditorGUILayout.PropertyField(Obj.FindProperty("TargetRefProperty"));
+            }
         }
         
         EditorGUILayout.PropertyField(Obj.FindProperty("TargetUpdateProperty"));
