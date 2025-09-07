@@ -14,9 +14,14 @@ public class PassiveEntryWarehouseUI : WarehouseUI {
         }
     }
 
-    public void AddItem(PassiveEntry passiveEntry, bool isNewItem){
+    public void AddItem(PassiveEntry passiveEntry, bool isNewItem) {
+        // TODO: Optimise Add And Remove PassiveEntry 
+        PassiveEntry addEntry = passiveEntry; 
+        if (isNewItem) {
+            addEntry = Instantiate(passiveEntry, this.transform);
+        }
         ClickableUI go = Instantiate(warehouseImageUIPrefab, warehouseContent);
-        go.passiveEntryData = passiveEntry;
-        if(isNewItem) PassiveEntryWarehouseManager.Instance.AddPassiveEntry(passiveEntry);
+        go.passiveEntryData = addEntry;
+        if(isNewItem) PassiveEntryWarehouseManager.Instance.AddPassiveEntry(addEntry);
     }
 }

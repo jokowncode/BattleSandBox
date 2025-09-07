@@ -309,9 +309,9 @@ public class BattleManager : StateMachineController{
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
         }
         if (Skills1InBattle.Remove(selectedHero, out PassiveEntry removedSkillData)){
+            RecallSelectedPassiveEntry(removedSkillData);
             selectedHero.RemovePassiveEntry(removedSkillData, false);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
-            RecallSelectedPassiveEntry(removedSkillData);
             UpdatePassiveEntryUI(selectedHero);
         }
     }
@@ -324,9 +324,9 @@ public class BattleManager : StateMachineController{
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
         }
         if (Skills2InBattle.Remove(selectedHero, out PassiveEntry removedSkillData)){
+            RecallSelectedPassiveEntry(removedSkillData);
             selectedHero.RemovePassiveEntry(removedSkillData, false);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
-            RecallSelectedPassiveEntry(removedSkillData);
             UpdatePassiveEntryUI(selectedHero);
         }
     }
