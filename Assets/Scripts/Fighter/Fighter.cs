@@ -389,8 +389,8 @@ public class Fighter : StateMachineController{
     public int StarLevel => InitialData.StarLevel;
     public float AttackRadius => InitialData.AttackRadius;
     public float Speed => InitialData.Speed;
-    public Sprite StandingSprite => InitialData.standingSprite;
-    public Sprite heroPortraitSprite => InitialData.heroPortraitSprite;
+    public Sprite DetailPortrait => InitialData.DetailPortrait;
+    public Sprite[] WarehouseHeroAnims => InitialData.WarehouseHeroAnims;
     
     #endregion
 }

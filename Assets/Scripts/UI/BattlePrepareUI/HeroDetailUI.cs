@@ -32,7 +32,7 @@ public class HeroDetailUI : MonoBehaviour {
         this.gameObject.SetActive(false);
     }
 
-    public void ChangeHeroDetailUIValue(Sprite sprite){
+    public void ChangeHeroDetailUIValue(Sprite sprite) {
         heroImage.sprite = sprite;
     }
 

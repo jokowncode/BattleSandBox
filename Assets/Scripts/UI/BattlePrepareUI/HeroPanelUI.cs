@@ -1,13 +1,20 @@
 ﻿
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HeroPanelUI : MonoBehaviour{
 
-    [SerializeField] private Image HeroPortraitImage;
+    private SimpleAnimationUI HeroPortraitAnim;
+    private Image HeroPortraitImage;
 
-    public void SetPortrait(Sprite heroPortrait){
-        HeroPortraitImage.sprite = heroPortrait;
+    private void Awake() {
+        HeroPortraitAnim = GetComponent<SimpleAnimationUI>();
+        HeroPortraitImage = GetComponent<Image>();
+    }
+
+    public void SetPortrait(Sprite[] heroPortrait){
+        HeroPortraitAnim.SetAnims(heroPortrait);
     }
 
     public void HeroDead(){
@@ -15,6 +22,9 @@ public class HeroPanelUI : MonoBehaviour{
         newMat.SetFloat(MaterialProperty.Desaturation, 0);
         HeroPortraitImage.material = newMat;
         HeroPortraitImage.color = Color.gray;
+        
+        HeroPortraitAnim.ResetAnim();
+        HeroPortraitAnim.enabled = false;
     }
 
 }

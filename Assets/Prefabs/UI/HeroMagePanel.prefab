@@ -65,8 +65,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 250011308, guid: 2eae918c4ba87b24f9b09b7131648842, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -252,6 +252,7 @@ GameObject:
   - component: {fileID: 4735908278664831591}
   - component: {fileID: 1195271710219590526}
   - component: {fileID: 8000895569463739453}
+  - component: {fileID: -2955648166507167874}
   - component: {fileID: -2440359001976069454}
   m_Layer: 0
   m_Name: HeroMagePanel
@@ -331,6 +332,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
+--- !u!114 &-2955648166507167874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5695862449215045017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e46f5aaae04c4897b47ef780c1b87fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Interval: 0.1
+  ImageUI: {fileID: 4448144492574197385}
 --- !u!114 &-2440359001976069454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,7 +358,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be18f0fa238b48a69d7082e94e1f51fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HeroPortraitImage: {fileID: 4448144492574197385}
 --- !u!1 &6370966416269813611
 GameObject:
   m_ObjectHideFlags: 0

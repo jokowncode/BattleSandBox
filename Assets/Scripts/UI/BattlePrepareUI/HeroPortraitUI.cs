@@ -44,7 +44,7 @@ public class HeroPortraitUI : MonoBehaviour {
             else
                 go=Instantiate(heroPriestPortraitUIPrefab, heroPortraitContent);
             
-            go.SetPortrait(hero.heroPortraitSprite);
+            go.SetPortrait(hero.WarehouseHeroAnims);
             heroPortraitUIDict.Add(hero,go);
         }
         heroPortraitContent.GetComponent<UILayoutManual>().LayoutChildren();

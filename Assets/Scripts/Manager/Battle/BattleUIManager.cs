@@ -69,7 +69,7 @@ public class BattleUIManager : MonoBehaviour {
         this.RecallHeroButton.gameObject.SetActive(true);
         SetHeroPanelActive(true);
         UpdatePassiveEntryWarehouse(hero.HeroAvailablePassiveEntrySortCode);
-        heroDetailUI.ChangeHeroDetailUIValue(hero.StandingSprite);
+        heroDetailUI.ChangeHeroDetailUIValue(hero.DetailPortrait);
         heroDetailUI.ChangeDetailUI(hero);
         UpdateSelectedHeroSkillUI(hero);
     }

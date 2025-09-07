@@ -43,6 +43,6 @@ public class HeroWarehouseUI : MonoBehaviour {
         if(go.GetComponent<DraggableUI>()==null)
             go.AddComponent<DraggableUI>();
         go.GetComponent<DraggableUI>().prefabReference = heroRef;
-        go.SetPortrait(HeroWarehouseManager.Instance.GetHeroByRef(heroRef).heroPortraitSprite);
+        go.SetPortrait(HeroWarehouseManager.Instance.GetHeroByRef(heroRef).WarehouseHeroAnims);
     }
 }
