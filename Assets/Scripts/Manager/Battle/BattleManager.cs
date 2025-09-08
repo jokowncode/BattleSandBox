@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering.UI;
 using UnityEngine.UI;
 
 public class BattleManager : StateMachineController{
@@ -12,6 +14,7 @@ public class BattleManager : StateMachineController{
     [field: SerializeField] public Transform EnemyParent { get; private set; }
     [SerializeField] private Transform HeroParent;
     [SerializeField] private Transform PassiveEntryParent;
+    [SerializeField] private Transform HeroWarehouseParent;
 
     [SerializeField] private AudioClip ErrorSfx;
     [SerializeField] private AudioClip EquipPassiveEntrySfx;
@@ -148,9 +151,40 @@ public class BattleManager : StateMachineController{
         BattleUIManager.Instance.SetHeroPortraitActive(true);
         BattleUIManager.Instance.heroPortraitUI.PushHeros(HeroesInBattle);
         OnBattleStart?.Invoke();
+        SaveHeroDeploy();
         SaveHeroPassiveEntry();
     }
-    
+
+    private void SaveHeroDeploy() {
+        List<HeroDeployData> data = new List<HeroDeployData>();
+        foreach (Hero hero in HeroesInBattle) {
+            data.Add(new HeroDeployData {
+                HeroName = hero.Name,
+                HeroPosition = hero.transform.position,
+            });
+        }
+        HeroDeploySaveData saveData = new HeroDeploySaveData { Datas = data };
+        string json = JsonUtility.ToJson(saveData);
+        if (PlayerPrefs.HasKey(this.Data.BattleName)) {
+            PlayerPrefs.DeleteKey(this.Data.BattleName);
+        }
+        PlayerPrefs.SetString(this.Data.BattleName, json);
+    }
+
+    public void LoadHeroDeploy() {
+        if (!PlayerPrefs.HasKey(this.Data.BattleName)) return;
+        HeroDeploySaveData saveData = JsonUtility.FromJson<HeroDeploySaveData>(PlayerPrefs.GetString(this.Data.BattleName));
+        foreach (HeroDeployData data in saveData.Datas) {
+            foreach (Transform child in HeroWarehouseParent) {
+                if (child.TryGetComponent(out DraggableUI draggable)
+                    && draggable.prefabReference == data.HeroName) {
+                    draggable.DeployHero(data.HeroPosition);
+                    break;
+                }
+            }
+        }
+    }
+
     private void SaveHeroPassiveEntry() {
         // TODO: Optimize Speed
         foreach (Hero hero in this.HeroesInBattle) {
@@ -186,6 +220,13 @@ public class BattleManager : StateMachineController{
                     break;
                 }
             }    
+        }
+    }
+
+    public void AllHeroRecall() {
+        for (int i = 0; i < HeroesInBattle.Count; ) {
+            this.selectedHero = HeroesInBattle[i];
+            RecallSelectedHero();
         }
     }
 
@@ -252,8 +293,7 @@ public class BattleManager : StateMachineController{
     /// </summary>
     public void RecallSelectedHero() {
         if (!selectedHero) return;
-        this.DeployAreaCurrentHeroCount[selectedHero.DeployAreaIndex]--;
-        BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.name);
+        BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.Name);
         this.RemoveHero(selectedHero);
         Destroy(selectedHero.gameObject);
         selectedHero = null;
@@ -346,6 +386,7 @@ public class BattleManager : StateMachineController{
     
 
     public void RemoveHero(Hero hero){
+        this.DeployAreaCurrentHeroCount[hero.DeployAreaIndex]--;
         OnHeroExitTheField?.Invoke(hero);
         this.HeroesInBattle.Remove(hero);
         RemovePassiveEntry();

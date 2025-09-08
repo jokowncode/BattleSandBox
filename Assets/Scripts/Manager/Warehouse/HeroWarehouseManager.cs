@@ -35,7 +35,7 @@ public class HeroWarehouseManager : MonoBehaviour {
         ownedHeroesDic.Clear(); // 清空旧数据，防止重复
         foreach (Hero hero in OwnedHeroes){
             if (hero == null) continue;
-            string heroRef = hero.name;
+            string heroRef = hero.Name;
             ownedHeroesDic[heroRef] = hero;
         }
     }

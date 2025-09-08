@@ -57,6 +57,7 @@ public class BattleUIManager : MonoBehaviour {
 
     private void Start() {
         heroWarehouseUI.UpdateHeroWarehouse();
+        BattleManager.Instance.LoadHeroDeploy();
         // PassiveEntryWarehouseUI.UpdatePassiveEntryWarehouse();
     }
 

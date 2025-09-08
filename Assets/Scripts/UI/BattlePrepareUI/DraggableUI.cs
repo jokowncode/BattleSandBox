@@ -32,7 +32,6 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
         if (go !=null){
             previewInstance = Instantiate(go);
             previewInstance.transform.position = Vector3.one * 100.0f;
-            previewInstance.name = prefabReference;
             SetAlpha(0.5f);
         }
     }
@@ -49,15 +48,24 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
     public void OnEndDrag(PointerEventData eventData){
         if (!previewInstance) return;
         SetAlpha(1f);
-        int deploAreaIndex = BattleManager.Instance.IsWithinArea(previewInstance.transform.position);
+        DeployHero(previewInstance, previewInstance.transform.position);
+    }
+
+    public void DeployHero(Vector3 heroPos) {
+        Hero prefab = HeroWarehouseManager.Instance.GetHeroByRef(prefabReference);
+        DeployHero(Instantiate(prefab), heroPos);
+    }
+
+    private void DeployHero(Hero hero, Vector3 heroPos) {
+        hero.transform.position = heroPos;
+        GetNavMeshPosition(hero.transform.position, 1.0f, out Vector3 finalPos);
+        int deploAreaIndex = BattleManager.Instance.IsWithinArea(finalPos);
         if (deploAreaIndex != -1){
-            GetNavMeshPosition(previewInstance.transform.position, 1.0f, out Vector3 finalPos);
-            previewInstance.transform.position = finalPos;
-            BattleManager.Instance.AddHero(previewInstance);
-            previewInstance.Deploy(deploAreaIndex);
+            hero.transform.position = finalPos;
+            hero.Deploy(deploAreaIndex);
             Destroy(this.gameObject);
         }else{
-            Destroy(previewInstance.gameObject);
+            Destroy(hero.gameObject);
         }
     }
 

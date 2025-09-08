@@ -51,6 +51,7 @@ public class Hero : Fighter{
         if(DeployHeroSfx)
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, DeployHeroSfx);
 
+        BattleManager.Instance.AddHero(this);
         if (HeroSelfPassiveEntries.Length != 0){
             foreach (PassiveEntry entry in HeroSelfPassiveEntries) {
                 AddPassiveEntry(entry, true);
