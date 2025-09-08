@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -15,13 +16,10 @@ public class PassiveEntryWarehouseUI : WarehouseUI {
     }
 
     public void AddItem(PassiveEntry passiveEntry, bool isNewItem) {
-        // TODO: Optimise Add And Remove PassiveEntry 
-        PassiveEntry addEntry = passiveEntry; 
-        if (isNewItem) {
-            addEntry = Instantiate(passiveEntry, this.transform);
-        }
         ClickableUI go = Instantiate(warehouseImageUIPrefab, warehouseContent);
-        go.passiveEntryData = addEntry;
-        if(isNewItem) PassiveEntryWarehouseManager.Instance.AddPassiveEntry(addEntry);
+        go.passiveEntryData = passiveEntry;
+        if (isNewItem) {
+            PassiveEntryWarehouseManager.Instance.AddPassiveEntry(passiveEntry);
+        }
     }
 }

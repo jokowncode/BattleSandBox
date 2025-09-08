@@ -10,30 +10,22 @@ public class AllHeroRecoverPassiveEntry : PassiveEntry {
     [SerializeField] private FighterType TargetFighterType;
     [SerializeField] private float RecoverMultiplier = 5.0f;
 
-    private BuffMiniData CurrentRecoverBuff;
-    private int TargetFighterCount;
-    private Hero OwnedHero;
-
-    private void Awake() {
-        this.CurrentRecoverBuff = Instantiate(RecoverBuff);
-    }
-
     public override void Construct(Hero ownedHero) {
-        this.OwnedHero = ownedHero;
-        foreach (Hero hero in BattleManager.Instance.HeroesInBattle) {
-            if (hero.Type == TargetFighterType) {
-                this.TargetFighterCount += 1;
-            }
-        }
-        
-        BattleManager.Instance.OnHeroEnterTheField += OnHeroEnterTheField;
-        BattleManager.Instance.OnHeroExitTheField += OnHeroExitTheField;
         BattleManager.Instance.OnBattleStart += OnBattleStart;
     }
 
     private void OnBattleStart() {
         // 场上每存在一名牧师，所有单位每秒回复5点*N的生命值
-        CurrentRecoverBuff.ChangedValue = this.TargetFighterCount * RecoverMultiplier;
+        BuffMiniData CurrentRecoverBuff = Instantiate(this.RecoverBuff);
+
+        int count = 0;
+        foreach (Hero hero in BattleManager.Instance.HeroesInBattle) {
+            if (hero.Type == TargetFighterType) {
+                count += 1;
+            }
+        }
+        
+        CurrentRecoverBuff.ChangedValue = count * RecoverMultiplier;
         BuffData buffData = ScriptableObject.CreateInstance<BuffData>();
         buffData.LongTimeEffectBuff = new List<BuffMiniData> { CurrentRecoverBuff };
         buffData.ImmediateEffectBuff = new List<BuffMiniData>();
@@ -41,25 +33,11 @@ public class AllHeroRecoverPassiveEntry : PassiveEntry {
         buffData.Duration = -1.0f;
 
         foreach(Hero hero in BattleManager.Instance.HeroesInBattle) {
-            BuffManager.Instance.AddBuff(this.OwnedHero, hero, buffData);
-        }
-    }
-
-    private void OnHeroExitTheField(Hero hero) {
-        if (hero.Type == TargetFighterType) {
-            this.TargetFighterCount -= 1;
-        }
-    }
-
-    private void OnHeroEnterTheField(Hero hero) {
-        if (hero.Type == TargetFighterType) {
-            this.TargetFighterCount += 1;
+            BuffManager.Instance.AddBuff(hero, hero, buffData);
         }
     }
 
     public override void Destruct(Hero hero) {
-        BattleManager.Instance.OnHeroEnterTheField -= OnHeroEnterTheField;
-        BattleManager.Instance.OnHeroExitTheField -= OnHeroExitTheField;
         BattleManager.Instance.OnBattleStart -= OnBattleStart;
     }
 }

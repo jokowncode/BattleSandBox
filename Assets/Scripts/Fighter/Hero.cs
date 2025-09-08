@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using Object = System.Object;
 
 public class Hero : Fighter{
 
@@ -17,6 +18,9 @@ public class Hero : Fighter{
     public int HeroAvailablePassiveEntrySortCode { get; private set; }
     public int DeployAreaIndex { get; private set; }
     public Vector3 StartPosition { get; private set; }
+
+    public Action<Hero> OnShowHeroDetail;
+    public Dictionary<string, Object> Records = new();
 
     protected override void Awake(){
         base.Awake();
@@ -49,18 +53,14 @@ public class Hero : Fighter{
 
         if (HeroSelfPassiveEntries.Length != 0){
             foreach (PassiveEntry entry in HeroSelfPassiveEntries) {
-                PassiveEntry addEntry = Instantiate(entry);
-                AddPassiveEntry(addEntry, true);
+                AddPassiveEntry(entry, true);
             }
         }
         BattleManager.Instance.ShowHeroDetail(this);
         BattleManager.Instance.LoadHeroPassiveEntry(this);
     }
 
-    public void Undress(){
-        for (int i = 0; i < EquipPassiveEntries.Count; ) {
-            RemovePassiveEntry(EquipPassiveEntries[i], false);
-        }
+    public void UndressSelfEntry(){
         for (int i = 0; i < SelfPassiveEntries.Count; ) {
             RemovePassiveEntry(SelfPassiveEntries[i], true);
         }
@@ -68,7 +68,6 @@ public class Hero : Fighter{
 
     public void AddPassiveEntry(PassiveEntry entry, bool isSelfOwned){
         if (!entry) return;
-        entry.transform.parent = this.transform;
         if (isSelfOwned) {
             SelfPassiveEntries.Add(entry);
         } else {
@@ -86,7 +85,6 @@ public class Hero : Fighter{
         } else {
             EquipPassiveEntries.Remove(removeEntry);
         }
-        Destroy(removeEntry.gameObject);
     }
 
     public string GetPassiveEntryDesc(){
@@ -97,4 +95,5 @@ public class Hero : Fighter{
         }
         return desc;
     }
+    
 }

@@ -242,6 +242,7 @@ public class BattleManager : StateMachineController{
 
     public void ShowHeroDetail(Hero hero){
         this.selectedHero = hero;
+        hero.OnShowHeroDetail?.Invoke(hero);
         UpdatePassiveEntryUI(hero);
         BattleUIManager.Instance.ShowHeroDetail(hero);
     }
@@ -252,7 +253,6 @@ public class BattleManager : StateMachineController{
     public void RecallSelectedHero() {
         if (!selectedHero) return;
         this.DeployAreaCurrentHeroCount[selectedHero.DeployAreaIndex]--;
-        RemovePassiveEntry();
         BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.name);
         this.RemoveHero(selectedHero);
         Destroy(selectedHero.gameObject);
@@ -270,20 +270,19 @@ public class BattleManager : StateMachineController{
         if (EquipPassiveEntrySfx) {
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EquipPassiveEntrySfx);
         }
-
-        PassiveEntry entry = Instantiate(data);
-        if (Skills1InBattle.TryAdd(selectedHero, entry) 
+        
+        if (Skills1InBattle.TryAdd(selectedHero, data) 
             && PassiveEntryWarehouseManager.Instance.ContainsPassiveEntry(data)){
-            selectedHero.AddPassiveEntry(entry, false);
+            selectedHero.AddPassiveEntry(data, false);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
             PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data);
             return 0;
         }
         
-        if (Skills2InBattle.TryAdd(selectedHero, entry)
+        if (Skills2InBattle.TryAdd(selectedHero, data)
             && PassiveEntryWarehouseManager.Instance.ContainsPassiveEntry(data)){
-            selectedHero.AddPassiveEntry(entry, false);
+            selectedHero.AddPassiveEntry(data, false);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
             PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data);
@@ -349,7 +348,8 @@ public class BattleManager : StateMachineController{
     public void RemoveHero(Hero hero){
         OnHeroExitTheField?.Invoke(hero);
         this.HeroesInBattle.Remove(hero);
-        hero.Undress();
+        RemovePassiveEntry();
+        hero.UndressSelfEntry();
     }
 
     public void RemoveEnemy(Enemy enemy) {
