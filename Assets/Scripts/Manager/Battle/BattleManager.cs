@@ -385,12 +385,14 @@ public class BattleManager : StateMachineController{
     }
     
 
-    public void RemoveHero(Hero hero){
+    public void RemoveHero(Hero hero) {
+        this.selectedHero = hero;
         this.DeployAreaCurrentHeroCount[hero.DeployAreaIndex]--;
         OnHeroExitTheField?.Invoke(hero);
         this.HeroesInBattle.Remove(hero);
         RemovePassiveEntry();
         hero.UndressSelfEntry();
+        this.selectedHero = null;
     }
 
     public void RemoveEnemy(Enemy enemy) {

@@ -130,8 +130,10 @@ public class Fighter : StateMachineController{
         this.ChangeState(null);
 
         // TODO: Temp
-        if (this.FighterSkillCaster is SummonSkillCaster summonSkill) {
-            summonSkill.ClearPet();
+        if (!BattleManager.Instance.IsGameOver) {
+            if (this.FighterSkillCaster is SummonSkillCaster summonSkill) {
+                summonSkill.ClearPet();
+            }    
         }
     }
 

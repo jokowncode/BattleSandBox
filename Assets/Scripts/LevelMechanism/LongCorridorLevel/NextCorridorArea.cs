@@ -10,6 +10,10 @@ public class NextCorridorArea : MonoBehaviour {
     [SerializeField] private NextCorridorArea NextArea;
     [SerializeField] private Transform StartAreaRef;
     
+    [Header("Move Area")]
+    [SerializeField] private MoveArea MoveArea;
+    [SerializeField] private float MoveDuration = 2.0f;
+    
     private bool IsActive;
     private bool IsEnd;
     private Vector3 Offset = Vector3.zero;
@@ -44,7 +48,24 @@ public class NextCorridorArea : MonoBehaviour {
 
     private void OnCameraArrive() {
         MoveCam.OnArrive -= OnCameraArrive;
-        StartCoroutine(NextAreaCoroutine());
+        StartCoroutine(MoveAreaCoroutine());
+    }
+
+    private IEnumerator MoveAreaCoroutine() {
+        foreach (Hero hero in BattleManager.Instance.HeroesInBattle) {
+            hero.transform.parent = this.MoveArea.transform;
+            hero.transform.localPosition = this.MoveArea.GetLocalPosition(hero.Name);
+        }
+
+        this.MoveArea.transform.position = this.Edge.position - new Vector3(50.0f, 0.0f, 0.0f);
+        Vector3 startPos = this.MoveArea.transform.position;
+        for (float t = 0.0f; t <= this.MoveDuration; t += Time.deltaTime) {
+            this.MoveArea.transform.position = Vector3.Lerp(startPos, this.transform.position, t / this.MoveDuration);
+            yield return null;
+        }
+
+        this.MoveArea.transform.position = this.transform.position;
+        NextArea.Active();
     }
 
     private IEnumerator NextAreaCoroutine() {
