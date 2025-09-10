@@ -57,7 +57,7 @@ public class NextCorridorArea : MonoBehaviour {
             hero.transform.localPosition = this.MoveArea.GetLocalPosition(hero.Name);
         }
 
-        this.MoveArea.transform.position = this.Edge.position - new Vector3(50.0f, 0.0f, 0.0f);
+        this.MoveArea.transform.position = this.Edge.position - new Vector3(15.0f, 0.0f, 0.0f);
         Vector3 startPos = this.MoveArea.transform.position;
         for (float t = 0.0f; t <= this.MoveDuration; t += Time.deltaTime) {
             this.MoveArea.transform.position = Vector3.Lerp(startPos, this.transform.position, t / this.MoveDuration);
