@@ -225,6 +225,7 @@ public class BattleManager : StateMachineController{
 
     public void AllHeroRecall() {
         for (int i = 0; i < HeroesInBattle.Count; ) {
+            Debug.Log("aaaaa");
             this.selectedHero = HeroesInBattle[i];
             RecallSelectedHero();
         }
@@ -392,7 +393,6 @@ public class BattleManager : StateMachineController{
         this.HeroesInBattle.Remove(hero);
         RemovePassiveEntry();
         hero.UndressSelfEntry();
-        this.selectedHero = null;
     }
 
     public void RemoveEnemy(Enemy enemy) {
