@@ -225,7 +225,6 @@ public class BattleManager : StateMachineController{
 
     public void AllHeroRecall() {
         for (int i = 0; i < HeroesInBattle.Count; ) {
-            Debug.Log("aaaaa");
             this.selectedHero = HeroesInBattle[i];
             RecallSelectedHero();
         }
