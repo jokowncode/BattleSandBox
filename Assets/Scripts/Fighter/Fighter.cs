@@ -392,7 +392,7 @@ public class Fighter : StateMachineController{
     public float AttackRadius => InitialData.AttackRadius;
     public float Speed => InitialData.Speed;
     public Sprite DetailPortrait => InitialData.DetailPortrait;
-    public Sprite[] WarehouseHeroAnims => InitialData.WarehouseHeroAnims;
+    public Sprite WarehouseHeroPortrait => InitialData.WarehouseHeroPortrait;
     
     #endregion
 }
