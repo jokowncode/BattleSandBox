@@ -27,8 +27,10 @@ public class FighterMove : MonoBehaviour{
         Agent.speed = Owner.Speed;
         // Obstacle.carveOnlyStationary = true;
 
-        Agent.enabled = true;
-        Obstacle.enabled = false;
+        if (!Agent.enabled) {
+            Obstacle.enabled = false;
+            Agent.enabled = true;
+        }
     }
 
     public void ChangeForward(float sign) {
@@ -64,7 +66,7 @@ public class FighterMove : MonoBehaviour{
         CurrentTargetPos = targetPos;
         Agent.SetDestination(targetPos);
     }
-
+    
     private Vector3 GenerateRandomPoint(Vector3 center, float radius) {
         Vector2 randomDir = UnityEngine.Random.insideUnitCircle * radius;
         Vector3 targetPos = center + new Vector3(randomDir.x, 0, randomDir.y);

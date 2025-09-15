@@ -8,9 +8,9 @@ public class Fighter : StateMachineController{
 
     [SerializeField] private Color InitialColor = Color.green;
     [SerializeField] private Color FinalColor = Color.red;
-    
-    [SerializeField] protected FighterData InitialData;
-    [SerializeField] private Canvas FighterCanvas;
+
+    [field: SerializeField] public FighterData InitialData { get; protected set; }
+    [SerializeField] protected Canvas FighterCanvas;
     [SerializeField] private Image BloodBarImage;
     [SerializeField] private Image ShieldBarImage;
     [field: SerializeField] public SkillNameUI SkillNameText{ get; private set; }
@@ -21,9 +21,9 @@ public class Fighter : StateMachineController{
     [field: SerializeField] public Transform AttackCaster { get; private set; }
     [SerializeField] private AudioClip BeDamagedSfx;
     
-    private FighterData CurrentData;
+    protected FighterData CurrentData;
     public Fighter AttackTarget { get; private set; }
-    public SkillCaster FighterSkillCaster { get; private set; }
+    public SkillCaster FighterSkillCaster { get; protected set; }
     public Animator FighterAnimator{ get; private set; }
     public FighterMove Move{ get; private set; }
     public FighterAnimationEvent AnimationEvent { get; private set; }
@@ -56,7 +56,7 @@ public class Fighter : StateMachineController{
         this.FighterPatrol = GetComponent<PatrolState>();
         this.FighterSkill = GetComponent<SkillState>();
         // Clone Fighter Data to Update
-        this.CurrentData = Instantiate(this.InitialData);
+        if(this.InitialData) this.CurrentData = Instantiate(this.InitialData);
         this.CurrentFighterType = this.gameObject.layer == LayerMask.NameToLayer("Hero") ? TargetType.Hero : TargetType.Enemy;
         this.BloodBarImage.color = InitialColor;
     }
@@ -92,14 +92,10 @@ public class Fighter : StateMachineController{
         if(FighterPatrol) FighterPatrol.OnFindAttackTarget += OnFindAttackTarget;
         if (SkillNameText) SkillNameText.Hide(true);
 
-        if (!IsBattleStart) {
+        if (!IsBattleStart || isSummon) {
             IsBattleStart = true;
             this.InBattleHealth = this.CurrentData.Health;
             this.InBattleShield = this.CurrentData.Shield;
-        }
-
-        if (isSummon) {
-            this.InBattleHealth = this.CurrentData.Health;
         }
     }
 
@@ -180,7 +176,7 @@ public class Fighter : StateMachineController{
         }
     }
 
-    private void FighterDead() {
+    public void FighterDead() {
         IsDead = true;
         OnDead?.Invoke();
         this.Renderer.Dead();
@@ -392,7 +388,7 @@ public class Fighter : StateMachineController{
     public float AttackRadius => InitialData.AttackRadius;
     public float Speed => InitialData.Speed;
     public Sprite DetailPortrait => InitialData.DetailPortrait;
-    public Sprite[] WarehouseHeroAnims => InitialData.WarehouseHeroAnims;
+    public Sprite WarehouseHeroPortrait => InitialData.WarehouseHeroPortrait;
     
     #endregion
 }

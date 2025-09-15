@@ -16,7 +16,7 @@ public class FighterData : ScriptableObject{
     public float Critical;
     public TargetType AttackTargetType;
     public FighterType Type;
-    public Sprite[] WarehouseHeroAnims;
+    public Sprite WarehouseHeroPortrait;
     public Sprite DetailPortrait;
 }
 

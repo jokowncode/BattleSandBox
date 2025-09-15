@@ -10,6 +10,8 @@ public class Hero : Fighter{
 
     [SerializeField] private AudioClip DeployHeroSfx;
     [SerializeField] private PassiveEntry[] HeroSelfPassiveEntries;
+    [field: SerializeField] public SkillCaster HeroUpdateSkillCaster { get; private set; }
+    [SerializeField] private GameObject Shadow;
 
     private List<PassiveEntry> EquipPassiveEntries;
     private List<PassiveEntry> SelfPassiveEntries;
@@ -22,6 +24,8 @@ public class Hero : Fighter{
     public Action<Hero> OnShowHeroDetail;
     public Dictionary<string, Object> Records = new();
 
+    public int MergeGroupIndex { get; set; } = -1;
+
     protected override void Awake(){
         base.Awake();
         EquipPassiveEntries = new List<PassiveEntry>();
@@ -32,7 +36,26 @@ public class Hero : Fighter{
             this.HeroAvailablePassiveEntrySortCode =
                 (int)PassiveEntrySort.General | (int)PassiveEntrySort.Talent | (int)this.FighterSkillCaster.Sort;
         }
+    }
+
+    public void SetMergeData(FighterData data) {
+        this.InitialData = data;
+        this.CurrentData = Instantiate(this.InitialData);
+    }
+
+    public void SetMergeSkill(SkillCaster newSkill) {
+        SkillCaster newSkillCaster = Instantiate(newSkill, this.transform);
+        this.FighterSkillCaster = newSkillCaster;
+    }
+
+    public void TransitionShow(bool show) {
+        string layerName = show ? "Hero" : "HideLayer";
+        string uiLayerName = show ? "UI" : "HideLayer";
         
+        this.gameObject.layer = LayerMask.NameToLayer(layerName);
+        this.HeroRenderer.gameObject.layer = LayerMask.NameToLayer(layerName);
+        this.Shadow.layer = LayerMask.NameToLayer(layerName);
+        this.FighterCanvas.gameObject.layer = LayerMask.NameToLayer(uiLayerName);
     }
 
     public List<PassiveEntry> GetHeroPassiveEntries() {
