@@ -24,6 +24,8 @@ public class Hero : Fighter{
     public Action<Hero> OnShowHeroDetail;
     public Dictionary<string, Object> Records = new();
 
+    public int MergeGroupIndex { get; set; } = -1;
+
     protected override void Awake(){
         base.Awake();
         EquipPassiveEntries = new List<PassiveEntry>();
@@ -34,7 +36,6 @@ public class Hero : Fighter{
             this.HeroAvailablePassiveEntrySortCode =
                 (int)PassiveEntrySort.General | (int)PassiveEntrySort.Talent | (int)this.FighterSkillCaster.Sort;
         }
-        
     }
 
     public void SetMergeData(FighterData data) {

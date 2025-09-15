@@ -1,0 +1,127 @@
+﻿
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class HeroMergeManager : MonoBehaviour {
+
+    // TODO: Passive Entry
+    // [SerializeField] private List<PassiveEntry> HeroMergePassiveEntries;
+    [SerializeField] private BuffData HeroMergeBuff;
+    [SerializeField] private float HeroMergeDuration = 5.0f;
+    [SerializeField] private int MergeEnergy = 5;
+    
+    public static HeroMergeManager Instance;
+    private HeroMergeGroupData[] HeroMergeGroup;
+    private WaitForSeconds HeroMergeTimer;
+    
+    private void Awake() {
+        if (Instance != null) {
+            Destroy(this.gameObject);
+            return;
+        }
+        Instance = this;
+        this.HeroMergeBuff.Duration = HeroMergeDuration;
+        this.HeroMergeTimer = new WaitForSeconds(this.HeroMergeDuration);
+    }
+
+    private void Start() {
+        BattleManager.Instance.OnBattleStart += OnBattleStart;
+        this.HeroMergeGroup = new HeroMergeGroupData[BattleManager.Instance.Data.MaxHeroCount / 2];
+    }
+
+    private void OnBattleStart() {
+        // TODO: Link UI
+        if (BattleManager.Instance.HeroesInBattle.Count >= 2) {
+            HeroMergeGroup[0] = new HeroMergeGroupData {
+                MergeHeroes = new List<Hero>(){
+                    BattleManager.Instance.HeroesInBattle[0],
+                    BattleManager.Instance.HeroesInBattle[1]
+                },
+                CurrentEnergy = 0,
+                CurrentMergeHero = null,
+                IsMerge = false
+            };
+            BattleManager.Instance.HeroesInBattle[0].MergeGroupIndex = 0;
+            BattleManager.Instance.HeroesInBattle[1].MergeGroupIndex = 0;
+            
+            BattleManager.Instance.HeroesInBattle[0].FighterSkillCaster.OnCastSkill += OnCastSkill;
+            BattleManager.Instance.HeroesInBattle[1].FighterSkillCaster.OnCastSkill += OnCastSkill;
+        }
+    }
+
+    private void OnCastSkill(Fighter fighter) {
+        if (fighter is not Hero hero ||  hero.MergeGroupIndex < 0 || hero.MergeGroupIndex >= this.HeroMergeGroup.Length) return;
+        HeroMergeGroupData data = this.HeroMergeGroup[hero.MergeGroupIndex];
+        if (data.IsMerge) return;
+        
+        data.CurrentEnergy += 1;
+        if (data.CurrentEnergy >= this.MergeEnergy) {
+            MergeHero(data);
+        }
+    }
+
+    private void MergeHero(HeroMergeGroupData groupData) {
+        if (groupData.IsMerge) return;
+        groupData.IsMerge = true;
+        StartCoroutine(MergeHeroCoroutine(groupData));
+    }
+
+    private IEnumerator MergeHeroCoroutine(HeroMergeGroupData groupData) {
+        StartMerge(groupData);
+        yield return this.HeroMergeTimer;
+        CancelMerge(groupData);
+    }
+
+    private void StartMerge(HeroMergeGroupData groupData) {
+        Hero firstHero = groupData.MergeHeroes[0];
+        Hero secondHero = groupData.MergeHeroes[1];
+        
+        Hero mergeHero = Instantiate(firstHero);
+        FighterData data = Instantiate(firstHero.InitialData);
+        data.PhysicsAttack = secondHero.InitialData.PhysicsAttack;
+        data.MagicAttack = secondHero.InitialData.MagicAttack;
+        data.Shield = 0;
+        mergeHero.SetMergeData(data);
+
+        GameObject otherHeroRenderer = Instantiate(secondHero.HeroRenderer.gameObject, mergeHero.HeroRenderer.gameObject.transform);
+        otherHeroRenderer.transform.localPosition = new Vector3(-3.0f, 0.0f, 0.0f);
+        mergeHero.SetMergeSkill(secondHero.HeroUpdateSkillCaster);
+        // All Property Increase 200%
+        if (HeroMergeBuff) BuffManager.Instance.AddBuff(mergeHero, mergeHero, HeroMergeBuff);
+        groupData.CurrentMergeHero = mergeHero;
+        groupData.CurrentMergeHero.OnDead += () => CancelMerge(groupData);
+        foreach (Hero hero in groupData.MergeHeroes) {
+            hero.FighterIdle();
+            hero.Move.StopMove();
+            hero.TransitionShow(false);
+            hero.OnDead?.Invoke();
+            BattleManager.Instance.HeroesInBattle.Remove(hero);
+        }
+        BattleManager.Instance.HeroesInBattle.Add(mergeHero);
+        mergeHero.BattleStart(true);
+    }
+
+    private void CancelMerge(HeroMergeGroupData groupData) {
+        if (!groupData.CurrentMergeHero) return;
+        if (!groupData.CurrentMergeHero.IsDead) {
+            groupData.CurrentMergeHero.FighterDead();
+            return;
+        }
+
+        Vector3 offset = Vector3.zero;
+        foreach (Hero hero in groupData.MergeHeroes) {
+            hero.transform.position = groupData.CurrentMergeHero.transform.position + offset;
+            offset += Vector3.left * 3.0f; 
+            hero.BattleStart();
+            hero.TransitionShow(true);
+            BattleManager.Instance.HeroesInBattle.Add(hero);
+        }
+        groupData.CurrentMergeHero = null;
+        groupData.IsMerge = false;
+        groupData.CurrentEnergy = 0;
+    }
+}
+
+

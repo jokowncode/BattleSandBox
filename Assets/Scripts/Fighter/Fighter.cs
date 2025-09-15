@@ -92,14 +92,10 @@ public class Fighter : StateMachineController{
         if(FighterPatrol) FighterPatrol.OnFindAttackTarget += OnFindAttackTarget;
         if (SkillNameText) SkillNameText.Hide(true);
 
-        if (!IsBattleStart) {
+        if (!IsBattleStart || isSummon) {
             IsBattleStart = true;
             this.InBattleHealth = this.CurrentData.Health;
             this.InBattleShield = this.CurrentData.Shield;
-        }
-
-        if (isSummon) {
-            this.InBattleHealth = this.CurrentData.Health;
         }
     }
 
@@ -180,7 +176,7 @@ public class Fighter : StateMachineController{
         }
     }
 
-    private void FighterDead() {
+    public void FighterDead() {
         IsDead = true;
         OnDead?.Invoke();
         this.Renderer.Dead();

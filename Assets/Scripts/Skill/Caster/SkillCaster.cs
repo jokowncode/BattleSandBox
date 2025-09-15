@@ -23,6 +23,8 @@ public abstract class SkillCaster : MonoBehaviour{
 
     public SkillData Data{ get; private set; }
 
+    public Action<Fighter> OnCastSkill;
+
     protected virtual void Awake(){
         OwnedFighter = GetComponentInParent<Fighter>();
         SkillStartPlugins = new List<SkillStart>();
@@ -109,6 +111,7 @@ public abstract class SkillCaster : MonoBehaviour{
         }
         CurrentSkillCastCount++;
         Cast(attackTarget);
+        OnCastSkill?.Invoke(this.OwnedFighter);
         // foreach (SkillStart start in SkillStartPlugins){
         //     start.AdditionalProcedure();
         // }
