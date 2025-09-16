@@ -403,21 +403,15 @@ public class BattleManager : StateMachineController{
         float minPercentage = 1.0f;
         if (type == TargetType.Hero){
             foreach (Hero hero in HeroesInBattle){
-                float currentValue = ReflectionTools.GetObjectProperty<float>(property.ToString(), hero);
-                float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+property, hero);
-                float percentage = currentValue / initialValue;
-                if (percentage < minPercentage){
-                    minPercentage = percentage;
+                if (hero.HealthPercentage < minPercentage){
+                    minPercentage = hero.HealthPercentage;
                     result = hero;
                 }
             }    
         }else if (type == TargetType.Enemy){
             foreach (Enemy enemy in EnemiesInBattle){
-                float currentValue = ReflectionTools.GetObjectProperty<float>(property.ToString(), enemy);
-                float initialValue = ReflectionTools.GetObjectProperty<float>("Initial"+property, enemy);
-                float percentage = currentValue / initialValue;
-                if (percentage < minPercentage){
-                    minPercentage = percentage;
+                if (enemy.HealthPercentage < minPercentage){
+                    minPercentage = enemy.HealthPercentage;
                     result = enemy;
                 }
             }    

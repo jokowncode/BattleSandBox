@@ -96,7 +96,7 @@ public class HeroMergeManager : MonoBehaviour {
             hero.FighterIdle();
             hero.Move.StopMove();
             hero.TransitionShow(false);
-            hero.OnDead?.Invoke();
+            hero.OnDisappear?.Invoke();
             BattleManager.Instance.HeroesInBattle.Remove(hero);
         }
         BattleManager.Instance.HeroesInBattle.Add(mergeHero);

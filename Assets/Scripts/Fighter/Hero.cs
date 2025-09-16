@@ -45,10 +45,13 @@ public class Hero : Fighter{
 
     public void SetMergeSkill(SkillCaster newSkill) {
         SkillCaster newSkillCaster = Instantiate(newSkill, this.transform);
+        newSkillCaster.gameObject.SetActive(true);
+        newSkillCaster.transform.position = this.FighterSkillCaster.transform.position;
         this.FighterSkillCaster = newSkillCaster;
     }
 
     public void TransitionShow(bool show) {
+        this.IsDisappear = !show;
         string layerName = show ? "Hero" : "HideLayer";
         string uiLayerName = show ? "UI" : "HideLayer";
         
@@ -56,6 +59,10 @@ public class Hero : Fighter{
         this.HeroRenderer.gameObject.layer = LayerMask.NameToLayer(layerName);
         this.Shadow.layer = LayerMask.NameToLayer(layerName);
         this.FighterCanvas.gameObject.layer = LayerMask.NameToLayer(uiLayerName);
+
+        foreach (Transform child in this.Center) {
+            child.gameObject.SetActive(show);
+        }
     }
 
     public List<PassiveEntry> GetHeroPassiveEntries() {

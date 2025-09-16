@@ -39,12 +39,16 @@ public class Fighter : StateMachineController{
     public bool IsDead{ get; private set; }
 
     public Action OnDead;
+    public Action OnDisappear;
 
     private float InBattleHealth;
     private float InBattleShield;
 
     private bool IsBattleStart;
+    public bool IsDisappear { get; protected set; } = false;
     
+    public float HealthPercentage => this.CurrentData.Health == 0.0f ? 0.0f : this.InBattleHealth / this.CurrentData.Health;
+
 #if DEBUG_MODE
     public float TotalDamage {get; set;}    
 #endif
@@ -96,6 +100,8 @@ public class Fighter : StateMachineController{
             IsBattleStart = true;
             this.InBattleHealth = this.CurrentData.Health;
             this.InBattleShield = this.CurrentData.Shield;
+            UpdateBloodBar();
+            UpdateShieldBar();
         }
     }
 
@@ -103,11 +109,22 @@ public class Fighter : StateMachineController{
         if (!target) return; 
         this.AttackTarget = target;
         this.AttackTarget.OnDead += OnTargetDead;
+        this.AttackTarget.OnDisappear += OnTargetDisappear;
+    }
+
+    private void OnTargetDisappear() {
+        if(this.AttackTarget) this.AttackTarget.OnDisappear -= OnTargetDisappear;
+        this.AttackTarget = null;
+        if (!this.IsDisappear) {
+            this.ChangeState(FighterPatrol);
+        }
     }
 
     private void OnTargetDead() {
         this.AttackTarget = null;
-        this.ChangeState(FighterPatrol);
+        if (!this.IsDisappear) {
+            this.ChangeState(FighterPatrol);
+        }
     }
     
     private void ShowDamage(float damage, bool isCritical){
@@ -141,15 +158,13 @@ public class Fighter : StateMachineController{
             finalDamage = Mathf.Max(0, effectData.Value - this.InBattleShield);
             this.InBattleShield = Mathf.Max(0, this.InBattleShield - effectData.Value);
             if (this.InBattleShield <= 0){
-                foreach (Transform child in this.transform) {
+                foreach (Transform child in this.Center.transform) {
                     if (child.CompareTag("Shield")) {
                         Destroy(child.gameObject);
                     }
                 }
             }   
-            if (this.ShieldBarImage) {
-                UpdateShieldBar();
-            }
+            UpdateShieldBar();
         }
         
         ShowDamage(finalDamage, effectData.IsCritical);
@@ -214,6 +229,7 @@ public class Fighter : StateMachineController{
     }
 
     private void UpdateShieldBar() {
+        if (!this.ShieldBarImage) return;
         this.ShieldBarImage.fillAmount = this.CurrentData.Shield == 0.0f ? 0.0f : this.InBattleShield / this.CurrentData.Shield;
     }
 
