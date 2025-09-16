@@ -50,10 +50,14 @@ public class FighterMove : MonoBehaviour{
         // this.Obstacle.enabled = false;
         // this.Obstacle.carving = false;
         this.Agent.enabled = true;
+        this.CurrentTargetPos = targetPos;
+        this.CurrentTargetPos.y = 0.0f;
         
         Vector3 velocityDir = (targetPos - this.transform.position).normalized;
         this.Owner.FighterAnimator.SetFloat(AnimationParams.Velocity, velocityDir.sqrMagnitude);
         if (velocityDir == Vector3.zero){
+            IsArrive = true;
+            OnArriveDestination?.Invoke(this.Owner);
             return;
         }
 
@@ -63,7 +67,6 @@ public class FighterMove : MonoBehaviour{
         //this.transform.position += Owner.Speed * Time.deltaTime * velocityDir;
         // Vector3 randomPos = GenerateRandomPoint(targetPos, this.Owner.AttackRadius);
         IsArrive = false;
-        CurrentTargetPos = targetPos;
         Agent.SetDestination(targetPos);
     }
     
@@ -80,7 +83,9 @@ public class FighterMove : MonoBehaviour{
     private void Update(){
         if (this.Agent.enabled) {
             ChangeForward(this.Agent.velocity.x);
-            if (!IsArrive && (CurrentTargetPos - this.transform.position).sqrMagnitude <= 0.005f) {
+            Vector3 currentPos = this.transform.position;
+            currentPos.y = 0.0f;
+            if (!IsArrive && (CurrentTargetPos - currentPos).sqrMagnitude <= 0.005f) {
                 IsArrive = true;
                 OnArriveDestination?.Invoke(this.Owner);
             }

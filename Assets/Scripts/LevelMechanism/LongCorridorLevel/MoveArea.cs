@@ -25,6 +25,11 @@ public class MoveArea : MonoBehaviour {
         HeroLocalPositions.Add(hero.Name, localPos);
     }
 
+    public Vector3 GetWorldPosition(string heroName) {
+        Vector3 localPos = GetLocalPosition(heroName);
+        return this.transform.TransformPoint(localPos);
+    }
+
     public Vector3 GetLocalPosition(string heroName) {
         return HeroLocalPositions.TryGetValue(heroName, out Vector3 position) ? position : Vector3.zero;
     }
