@@ -53,7 +53,7 @@ public class SummonSkillCaster : SkillCaster{
         ApplySkillStart(pet.gameObject, 
             pet.Type == FighterType.Warrior ? pet.PhysicsAttack : pet.MagicAttack);
 
-        pet.OnDead += () => this.SummonPets.Remove(pet);
+        pet.OnDead += _ => this.SummonPets.Remove(pet);
         this.SummonPets.Add(pet);
     }
 

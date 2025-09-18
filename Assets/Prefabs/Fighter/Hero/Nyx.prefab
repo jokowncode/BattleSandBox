@@ -60,7 +60,7 @@ PrefabInstance:
         type: 3}
       propertyPath: <HeroUpdateSkillCaster>k__BackingField
       value: 
-      objectReference: {fileID: 2602854629779414099}
+      objectReference: {fileID: 7342495795647362019}
     - target: {fileID: 1696080231649588743, guid: 73e558a38b9f460459e333776a739292,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -189,6 +189,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2602854629779414099}
+    - targetCorrespondingSourceObject: {fileID: 6796088590249075442, guid: 73e558a38b9f460459e333776a739292,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7342495795647362019}
   m_SourcePrefab: {fileID: 100100000, guid: 73e558a38b9f460459e333776a739292, type: 3}
 --- !u!114 &3720164048115405847 stripped
 MonoBehaviour:
@@ -202,6 +206,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &5061571775692655203 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6796088590249075442, guid: 73e558a38b9f460459e333776a739292,
+    type: 3}
+  m_PrefabInstance: {fileID: 1760588761901328529}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7342495795647362019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5061571775692655203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 509f32262ff34e40b10a061ea759ff45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InitialData: {fileID: 11400000, guid: 8bdcd29a764951549bf590d5167efbbb, type: 2}
+  SkillStartParticle: {fileID: 198805929110671240, guid: 07f193a9e5b35c04db91f160dabc03b6,
+    type: 3}
+  SkillCastSfx: {fileID: 8300000, guid: 2a92a1ba68af9d34594af3210c8845e2, type: 3}
+  <Sort>k__BackingField: 16
+  BuffData: {fileID: 11400000, guid: 4790b2a1b0267174d9d682c882b17efa, type: 2}
+  SummonCount: 4
+  SummonDuration: 6
+  SummonAngle: 30
 --- !u!4 &6724247256806009355 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4989862382575370906, guid: 73e558a38b9f460459e333776a739292,

@@ -21,7 +21,7 @@ public class BuffManager : MonoBehaviour {
         if (!target || target.IsDead) return;
         if (!caster || caster.IsDead) return;
         Coroutine coroutine = StartCoroutine(BuffCoroutine(caster, target, buffData));
-        target.OnDead += () => StopCoroutine(coroutine);
+        target.OnDead += _ => StopCoroutine(coroutine);
     }
 
     private IEnumerator BuffCoroutine(Fighter caster, Fighter target, BuffData buffData) {

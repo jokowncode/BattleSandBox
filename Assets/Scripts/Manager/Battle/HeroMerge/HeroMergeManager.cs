@@ -48,13 +48,32 @@ public class HeroMergeManager : MonoBehaviour {
             
             BattleManager.Instance.HeroesInBattle[0].FighterSkillCaster.OnCastSkill += OnCastSkill;
             BattleManager.Instance.HeroesInBattle[1].FighterSkillCaster.OnCastSkill += OnCastSkill;
+            
+            BattleManager.Instance.HeroesInBattle[0].OnDead += OnFighterDead;
+            BattleManager.Instance.HeroesInBattle[1].OnDead += OnFighterDead;
         }
     }
 
+    private void OnFighterDead(Fighter fighter) {
+        if (fighter is not Hero hero) return;
+        HeroMergeGroupData data = HeroMergeGroup[hero.MergeGroupIndex];
+        this.HeroMergeGroup[hero.MergeGroupIndex] = null;
+        
+        data.MergeHeroes[0].FighterSkillCaster.OnCastSkill -= OnCastSkill;
+        data.MergeHeroes[1].FighterSkillCaster.OnCastSkill -= OnCastSkill;
+        
+        data.MergeHeroes[0].OnDead -= OnFighterDead;
+        data.MergeHeroes[1].OnDead -= OnFighterDead;
+
+        data.MergeHeroes[0].MergeGroupIndex = -1;
+        data.MergeHeroes[1].MergeGroupIndex = -1;
+    }
+
     private void OnCastSkill(Fighter fighter) {
-        if (fighter is not Hero hero ||  hero.MergeGroupIndex < 0 || hero.MergeGroupIndex >= this.HeroMergeGroup.Length) return;
+        if (fighter is not Hero hero 
+            ||  hero.MergeGroupIndex < 0 || hero.MergeGroupIndex >= this.HeroMergeGroup.Length) return;
         HeroMergeGroupData data = this.HeroMergeGroup[hero.MergeGroupIndex];
-        if (data.IsMerge) return;
+        if (data == null || data.IsMerge) return;
         
         data.CurrentEnergy += 1;
         if (data.CurrentEnergy >= this.MergeEnergy) {
@@ -91,7 +110,7 @@ public class HeroMergeManager : MonoBehaviour {
         // All Property Increase 200%
         if (HeroMergeBuff) BuffManager.Instance.AddBuff(mergeHero, mergeHero, HeroMergeBuff);
         groupData.CurrentMergeHero = mergeHero;
-        groupData.CurrentMergeHero.OnDead += () => CancelMerge(groupData);
+        groupData.CurrentMergeHero.OnDead += _ => CancelMerge(groupData);
         foreach (Hero hero in groupData.MergeHeroes) {
             hero.FighterIdle();
             hero.Move.StopMove();

@@ -38,7 +38,7 @@ public class Fighter : StateMachineController{
     private FighterRenderer Renderer;
     public bool IsDead{ get; private set; }
 
-    public Action OnDead;
+    public Action<Fighter> OnDead;
     public Action OnDisappear;
 
     private float InBattleHealth;
@@ -120,7 +120,7 @@ public class Fighter : StateMachineController{
         }
     }
 
-    private void OnTargetDead() {
+    private void OnTargetDead(Fighter fighter) {
         this.AttackTarget = null;
         if (!this.IsDisappear) {
             this.ChangeState(FighterPatrol);
@@ -193,7 +193,7 @@ public class Fighter : StateMachineController{
 
     public void FighterDead() {
         IsDead = true;
-        OnDead?.Invoke();
+        OnDead?.Invoke(this);
         this.Renderer.Dead();
         this.FighterCanvas.gameObject.SetActive(false);
         this.gameObject.layer = LayerMask.NameToLayer("Default");
