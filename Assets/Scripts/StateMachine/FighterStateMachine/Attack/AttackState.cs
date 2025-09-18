@@ -85,10 +85,20 @@ public abstract class AttackState : FighterState{
         }
     }
 
-    protected virtual void OnAttack(){
+    private void OnAttack(){
+        if (IsNeedTarget && !this.AttackTarget) return;
         if (AttackSfx) {
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.AttackSfx);
         }
+
+        if (SpecialAttackCondition()) {
+            SpecialAttack();
+            return;
+        }
+        NormalAttack();
     }
 
+    protected virtual void NormalAttack() { }
+    protected virtual void SpecialAttack() { }
+    protected virtual bool SpecialAttackCondition() { return false; }
 }

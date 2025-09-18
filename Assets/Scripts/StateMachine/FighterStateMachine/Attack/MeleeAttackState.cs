@@ -4,9 +4,7 @@ using UnityEngine.VFX;
 
 public class MeleeAttackState : AttackState{
     
-    protected override void OnAttack(){
-        if (IsNeedTarget && !this.AttackTarget) return;
-        base.OnAttack();
+    protected override void NormalAttack(){
         if (AttackParticle) {
             Vector3 attackVec = AttackTarget.transform.position - transform.position;
             Vector3 XZ2XY = attackVec;

@@ -10,8 +10,7 @@ public class HealMinHealthPercentageState : AttackState{
         IsNeedTarget = false;
     }
 
-    protected override void OnAttack(){
-        base.OnAttack();
+    protected override void NormalAttack(){
         Fighter target = BattleManager.Instance.FindMinPercentagePropertyHero(FighterProperty.Health, Controller.AttackTargetType);
         if (!target) return;
 

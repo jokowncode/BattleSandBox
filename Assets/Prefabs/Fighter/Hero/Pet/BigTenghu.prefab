@@ -210,10 +210,46 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 1604180600521043341, guid: 9dc971c92557071459ea2a696d2fd53d, type: 3}
     - {fileID: 8161470355867436999, guid: 9dc971c92557071459ea2a696d2fd53d, type: 3}
+    - {fileID: 5145292406634641616, guid: 9dc971c92557071459ea2a696d2fd53d, type: 3}
     m_RemovedGameObjects:
     - {fileID: 536756055507888565, guid: 9dc971c92557071459ea2a696d2fd53d, type: 3}
     - {fileID: 2183968601451974002, guid: 9dc971c92557071459ea2a696d2fd53d, type: 3}
     - {fileID: 3060001644463883575, guid: 9dc971c92557071459ea2a696d2fd53d, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3462644465821736050, guid: 9dc971c92557071459ea2a696d2fd53d,
+        type: 3}
+      insertIndex: 5
+      addedObject: {fileID: 3953105375245387964}
   m_SourcePrefab: {fileID: 100100000, guid: 9dc971c92557071459ea2a696d2fd53d, type: 3}
+--- !u!198 &2273575133442946776 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6544825358100488283, guid: 9dc971c92557071459ea2a696d2fd53d,
+    type: 3}
+  m_PrefabInstance: {fileID: 4998643145887143555}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8454232586473802481 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3462644465821736050, guid: 9dc971c92557071459ea2a696d2fd53d,
+    type: 3}
+  m_PrefabInstance: {fileID: 4998643145887143555}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3953105375245387964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8454232586473802481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e8e41c4db5d4237b94aa2f310170783, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttackParticle: {fileID: 2273575133442946776}
+  AttackSfx: {fileID: 8300000, guid: 0e431d19ed471444eb67e9342014b541, type: 3}
+  BulletPrefab: {fileID: 2636736070463652283, guid: 210c2a26243af1e4b9dbeb3719546343,
+    type: 3}
+  Angle: 30
+  InitialDistance: 2
+  TriggerSpecialAttackInterval: 4
