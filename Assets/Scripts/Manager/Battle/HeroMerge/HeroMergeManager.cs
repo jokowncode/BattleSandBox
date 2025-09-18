@@ -96,8 +96,8 @@ public class HeroMergeManager : MonoBehaviour {
             hero.FighterIdle();
             hero.Move.StopMove();
             hero.TransitionShow(false);
-            hero.OnDisappear?.Invoke();
             BattleManager.Instance.HeroesInBattle.Remove(hero);
+            hero.OnDisappear?.Invoke();
         }
         BattleManager.Instance.HeroesInBattle.Add(mergeHero);
         mergeHero.BattleStart(true);
@@ -105,6 +105,7 @@ public class HeroMergeManager : MonoBehaviour {
 
     private void CancelMerge(HeroMergeGroupData groupData) {
         if (!groupData.CurrentMergeHero) return;
+        groupData.CurrentMergeHero.gameObject.SetActive(false);
         if (!groupData.CurrentMergeHero.IsDead) {
             groupData.CurrentMergeHero.FighterDead();
             return;

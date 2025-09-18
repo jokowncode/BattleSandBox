@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class DurationDamageSkillEffect : SkillEffect{
 
+    [Header("Duration Damage")]
     [SerializeField] private float DamageInterval = 1.0f;
     
     private List<Fighter> InMagicCircleAreaFighters;

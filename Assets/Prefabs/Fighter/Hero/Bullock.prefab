@@ -24714,7 +24714,7 @@ PrefabInstance:
     - target: {fileID: 1593314390621504107, guid: 73e558a38b9f460459e333776a739292,
         type: 3}
       propertyPath: HeroSelfPassiveEntries.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1593314390621504107, guid: 73e558a38b9f460459e333776a739292,
         type: 3}
@@ -24732,7 +24732,7 @@ PrefabInstance:
         type: 3}
       propertyPath: <HeroUpdateSkillCaster>k__BackingField
       value: 
-      objectReference: {fileID: 2625108407070357053}
+      objectReference: {fileID: 8161470355867436999}
     - target: {fileID: 1696080231649588743, guid: 73e558a38b9f460459e333776a739292,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -24874,6 +24874,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2625108407070357053}
+    - targetCorrespondingSourceObject: {fileID: 6796088590249075442, guid: 73e558a38b9f460459e333776a739292,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8161470355867436999}
   m_SourcePrefab: {fileID: 100100000, guid: 73e558a38b9f460459e333776a739292, type: 3}
 --- !u!4 &369295348737912090 stripped
 Transform:
@@ -24900,6 +24904,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InitialData: {fileID: 11400000, guid: b354de0c601ed3f4dbe27bdf7c6eedf4, type: 2}
+  SkillStartParticle: {fileID: 0}
+  SkillCastSfx: {fileID: 8300000, guid: 65a6250fcfc8d5d45ba317f49892c90a, type: 3}
+  <Sort>k__BackingField: 16
+--- !u!1 &2183968601451974002 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6796088590249075442, guid: 73e558a38b9f460459e333776a739292,
+    type: 3}
+  m_PrefabInstance: {fileID: 4620567117337948032}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8161470355867436999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2183968601451974002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2604aea48054261b8a188afce0aa173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InitialData: {fileID: 11400000, guid: 7f8d036bf5e6bdb4692479f2f05aaf0d, type: 2}
   SkillStartParticle: {fileID: 0}
   SkillCastSfx: {fileID: 8300000, guid: 65a6250fcfc8d5d45ba317f49892c90a, type: 3}
   <Sort>k__BackingField: 16

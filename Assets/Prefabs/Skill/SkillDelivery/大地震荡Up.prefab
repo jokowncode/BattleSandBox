@@ -102,6 +102,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 96648896923068284, guid: c00b77b5439de2547969406d06c7d43b,
+        type: 3}
+      propertyPath: m_Radius
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 471497842965634427, guid: c00b77b5439de2547969406d06c7d43b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -155,7 +160,7 @@ PrefabInstance:
     - target: {fileID: 8525953266526646887, guid: c00b77b5439de2547969406d06c7d43b,
         type: 3}
       propertyPath: m_Name
-      value: "\u5927\u5730\u9707\u8361"
+      value: "\u5927\u5730\u9707\u8361Up"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -172,7 +177,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8525953266526646887, guid: c00b77b5439de2547969406d06c7d43b,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7425934197294029457}
+      addedObject: {fileID: 1092831657413058907}
   m_SourcePrefab: {fileID: 100100000, guid: c00b77b5439de2547969406d06c7d43b, type: 3}
 --- !u!1 &3044718668890374122 stripped
 GameObject:
@@ -192,8 +197,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0322aed755e044fa8545fa7623a59671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DefaultDuration: 2
---- !u!114 &7425934197294029457
+  DefaultDuration: 1.5
+--- !u!114 &1092831657413058907
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -202,12 +207,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 3044718668890374122}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1306a10b044b47769cf2011aedfd213a, type: 3}
+  m_Script: {fileID: 11500000, guid: 15198b709cfa4801aeca1db8c697dbc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SkillApplyEffectSfx: {fileID: 0}
   SkillEndBuff: {fileID: 11400000, guid: a16b7fe1ae2ffd1409b76bd76a539a2d, type: 2}
   BuffTargetIsSelf: 1
+  DamageInterval: 1
 --- !u!4 &6528072009870954742 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 471497842965634427, guid: c00b77b5439de2547969406d06c7d43b,

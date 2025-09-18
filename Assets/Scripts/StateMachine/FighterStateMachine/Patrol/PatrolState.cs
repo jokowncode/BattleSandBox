@@ -47,7 +47,8 @@ public class PatrolState : FighterState{
             Controller.Move.MoveTo(this.PatrolPoint.transform.position);
         }*/
         
-        if (!this.PatrolPoint){
+        if (!this.PatrolPoint || 
+            this.PatrolPoint.gameObject.layer != LayerMask.NameToLayer(Controller.AttackTargetType.ToString())){
             Func<Fighter, bool> condition = null;
             if (Controller.Type == FighterType.Warrior){
                 condition = (Fighter warrior) => FormationManager.Instance.ValidTarget(warrior);

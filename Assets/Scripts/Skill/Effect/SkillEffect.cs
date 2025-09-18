@@ -5,9 +5,12 @@ using UnityEngine;
 
 public abstract class SkillEffect : MonoBehaviour {
 
-    [SerializeField] protected ParticleSystem EffectParticle;
     [SerializeField] private AudioClip SkillApplyEffectSfx;
-
+    
+    [Header("Skill End Buff")]
+    [SerializeField] private BuffData SkillEndBuff;
+    [SerializeField] private bool BuffTargetIsSelf = true;
+    
     public List<SkillEnd> SkillEndPlugins{ get; private set; }
     public SkillDelivery Delivery{ get; private set; }
 
@@ -21,11 +24,6 @@ public abstract class SkillEffect : MonoBehaviour {
     }
 
     public void ApplyEffect(Fighter influenceFighter, EffectData effectData) {
-        if (EffectParticle) {
-            EffectParticle.transform.position = influenceFighter.transform.position + Vector3.up;
-            EffectParticle.Play();
-        }
-
         if (SkillApplyEffectSfx) {
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.SkillApplyEffectSfx);
         }
@@ -35,6 +33,11 @@ public abstract class SkillEffect : MonoBehaviour {
             CameraManager.Instance.ShakeCamera(0.5f, 0.5f, Vector3.up);
         } else {
             CameraManager.Instance.ShakeCamera(0.5f, 0.25f, Vector3.right);
+        }
+
+        if (SkillEndBuff && this.Delivery.Caster.TryGetComponent(out Fighter caster)) {
+            Fighter target = this.BuffTargetIsSelf ? caster : influenceFighter;
+            BuffManager.Instance.AddBuff(caster, target, SkillEndBuff);
         }
 
         if (this.SkillEndPlugins == null) return;

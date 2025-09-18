@@ -31,7 +31,12 @@ public class FighterRenderer : MonoBehaviour{
 
     public void Dead(){
         if (IsDead) return;
-        StartCoroutine(DeadCoroutine());
+        if (this.gameObject.activeInHierarchy) {
+            StartCoroutine(DeadCoroutine());
+        } else {
+            Destroy(this.transform.parent.gameObject);
+            IsDead = false;
+        }
     }
     
     private IEnumerator DeadCoroutine(){
