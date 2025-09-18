@@ -56,6 +56,9 @@ public class NextCorridorArea : MonoBehaviour {
         // Move Fighter To Here Like Start Formation
         foreach (Hero hero in BattleManager.Instance.HeroesInBattle) {
             hero.Move.StartMove();
+            if (hero.FighterSkillCaster is SummonSkillCaster summonSkill) {
+                summonSkill.ClearPet();
+            }
         }
         yield return null;
         foreach (Hero hero in BattleManager.Instance.HeroesInBattle) {

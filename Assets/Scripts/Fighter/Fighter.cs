@@ -141,13 +141,6 @@ public class Fighter : StateMachineController{
         this.FighterAnimator.SetTrigger(AnimationParams.Idle);
         this.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
         this.ChangeState(null);
-
-        // TODO: Temp
-        if (!BattleManager.Instance.IsGameOver) {
-            if (this.FighterSkillCaster is SummonSkillCaster summonSkill) {
-                summonSkill.ClearPet();
-            }    
-        }
     }
 
     public void BeDamaged(EffectData effectData){
