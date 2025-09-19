@@ -78,7 +78,7 @@ public abstract class SkillCaster : MonoBehaviour{
 
     #endregion
 
-    protected float GetSkillEffectValue(out bool isCritical){
+    public float GetSkillEffectValue(out bool isCritical){
         isCritical = Random.value < OwnedFighter.Critical / 100.0f;
         float critical = isCritical ? 1.5f : 1.0f;
         
