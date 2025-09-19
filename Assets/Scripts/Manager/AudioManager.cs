@@ -10,7 +10,12 @@ public class AudioManager : MonoBehaviour{
 
     [SerializeField] private AudioSource MainMusicAudioSource;
     [SerializeField] private AudioSource FootstepAudioSource;
+    [SerializeField] private AudioSource DialogAudioSource;
     [SerializeField] private AudioClip[] FootstepAudios;
+
+    private Coroutine CurrentDialogCoroutine;
+    public Action OnDialogFinished;
+    public bool DialogIsFinished { get; private set; } = false;
 
     private void Awake(){
         if (Instance != null) {
@@ -28,6 +33,34 @@ public class AudioManager : MonoBehaviour{
         this.MainMusicAudioSource.clip = newClip;
         this.MainMusicAudioSource.mute = false;
         this.MainMusicAudioSource.Play();
+    }
+    
+    public void SetDialog(AudioClip newClip) {
+        this.DialogIsFinished = false;
+        this.DialogAudioSource.mute = true;
+        this.DialogAudioSource.clip = newClip;
+        this.DialogAudioSource.mute = false;
+        this.DialogAudioSource.Play();
+        
+        if (this.CurrentDialogCoroutine != null) {
+            StopCoroutine(this.CurrentDialogCoroutine);
+        }
+        this.CurrentDialogCoroutine = StartCoroutine(DialogPlayCoroutine(newClip.length));
+    }
+
+    private IEnumerator DialogPlayCoroutine(float length) {
+        yield return new WaitForSeconds(length);
+        this.OnDialogFinished?.Invoke();
+        this.DialogIsFinished = true;
+    }
+
+    public void StopDialog() {
+        if (this.CurrentDialogCoroutine != null) {
+            StopCoroutine(this.CurrentDialogCoroutine);
+            this.CurrentDialogCoroutine = null;
+        }
+        this.DialogIsFinished = true;
+        this.DialogAudioSource.Stop();
     }
 
     public void SetMainMusicVolume(float volume){
