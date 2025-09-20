@@ -6,14 +6,17 @@ using UnityEngine;
 public class TypeWriter : MonoBehaviour {
 
     [SerializeField] private float Duration = 1.0f;
+    [SerializeField] private float EndDelayTime = 1.0f;
     
     private TextMeshProUGUI Text;
     private string CurrentContent;
+    private WaitForSeconds EndDelayTimer;
     
     public bool IsEnd { get; private set; }
 
     private void Awake() {
         this.Text = GetComponent<TextMeshProUGUI>();
+        this.EndDelayTimer = new WaitForSeconds(this.EndDelayTime);
     }
 
     public void Play(string text) {
@@ -31,6 +34,8 @@ public class TypeWriter : MonoBehaviour {
             this.Text.text = content.Substring(0, length);
             yield return wait;
         }
+
+        yield return EndDelayTimer;
         this.Text.text = content;
         this.IsEnd = true;
     }

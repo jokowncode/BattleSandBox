@@ -14,7 +14,6 @@ public class AudioManager : MonoBehaviour{
     [SerializeField] private AudioClip[] FootstepAudios;
 
     private Coroutine CurrentDialogCoroutine;
-    public Action OnDialogFinished;
     public bool DialogIsFinished { get; private set; } = false;
 
     private void Awake(){
@@ -25,7 +24,6 @@ public class AudioManager : MonoBehaviour{
 
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
-        this.MainMusicAudioSource = GetComponent<AudioSource>();
     }
 
     public void SetMainMusic(AudioClip newClip){
@@ -34,7 +32,11 @@ public class AudioManager : MonoBehaviour{
         this.MainMusicAudioSource.mute = false;
         this.MainMusicAudioSource.Play();
     }
-    
+
+    public void StopMainMusic() {
+        this.MainMusicAudioSource.Stop();
+    }
+
     public void SetDialog(AudioClip newClip) {
         this.DialogIsFinished = false;
         this.DialogAudioSource.mute = true;
@@ -50,7 +52,6 @@ public class AudioManager : MonoBehaviour{
 
     private IEnumerator DialogPlayCoroutine(float length) {
         yield return new WaitForSeconds(length);
-        this.OnDialogFinished?.Invoke();
         this.DialogIsFinished = true;
     }
 

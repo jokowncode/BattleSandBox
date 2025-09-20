@@ -7,17 +7,28 @@ using UnityEngine.UI;
 public class DialogManager : MonoBehaviour {
     // TODO: Link
     [SerializeField] private StoryDialogData[] Dialogs;
+    [SerializeField] private AudioClip DialogBGM;
 
+    [Header("UI")]
     [SerializeField] private Image BackgroundImage;
     [SerializeField] private Image CharacterPortrait;
     [SerializeField] private TextMeshProUGUI CharacterName;
     [SerializeField] private TypeWriter DialogText;
     [SerializeField] private StoryReviewUI StoryReview;
+
+    [Header("Dialog Option")] 
+    [SerializeField] private Transform DialogOptionContainer;
+    [SerializeField] private DialogOption DialogOptionPrefab;
     
     public static DialogManager Instance;
     private int CurrentIndex;
     private CanvasGroup DialogCanvasGroup;
     public bool IsAutoPlay { get; private set; } = false;
+    private bool IsChooseOption = true;
+    private bool HasSound = false;
+
+    private bool CurrentDialogIsFinished =>
+        this.HasSound ? AudioManager.Instance.DialogIsFinished : this.DialogText.IsEnd;
 
     private void Awake() {
         if (Instance != null) {
@@ -37,16 +48,23 @@ public class DialogManager : MonoBehaviour {
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.P)) {
-            PlayDialog();
+            PlayNewDialog();
         }
+
+        if (!this.IsAutoPlay) return;
+        if (this.CurrentDialogIsFinished) NextDialog();
     }
 
-    public void PlayDialog() {
+    public void PlayNewDialog() {
         if (this.Dialogs.Length == 0) return;
+        this.StoryReview.Reset();
         this.CurrentIndex = 0;
         SetDialog();
         Transition(true);
-        this.StoryReview.SetDialogs(this.Dialogs);
+
+        if (this.DialogBGM) {
+            AudioManager.Instance.SetMainMusic(this.DialogBGM);
+        }
     }
 
     public void Next() {
@@ -58,8 +76,12 @@ public class DialogManager : MonoBehaviour {
     }
 
     private void NextDialog() {
-        this.CurrentIndex++;
-        if (this.CurrentIndex >= this.Dialogs.Length) {
+        if (!this.IsChooseOption) {
+            return;
+        }
+
+        this.CurrentIndex = this.Dialogs[this.CurrentIndex].NextDialogIndex;
+        if (this.CurrentIndex < 0 || this.CurrentIndex >= this.Dialogs.Length) {
             DialogEnd();
             return;
         }
@@ -69,31 +91,26 @@ public class DialogManager : MonoBehaviour {
     public void DialogEnd() {
         AudioManager.Instance.StopDialog();
         Transition(false);
+        this.IsAutoPlay = false;
+
+        if (this.DialogBGM) {
+            AudioManager.Instance.StopMainMusic();
+        }
     }
 
     public void ShowDialogReview() {
         AudioManager.Instance.StopDialog();
-        this.StoryReview.ShowDialogReview(this.CurrentIndex);
-        if (this.IsAutoPlay) {
-            AutoPlay();
-        }
+        this.StoryReview.Transition(true);
+        this.IsAutoPlay = false;
     }
 
     public void HideDialogReview() {
         AudioManager.Instance.StopDialog();
-        this.StoryReview.HideDialogReview();
+        this.StoryReview.Transition(false);
     }
 
     public void AutoPlay() {
         this.IsAutoPlay = !this.IsAutoPlay;
-        if (this.IsAutoPlay) {
-            AudioManager.Instance.OnDialogFinished += NextDialog;
-            if (AudioManager.Instance.DialogIsFinished) {
-                NextDialog();
-            }
-        } else {
-            AudioManager.Instance.OnDialogFinished -= NextDialog;
-        }
     }
 
     private void SetDialog() {
@@ -102,10 +119,38 @@ public class DialogManager : MonoBehaviour {
         if (data.Background) {
             this.BackgroundImage.sprite = data.Background;
         }
+        this.CharacterPortrait.color = new Color(1, 1, 1, data.CharacterPortrait ? 1.0f : 0.0f); 
         this.CharacterPortrait.sprite = data.CharacterPortrait;
         this.CharacterName.text = data.CharacterName;
         this.DialogText.Play(data.DialogText);
-        AudioManager.Instance.SetDialog(data.DialogAudio);
+
+        this.HasSound = data.DialogAudio;
+        if (data.DialogAudio) {
+            AudioManager.Instance.SetDialog(data.DialogAudio);
+        }
+
+        foreach (Transform option in this.DialogOptionContainer) {
+            Destroy(option.gameObject);
+        }
+        this.IsChooseOption = data.Options == null || data.Options.Length == 0;
+        if (data.Options != null) {
+            foreach (DialogOptionData optionData in data.Options) {
+                DialogOption option = Instantiate(this.DialogOptionPrefab, this.DialogOptionContainer);
+                option.SetOptionData(optionData.OptionText, optionData.NextDialogIndex);
+            }
+        }
+        this.StoryReview.AddDialogHistory(data);
+    }
+
+    public void ClickOption(int nextDialogIndex, string optionText) {
+        if (nextDialogIndex < 0) {
+            DialogEnd();
+            return;
+        }
+        this.CurrentIndex = nextDialogIndex;
+        this.IsChooseOption = true;
+        this.StoryReview.AddDialogOptionHistory(optionText);
+        SetDialog();
     }
 }
 
