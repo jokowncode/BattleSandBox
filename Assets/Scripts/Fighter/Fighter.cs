@@ -276,15 +276,15 @@ public class Fighter : StateMachineController{
         }
 
         float finalValue = currentValue + changeValue;
-        
         ReflectionTools.SetObjectProperty(propertyName, this, finalValue);
         if (updateProperty == FighterProperty.Shield && IsBattleStart) {
             if (finalValue <= 0.0f) {
                 this.InBattleShield = 0.0f;
             } else {
-                this.InBattleShield = currentValue != 0.0f ? 
+                this.InBattleShield = currentValue != 0.0f && this.InBattleShield != 0.0f? 
                     this.InBattleShield + this.InBattleShield * increasePercentage : changeValue;
             }
+            this.InBattleShield = Mathf.Max(this.InBattleShield, 0.0f);
             UpdateShieldBar();
         }
 
