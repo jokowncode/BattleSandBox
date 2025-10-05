@@ -160,7 +160,7 @@ public class HeroLinkUI : MonoBehaviour
             AllHeroes.Add(hero);
             GameObject heroCard = Instantiate(availableHeroesPrefab, availableHeroesContent);
             heroCard.GetComponent<HeroLinkClickableUI>().Hero =  hero;
-            heroCard.GetComponent<Image>().sprite = hero.heroPortraitSprite;
+            heroCard.GetComponent<Image>().sprite = hero.DetailPortrait;
             Debug.Log($"英雄 {hero.Name} 已添加到可用列表");
         }
     }
@@ -208,7 +208,7 @@ public class HeroLinkUI : MonoBehaviour
         if(tempHero != null)
             AddHeroToAvailable(tempHero);
         HeroSlots[selectedSlotIndex].GetComponent<HeroLinkSlotUI>().Hero = hero;
-        HeroSlots[selectedSlotIndex].GetComponent<Image>().sprite = hero.heroPortraitSprite;
+        HeroSlots[selectedSlotIndex].GetComponent<Image>().sprite = hero.DetailPortrait;
         HeroSlots[selectedSlotIndex].GetComponent<Image>().color = new Color(1, 1, 1, 1);
         Debug.Log("s: "+selectedSlotIndex);
         Debug.Log("c: " + HeroesInSlots.Count);
@@ -253,7 +253,7 @@ public class HeroLinkUI : MonoBehaviour
     {
         GameObject heroCard = Instantiate(availableHeroesPrefab, availableHeroesContent);
         heroCard.GetComponent<HeroLinkClickableUI>().Hero =  hero;
-        heroCard.GetComponent<Image>().sprite = hero.heroPortraitSprite;
+        heroCard.GetComponent<Image>().sprite = hero.DetailPortrait;
         if(isDebugging)
             Debug.Log($"英雄 {hero.Name} 已添加到可用列表");
     }

@@ -40,7 +40,7 @@ public class HeroDetailUI : MonoBehaviour {
     }
 
     private void Update() {
-        SetAllUITransparency(this.gameObject,fadeUI,0.1f);
+        //SetAllUITransparency(this.gameObject,fadeUI,0.1f);
     }
 
     public void ChangeHeroDetailUIValue(Sprite sprite){
