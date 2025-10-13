@@ -7,12 +7,13 @@ public class TypeWriter : MonoBehaviour {
 
     [SerializeField] private float Duration = 1.0f;
     [SerializeField] private float EndDelayTime = 1.0f;
-    
+
     private TextMeshProUGUI Text;
     private string CurrentContent;
     private WaitForSeconds EndDelayTimer;
-    
-    public bool IsEnd { get; private set; }
+
+    private bool IsPlayEnd;
+    public bool IsDelayEnd { get; private set; }
 
     private void Awake() {
         this.Text = GetComponent<TextMeshProUGUI>();
@@ -21,7 +22,8 @@ public class TypeWriter : MonoBehaviour {
 
     public void Play(string text) {
         StopAllCoroutines();
-        IsEnd = false;
+        IsDelayEnd = false;
+        IsPlayEnd = false;
         CurrentContent = text;
         StartCoroutine(PlayCoroutine(text));
     }
@@ -34,16 +36,21 @@ public class TypeWriter : MonoBehaviour {
             this.Text.text = content.Substring(0, length);
             yield return wait;
         }
-
+        this.IsPlayEnd = true;
         yield return EndDelayTimer;
         this.Text.text = content;
-        this.IsEnd = true;
+        this.IsDelayEnd = true;
     }
 
-    public void EndText() {
+    public bool EndText() {
         StopAllCoroutines();
-        this.Text.text = this.CurrentContent;
-        this.IsEnd = true;
+        bool result = this.IsPlayEnd;
+        if (!this.IsPlayEnd) {
+            this.Text.text = this.CurrentContent;
+            this.IsPlayEnd = true;
+        }
+        this.IsDelayEnd = true;
+        return result;
     }
 }
 

@@ -32,7 +32,7 @@ public class DialogManager : MonoBehaviour {
     public Action OnDialogEnded;
 
     private bool CurrentDialogIsFinished =>
-        this.HasSound ? AudioManager.Instance.DialogIsFinished : this.DialogText.IsEnd;
+        this.HasSound ? AudioManager.Instance.DialogIsFinished : this.DialogText.IsDelayEnd;
 
     private void Awake() {
         if (Instance != null) {
@@ -76,11 +76,9 @@ public class DialogManager : MonoBehaviour {
     }
 
     public void Next() {
-        if (!this.DialogText.IsEnd) {
-            this.DialogText.EndText();
-            return;
+        if (this.DialogText.EndText()) {
+            NextDialog();
         }
-        NextDialog();
     }
 
     private void NextDialog() {
