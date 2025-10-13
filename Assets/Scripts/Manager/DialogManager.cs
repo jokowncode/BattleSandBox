@@ -5,10 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class DialogManager : MonoBehaviour {
-    // TODO: Link
-    [SerializeField] private StoryDialogData[] Dialogs;
-    [SerializeField] private AudioClip DialogBGM;
-
+    
     [Header("UI")]
     [SerializeField] private Image BackgroundImage;
     [SerializeField] private Image CharacterPortrait;
@@ -26,6 +23,13 @@ public class DialogManager : MonoBehaviour {
     public bool IsAutoPlay { get; private set; } = false;
     private bool IsChooseOption = true;
     private bool HasSound = false;
+    private bool IsFullScreen = false;
+
+    private StoryDialogData[] Dialogs;
+    private AudioClip PreBGM;
+    private bool HasDialogBGM = false;
+
+    public Action OnDialogEnded;
 
     private bool CurrentDialogIsFinished =>
         this.HasSound ? AudioManager.Instance.DialogIsFinished : this.DialogText.IsEnd;
@@ -47,23 +51,27 @@ public class DialogManager : MonoBehaviour {
     }
 
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.P)) {
-            PlayNewDialog();
-        }
-
         if (!this.IsAutoPlay) return;
         if (this.CurrentDialogIsFinished) NextDialog();
     }
 
-    public void PlayNewDialog() {
+    public void PlayNewDialog(StoryDialogData[] dialogs, AudioClip dialogBGM, bool isFullScreen = true) {
+        this.Dialogs = dialogs;
+        this.IsFullScreen = isFullScreen;
         if (this.Dialogs.Length == 0) return;
         this.StoryReview.Reset();
         this.CurrentIndex = 0;
         SetDialog();
         Transition(true);
 
-        if (this.DialogBGM) {
-            AudioManager.Instance.SetMainMusic(this.DialogBGM);
+        this.HasDialogBGM = dialogBGM;
+        if (dialogBGM) {
+            this.PreBGM = AudioManager.Instance.GetCurrentMainMusic();
+            AudioManager.Instance.SetMainMusic(dialogBGM);
+        }
+
+        if (this.IsFullScreen) {
+            CameraManager.Instance.MainCamera.cullingMask = 1 << LayerMask.NameToLayer("UI");
         }
     }
 
@@ -93,9 +101,16 @@ public class DialogManager : MonoBehaviour {
         Transition(false);
         this.IsAutoPlay = false;
 
-        if (this.DialogBGM) {
+        if (this.HasDialogBGM) {
             AudioManager.Instance.StopMainMusic();
+            if(this.PreBGM) AudioManager.Instance.SetMainMusic(this.PreBGM);
         }
+        
+        if (this.IsFullScreen) {
+            CameraManager.Instance.MainCamera.cullingMask = ~0;
+        }
+        
+        this.OnDialogEnded?.Invoke();
     }
 
     public void ShowDialogReview() {

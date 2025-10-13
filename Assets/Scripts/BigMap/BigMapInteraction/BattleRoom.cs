@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class BattleRoom : InteractionObject{
 
-    [SerializeField] private BattleData Data;
+    [SerializeField] protected BattleData Data;
     [SerializeField] private Transform Enemies;
     
     private BoxCollider Collider;
-    private bool IsEnd;
+    protected bool IsEnd;
     
     protected override void Awake(){
         base.Awake();

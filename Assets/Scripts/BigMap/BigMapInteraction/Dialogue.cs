@@ -5,16 +5,12 @@ using UnityEngine;
 
 public class Dialogue : InteractionObject{
 
-    [SerializeField] private NPCConversation Dialog;
+    [SerializeField] private StoryDialogData[] Dialogs;
     [SerializeField] private bool CanRepeat = true;
     [SerializeField] private bool IsForce = false;
 
     private bool IsCurrentConversation;
     private bool IsDialogue;
-    
-    private void Start(){
-        ConversationManager.OnConversationEnded += OnConversationEnded;
-    }
 
     protected override void OnTriggerEnter(Collider other){
         if (this.IsDialogue && !CanRepeat) return;
@@ -25,7 +21,8 @@ public class Dialogue : InteractionObject{
         }
     }
 
-    private void OnConversationEnded(){
+    private void OnDialogEnded(){
+        DialogManager.Instance.OnDialogEnded -= OnDialogEnded;
         if (!IsCurrentConversation) return;
         if (CanRepeat){
             IsCurrentConversation = false;
@@ -44,7 +41,9 @@ public class Dialogue : InteractionObject{
 
     private void TriggerDialogue(){
         IsCurrentConversation = true;
-        ConversationManager.Instance.StartConversation(this.Dialog);
+        // ConversationManager.Instance.StartConversation(this.Dialog);
+        DialogManager.Instance.OnDialogEnded += OnDialogEnded;
+        DialogManager.Instance.PlayNewDialog(this.Dialogs, null);
         this.InAreaPlayer.TransitionInteractionTip(false);
         // TODO
         // this.InAreaPlayer.TransMove(false);

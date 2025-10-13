@@ -33,6 +33,10 @@ public class AudioManager : MonoBehaviour{
         this.MainMusicAudioSource.Play();
     }
 
+    public AudioClip GetCurrentMainMusic() {
+        return this.MainMusicAudioSource.clip;
+    }
+
     public void StopMainMusic() {
         this.MainMusicAudioSource.Stop();
     }
