@@ -93,7 +93,8 @@ public class DialogManager : MonoBehaviour {
         if (!this.IsChooseOption) {
             return;
         }
-
+        
+        this.Dialogs[this.CurrentIndex].AfterDialog?.Invoke();
         this.CurrentIndex = this.Dialogs[this.CurrentIndex].NextDialogIndex;
         if (this.CurrentIndex < 0 || this.CurrentIndex >= this.Dialogs.Length) {
             DialogEnd();
@@ -177,6 +178,7 @@ public class DialogManager : MonoBehaviour {
             }
         }
         this.StoryReview.AddDialogHistory(data);
+        data.BeforeDialog?.Invoke();
     }
 
     public void ClickOption(int nextDialogIndex, string optionText) {

@@ -16033,7 +16033,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
+    - _WindDirection: {r: 0.85536015, g: 0.57024, b: 0, a: 80.34442}
   m_BuildTextureStacks: []
 --- !u!43 &124096264
 Mesh:
@@ -21121,7 +21121,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
+    - _WindDirection: {r: 0.85536015, g: 0.57024, b: 0, a: 80.34442}
   m_BuildTextureStacks: []
 --- !u!21 &158793434
 Material:
@@ -28762,7 +28762,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
+    - _WindDirection: {r: 0.85536015, g: 0.57024, b: 0, a: 80.34442}
   m_BuildTextureStacks: []
 --- !u!1 &388018976
 GameObject:
@@ -62759,7 +62759,52 @@ MonoBehaviour:
     CharacterName: "\u6307\u5F15"
     CharacterPortrait: {fileID: 0}
     Options: []
+    NextDialogIndex: 1
+    BeforeDialog:
+      m_PersistentCalls:
+        m_Calls: []
+    AfterDialog:
+      m_PersistentCalls:
+        m_Calls: []
+  - Background: {fileID: 0}
+    NotBackground: 1
+    BackgroundIsFadeIn: 0
+    DialogAudio: {fileID: 0}
+    DialogText: "\u8D2D\u4E70"
+    CharacterName: "\u6307\u5F15"
+    CharacterPortrait: {fileID: 0}
+    Options: []
     NextDialogIndex: -1
+    BeforeDialog:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1368198389}
+          m_TargetAssemblyTypeName: BigMapUIManager, Assembly-CSharp
+          m_MethodName: TransitionStore
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+    AfterDialog:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1368198389}
+          m_TargetAssemblyTypeName: BigMapUIManager, Assembly-CSharp
+          m_MethodName: TransitionStore
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   CanRepeat: 0
   IsForce: 1
 --- !u!1 &782364753
@@ -79315,7 +79360,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0.87, g: 0.13, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
+    - _WindDirection: {r: 0.85536015, g: 0.57024, b: 0, a: 80.34442}
   m_BuildTextureStacks: []
 --- !u!1 &983263877
 GameObject:
@@ -121098,7 +121143,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
+    - _WindDirection: {r: 0.85536015, g: 0.57024, b: 0, a: 80.34442}
   m_BuildTextureStacks: []
 --- !u!1 &1351560891
 GameObject:
@@ -131978,7 +132023,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
+    - _WindDirection: {r: 0.85536015, g: 0.57024, b: 0, a: 80.34442}
   m_BuildTextureStacks: []
 --- !u!21 &1478599381
 Material:
@@ -134383,6 +134428,12 @@ MonoBehaviour:
     CharacterPortrait: {fileID: 0}
     Options: []
     NextDialogIndex: -1
+    BeforeDialog:
+      m_PersistentCalls:
+        m_Calls: []
+    AfterDialog:
+      m_PersistentCalls:
+        m_Calls: []
   BattleLoseDialog:
   - Background: {fileID: 21300000, guid: f8c3c8ca039788a4398fbd8e755b2e80, type: 3}
     NotBackground: 0
@@ -134394,6 +134445,12 @@ MonoBehaviour:
       type: 3}
     Options: []
     NextDialogIndex: -1
+    BeforeDialog:
+      m_PersistentCalls:
+        m_Calls: []
+    AfterDialog:
+      m_PersistentCalls:
+        m_Calls: []
   BattleVictoryDialog:
   - Background: {fileID: 21300000, guid: f8c3c8ca039788a4398fbd8e755b2e80, type: 3}
     NotBackground: 0
@@ -134405,6 +134462,12 @@ MonoBehaviour:
       type: 3}
     Options: []
     NextDialogIndex: -1
+    BeforeDialog:
+      m_PersistentCalls:
+        m_Calls: []
+    AfterDialog:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &1649129552
 GameObject:
   m_ObjectHideFlags: 0
@@ -145447,7 +145510,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
+    - _WindDirection: {r: 0.85536015, g: 0.57024, b: 0, a: 80.34442}
   m_BuildTextureStacks: []
 --- !u!1 &1733322784
 GameObject:
@@ -146426,7 +146489,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
+    - _WindDirection: {r: 0.85536015, g: 0.57024, b: 0, a: 80.34442}
   m_BuildTextureStacks: []
 --- !u!1 &1792427437
 GameObject:
@@ -180282,7 +180345,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
+    - _WindDirection: {r: 0.85536015, g: 0.57024, b: 0, a: 80.34442}
   m_BuildTextureStacks: []
 --- !u!43 &2134373491
 Mesh:

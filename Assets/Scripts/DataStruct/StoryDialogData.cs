@@ -1,6 +1,7 @@
 ﻿
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 [Serializable]
 public struct DialogOptionData {
@@ -19,5 +20,8 @@ public struct StoryDialogData {
     public Sprite CharacterPortrait;
     public DialogOptionData[] Options;
     public int NextDialogIndex;
+
+    public UnityEvent BeforeDialog;
+    public UnityEvent AfterDialog;
 }
 
