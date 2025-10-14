@@ -16033,7 +16033,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 1.0380278, g: 0.69201845, b: 0, a: 95.79527}
+    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
   m_BuildTextureStacks: []
 --- !u!43 &124096264
 Mesh:
@@ -21121,7 +21121,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 1.0380278, g: 0.69201845, b: 0, a: 95.79527}
+    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
   m_BuildTextureStacks: []
 --- !u!21 &158793434
 Material:
@@ -28762,7 +28762,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 1.0380278, g: 0.69201845, b: 0, a: 95.79527}
+    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
   m_BuildTextureStacks: []
 --- !u!1 &388018976
 GameObject:
@@ -29704,12 +29704,12 @@ RectTransform:
   - {fileID: 759743841}
   - {fileID: 983263878}
   - {fileID: 733219466}
-  m_Father: {fileID: 870816675}
+  m_Father: {fileID: 627242805}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_AnchoredPosition: {x: 0, y: 490.02512}
+  m_SizeDelta: {x: 1819.9103, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &462969395
 GameObject:
@@ -41133,6 +41133,7 @@ RectTransform:
   m_Children:
   - {fileID: 885486379}
   - {fileID: 1675275278}
+  - {fileID: 457481783}
   m_Father: {fileID: 870816675}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -62683,6 +62684,84 @@ Transform:
   - {fileID: 40185628}
   m_Father: {fileID: 734441450}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &774177247
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 774177248}
+  - component: {fileID: 774177249}
+  - component: {fileID: 774177250}
+  m_Layer: 0
+  m_Name: StoreInstructionDialog
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &774177248
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774177247}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.723, y: 0.439, z: 0.224}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1809127677}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &774177249
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774177247}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.50988007, y: 1, z: 2.9005623}
+  m_Center: {x: 0.24505997, y: 0, z: 0.95028114}
+--- !u!114 &774177250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774177247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab6e184bf2c348f29ed8ad99ba189130, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Dialogs:
+  - Background: {fileID: 21300000, guid: f45ded7887af4ef4c8cddcbc10b5741e, type: 3}
+    NotBackground: 0
+    BackgroundIsFadeIn: 0
+    DialogAudio: {fileID: 0}
+    DialogText: "\u8FD9\u662F\u5546\u5E97"
+    CharacterName: "\u6307\u5F15"
+    CharacterPortrait: {fileID: 0}
+    Options: []
+    NextDialogIndex: -1
+  CanRepeat: 0
+  IsForce: 1
 --- !u!1 &782364753
 GameObject:
   m_ObjectHideFlags: 0
@@ -68464,6 +68543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2043233aba6c4181b5674de371746c27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BackGameObject: {fileID: 627242804}
   BackgroundImage: {fileID: 1675275276}
   BackgroundImageFadeInDuration: 0.5
   CharacterPortrait: {fileID: 1649737147}
@@ -68561,7 +68641,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 627242805}
-  - {fileID: 457481783}
   - {fileID: 1627726966}
   - {fileID: 917442875}
   - {fileID: 2008525801}
@@ -79236,7 +79315,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0.87, g: 0.13, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 1.0380278, g: 0.69201845, b: 0, a: 95.79527}
+    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
   m_BuildTextureStacks: []
 --- !u!1 &983263877
 GameObject:
@@ -121019,7 +121098,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 1.0380278, g: 0.69201845, b: 0, a: 95.79527}
+    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
   m_BuildTextureStacks: []
 --- !u!1 &1351560891
 GameObject:
@@ -131788,7 +131867,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -751.54535, y: 0}
+  m_AnchoredPosition: {x: -751.4551, y: 0}
   m_SizeDelta: {x: 1502, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1466599170
@@ -131899,7 +131978,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 1.0380278, g: 0.69201845, b: 0, a: 95.79527}
+    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
   m_BuildTextureStacks: []
 --- !u!21 &1478599381
 Material:
@@ -134296,6 +134375,7 @@ MonoBehaviour:
   Enemies: {fileID: 1648549087}
   BattleStartDialog:
   - Background: {fileID: 21300000, guid: c352d849d38096b41b0c9eff418d3df5, type: 3}
+    NotBackground: 0
     BackgroundIsFadeIn: 1
     DialogAudio: {fileID: 0}
     DialogText: "\u4E0D\uFF0C\u4E0D\u8981\uFF01"
@@ -134305,6 +134385,7 @@ MonoBehaviour:
     NextDialogIndex: -1
   BattleLoseDialog:
   - Background: {fileID: 21300000, guid: f8c3c8ca039788a4398fbd8e755b2e80, type: 3}
+    NotBackground: 0
     BackgroundIsFadeIn: 0
     DialogAudio: {fileID: 8300000, guid: a2e776d0444fc274986b0e93564700c5, type: 3}
     DialogText: "\u8F93\u4E86"
@@ -134315,6 +134396,7 @@ MonoBehaviour:
     NextDialogIndex: -1
   BattleVictoryDialog:
   - Background: {fileID: 21300000, guid: f8c3c8ca039788a4398fbd8e755b2e80, type: 3}
+    NotBackground: 0
     BackgroundIsFadeIn: 0
     DialogAudio: {fileID: 8300000, guid: a2e776d0444fc274986b0e93564700c5, type: 3}
     DialogText: "\u8D62\u4E86"
@@ -145365,7 +145447,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 1.0380278, g: 0.69201845, b: 0, a: 95.79527}
+    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
   m_BuildTextureStacks: []
 --- !u!1 &1733322784
 GameObject:
@@ -146344,7 +146426,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 1.0380278, g: 0.69201845, b: 0, a: 95.79527}
+    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
   m_BuildTextureStacks: []
 --- !u!1 &1792427437
 GameObject:
@@ -146464,6 +146546,125 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &1809127676
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1809127677}
+  - component: {fileID: 1809127681}
+  - component: {fileID: 1809127680}
+  - component: {fileID: 1809127679}
+  - component: {fileID: 1809127678}
+  m_Layer: 0
+  m_Name: Cosmic_Retro_Computer_3 (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1809127677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809127676}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: -0.9985466, y: -0.359, z: 0.32}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 774177248}
+  m_Father: {fileID: 2011903852}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &1809127678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809127676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 290533fc3b8942538e3eb98b3b0fead7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &1809127679
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809127676}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.50887465, y: 1.1005572, z: 2.8709931}
+  m_Center: {x: 0, y: 0.5502786, z: 1.1769631}
+--- !u!23 &1809127680
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809127676}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 4d5bd3fdae0f30947b61abeab6cf8627, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1809127681
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809127676}
+  m_Mesh: {fileID: -2704473011432235434, guid: 8f95934fcb9e57a46aa97c9c3453e9a6, type: 3}
 --- !u!1001 &1812491207
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -163971,7 +164172,11 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 3048278879498727023, guid: 597514f1595e6314d840977ece84ff4c, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 6296159894140288114, guid: 597514f1595e6314d840977ece84ff4c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1809127677}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 597514f1595e6314d840977ece84ff4c, type: 3}
 --- !u!4 &2011903852 stripped
@@ -180077,7 +180282,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 1.0380278, g: 0.69201845, b: 0, a: 95.79527}
+    - _WindDirection: {r: 2.3549154, g: 1.569943, b: 0, a: 194.06268}
   m_BuildTextureStacks: []
 --- !u!43 &2134373491
 Mesh:

@@ -11,6 +11,7 @@ public struct DialogOptionData {
 [Serializable]
 public struct StoryDialogData {
     public Sprite Background;
+    public bool NotBackground;
     public bool BackgroundIsFadeIn;
     public AudioClip DialogAudio;
     [TextArea] public string DialogText;

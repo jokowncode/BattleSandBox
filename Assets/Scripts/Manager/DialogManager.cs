@@ -6,8 +6,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class DialogManager : MonoBehaviour {
-    
-    [Header("UI")]
+
+    [Header("UI")] 
+    [SerializeField] private GameObject BackGameObject;
     [SerializeField] private Image BackgroundImage;
     [SerializeField] private float BackgroundImageFadeInDuration = 0.5f;
     
@@ -144,7 +145,8 @@ public class DialogManager : MonoBehaviour {
     private void SetDialog() {
         StoryDialogData data = this.Dialogs[this.CurrentIndex];
         
-        if (data.Background) {
+        this.BackGameObject.SetActive(!data.NotBackground);
+        if (!data.NotBackground && data.Background) {
             this.BackgroundImage.sprite = data.Background;
             this.BackgroundImageCanvasGroup.alpha = 0.0f;
             if (data.BackgroundIsFadeIn) {
