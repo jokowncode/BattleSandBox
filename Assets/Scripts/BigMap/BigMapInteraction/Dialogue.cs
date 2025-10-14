@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class Dialogue : InteractionObject{
 
-    [SerializeField] private StoryDialogData[] Dialogs;
+    [SerializeField] private DialogGraph Dialogs;
     [SerializeField] private bool CanRepeat = true;
     [SerializeField] private bool IsForce = false;
-
+    [SerializeField] private bool IsFullScreen = true;
+    
     private bool IsCurrentConversation;
     private bool IsDialogue;
 
@@ -33,6 +34,7 @@ public class Dialogue : InteractionObject{
     }
 
     protected override void Interaction(){
+        if (DialogManager.Instance.IsInDialog) return;
         if (this.IsDialogue && !CanRepeat) return;
         if (IsCurrentConversation) return;
         TriggerDialogue();
@@ -42,7 +44,7 @@ public class Dialogue : InteractionObject{
         IsCurrentConversation = true;
         // ConversationManager.Instance.StartConversation(this.Dialog);
         DialogManager.Instance.OnDialogEnded += OnDialogEnded;
-        DialogManager.Instance.PlayNewDialog(this.Dialogs, null);
+        DialogManager.Instance.PlayNewDialog(this.gameObject, this.Dialogs, this.IsFullScreen);
         this.InAreaPlayer.TransitionInteractionTip(false);
     }
 }

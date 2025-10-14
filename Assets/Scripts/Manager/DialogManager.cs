@@ -1,9 +1,11 @@
 ﻿
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using XNode;
 
 public class DialogManager : MonoBehaviour {
 
@@ -22,14 +24,14 @@ public class DialogManager : MonoBehaviour {
     [SerializeField] private DialogOption DialogOptionPrefab;
     
     public static DialogManager Instance;
-    private int CurrentIndex;
+    // private int CurrentIndex;
     private CanvasGroup DialogCanvasGroup;
     public bool IsAutoPlay { get; private set; } = false;
     private bool IsChooseOption = true;
     private bool HasSound = false;
     private bool IsFullScreen = false;
 
-    private StoryDialogData[] Dialogs;
+    // private StoryDialogData[] Dialogs;
     private AudioClip PreBGM;
     private bool HasDialogBGM = false;
 
@@ -40,6 +42,9 @@ public class DialogManager : MonoBehaviour {
 
     private bool CurrentDialogIsFinished =>
         this.HasSound ? AudioManager.Instance.DialogIsFinished : this.DialogText.IsDelayEnd;
+
+    private DialogNode CurrentDialogNode;
+    private GameObject CurrentInvokeGameObject;
 
     private void Awake() {
         if (Instance != null) {
@@ -63,19 +68,33 @@ public class DialogManager : MonoBehaviour {
         if (this.CurrentDialogIsFinished) NextDialog();
     }
 
-    public void PlayNewDialog(StoryDialogData[] dialogs, AudioClip dialogBGM, bool isFullScreen = true) {
-        this.Dialogs = dialogs;
+    private StartNode FindStartNode(DialogGraph graph) {
+        List<Node> nodes = graph.nodes;
+        foreach (Node node in nodes) {
+            if (node is StartNode startNode) return startNode;
+        }
+        return null;
+    }
+    
+    public void PlayNewDialog(GameObject invokeGO, DialogGraph dialog, bool isFullScreen = true) {
         this.IsFullScreen = isFullScreen;
-        if (this.Dialogs.Length == 0) return;
+        this.CurrentInvokeGameObject = invokeGO;
+        if (!dialog) return;
+        StartNode startNode = FindStartNode(dialog);
+        if (!startNode) return;
+
+        NodePort startPort = startNode.GetOutputPort("NextDialog").Connection;
+        if (startPort == null || startPort.node is not DialogNode dialogNode) return;
+        
+        this.CurrentDialogNode = dialogNode;
         this.StoryReview.Reset();
-        this.CurrentIndex = 0;
         SetDialog();
         Transition(true);
-
-        this.HasDialogBGM = dialogBGM;
-        if (dialogBGM) {
+        
+        this.HasDialogBGM = startNode.DialogBGM;
+        if (this.HasDialogBGM) {
             this.PreBGM = AudioManager.Instance.GetCurrentMainMusic();
-            AudioManager.Instance.SetMainMusic(dialogBGM);
+            AudioManager.Instance.SetMainMusic(startNode.DialogBGM);
         }
 
         if (this.IsFullScreen) {
@@ -94,12 +113,17 @@ public class DialogManager : MonoBehaviour {
             return;
         }
         
-        this.Dialogs[this.CurrentIndex].AfterDialog?.Invoke();
-        this.CurrentIndex = this.Dialogs[this.CurrentIndex].NextDialogIndex;
-        if (this.CurrentIndex < 0 || this.CurrentIndex >= this.Dialogs.Length) {
+        if (this.CurrentInvokeGameObject && this.CurrentDialogNode.AfterDialogInvokeFuncName != "") {
+            this.CurrentInvokeGameObject.SendMessage(this.CurrentDialogNode.AfterDialogInvokeFuncName);
+        }
+        
+        NodePort nextPort = this.CurrentDialogNode.GetOutputPort("NextDialog").Connection;
+        if (nextPort == null || nextPort.node is not DialogNode dialogNode) {
             DialogEnd();
             return;
         }
+
+        this.CurrentDialogNode = dialogNode;
         SetDialog();
     }
 
@@ -144,7 +168,7 @@ public class DialogManager : MonoBehaviour {
     }
 
     private void SetDialog() {
-        StoryDialogData data = this.Dialogs[this.CurrentIndex];
+        DialogNode data = this.CurrentDialogNode;
         
         this.BackGameObject.SetActive(!data.NotBackground);
         if (!data.NotBackground && data.Background) {
@@ -172,21 +196,27 @@ public class DialogManager : MonoBehaviour {
         }
         this.IsChooseOption = data.Options == null || data.Options.Length == 0;
         if (data.Options != null) {
-            foreach (DialogOptionData optionData in data.Options) {
+            for (int i = 0; i < data.Options.Length; i++) {
                 DialogOption option = Instantiate(this.DialogOptionPrefab, this.DialogOptionContainer);
-                option.SetOptionData(optionData.OptionText, optionData.NextDialogIndex);
+                option.SetOptionData(data.Options[i], i);
             }
         }
         this.StoryReview.AddDialogHistory(data);
-        data.BeforeDialog?.Invoke();
+        
+        if (this.CurrentInvokeGameObject && data.BeforeDialogInvokeFuncName != "") {
+            this.CurrentInvokeGameObject.SendMessage(data.BeforeDialogInvokeFuncName);
+        }
     }
 
-    public void ClickOption(int nextDialogIndex, string optionText) {
-        if (nextDialogIndex < 0) {
+    public void ClickOption(int index, string optionText) {
+        
+        NodePort optionPort = this.CurrentDialogNode.GetPort($"Options {index}").Connection;
+        if (optionPort == null || optionPort.node is not DialogNode dialogNode) {
             DialogEnd();
             return;
         }
-        this.CurrentIndex = nextDialogIndex;
+
+        this.CurrentDialogNode = dialogNode;
         this.IsChooseOption = true;
         this.StoryReview.AddDialogOptionHistory(optionText);
         SetDialog();

@@ -8,7 +8,7 @@ public class StoryDialogHistory : MonoBehaviour {
     [SerializeField] private Button PlaySoundButton;
     [SerializeField] private TextMeshProUGUI DialogText;
     
-    public void SetDialogData(StoryDialogData data) {
+    public void SetDialogData(DialogNode data) {
         string prefix = data.CharacterName == "" ? "" : $"{data.CharacterName}：";
         this.DialogText.text = $"{prefix}{data.DialogText}";
         this.PlaySoundButton.gameObject.SetActive(data.DialogAudio);

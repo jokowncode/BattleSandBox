@@ -29,7 +29,7 @@ public class StoryReviewUI : MonoBehaviour {
         }
     }
 
-    public void AddDialogHistory(StoryDialogData data) {
+    public void AddDialogHistory(DialogNode data) {
         StoryDialogHistory history = Instantiate(this.StoryDialogPrefab, this.StoryDialogContainer);
         history.SetDialogData(data);
     }

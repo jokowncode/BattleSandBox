@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BattleDialogRoom : BattleRoom {
 
-    [SerializeField] private StoryDialogData[] BattleStartDialog;
-    [SerializeField] private StoryDialogData[] BattleLoseDialog;
-    [SerializeField] private StoryDialogData[] BattleVictoryDialog;
+    [SerializeField] private DialogGraph BattleStartDialog;
+    [SerializeField] private DialogGraph BattleLoseDialog;
+    [SerializeField] private DialogGraph BattleVictoryDialog;
 
     enum State {
         PreBattle,
@@ -40,14 +40,14 @@ public class BattleDialogRoom : BattleRoom {
         base.OnTriggerEnter(other);
         this.CurrentState = State.PreBattle;
         if (GameManager.Instance.IsBattleEnd) {
-            if (GameManager.Instance.IsBattleVictory && this.BattleVictoryDialog is {Length: > 0}) {
+            if (GameManager.Instance.IsBattleVictory && this.BattleVictoryDialog) {
                 this.CurrentState = State.Victory;
                 DialogManager.Instance.OnDialogEnded += OnDialogEnded;
-                DialogManager.Instance.PlayNewDialog(this.BattleVictoryDialog, null);
-            }else if (!GameManager.Instance.IsBattleVictory && this.BattleLoseDialog is {Length: > 0}) {
+                DialogManager.Instance.PlayNewDialog(this.gameObject, this.BattleVictoryDialog);
+            }else if (!GameManager.Instance.IsBattleVictory && this.BattleLoseDialog) {
                 this.CurrentState = State.Lose;
                 DialogManager.Instance.OnDialogEnded += OnDialogEnded;
-                DialogManager.Instance.PlayNewDialog(this.BattleLoseDialog, null);
+                DialogManager.Instance.PlayNewDialog(this.gameObject, this.BattleLoseDialog);
             }
         }
     }
@@ -55,9 +55,9 @@ public class BattleDialogRoom : BattleRoom {
     protected override void Interaction() {
         if (this.IsEnd) return;
         if (DialogManager.Instance.IsInDialog) return;
-        if (this.CurrentState == State.PreBattle && BattleStartDialog is { Length: > 0 }) {
+        if (this.CurrentState == State.PreBattle && BattleStartDialog) {
             DialogManager.Instance.OnDialogEnded += OnDialogEnded;
-            DialogManager.Instance.PlayNewDialog(this.BattleStartDialog, null);
+            DialogManager.Instance.PlayNewDialog(this.gameObject, this.BattleStartDialog);
         } else {
             GameManager.Instance.GoToBattle(this.Data);
         }
