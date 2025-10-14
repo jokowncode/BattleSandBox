@@ -44,7 +44,7 @@ public class Dialogue : InteractionObject{
         IsCurrentConversation = true;
         // ConversationManager.Instance.StartConversation(this.Dialog);
         DialogManager.Instance.OnDialogEnded += OnDialogEnded;
-        DialogManager.Instance.PlayNewDialog(this.gameObject, this.Dialogs, this.IsFullScreen);
+        DialogManager.Instance.PlayNewDialog(this.Dialogs, this.IsFullScreen);
         this.InAreaPlayer.TransitionInteractionTip(false);
     }
 }

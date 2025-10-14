@@ -44,7 +44,6 @@ public class DialogManager : MonoBehaviour {
         this.HasSound ? AudioManager.Instance.DialogIsFinished : this.DialogText.IsDelayEnd;
 
     private DialogNode CurrentDialogNode;
-    private GameObject CurrentInvokeGameObject;
 
     private void Awake() {
         if (Instance != null) {
@@ -76,9 +75,8 @@ public class DialogManager : MonoBehaviour {
         return null;
     }
     
-    public void PlayNewDialog(GameObject invokeGO, DialogGraph dialog, bool isFullScreen = true) {
+    public void PlayNewDialog(DialogGraph dialog, bool isFullScreen = true) {
         this.IsFullScreen = isFullScreen;
-        this.CurrentInvokeGameObject = invokeGO;
         if (!dialog) return;
         StartNode startNode = FindStartNode(dialog);
         if (!startNode) return;
@@ -113,8 +111,8 @@ public class DialogManager : MonoBehaviour {
             return;
         }
         
-        if (this.CurrentInvokeGameObject && this.CurrentDialogNode.AfterDialogInvokeFuncName != "") {
-            this.CurrentInvokeGameObject.SendMessage(this.CurrentDialogNode.AfterDialogInvokeFuncName);
+        if (this.CurrentDialogNode.AfterDialogInvokeAction != "") {
+            DialogEventManager.Instance.RaiseEvent(this.CurrentDialogNode.AfterDialogInvokeAction);
         }
         
         NodePort nextPort = this.CurrentDialogNode.GetOutputPort("NextDialog").Connection;
@@ -203,8 +201,8 @@ public class DialogManager : MonoBehaviour {
         }
         this.StoryReview.AddDialogHistory(data);
         
-        if (this.CurrentInvokeGameObject && data.BeforeDialogInvokeFuncName != "") {
-            this.CurrentInvokeGameObject.SendMessage(data.BeforeDialogInvokeFuncName);
+        if (data.BeforeDialogInvokeAction != "") {
+            DialogEventManager.Instance.RaiseEvent(data.BeforeDialogInvokeAction);
         }
     }
 

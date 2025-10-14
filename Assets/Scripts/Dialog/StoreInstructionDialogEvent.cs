@@ -1,14 +1,16 @@
 ﻿
+using System;
 using UnityEngine;
 
 public class StoreInstructionDialogEvent : MonoBehaviour {
-
-    private void ShowStore() {
-        BigMapUIManager.Instance.TransitionStore(true);
+    private void Start() {
+        DialogEventManager.Instance.AddEvent("ShowStore", () => {
+            BigMapUIManager.Instance.TransitionStore(true);
+        });
+        
+        DialogEventManager.Instance.AddEvent("HideStore", () => {
+            BigMapUIManager.Instance.TransitionStore(false);
+        });
     }
-
-    private void HideStore() {
-        BigMapUIManager.Instance.TransitionStore(false);
-    }
-
 }
+

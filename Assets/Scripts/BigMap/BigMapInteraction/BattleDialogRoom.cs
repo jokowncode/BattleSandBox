@@ -43,11 +43,11 @@ public class BattleDialogRoom : BattleRoom {
             if (GameManager.Instance.IsBattleVictory && this.BattleVictoryDialog) {
                 this.CurrentState = State.Victory;
                 DialogManager.Instance.OnDialogEnded += OnDialogEnded;
-                DialogManager.Instance.PlayNewDialog(this.gameObject, this.BattleVictoryDialog);
+                DialogManager.Instance.PlayNewDialog(this.BattleVictoryDialog);
             }else if (!GameManager.Instance.IsBattleVictory && this.BattleLoseDialog) {
                 this.CurrentState = State.Lose;
                 DialogManager.Instance.OnDialogEnded += OnDialogEnded;
-                DialogManager.Instance.PlayNewDialog(this.gameObject, this.BattleLoseDialog);
+                DialogManager.Instance.PlayNewDialog(this.BattleLoseDialog);
             }
         }
     }
@@ -57,7 +57,7 @@ public class BattleDialogRoom : BattleRoom {
         if (DialogManager.Instance.IsInDialog) return;
         if (this.CurrentState == State.PreBattle && BattleStartDialog) {
             DialogManager.Instance.OnDialogEnded += OnDialogEnded;
-            DialogManager.Instance.PlayNewDialog(this.gameObject, this.BattleStartDialog);
+            DialogManager.Instance.PlayNewDialog(this.BattleStartDialog);
         } else {
             GameManager.Instance.GoToBattle(this.Data);
         }

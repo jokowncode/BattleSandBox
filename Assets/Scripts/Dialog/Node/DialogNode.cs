@@ -15,8 +15,8 @@ public class DialogNode : Node {
     public string CharacterName;
     public Sprite CharacterPortrait;
 
-    public string BeforeDialogInvokeFuncName;
-    public string AfterDialogInvokeFuncName;
+    public string BeforeDialogInvokeAction;
+    public string AfterDialogInvokeAction;
     
     [Output(dynamicPortList = true)] public string[] Options;
     [Output] public Node NextDialog;
