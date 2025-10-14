@@ -54,6 +54,7 @@ public class BattleDialogRoom : BattleRoom {
 
     protected override void Interaction() {
         if (this.IsEnd) return;
+        if (DialogManager.Instance.IsInDialog) return;
         if (this.CurrentState == State.PreBattle && BattleStartDialog is { Length: > 0 }) {
             DialogManager.Instance.OnDialogEnded += OnDialogEnded;
             DialogManager.Instance.PlayNewDialog(this.BattleStartDialog, null);

@@ -27,7 +27,9 @@ public class PlayerMove : MonoBehaviour{
         PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
     }
 
-    private void Update(){
+    private void Update() {
+        if (DialogManager.Instance.IsInDialog) return;
+        
         float x = Input.GetAxisRaw("Horizontal");
         Vector3 velocity = new Vector3(x, 0.0f, 0.0f);
 

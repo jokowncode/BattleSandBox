@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,8 @@ public class DialogManager : MonoBehaviour {
     
     [Header("UI")]
     [SerializeField] private Image BackgroundImage;
+    [SerializeField] private float BackgroundImageFadeInDuration = 0.5f;
+    
     [SerializeField] private Image CharacterPortrait;
     [SerializeField] private TextMeshProUGUI CharacterName;
     [SerializeField] private TypeWriter DialogText;
@@ -31,6 +34,9 @@ public class DialogManager : MonoBehaviour {
 
     public Action OnDialogEnded;
 
+    private CanvasGroup BackgroundImageCanvasGroup;
+    public bool IsInDialog => this.DialogCanvasGroup.alpha >= 0.9f;
+
     private bool CurrentDialogIsFinished =>
         this.HasSound ? AudioManager.Instance.DialogIsFinished : this.DialogText.IsDelayEnd;
 
@@ -41,6 +47,7 @@ public class DialogManager : MonoBehaviour {
         }
         Instance = this;
         DialogCanvasGroup = GetComponent<CanvasGroup>();
+        BackgroundImageCanvasGroup = BackgroundImage.GetComponent<CanvasGroup>();
         Transition(false);
     }
 
@@ -126,11 +133,26 @@ public class DialogManager : MonoBehaviour {
         this.IsAutoPlay = !this.IsAutoPlay;
     }
 
+    private IEnumerator BackgroundImageFadeInCoroutine() {
+        for (float t = 0.0f; t < this.BackgroundImageFadeInDuration; t += Time.deltaTime) {
+            this.BackgroundImageCanvasGroup.alpha = Mathf.Lerp(0.0f, 1.0f, t / this.BackgroundImageFadeInDuration);
+            yield return null;
+        }
+        this.BackgroundImageCanvasGroup.alpha = 1.0f;
+    }
+
     private void SetDialog() {
         StoryDialogData data = this.Dialogs[this.CurrentIndex];
         
         if (data.Background) {
             this.BackgroundImage.sprite = data.Background;
+            this.BackgroundImageCanvasGroup.alpha = 0.0f;
+            if (data.BackgroundIsFadeIn) {
+                StopAllCoroutines();
+                StartCoroutine(BackgroundImageFadeInCoroutine());
+            } else {
+                this.BackgroundImageCanvasGroup.alpha = 1.0f;
+            }
         }
         this.CharacterPortrait.color = new Color(1, 1, 1, data.CharacterPortrait ? 1.0f : 0.0f); 
         this.CharacterPortrait.sprite = data.CharacterPortrait;
