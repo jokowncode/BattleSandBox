@@ -30,7 +30,6 @@ public class Dialogue : InteractionObject{
         }
 
         this.IsDialogue = true;
-        // this.InAreaPlayer.TransMove(true);
     }
 
     protected override void Interaction(){
@@ -45,8 +44,6 @@ public class Dialogue : InteractionObject{
         DialogManager.Instance.OnDialogEnded += OnDialogEnded;
         DialogManager.Instance.PlayNewDialog(this.Dialogs, null);
         this.InAreaPlayer.TransitionInteractionTip(false);
-        // TODO
-        // this.InAreaPlayer.TransMove(false);
     }
 }
 
