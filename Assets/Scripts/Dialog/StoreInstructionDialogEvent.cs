@@ -3,13 +3,20 @@ using System;
 using UnityEngine;
 
 public class StoreInstructionDialogEvent : MonoBehaviour {
+
+    private Store CurrentStore;
+
+    private void Awake() {
+        this.CurrentStore = this.GetComponent<Store>();
+    }
+
     private void Start() {
-        DialogEventManager.Instance.AddEvent("ShowStore", () => {
-            BigMapUIManager.Instance.TransitionStore(true);
+        DialogEventManager.Instance.AddEvent("ShowStoreInstruction", () => {
+            this.CurrentStore.ShowStore();
         });
         
-        DialogEventManager.Instance.AddEvent("HideStore", () => {
-            BigMapUIManager.Instance.TransitionStore(false);
+        DialogEventManager.Instance.AddEvent("HideStoreInstruction", () => {
+            BigMapUIManager.Instance.HideStore();
         });
     }
 }

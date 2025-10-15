@@ -1,14 +1,17 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BigMapUIManager : MonoBehaviour{
 
     [SerializeField] private CanvasGroup HUDCanvasGroup;
-    [SerializeField] private CanvasGroup StoreCanvasGroup;
+    [SerializeField] private StoreUI Store;
     [SerializeField] private BattleStartUI BattleStartBannar;
     
     public static BigMapUIManager Instance;
+
+    private Store CurrentShowStore;
 
     private void Awake(){
         if (Instance != null){
@@ -18,24 +21,20 @@ public class BigMapUIManager : MonoBehaviour{
         Instance = this;
     }
 
-    private void HideCanvasGroup(CanvasGroup group){
-        group.alpha = 0.0f;
-        group.interactable = false;
-        group.blocksRaycasts = false;
+    public void ShowStore(Store store) {
+        Store.ShowStoreUI(store.Goods);
+        this.CurrentShowStore = store;
     }
 
-    private void ShowCanvasGroup(CanvasGroup group){
-        group.alpha = 1.0f;
-        group.interactable = true;
-        group.blocksRaycasts = true;
+    public void HideStore() {
+        Store.HideStoreUI();
+        this.CurrentShowStore = null;
     }
 
-    public void TransitionStore(bool isShow){
-        if (isShow){
-            ShowCanvasGroup(StoreCanvasGroup);
-        } else {
-            HideCanvasGroup(StoreCanvasGroup);
-        }
+    public void RemoveStoreGoods(StoreGoodsData data) {
+        if (!this.CurrentShowStore) return;
+        this.CurrentShowStore.RemoveGoods(data);
+        this.Store.UpdateStoreUI(this.CurrentShowStore.Goods);
     }
 
     public void ShowBattleStartUI(Sprite background, Sprite battleImage, string battleText){
