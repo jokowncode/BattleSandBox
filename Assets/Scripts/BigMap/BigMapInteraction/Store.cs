@@ -11,12 +11,13 @@ public class Store : InteractionObject {
         // TODO: Save And Load Store Goods Purchase Condition
     }
 
-    protected override void Interaction(){
+    protected override void Interaction() {
+        if (BigMapUIManager.Instance.IsOpenStore) return;
         ShowStore();
     }
 
     public void ShowStore() {
-        BigMapUIManager.Instance.ShowStore(this);
+        StoreUI.Instance.ShowStoreUI(this);
     }
 
     public void RemoveGoods(StoreGoodsData data) {

@@ -13,10 +13,15 @@ public class StoreInstructionDialogEvent : MonoBehaviour {
     private void Start() {
         DialogEventManager.Instance.AddEvent("ShowStoreInstruction", () => {
             this.CurrentStore.ShowStore();
+            DialogManager.Instance.TransitionPause(true);
+            StoreUI.Instance.StoreInstructionMode(0, () => {
+                DialogManager.Instance.TransitionPause(false);
+                DialogManager.Instance.Next();
+            });
         });
         
         DialogEventManager.Instance.AddEvent("HideStoreInstruction", () => {
-            BigMapUIManager.Instance.HideStore();
+            StoreUI.Instance.HideStoreUI();
         });
     }
 }

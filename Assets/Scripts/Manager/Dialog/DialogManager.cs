@@ -45,6 +45,8 @@ public class DialogManager : MonoBehaviour {
 
     private DialogNode CurrentDialogNode;
 
+    private bool Pause = false;
+    
     private void Awake() {
         if (Instance != null) {
             Destroy(this.gameObject);
@@ -107,6 +109,10 @@ public class DialogManager : MonoBehaviour {
     }
 
     private void NextDialog() {
+        if (this.Pause) {
+            return;
+        }
+
         if (!this.IsChooseOption) {
             return;
         }
@@ -218,6 +224,10 @@ public class DialogManager : MonoBehaviour {
         this.IsChooseOption = true;
         this.StoryReview.AddDialogOptionHistory(optionText);
         SetDialog();
+    }
+
+    public void TransitionPause(bool pause) {
+        this.Pause = pause;
     }
 }
 

@@ -12,6 +12,8 @@ public class StoreGoodsUI : MonoBehaviour {
 
     private Outline GoodsOutline;
 
+    public Action OnPurchase;
+
     private void Awake() {
         this.GoodsOutline = this.GetComponent<Outline>();
     }
@@ -30,11 +32,16 @@ public class StoreGoodsUI : MonoBehaviour {
                 case GoodsType.EXP:
                     // Debug.Log("Buy EXP");
                     break;
-            } 
+            }
             
             // Destroy Goods If Purchase Success
-            BigMapUIManager.Instance.RemoveStoreGoods(data);
+            StoreUI.Instance.RemoveGoods(data);
+            OnPurchase?.Invoke();
         });
+    }
+
+    public void DisablePurchase() {
+        this.PurchaseButton.interactable = false;
     }
 }
 
