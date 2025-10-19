@@ -117,7 +117,7 @@ public class DialogManager : MonoBehaviour {
             return;
         }
         
-        if (this.CurrentDialogNode.AfterDialogInvokeAction != "") {
+        if (this.CurrentDialogNode.AfterDialogInvokeAction != null) {
             DialogEventManager.Instance.RaiseEvent(this.CurrentDialogNode.AfterDialogInvokeAction);
         }
         
@@ -207,7 +207,7 @@ public class DialogManager : MonoBehaviour {
         }
         this.StoryReview.AddDialogHistory(data);
         
-        if (data.BeforeDialogInvokeAction != "") {
+        if (data.BeforeDialogInvokeAction != null) {
             DialogEventManager.Instance.RaiseEvent(data.BeforeDialogInvokeAction);
         }
     }
