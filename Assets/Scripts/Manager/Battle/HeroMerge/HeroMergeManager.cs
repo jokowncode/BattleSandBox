@@ -8,9 +8,13 @@ public class HeroMergeManager : MonoBehaviour {
 
     // TODO: Passive Entry
     // [SerializeField] private List<PassiveEntry> HeroMergePassiveEntries;
+    [Header("Merge Version")]
     [SerializeField] private BuffData HeroMergeBuff;
     [SerializeField] private float HeroMergeDuration = 5.0f;
     [SerializeField] private int MergeEnergy = 5;
+
+    [Header("Tactic Version")] 
+    [SerializeField] private BattleTacticType UseTacticType;
     
     public static HeroMergeManager Instance;
     private HeroMergeGroupData[] HeroMergeGroup;
@@ -77,8 +81,32 @@ public class HeroMergeManager : MonoBehaviour {
         
         data.CurrentEnergy += 1;
         if (data.CurrentEnergy >= this.MergeEnergy) {
-            MergeHero(data);
+            // MergeHero(data);
+            MergeHeroTacticVersion(data);
         }
+    }
+
+    private void MergeHeroTacticVersion(HeroMergeGroupData groupData) {
+        if (groupData.IsMerge) return;
+        groupData.IsMerge = true;
+        StartCoroutine(MergeHeroTacticVersionCoroutine(groupData));
+    }
+
+    private IEnumerator MergeHeroTacticVersionCoroutine(HeroMergeGroupData groupData) {
+        BattleTactic tactic = BattleTacticFactory.CreateBattleTactic(this.UseTacticType);
+        tactic.CastTactic(groupData.MergeHeroes[0], groupData.MergeHeroes[1]);
+        
+        // 设置主动技能升级
+        if(groupData.MergeHeroes[0]) groupData.MergeHeroes[0].SkillChange(true);
+        if(groupData.MergeHeroes[1]) groupData.MergeHeroes[1].SkillChange(true);
+        
+        yield return this.HeroMergeTimer;
+        
+        // 取消主动技能升级
+        if(groupData.MergeHeroes[0]) groupData.MergeHeroes[0].SkillChange(false);
+        if(groupData.MergeHeroes[1]) groupData.MergeHeroes[1].SkillChange(false);
+        groupData.IsMerge = false;
+        groupData.CurrentEnergy = 0;
     }
 
     private void MergeHero(HeroMergeGroupData groupData) {
@@ -112,6 +140,7 @@ public class HeroMergeManager : MonoBehaviour {
         groupData.CurrentMergeHero = mergeHero;
         groupData.CurrentMergeHero.OnDead += _ => CancelMerge(groupData);
         foreach (Hero hero in groupData.MergeHeroes) {
+            if (!hero) continue;
             hero.FighterIdle();
             hero.Move.StopMove();
             hero.TransitionShow(false);
@@ -132,6 +161,7 @@ public class HeroMergeManager : MonoBehaviour {
 
         Vector3 offset = Vector3.zero;
         foreach (Hero hero in groupData.MergeHeroes) {
+            if (!hero) continue;
             hero.transform.position = groupData.CurrentMergeHero.transform.position + offset;
             offset += Vector3.left * 3.0f; 
             hero.BattleStart();

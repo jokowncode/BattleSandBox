@@ -13,6 +13,9 @@ public class Hero : Fighter{
     [field: SerializeField] public SkillCaster HeroUpdateSkillCaster { get; private set; }
     [SerializeField] private GameObject Shadow;
 
+    [Header("Trail")]
+    [SerializeField] private SimpleProjectile SkillTrailPrefab;
+    
     private List<PassiveEntry> EquipPassiveEntries;
     private List<PassiveEntry> SelfPassiveEntries;
     
@@ -48,6 +51,26 @@ public class Hero : Fighter{
         newSkillCaster.gameObject.SetActive(true);
         newSkillCaster.transform.position = this.FighterSkillCaster.transform.position;
         this.FighterSkillCaster = newSkillCaster;
+    }
+    
+    public void ChangePositionWithTrail(Vector3 targetPosition) {
+        if (SkillTrailPrefab) {
+            SimpleProjectile projectile = Instantiate(SkillTrailPrefab, this.Center.position, Quaternion.identity);
+            projectile.SetFlightParameters(this.Center.position, targetPosition, this);
+        } else {
+            this.transform.position = targetPosition; 
+        }
+    }
+
+    public void SkillChange(bool isUpdate) {
+        SkillCaster newSkill = isUpdate ? this.HeroUpdateSkillCaster : this.OriginFighterSkillCaster;
+        SkillCaster oldSkill = isUpdate ? this.OriginFighterSkillCaster : this.HeroUpdateSkillCaster;
+        
+        newSkill.gameObject.SetActive(true);
+        oldSkill.gameObject.SetActive(false);
+        if(this.FighterSkillCaster) newSkill.transform.position = this.FighterSkillCaster.transform.position;
+        this.FighterSkillCaster = newSkill;
+        if(this.FighterSkillCaster) this.SkillNameText.SetSkillName(this.FighterSkillCaster.Data.Name);
     }
 
     public void TransitionShow(bool show) {

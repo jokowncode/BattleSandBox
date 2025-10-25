@@ -14,6 +14,8 @@ public class SimpleProjectile : MonoBehaviour
     private float startTime;
     private bool hasReachedTarget = false;
 
+    private Hero CurrentHero = null;
+    
     void Start()
     {
         transform.position = originPos;
@@ -47,15 +49,21 @@ public class SimpleProjectile : MonoBehaviour
         
         transform.position = targetPos;
         hasReachedTarget = true;
+        if (CurrentHero) {
+            CurrentHero.transform.position = targetPos;
+            CurrentHero.TransitionShow(true);
+        }
         
         yield return new WaitForSeconds(destroyDelay);
         Destroy(gameObject);
     }
     
-    public void SetFlightParameters(Vector3 origin, Vector3 target)
+    public void SetFlightParameters(Vector3 origin, Vector3 target, Hero hero)
     {
+        if(hero) hero.TransitionShow(false);
         originPos = origin;
         targetPos = target;
+        CurrentHero = hero;
         // flightTime = time;
         // destroyDelay = delay;
     }

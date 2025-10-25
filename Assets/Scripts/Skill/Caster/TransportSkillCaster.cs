@@ -5,8 +5,8 @@ public class TransportSkillCaster : SkillCaster {
     
     [SerializeField] private BuffData BuffData;
     
-    [Header("Trail")]
-    [SerializeField] private GameObject SkillTrailPrefab;
+    /*[Header("Trail")]
+    [SerializeField] private GameObject SkillTrailPrefab;*/
     
     [Header("Summon")]
     [SerializeField] private int SummonCount = 0;
@@ -16,13 +16,16 @@ public class TransportSkillCaster : SkillCaster {
     [Header("material Props")]
     private string propertyName = "_Outer";
 
-    private void Summon(float angle) {
+    private void Summon(Vector3 centerPos, float angle) {
         Vector3 rotVector = Quaternion.AngleAxis(angle, Vector3.up) * Vector3.right;
-        Vector3 summonPos = OwnedFighter.transform.position + rotVector * OwnedFighter.AttackRadius;
+        Vector3 summonPos = centerPos + rotVector * OwnedFighter.AttackRadius;
         Fighter summon = Instantiate(OwnedFighter, summonPos, Quaternion.identity);
         summon.FighterSkillCaster.SetSkillCastCount(this.CurrentSkillCastCount);
         summon.BattleStart(true);
-        
+        if (summon is Hero hero) {
+            hero.TransitionShow(true);
+        }
+
         // Outer
         SpriteRenderer targetSpriteRenderer = summon.transform.GetComponentInChildren<SpriteRenderer>();
         if (targetSpriteRenderer != null)
@@ -48,21 +51,22 @@ public class TransportSkillCaster : SkillCaster {
         
         Fighter fighter = BattleManager.Instance.FindFurthestEnemyTarget(OwnedFighter.transform.position);
         
-        if(SkillTrailPrefab!=null)
-        {
+        /*if(SkillTrailPrefab!=null) {
             // wow
             GameObject projectile = Instantiate(SkillTrailPrefab, OwnedFighter.Center.position, Quaternion.identity);
             projectile.GetComponent<SimpleProjectile>().SetFlightParameters(OwnedFighter.Center.position, fighter.Center.position + Vector3.right * OwnedFighter.AttackRadius);
-        }
-        
-        
-        
+        }*/
         //Fighter fighter = BattleManager.Instance.FindFurthestEnemyTarget(OwnedFighter.transform.position);
-        OwnedFighter.transform.position = fighter.transform.position + Vector3.right * OwnedFighter.AttackRadius;
+        // OwnedFighter.transform.position = fighter.transform.position + Vector3.right * OwnedFighter.AttackRadius;
+        Vector3 targetPos = fighter.transform.position + Vector3.right * OwnedFighter.AttackRadius;
+        if (OwnedFighter is Hero hero) {
+            hero.ChangePositionWithTrail(targetPos);
+        }
+
         if (SummonCount != 0) {
             for (int i = 0; i < SummonCount / 2; i++) {
-                Summon(-(i + 1) * SummonAngle);
-                Summon((i + 1) * SummonAngle);
+                Summon(targetPos, -(i + 1) * SummonAngle);
+                Summon(targetPos, (i + 1) * SummonAngle);
             }    
         }
         

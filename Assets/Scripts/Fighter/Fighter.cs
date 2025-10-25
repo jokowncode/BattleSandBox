@@ -23,7 +23,9 @@ public class Fighter : StateMachineController{
     
     protected FighterData CurrentData;
     public Fighter AttackTarget { get; private set; }
+    public SkillCaster OriginFighterSkillCaster { get; protected set; }
     public SkillCaster FighterSkillCaster { get; protected set; }
+
     public Animator FighterAnimator{ get; private set; }
     public FighterMove Move{ get; private set; }
     public FighterAnimationEvent AnimationEvent { get; private set; }
@@ -55,7 +57,9 @@ public class Fighter : StateMachineController{
 
     protected virtual void Awake(){
         GetRendererComponent();
-        this.FighterSkillCaster = GetComponentInChildren<SkillCaster>();
+        this.OriginFighterSkillCaster = GetComponentInChildren<SkillCaster>();
+        this.FighterSkillCaster = this.OriginFighterSkillCaster;
+        
         this.Move = GetComponent<FighterMove>();
         this.FighterPatrol = GetComponent<PatrolState>();
         this.FighterSkill = GetComponent<SkillState>();
