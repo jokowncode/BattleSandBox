@@ -5,9 +5,17 @@ using UnityEngine;
 public abstract class InteractionObject : MonoBehaviour{
 
     protected Player InAreaPlayer;
+    protected bool IsEnd = false;
+
+    public Action OnInteractionEnded;
     
     protected virtual void Awake(){
         this.enabled = false;
+    }
+
+    protected void EndInteraction() {
+        this.IsEnd = true;
+        this.OnInteractionEnded?.Invoke();
     }
 
     protected virtual void OnTriggerEnter(Collider other){

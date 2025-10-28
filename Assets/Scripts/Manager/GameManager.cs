@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour{
     
     public static GameManager Instance;
 
-    private Player CurrentPlayer;
+    public Player PlayerInBigMap { get; private set; }
     private BattleData NextBattleData;
     private Vector3 InBigMapPlayerPosition;
 
@@ -38,9 +38,9 @@ public class GameManager : MonoBehaviour{
         }
 
         if (SceneChangeManager.Instance.CurrentScene == SceneType.BigMap){
-            this.CurrentPlayer = FindAnyObjectByType<Player>();
+            this.PlayerInBigMap = FindAnyObjectByType<Player>();
             if (this.IsBattleEnd)
-                this.CurrentPlayer.transform.position = this.InBigMapPlayerPosition;
+                this.PlayerInBigMap.transform.position = this.InBigMapPlayerPosition;
         }
 
         if (SceneChangeManager.Instance.CurrentScene != SceneType.BigMap){
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour{
 
     public void GoToBattle(BattleData battleData){
         this.NextBattleData = battleData;
-        this.InBigMapPlayerPosition = this.CurrentPlayer.transform.position;
+        this.InBigMapPlayerPosition = this.PlayerInBigMap.transform.position;
         if(GoToBattleSfx)
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.GoToBattleSfx);
         BigMapUIManager.Instance.ShowBattleStartUI(battleData.BattleBannarBackground, battleData.BattleImage, battleData.BattleText);

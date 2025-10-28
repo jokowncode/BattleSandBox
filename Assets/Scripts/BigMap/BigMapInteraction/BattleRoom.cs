@@ -5,9 +5,9 @@ public class BattleRoom : InteractionObject{
 
     [SerializeField] protected BattleData Data;
     [SerializeField] private Transform Enemies;
+    [SerializeField] private Dialogue NextActiveDialogue;
     
     private BoxCollider Collider;
-    protected bool IsEnd;
     
     protected override void Awake(){
         base.Awake();
@@ -31,7 +31,13 @@ public class BattleRoom : InteractionObject{
     protected override void OnTriggerEnter(Collider other){
         base.OnTriggerEnter(other);
         if (this.IsEnd || (GameManager.Instance.IsBattleEnd && GameManager.Instance.IsBattleVictory)){
-            this.IsEnd = true;
+            if (!this.IsEnd) {
+                if (NextActiveDialogue) {
+                    NextActiveDialogue.Activate();
+                }
+                // this.IsEnd = true;
+                this.EndInteraction();
+            }
             this.InAreaPlayer.TransitionInteractionTip(false);
             this.enabled = false;
             if(this.Enemies) Destroy(this.Enemies.gameObject);

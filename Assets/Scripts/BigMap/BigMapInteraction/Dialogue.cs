@@ -10,11 +10,25 @@ public class Dialogue : InteractionObject{
     [SerializeField] private bool IsForce = false;
     [SerializeField] private bool IsFullScreen = true;
     
+    [Header("Next Dialog")]
+    [SerializeField] private bool IsActiveWhenAwake = true;
+    [SerializeField] private Dialogue NextActiveDialogue;
+    
     private bool IsCurrentConversation;
-    private bool IsDialogue;
+    private bool IsActive = false;
 
-    protected override void OnTriggerEnter(Collider other){
-        if (this.IsDialogue && !CanRepeat) return;
+    protected override void Awake() {
+        base.Awake();
+        this.IsActive = this.IsActiveWhenAwake;
+    }
+
+    public void Activate() {
+        this.IsActive = true;
+    }
+
+    protected override void OnTriggerEnter(Collider other) {
+        if (!this.IsActive) return;
+        if (this.IsEnd && !CanRepeat) return;
         if (!other.CompareTag("Player")) return;
         base.OnTriggerEnter(other);
         if (this.IsForce){
@@ -30,12 +44,18 @@ public class Dialogue : InteractionObject{
             this.InAreaPlayer.TransitionInteractionTip(true);
         }
 
-        this.IsDialogue = true;
+        // this.IsEnd = true;
+        if (!this.IsEnd) {
+            this.EndInteraction();
+            if (NextActiveDialogue) {
+                NextActiveDialogue.Activate();
+            }
+        }
     }
 
     protected override void Interaction(){
         if (DialogManager.Instance.IsInDialog) return;
-        if (this.IsDialogue && !CanRepeat) return;
+        if (this.IsEnd && !CanRepeat) return;
         if (IsCurrentConversation) return;
         TriggerDialogue();
     }

@@ -8,6 +8,10 @@ public class BigMapUIManager : MonoBehaviour{
     [SerializeField] private CanvasGroup HUDCanvasGroup;
     [SerializeField] private BattleStartUI BattleStartBannar;
     
+    [Header("Task")]
+    [SerializeField] private TaskData FirstTask;
+    [SerializeField] private TaskUI TaskUI;
+    
     public static BigMapUIManager Instance;
 
     private Store CurrentShowStore;
@@ -19,10 +23,17 @@ public class BigMapUIManager : MonoBehaviour{
             return;
         }
         Instance = this;
+        
+        // TODO: Load Current Player Task Procedure
+        ShowNewTask(this.FirstTask);
     }
 
     public void ShowBattleStartUI(Sprite background, Sprite battleImage, string battleText){
         this.BattleStartBannar.ShowBattleStartUI(background, battleImage, battleText);
+    }
+
+    public void ShowNewTask(TaskData newTask) {
+        TaskUI.SetTask(newTask);
     }
 }
 
