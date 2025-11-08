@@ -67,7 +67,7 @@ public class BattleUIManager : MonoBehaviour {
 
     public void ShowHeroDetail(Hero hero) {
         if (!hero) return;
-        this.RecallHeroButton.gameObject.SetActive(true);
+        this.RecallHeroButton.gameObject.SetActive(!hero.IsOriginExist);
         SetHeroPanelActive(true);
         UpdatePassiveEntryWarehouse(hero.HeroAvailablePassiveEntrySortCode);
         heroDetailUI.ChangeHeroDetailUIValue(hero.DetailPortrait);

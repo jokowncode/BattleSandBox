@@ -3,6 +3,12 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+public enum NextCorridorMoveWay {
+    Disappear,
+    HeroMove,
+    AreaMove
+}
+
 public class NextCorridorArea : MonoBehaviour {
 
     [SerializeField] private Transform Edge;
@@ -10,6 +16,7 @@ public class NextCorridorArea : MonoBehaviour {
     [SerializeField] private Transform GroundParent;
     [SerializeField] private NextCorridorArea NextArea;
     [SerializeField] private Transform StartAreaRef;
+    [SerializeField] private NextCorridorMoveWay MoveWay = NextCorridorMoveWay.Disappear;
     
     [Header("Move Area")]
     [SerializeField] private MoveArea MoveArea;
@@ -44,12 +51,15 @@ public class NextCorridorArea : MonoBehaviour {
             BattleManager.Instance.BattleVictory();
             return;
         }
-
-        /*if (MoveCam) {
-            MoveCam.MoveToInXDir(this.Offset.x);
-            MoveCam.OnArrive += OnCameraArrive;
-        }*/
-        StartCoroutine(DisappearAreaCoroutine());
+        
+        if (this.MoveWay == NextCorridorMoveWay.HeroMove) {
+            if (MoveCam) {
+                MoveCam.MoveToInXDir(this.Offset.x);
+                MoveCam.OnArrive += OnCameraArrive;
+            }
+        }else if (this.MoveWay == NextCorridorMoveWay.Disappear) {
+            StartCoroutine(DisappearAreaCoroutine());
+        }
     }
 
     private IEnumerator DisappearAreaCoroutine() {
@@ -103,7 +113,11 @@ public class NextCorridorArea : MonoBehaviour {
 
     private void OnCameraArrive() {
         MoveCam.OnArrive -= OnCameraArrive;
-        StartCoroutine(MoveAreaCoroutine());
+        if (MoveWay == NextCorridorMoveWay.HeroMove) {
+            StartCoroutine(NextAreaCoroutine());    
+        }else if (MoveWay == NextCorridorMoveWay.AreaMove) {
+            StartCoroutine(MoveAreaCoroutine());
+        }
     }
 
     private IEnumerator MoveAreaCoroutine() {
@@ -131,6 +145,7 @@ public class NextCorridorArea : MonoBehaviour {
         }
         yield return null;
         foreach (Hero hero in BattleManager.Instance.HeroesInBattle) {
+            hero.Move.ChangeSpeed(10.0f);
             hero.Move.MoveTo(hero.StartPosition + this.Offset);
             hero.Move.OnArriveDestination += OnArriveDestination;
         }
@@ -139,6 +154,7 @@ public class NextCorridorArea : MonoBehaviour {
     private void OnArriveDestination(Fighter fighter) {
         fighter.Move.OnArriveDestination -= OnArriveDestination;
         fighter.FighterIdle();
+        fighter.Move.RecoverSpeed();
         fighter.Move.StopMove();
         
         ArriveHeroCount += 1;
@@ -152,12 +168,7 @@ public class NextCorridorArea : MonoBehaviour {
         IsActive = true;
         IsEnd = false;
         BattleManager.Instance.AddEnemiesInParent(this.CurrentAreaEnemyParent);
-        foreach (Enemy enemy in BattleManager.Instance.EnemiesInBattle){
-            enemy.BattleStart();
-        }
-        foreach (Hero hero in BattleManager.Instance.HeroesInBattle){
-            hero.BattleStart();
-        }
+        BattleManager.Instance.StartBattleInRound();
     }
 }
 

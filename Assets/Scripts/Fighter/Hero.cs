@@ -12,7 +12,7 @@ public class Hero : Fighter{
     [SerializeField] private PassiveEntry[] HeroSelfPassiveEntries;
     [field: SerializeField] public SkillCaster HeroUpdateSkillCaster { get; private set; }
     [SerializeField] private GameObject Shadow;
-
+    
     [Header("Trail")]
     [SerializeField] private SimpleProjectile SkillTrailPrefab;
     
@@ -28,6 +28,7 @@ public class Hero : Fighter{
     public Dictionary<string, Object> Records = new();
 
     public int MergeGroupIndex { get; set; } = -1;
+    public bool IsOriginExist = false;
 
     protected override void Awake(){
         base.Awake();
@@ -97,8 +98,12 @@ public class Hero : Fighter{
         this.Move.Agent.enabled = false;
     }
 
-    public void Deploy(int deployAreaIndex) {
+    public void SetStartPosition() {
         this.StartPosition = this.transform.position;
+    }
+
+    public void Deploy(int deployAreaIndex) {
+        this.SetStartPosition();
         this.DeployAreaIndex = deployAreaIndex;
         this.Move.Agent.enabled = true;
         if(DeployHeroSfx)

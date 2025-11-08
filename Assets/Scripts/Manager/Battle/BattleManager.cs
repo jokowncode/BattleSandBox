@@ -37,7 +37,9 @@ public class BattleManager : StateMachineController{
 
     public Action<Hero> OnHeroEnterTheField;
     public Action<Hero> OnHeroExitTheField;
+    
     public Action OnBattleStart;
+    public Action OnBattleStartInRound;
 
     public bool IsGameOver => EnemiesInBattle.Count <= 0 || HeroesInBattle.Count <= 0;
     public bool IsFullHero => this.HeroesInBattle.Count >= this.Data.MaxHeroCount;
@@ -83,7 +85,10 @@ public class BattleManager : StateMachineController{
         if (this.HeroParent.childCount != 0) {
             foreach (Transform child in this.HeroParent.transform) {
                 if (child.TryGetComponent(out Hero hero)) {
+                    hero.IsOriginExist = true;
+                    hero.SetStartPosition();
                     this.HeroesInBattle.Add(hero);
+                    // OnHeroEnterTheField?.Invoke(hero);
                 }
             }
         }
@@ -133,6 +138,16 @@ public class BattleManager : StateMachineController{
         }
     }
 
+    public void StartBattleInRound() {
+        foreach (Enemy enemy in this.EnemiesInBattle){
+            enemy.BattleStart();
+        }
+        foreach (Hero hero in this.HeroesInBattle) {
+            hero.BattleStart();
+        }
+        OnBattleStartInRound?.Invoke();
+    }
+
     public void StartBattle(){
         if (this.HeroesInBattle.Count <= 0){
             PlayErrorSfx();
@@ -158,6 +173,7 @@ public class BattleManager : StateMachineController{
     private void SaveHeroDeploy() {
         List<HeroDeployData> data = new List<HeroDeployData>();
         foreach (Hero hero in HeroesInBattle) {
+            if(hero.IsOriginExist) continue;
             data.Add(new HeroDeployData {
                 HeroName = hero.Name,
                 HeroPosition = hero.transform.position,
@@ -233,6 +249,12 @@ public class BattleManager : StateMachineController{
     public void BattleVictory() {
         if (TryGetComponent(out VictoryState victory)) {
             ChangeState(victory);    
+        }
+    }
+
+    public void BattleDefeat() {
+        if (TryGetComponent(out DefeatState defeat)) {
+            ChangeState(defeat);    
         }
     }
 
