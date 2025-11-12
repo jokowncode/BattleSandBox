@@ -27,6 +27,7 @@ public class FormationManager : MonoBehaviour{
     }
 
     public Vector3 GetFormationPosition(Fighter target, Fighter oldTarget, float radius){
+        // TODO: maybe has bug
         if (oldTarget && TargetRecords.ContainsKey(oldTarget)){
             TargetRecords[oldTarget]--;
             if(TargetRecords[oldTarget] <= 0) TargetRecords.Remove(oldTarget);

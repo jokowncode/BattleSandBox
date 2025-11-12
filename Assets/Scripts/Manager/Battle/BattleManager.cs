@@ -453,7 +453,37 @@ public class BattleManager : StateMachineController{
         }
         return result;
     }
-    
+
+    private List<Fighter> GetSortedFightersByDistance(Fighter self) {
+        List<Fighter> result = new List<Fighter>();
+        if (self.AttackTargetType == TargetType.Hero) {
+            foreach (Hero hero in this.HeroesInBattle) {
+                result.Add(hero);
+            }
+        }else if (self.AttackTargetType == TargetType.Enemy) {
+            foreach (Enemy enemy in this.EnemiesInBattle) {
+                result.Add(enemy);
+            }
+        }
+        result.Sort((Fighter f1, Fighter f2) => {
+            float d1 = (self.transform.position - f1.transform.position).sqrMagnitude;
+            float d2 = (self.transform.position - f2.transform.position).sqrMagnitude;
+            return d1 > d2 ? 1 : (d1 < d2 ? -1 : 0);
+        });
+        return result;
+    }
+
+    public Fighter GetNearestFighter(Fighter selfFighter, Func<Fighter, bool> condition = null) {
+        List<Fighter> sortedFighter = GetSortedFightersByDistance(selfFighter);
+        if (condition == null) return sortedFighter[0];
+        foreach (Fighter f in sortedFighter) {
+            if (condition(f)) {
+                return f;
+            }
+        }
+        return null;
+    }
+
     public Fighter GetRandomFighter(TargetType type, Func<Fighter, bool> condition = null) {
         if (IsGameOver) return null;
         int randomIndex = -1;

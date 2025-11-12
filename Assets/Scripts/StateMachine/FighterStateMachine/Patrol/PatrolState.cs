@@ -16,9 +16,12 @@ public class PatrolState : FighterState{
     private bool IsMoveStop;
     private bool IsFirstFrame = true;
     private Fighter LastPatrolPoint;
+
+    private bool IsFirstTimePatrol = true;
     
     protected override void Awake(){
         base.Awake();
+        IsFirstTimePatrol = true;
         FighterAttack = GetComponent<AttackState>();
         FighterSkill = GetComponent<SkillState>();
         FighterChase = GetComponent<ChaseState>();
@@ -46,14 +49,17 @@ public class PatrolState : FighterState{
         if (this.PatrolPoint){
             Controller.Move.MoveTo(this.PatrolPoint.transform.position);
         }*/
-        
-        if (!this.PatrolPoint || 
-            this.PatrolPoint.gameObject.layer != LayerMask.NameToLayer(Controller.AttackTargetType.ToString())){
+        if (!this.PatrolPoint){
             Func<Fighter, bool> condition = null;
             if (Controller.Type == FighterType.Warrior){
                 condition = (Fighter warrior) => FormationManager.Instance.ValidTarget(warrior);
             }
-            this.PatrolPoint = BattleManager.Instance.GetRandomFighter(Controller.AttackTargetType, condition);
+
+            if (IsFirstTimePatrol) {
+                this.PatrolPoint = BattleManager.Instance.GetRandomFighter(Controller.AttackTargetType, condition);
+            } else {
+                this.PatrolPoint = BattleManager.Instance.GetNearestFighter(Controller, condition);
+            }
             this.LastPatrolPoint = this.PatrolPoint;
         }
 
@@ -66,6 +72,8 @@ public class PatrolState : FighterState{
     }
 
     public override void Destruct() {
+        IsFirstTimePatrol = false;
+        PatrolPoint = null;
         if(IsMoveStop) Controller.Move.StopMove();
     }
 
