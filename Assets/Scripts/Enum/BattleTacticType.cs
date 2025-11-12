@@ -1,5 +1,8 @@
 ﻿
 public enum BattleTacticType {
-    ChangePosition
+    ChangePosition,
+    ForceConcentration,
+    DamageShare,
+    RevengeVow
 }
 

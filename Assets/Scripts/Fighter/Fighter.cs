@@ -163,7 +163,14 @@ public class Fighter : StateMachineController{
             }   
             UpdateShieldBar();
         }
-        
+
+        if (this is Hero hero && hero.ShareDamageHero) {
+            finalDamage /= 2;
+            hero.ShareDamageHero.BeDamaged(new EffectData() {
+                Value = finalDamage
+            });
+        }
+
         ShowDamage(finalDamage, effectData.IsCritical);
         
         this.InBattleHealth = Mathf.Min(this.CurrentData.Health, this.InBattleHealth - finalDamage);

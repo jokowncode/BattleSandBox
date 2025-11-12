@@ -15,6 +15,9 @@ public class Hero : Fighter{
     
     [Header("Trail")]
     [SerializeField] private SimpleProjectile SkillTrailPrefab;
+
+    [Header("Revenge")] 
+    [SerializeField] private BuffData RevengeBuff;
     
     private List<PassiveEntry> EquipPassiveEntries;
     private List<PassiveEntry> SelfPassiveEntries;
@@ -28,7 +31,9 @@ public class Hero : Fighter{
     public Dictionary<string, Object> Records = new();
 
     public int MergeGroupIndex { get; set; } = -1;
-    public bool IsOriginExist = false;
+    public bool IsOriginExist { get; set; } = false;
+
+    public Hero ShareDamageHero { get; private set; } = null;
 
     protected override void Awake(){
         base.Awake();
@@ -40,6 +45,24 @@ public class Hero : Fighter{
             this.HeroAvailablePassiveEntrySortCode =
                 (int)PassiveEntrySort.General | (int)PassiveEntrySort.Talent | (int)this.FighterSkillCaster.Sort;
         }
+    }
+
+    public void ShareDamage(Hero hero) {
+        this.ShareDamageHero = hero;
+    }
+
+    public void StartRevengeVow(Hero hero) {
+        hero.OnDead += OnRevengeDead;
+    }
+    
+    public void StopRevengeVow(Hero hero) {
+        if (!hero) return;
+        hero.OnDead -= OnRevengeDead;
+    }
+
+    private void OnRevengeDead(Fighter deadHero) {
+        deadHero.OnDead -= OnRevengeDead;
+        BuffManager.Instance.AddBuff(this, this, this.RevengeBuff);
     }
 
     public void SetMergeData(FighterData data) {

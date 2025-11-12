@@ -97,14 +97,17 @@ public class HeroMergeManager : MonoBehaviour {
         tactic.CastTactic(groupData.MergeHeroes[0], groupData.MergeHeroes[1]);
         
         // 设置主动技能升级
-        if(groupData.MergeHeroes[0]) groupData.MergeHeroes[0].SkillChange(true);
-        if(groupData.MergeHeroes[1]) groupData.MergeHeroes[1].SkillChange(true);
+        // if(groupData.MergeHeroes[0]) groupData.MergeHeroes[0].SkillChange(true);
+        // if(groupData.MergeHeroes[1]) groupData.MergeHeroes[1].SkillChange(true);
         
         yield return this.HeroMergeTimer;
         
         // 取消主动技能升级
-        if(groupData.MergeHeroes[0]) groupData.MergeHeroes[0].SkillChange(false);
-        if(groupData.MergeHeroes[1]) groupData.MergeHeroes[1].SkillChange(false);
+        // if(groupData.MergeHeroes[0]) groupData.MergeHeroes[0].SkillChange(false);
+        // if(groupData.MergeHeroes[1]) groupData.MergeHeroes[1].SkillChange(false);
+        
+        tactic.StopTactic(groupData.MergeHeroes[0], groupData.MergeHeroes[1]);
+        
         groupData.IsMerge = false;
         groupData.CurrentEnergy = 0;
     }

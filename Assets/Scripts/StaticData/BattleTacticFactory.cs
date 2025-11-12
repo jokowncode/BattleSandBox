@@ -16,6 +16,15 @@ public static class BattleTacticFactory {
             case BattleTacticType.ChangePosition:
                 tactic = new ChangePositionBattleTactic();
                 break;
+            case BattleTacticType.ForceConcentration:
+                tactic = new ForceConcentrationBattleTactic();
+                break;
+            case  BattleTacticType.DamageShare:
+                tactic = new DamageShareBattleTactic();
+                break;
+            case BattleTacticType.RevengeVow:
+                tactic = new RevengeVowBattleTactic();
+                break;
         }
         if (tactic != null) Tactics.Add(type, tactic);
         return tactic;
