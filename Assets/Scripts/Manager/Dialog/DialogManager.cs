@@ -18,6 +18,9 @@ public class DialogManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI CharacterName;
     [SerializeField] private TypeWriter DialogText;
     [SerializeField] private StoryReviewUI StoryReview;
+    
+    [Header("Background Character Portrait")]
+    [SerializeField] private Transform CharacterPortraitContainer;
 
     [Header("Dialog Option")] 
     [SerializeField] private Transform DialogOptionContainer;
@@ -33,7 +36,6 @@ public class DialogManager : MonoBehaviour {
 
     // private StoryDialogData[] Dialogs;
     private AudioClip PreBGM;
-    private bool HasDialogBGM = false;
 
     public Action OnDialogEnded;
 
@@ -79,6 +81,9 @@ public class DialogManager : MonoBehaviour {
     
     public void PlayNewDialog(DialogGraph dialog, bool isFullScreen = true) {
         this.IsFullScreen = isFullScreen;
+        this.PreBGM = AudioManager.Instance.GetCurrentMainMusic();
+        AudioManager.Instance.StopFootstep();
+        
         if (!dialog) return;
         StartNode startNode = FindStartNode(dialog);
         if (!startNode) return;
@@ -91,12 +96,6 @@ public class DialogManager : MonoBehaviour {
         SetDialog();
         Transition(true);
         
-        this.HasDialogBGM = startNode.DialogBGM;
-        if (this.HasDialogBGM) {
-            this.PreBGM = AudioManager.Instance.GetCurrentMainMusic();
-            AudioManager.Instance.SetMainMusic(startNode.DialogBGM);
-        }
-
         if (this.IsFullScreen) {
             CameraManager.Instance.MainCamera.cullingMask = 1 << LayerMask.NameToLayer("UI");
         }
@@ -136,10 +135,8 @@ public class DialogManager : MonoBehaviour {
         Transition(false);
         this.IsAutoPlay = false;
 
-        if (this.HasDialogBGM) {
-            AudioManager.Instance.StopMainMusic();
-            if(this.PreBGM) AudioManager.Instance.SetMainMusic(this.PreBGM);
-        }
+        AudioManager.Instance.StopMainMusic();
+        if(this.PreBGM) AudioManager.Instance.SetMainMusic(this.PreBGM);
         
         if (this.IsFullScreen) {
             CameraManager.Instance.MainCamera.cullingMask = ~0;
@@ -185,16 +182,33 @@ public class DialogManager : MonoBehaviour {
                 this.BackgroundImageCanvasGroup.alpha = 1.0f;
             }
         }
+
+        foreach (Transform child in this.CharacterPortraitContainer) {
+            child.gameObject.SetActive(false);
+        }
+        if (data.BackgroundCharacterPortraits != null && data.BackgroundCharacterPortraits.Length > 0) {
+            for (int i = 0; i < data.BackgroundCharacterPortraits.Length; i++) {
+                if(this.CharacterPortraitContainer.GetChild(i).TryGetComponent(out Image portraitImage)){
+                    portraitImage.gameObject.SetActive(true);
+                    portraitImage.sprite = data.BackgroundCharacterPortraits[i];
+                }
+            }
+        }
+
         this.CharacterPortrait.color = new Color(1, 1, 1, data.CharacterPortrait ? 1.0f : 0.0f); 
         this.CharacterPortrait.sprite = data.CharacterPortrait;
         this.CharacterName.text = data.CharacterName;
         this.DialogText.Play(data.DialogText);
 
         this.HasSound = data.DialogAudio;
-        if (data.DialogAudio) {
-            AudioManager.Instance.SetDialog(data.DialogAudio);
+        if (data.DialogBGM) {
+            AudioManager.Instance.FadeMainMusic(data.DialogBGM, 2.0f, data.BGMVolume);
         }
-
+        
+        if (data.DialogAudio) {
+            AudioManager.Instance.SetDialog(data.DialogAudio, data.CharacterAudioVolume);
+        }
+        
         foreach (Transform option in this.DialogOptionContainer) {
             Destroy(option.gameObject);
         }
@@ -223,6 +237,7 @@ public class DialogManager : MonoBehaviour {
         this.CurrentDialogNode = dialogNode;
         this.IsChooseOption = true;
         this.StoryReview.AddDialogOptionHistory(optionText);
+        AudioManager.Instance.StopDialog();
         SetDialog();
     }
 

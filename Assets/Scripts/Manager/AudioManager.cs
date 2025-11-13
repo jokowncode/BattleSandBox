@@ -33,6 +33,16 @@ public class AudioManager : MonoBehaviour{
         this.MainMusicAudioSource.Play();
     }
 
+    public void FadeMainMusic(AudioClip newClip, float duration = 1.0f, float newVolume = 1.0f) {
+        StartCoroutine(FadeMainMusicCoroutine(newClip, duration, newVolume));
+    }
+
+    private IEnumerator FadeMainMusicCoroutine(AudioClip newClip, float duration, float volume) {
+        yield return FadeCoroutine(0.0f, duration / 2.0f);
+        SetMainMusic(newClip);
+        yield return FadeCoroutine(volume, duration / 2.0f);
+    }
+
     public AudioClip GetCurrentMainMusic() {
         return this.MainMusicAudioSource.clip;
     }
@@ -41,9 +51,10 @@ public class AudioManager : MonoBehaviour{
         this.MainMusicAudioSource.Stop();
     }
 
-    public void SetDialog(AudioClip newClip) {
+    public void SetDialog(AudioClip newClip, float volume = 1.0f) {
         this.DialogIsFinished = false;
         this.DialogAudioSource.mute = true;
+        this.DialogAudioSource.volume = volume;
         this.DialogAudioSource.clip = newClip;
         this.DialogAudioSource.mute = false;
         this.DialogAudioSource.Play();
@@ -70,10 +81,6 @@ public class AudioManager : MonoBehaviour{
 
     public void SetMainMusicVolume(float volume){
         this.MainMusicAudioSource.volume = volume;
-    }
-
-    public void Fade(float newVolume, float duration = 0.5f){
-        StartCoroutine(FadeCoroutine(newVolume, duration));
     }
 
     private IEnumerator FadeCoroutine(float newVolume, float duration = 0.5f){
