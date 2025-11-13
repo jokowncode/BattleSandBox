@@ -82,6 +82,7 @@ public class DialogManager : MonoBehaviour {
     public void PlayNewDialog(DialogGraph dialog, bool isFullScreen = true) {
         this.IsFullScreen = isFullScreen;
         this.PreBGM = AudioManager.Instance.GetCurrentMainMusic();
+        AudioManager.Instance.StopFootstep();
         
         if (!dialog) return;
         StartNode startNode = FindStartNode(dialog);
