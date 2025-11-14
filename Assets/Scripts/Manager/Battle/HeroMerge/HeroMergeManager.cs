@@ -8,17 +8,22 @@ public class HeroMergeManager : MonoBehaviour {
 
     // TODO: Passive Entry
     // [SerializeField] private List<PassiveEntry> HeroMergePassiveEntries;
+    
+    [Header("General")]
+    [SerializeField] private float MergeEnergy = 5;
+    
     [Header("Merge Version")]
     [SerializeField] private BuffData HeroMergeBuff;
     [SerializeField] private float HeroMergeDuration = 5.0f;
-    [SerializeField] private int MergeEnergy = 5;
 
     [Header("Tactic Version")] 
     [SerializeField] private BattleTacticType UseTacticType;
     
     public static HeroMergeManager Instance;
-    private HeroMergeGroupData[] HeroMergeGroup;
+    // private HeroMergeGroupData[] HeroMergeGroup;
     private WaitForSeconds HeroMergeTimer;
+    
+    private Dictionary<Hero, float> HeroEnergies = new Dictionary<Hero, float>();
     
     private void Awake() {
         if (Instance != null) {
@@ -32,12 +37,12 @@ public class HeroMergeManager : MonoBehaviour {
 
     private void Start() {
         BattleManager.Instance.OnBattleStart += OnBattleStart;
-        this.HeroMergeGroup = new HeroMergeGroupData[BattleManager.Instance.Data.MaxHeroCount / 2];
+        // this.HeroMergeGroup = new HeroMergeGroupData[BattleManager.Instance.Data.MaxHeroCount / 2];
     }
 
     private void OnBattleStart() {
-        // TODO: Link UI
-        if (BattleManager.Instance.HeroesInBattle.Count >= 2) {
+        // Hero Merge Version
+        /*if (BattleManager.Instance.HeroesInBattle.Count >= 2) {
             HeroMergeGroup[0] = new HeroMergeGroupData {
                 MergeHeroes = new List<Hero>(){
                     BattleManager.Instance.HeroesInBattle[0],
@@ -55,10 +60,15 @@ public class HeroMergeManager : MonoBehaviour {
             
             BattleManager.Instance.HeroesInBattle[0].OnDead += OnFighterDead;
             BattleManager.Instance.HeroesInBattle[1].OnDead += OnFighterDead;
+        }*/
+        
+        // Tactic Version
+        foreach (Hero hero in BattleManager.Instance.HeroesInBattle) {
+            hero.FighterSkillCaster.OnCastSkill += OnCastSkill;
         }
     }
 
-    private void OnFighterDead(Fighter fighter) {
+    /*private void OnFighterDead(Fighter fighter) {
         if (fighter is not Hero hero) return;
         HeroMergeGroupData data = HeroMergeGroup[hero.MergeGroupIndex];
         this.HeroMergeGroup[hero.MergeGroupIndex] = null;
@@ -71,10 +81,11 @@ public class HeroMergeManager : MonoBehaviour {
 
         data.MergeHeroes[0].MergeGroupIndex = -1;
         data.MergeHeroes[1].MergeGroupIndex = -1;
-    }
+    }*/
 
     private void OnCastSkill(Fighter fighter) {
-        if (fighter is not Hero hero 
+        // Hero Merge Version
+        /*if (fighter is not Hero hero 
             ||  hero.MergeGroupIndex < 0 || hero.MergeGroupIndex >= this.HeroMergeGroup.Length) return;
         HeroMergeGroupData data = this.HeroMergeGroup[hero.MergeGroupIndex];
         if (data == null || data.IsMerge) return;
@@ -83,18 +94,50 @@ public class HeroMergeManager : MonoBehaviour {
         if (data.CurrentEnergy >= this.MergeEnergy) {
             // MergeHero(data);
             MergeHeroTacticVersion(data);
+        }*/
+    
+        if (fighter is not Hero hero) return;
+        if (hero.IsMerge) return;
+        if (this.HeroEnergies.TryGetValue(hero, out float energy) && energy >= this.MergeEnergy) return;
+        if (!this.HeroEnergies.TryAdd(hero, 1)) {
+            this.HeroEnergies[hero] += 1;
+        }
+        float value = this.HeroEnergies[hero] / this.MergeEnergy;
+        BattleUIManager.Instance.heroPortraitUI.SetHeroEnergy(hero, value);
+    }
+
+    private void Update() {
+        // TODO: Link UI
+        if (Input.GetKeyDown(KeyCode.M)) {
+            if (BattleManager.Instance.HeroesInBattle.Count < 2) return;
+            MergeHeroTacticVersion(BattleManager.Instance.HeroesInBattle[0], BattleManager.Instance.HeroesInBattle[1]);
         }
     }
 
-    private void MergeHeroTacticVersion(HeroMergeGroupData groupData) {
-        if (groupData.IsMerge) return;
-        groupData.IsMerge = true;
-        StartCoroutine(MergeHeroTacticVersionCoroutine(groupData));
+    private void MergeHeroTacticVersion(Hero hero1, Hero hero2) {
+        if (!hero1 || !hero2) return;
+        if (hero1.IsMerge || hero2.IsMerge) return;
+
+        if (!this.HeroEnergies.TryGetValue(hero1, out float hero1E) ||
+            !this.HeroEnergies.TryGetValue(hero2, out float hero2E) || 
+            hero1E < this.MergeEnergy ||
+            hero2E < this.MergeEnergy) return;
+
+        StartCoroutine(MergeHeroTacticVersionCoroutine(hero1, hero2));
     }
 
-    private IEnumerator MergeHeroTacticVersionCoroutine(HeroMergeGroupData groupData) {
+    private IEnumerator MergeHeroTacticVersionCoroutine(Hero hero1, Hero hero2) {
+        
+        hero1.IsMerge = true;
+        hero2.IsMerge = true;
+
+        this.HeroEnergies[hero1] = 0;
+        this.HeroEnergies[hero2] = 0;
+        BattleUIManager.Instance.heroPortraitUI.SetHeroEnergy(hero1, 0);
+        BattleUIManager.Instance.heroPortraitUI.SetHeroEnergy(hero2, 0);
+        
         BattleTactic tactic = BattleTacticFactory.CreateBattleTactic(this.UseTacticType);
-        tactic.CastTactic(groupData.MergeHeroes[0], groupData.MergeHeroes[1]);
+        tactic.CastTactic(hero1, hero2);
         
         // 设置主动技能升级
         // if(groupData.MergeHeroes[0]) groupData.MergeHeroes[0].SkillChange(true);
@@ -106,10 +149,10 @@ public class HeroMergeManager : MonoBehaviour {
         // if(groupData.MergeHeroes[0]) groupData.MergeHeroes[0].SkillChange(false);
         // if(groupData.MergeHeroes[1]) groupData.MergeHeroes[1].SkillChange(false);
         
-        tactic.StopTactic(groupData.MergeHeroes[0], groupData.MergeHeroes[1]);
-        
-        groupData.IsMerge = false;
-        groupData.CurrentEnergy = 0;
+        tactic.StopTactic(hero1, hero2);
+
+        hero1.IsMerge = false;
+        hero2.IsMerge = false;
     }
 
     private void MergeHero(HeroMergeGroupData groupData) {

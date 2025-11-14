@@ -164,7 +164,7 @@ public class BattleManager : StateMachineController{
         this.BattleStartTime = Time.time;
 #endif
         BattleUIManager.Instance.SetHeroPortraitActive(true);
-        BattleUIManager.Instance.heroPortraitUI.PushHeros(HeroesInBattle);
+        BattleUIManager.Instance.heroPortraitUI.CreateUIProtraits(HeroesInBattle);
         OnBattleStart?.Invoke();
         SaveHeroDeploy();
         SaveHeroPassiveEntry();

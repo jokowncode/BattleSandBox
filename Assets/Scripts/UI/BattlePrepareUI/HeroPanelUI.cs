@@ -7,8 +7,12 @@ public class HeroPanelUI : MonoBehaviour{
 
     [SerializeField] private Image HeroPortraitImage;
 
-    public void SetPortrait(Sprite heroPortrait) {
+    [SerializeField] private GameObject EnergyBar;
+    [SerializeField] private Image EnergyProgress;
+
+    public void SetPortrait(Sprite heroPortrait, bool hasEnergy) {
         HeroPortraitImage.sprite = heroPortrait;
+        this.EnergyBar.SetActive(hasEnergy);
     }
 
     public void HeroDead(){
@@ -18,5 +22,8 @@ public class HeroPanelUI : MonoBehaviour{
         HeroPortraitImage.color = Color.gray;
     }
 
+    public void SetHeroEnergy(float value) {
+        this.EnergyProgress.fillAmount = value;
+    }
 }
 

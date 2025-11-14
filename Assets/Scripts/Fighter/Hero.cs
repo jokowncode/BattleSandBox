@@ -30,10 +30,11 @@ public class Hero : Fighter{
     public Action<Hero> OnShowHeroDetail;
     public Dictionary<string, Object> Records = new();
 
-    public int MergeGroupIndex { get; set; } = -1;
+    // public int MergeGroupIndex { get; set; } = -1;
     public bool IsOriginExist { get; set; } = false;
 
     public Hero ShareDamageHero { get; private set; } = null;
+    public bool IsMerge { get; set; } = false;
 
     protected override void Awake(){
         base.Awake();
