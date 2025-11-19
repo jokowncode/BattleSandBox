@@ -1,14 +1,19 @@
 ﻿
 using UnityEngine;
 
-public class BattleRoom : InteractionObject{
+public class BattleRoom : InteractionObject {
 
     [SerializeField] protected BattleData Data;
     [SerializeField] private Transform Enemies;
     [SerializeField] private Dialogue NextActiveDialogue;
     
     private BoxCollider Collider;
-    
+
+    protected override string GetName() {
+        if (!this.Data) return "UnknownBattleRoom";
+        return this.Data.BattleName;
+    }
+
     protected override void Awake(){
         base.Awake();
         this.Collider = this.GetComponent<BoxCollider>();

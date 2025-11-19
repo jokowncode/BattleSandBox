@@ -9,11 +9,9 @@ public class GameManager : MonoBehaviour{
     [SerializeField] private Texture2D MouseCursor;
     
     public static GameManager Instance;
-
-    public Player PlayerInBigMap { get; private set; }
+    
     private BattleData NextBattleData;
-    private Vector3 InBigMapPlayerPosition;
-
+    
     public bool IsBattleEnd{ get; private set; }
     public bool IsBattleVictory{ get; private set; }
 
@@ -37,12 +35,6 @@ public class GameManager : MonoBehaviour{
             BattleManager.Instance.SetBattleData(this.NextBattleData);
         }
 
-        if (SceneChangeManager.Instance.CurrentScene == SceneType.BigMap){
-            this.PlayerInBigMap = FindAnyObjectByType<Player>();
-            if (this.IsBattleEnd)
-                this.PlayerInBigMap.transform.position = this.InBigMapPlayerPosition;
-        }
-
         if (SceneChangeManager.Instance.CurrentScene != SceneType.BigMap){
             ResetBattleFlag();
         }
@@ -50,7 +42,6 @@ public class GameManager : MonoBehaviour{
 
     public void GoToBattle(BattleData battleData){
         this.NextBattleData = battleData;
-        this.InBigMapPlayerPosition = this.PlayerInBigMap.transform.position;
         if(GoToBattleSfx)
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.GoToBattleSfx);
         BigMapUIManager.Instance.ShowBattleStartUI(battleData.BattleBannarBackground, battleData.BattleImage, battleData.BattleText);

@@ -8,13 +8,23 @@ public abstract class InteractionObject : MonoBehaviour{
     protected bool IsEnd = false;
 
     public Action OnInteractionEnded;
+
+    protected abstract string GetName();
     
     protected virtual void Awake(){
         this.enabled = false;
+        if (SaveMapManager.Instance.IsFirstLoad) {
+            SaveMapManager.Instance.OnLoadMap += OnLoadMap;
+        }
+    }
+
+    private void OnLoadMap() {
+        this.IsEnd = SaveMapManager.Instance.LoadInteractionObject(this.GetName());
     }
 
     protected void EndInteraction() {
         this.IsEnd = true;
+        SaveMapManager.Instance.SaveInteractionObject(this.GetName(), this.IsEnd);
         this.OnInteractionEnded?.Invoke();
     }
 

@@ -12,6 +12,8 @@ public class SceneChangeManager : MonoBehaviour{
     public static SceneChangeManager Instance;
     public SceneType CurrentScene{ get; private set; }
 
+    public Action<SceneType, SceneType> OnSceneChange;
+
     private void Awake(){
         if (Instance != null){
             Destroy(this.gameObject);
@@ -37,7 +39,8 @@ public class SceneChangeManager : MonoBehaviour{
         AudioManager.Instance.StopFootstep();
     }
 
-    public void GoToScene(SceneType type){
+    public void GoToScene(SceneType type) {
+        this.OnSceneChange?.Invoke(this.CurrentScene, type);
         this.CurrentScene = type;
         SceneManager.LoadScene((int)type);
     }

@@ -24,8 +24,17 @@ public class BigMapUIManager : MonoBehaviour{
         }
         Instance = this;
         
-        // TODO: Load Current Player Task Procedure
-        ShowNewTask(this.FirstTask);
+        if (SaveMapManager.Instance.IsFirstLoad) {
+            SaveMapManager.Instance.OnLoadMap += OnLoadMap;
+        }
+    }
+
+    private void OnLoadMap() {
+        if (SaveMapManager.Instance.CurrentTask.TaskPosition) {
+            ShowNewTask(SaveMapManager.Instance.CurrentTask);    
+        } else {
+            ShowNewTask(this.FirstTask);   
+        }
     }
 
     public void ShowBattleStartUI(Sprite background, Sprite battleImage, string battleText){
@@ -33,6 +42,7 @@ public class BigMapUIManager : MonoBehaviour{
     }
 
     public void ShowNewTask(TaskData newTask) {
+        SaveMapManager.Instance.CurrentTask = newTask;
         TaskUI.SetTask(newTask);
     }
 }

@@ -3,8 +3,9 @@ using System;
 using DialogueEditor;
 using UnityEngine;
 
-public class Dialogue : InteractionObject{
+public class Dialogue : InteractionObject {
 
+    [SerializeField] private string DialogueName;
     [SerializeField] private DialogGraph Dialogs;
     [SerializeField] private bool CanRepeat = true;
     [SerializeField] private bool IsForce = false;
@@ -17,13 +18,27 @@ public class Dialogue : InteractionObject{
     private bool IsCurrentConversation;
     private bool IsActive = false;
 
+    protected override string GetName() {
+        return this.DialogueName;
+    }
+
     protected override void Awake() {
         base.Awake();
         this.IsActive = this.IsActiveWhenAwake;
+        if (SaveMapManager.Instance.IsFirstLoad) {
+            SaveMapManager.Instance.OnLoadMap += OnLoadMap;
+        }
+    }
+
+    private void OnLoadMap() {
+        if (!this.IsActiveWhenAwake) {
+            this.IsActive = SaveMapManager.Instance.DialoguesAvailable(this.GetName());
+        }
     }
 
     public void Activate() {
         this.IsActive = true;
+        SaveMapManager.Instance.SaveAvailableDialogue(this.GetName());
     }
 
     protected override void OnTriggerEnter(Collider other) {

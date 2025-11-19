@@ -6,6 +6,10 @@ public class Store : InteractionObject {
 
     [field: SerializeField] public List<StoreGoodsData> Goods { get; private set; }
 
+    protected override string GetName() {
+        return "Store";
+    }
+
     protected override void Awake() {
         base.Awake();
         // TODO: Save And Load Store Goods Purchase Condition

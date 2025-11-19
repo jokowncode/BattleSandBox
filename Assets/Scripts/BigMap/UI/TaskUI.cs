@@ -17,8 +17,8 @@ public class TaskUI : MonoBehaviour {
     }
 
     private void Update() {
-        if (GameManager.Instance.PlayerInBigMap) {
-            Vector3 playerPos = GameManager.Instance.PlayerInBigMap.transform.position;
+        if (SaveMapManager.Instance.PlayerInBigMap) {
+            Vector3 playerPos = SaveMapManager.Instance.PlayerInBigMap.transform.position;
             Vector3 dir = this.TaskPos - playerPos;
             dir.z = 0.0f;
             dir = dir.normalized;
