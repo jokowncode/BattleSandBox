@@ -25,12 +25,9 @@ public class Dialogue : InteractionObject {
     protected override void Awake() {
         base.Awake();
         this.IsActive = this.IsActiveWhenAwake;
-        if (SaveMapManager.Instance.IsFirstLoad) {
-            SaveMapManager.Instance.OnLoadMap += OnLoadMap;
-        }
     }
 
-    private void OnLoadMap() {
+    protected override void LoadBigMapData() {
         if (!this.IsActiveWhenAwake) {
             this.IsActive = SaveMapManager.Instance.DialoguesAvailable(this.GetName());
         }

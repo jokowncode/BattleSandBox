@@ -3,9 +3,7 @@ using System;
 using UnityEngine;
 
 public class TaskTransition : MonoBehaviour {
-
-    [SerializeField] private TaskData NextTaskData;
-
+    
     private InteractionObject Interaction;
     
     private void Awake() {
@@ -17,7 +15,7 @@ public class TaskTransition : MonoBehaviour {
 
     private void OnInteractionEnded() {
         this.Interaction.OnInteractionEnded -= OnInteractionEnded;
-        BigMapUIManager.Instance.ShowNewTask(this.NextTaskData);
+        TaskManager.Instance.NextTask();
     }
 }
 

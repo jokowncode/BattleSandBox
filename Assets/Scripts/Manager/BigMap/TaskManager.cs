@@ -1,0 +1,43 @@
+﻿
+using System;
+using UnityEngine;
+
+public class TaskManager : MonoBehaviour {
+
+    public static TaskManager Instance;
+
+    [SerializeField] private TaskData[] GameTasks;
+    [SerializeField] private TaskUI Task;
+
+    private int CurrentTaskIndex = 0;
+    
+    private void Awake() {
+        if (Instance != null) {
+            Destroy(this.gameObject);
+            return;
+        }
+        Instance = this;
+        SaveMapManager.Instance.OnLoadMap += OnLoadMap;
+    }
+    
+    private void OnLoadMap() {
+        SaveMapManager.Instance.OnLoadMap -= OnLoadMap;
+        this.CurrentTaskIndex = SaveMapManager.Instance.CurrentTaskIndex;
+        this.SetTask();
+    }
+
+    public void NextTask() {
+        this.CurrentTaskIndex++;
+        SaveMapManager.Instance.CurrentTaskIndex = this.CurrentTaskIndex;
+        this.SetTask();
+    }
+
+    private void SetTask() {
+        if (this.CurrentTaskIndex < this.GameTasks.Length) {
+            Task.SetTask(this.GameTasks[this.CurrentTaskIndex]);
+        } else {
+            Task.gameObject.SetActive(false);
+        }
+    }
+}
+

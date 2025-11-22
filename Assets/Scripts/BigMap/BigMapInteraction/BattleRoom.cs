@@ -26,6 +26,10 @@ public class BattleRoom : InteractionObject {
         GameManager.Instance.GoToBattle(this.Data);
     }
 
+    protected override void LoadBigMapData() {
+        if(this.IsEnd && this.Enemies) Destroy(this.Enemies.gameObject);
+    }
+
     protected override void Update(){
         base.Update();
         if (!this.IsEnd && this.Collider.bounds.Contains(this.InAreaPlayer.transform.position)){

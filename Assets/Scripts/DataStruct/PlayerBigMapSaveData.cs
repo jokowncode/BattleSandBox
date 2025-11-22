@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class PlayerBigMapSaveData {
     public Vector3 PlayerPosition = Vector3.zero;
-    public TaskData CurrentTask;
+    public int CurrentTaskIndex = 0;
 }
 
 

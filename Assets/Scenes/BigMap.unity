@@ -16098,7 +16098,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 0.86360204, g: 0.57573456, b: 0, a: 61.803402}
+    - _WindDirection: {r: 0.08176371, g: 0.054509137, b: 0, a: 6.798374}
   m_BuildTextureStacks: []
 --- !u!43 &124096264
 Mesh:
@@ -21186,7 +21186,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 0.86360204, g: 0.57573456, b: 0, a: 61.803402}
+    - _WindDirection: {r: 0.08176371, g: 0.054509137, b: 0, a: 6.798374}
   m_BuildTextureStacks: []
 --- !u!21 &158793434
 Material:
@@ -29169,7 +29169,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 0.86360204, g: 0.57573456, b: 0, a: 61.803402}
+    - _WindDirection: {r: 0.08176371, g: 0.054509137, b: 0, a: 6.798374}
   m_BuildTextureStacks: []
 --- !u!1 &388018976
 GameObject:
@@ -58054,6 +58054,7 @@ GameObject:
   - component: {fileID: 751676000}
   - component: {fileID: 751676002}
   - component: {fileID: 751676001}
+  - component: {fileID: 751676003}
   m_Layer: 0
   m_Name: TestDialogue2
   m_TagString: Untagged
@@ -58116,6 +58117,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &751676003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 751675999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81087027099a4656a9cae7a9fb0feb2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &759960146
 GameObject:
   m_ObjectHideFlags: 0
@@ -63239,9 +63252,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81087027099a4656a9cae7a9fb0feb2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NextTaskData:
-    TaskDescription: "\u5BF9\u8BDD2"
-    TaskPosition: {fileID: 751676000}
 --- !u!1 &774177247
 GameObject:
   m_ObjectHideFlags: 0
@@ -68975,7 +68985,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -751.50055, y: 0}
+  m_AnchoredPosition: {x: -751.4546, y: 0}
   m_SizeDelta: {x: 1502, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &846666168
@@ -80202,7 +80212,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0.87, g: 0.13, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 0.86360204, g: 0.57573456, b: 0, a: 61.803402}
+    - _WindDirection: {r: 0.08176371, g: 0.054509137, b: 0, a: 6.798374}
   m_BuildTextureStacks: []
 --- !u!1 &984024538
 GameObject:
@@ -122020,7 +122030,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 0.86360204, g: 0.57573456, b: 0, a: 61.803402}
+    - _WindDirection: {r: 0.08176371, g: 0.054509137, b: 0, a: 6.798374}
   m_BuildTextureStacks: []
 --- !u!1001 &1357484651
 PrefabInstance:
@@ -122280,6 +122290,7 @@ GameObject:
   - component: {fileID: 1368198384}
   - component: {fileID: 1368198388}
   - component: {fileID: 1368198389}
+  - component: {fileID: 1368198390}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -122399,10 +122410,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HUDCanvasGroup: {fileID: 1955426286}
   BattleStartBannar: {fileID: 1617949199}
-  FirstTask:
-    TaskDescription: "\u6218\u6597"
-    TaskPosition: {fileID: 0}
-  TaskUI: {fileID: 1052609436}
+--- !u!114 &1368198390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1368198383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9331eb22e46ac9c1547ff237f7b30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameTasks:
+  - TaskDescription: "\u6218\u6597"
+    TaskPosition: {fileID: 1648549086}
+  - TaskDescription: "\u5BF9\u8BDD1"
+    TaskPosition: {fileID: 773218819}
+  - TaskDescription: "\u5BF9\u8BDD2"
+    TaskPosition: {fileID: 751676000}
+  Task: {fileID: 1052609436}
 --- !u!1 &1378253393
 GameObject:
   m_ObjectHideFlags: 0
@@ -132655,7 +132682,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 0.86360204, g: 0.57573456, b: 0, a: 61.803402}
+    - _WindDirection: {r: 0.08176371, g: 0.054509137, b: 0, a: 6.798374}
   m_BuildTextureStacks: []
 --- !u!21 &1478599381
 Material:
@@ -134479,8 +134506,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 190402357}
   m_HandleRect: {fileID: 190402356}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -135164,9 +135191,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81087027099a4656a9cae7a9fb0feb2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NextTaskData:
-    TaskDescription: "\u5BF9\u8BDD"
-    TaskPosition: {fileID: 773218819}
 --- !u!1 &1649129552
 GameObject:
   m_ObjectHideFlags: 0
@@ -146364,7 +146388,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 0.86360204, g: 0.57573456, b: 0, a: 61.803402}
+    - _WindDirection: {r: 0.08176371, g: 0.054509137, b: 0, a: 6.798374}
   m_BuildTextureStacks: []
 --- !u!1 &1733322784
 GameObject:
@@ -147418,7 +147442,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 0.86360204, g: 0.57573456, b: 0, a: 61.803402}
+    - _WindDirection: {r: 0.08176371, g: 0.054509137, b: 0, a: 6.798374}
   m_BuildTextureStacks: []
 --- !u!1 &1792427437
 GameObject:
@@ -181194,7 +181218,7 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowIntensity: {r: 0, g: 1, b: 0, a: 0}
     - _ToLightDir: {r: -0, g: -0, b: -1, a: 0}
-    - _WindDirection: {r: 0.86360204, g: 0.57573456, b: 0, a: 61.803402}
+    - _WindDirection: {r: 0.08176371, g: 0.054509137, b: 0, a: 6.798374}
   m_BuildTextureStacks: []
 --- !u!43 &2134373491
 Mesh:

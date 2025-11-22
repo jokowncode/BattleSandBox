@@ -12,15 +12,17 @@ public abstract class InteractionObject : MonoBehaviour{
     protected abstract string GetName();
     
     protected virtual void Awake(){
+        SaveMapManager.Instance.OnLoadMap += OnLoadMap;
         this.enabled = false;
-        if (SaveMapManager.Instance.IsFirstLoad) {
-            SaveMapManager.Instance.OnLoadMap += OnLoadMap;
-        }
     }
 
     private void OnLoadMap() {
+        SaveMapManager.Instance.OnLoadMap -= OnLoadMap;
         this.IsEnd = SaveMapManager.Instance.LoadInteractionObject(this.GetName());
+        this.LoadBigMapData();
     }
+
+    protected virtual void LoadBigMapData() { }
 
     protected void EndInteraction() {
         this.IsEnd = true;

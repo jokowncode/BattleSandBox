@@ -11,11 +11,12 @@ public class SaveMapManager : MonoBehaviour {
     public Action OnLoadMap;
     
     public Player PlayerInBigMap { get; private set; }
-    public bool IsFirstLoad { get; private set; } = true;
 
     private PlayerBigMapSaveData BigMapPlayerData;
     private Dictionary<string, bool> InteractionObjectsEndMap;
     private List<string> AvailableDialogues;
+
+    private bool IsEnterBigMap = false;
     
     private void Awake() {
         if (Instance != null) {
@@ -61,9 +62,12 @@ public class SaveMapManager : MonoBehaviour {
         SceneChangeManager.Instance.OnSceneChange += OnSceneChange;
     }
 
-    private void OnSceneChange(SceneType oldScene, SceneType _) {
+    private void OnSceneChange(SceneType oldScene, SceneType newScene) {
         if (oldScene == SceneType.BigMap) {
             this.BigMapPlayerData.PlayerPosition = this.PlayerInBigMap.transform.position;
+            if (newScene != SceneType.Battle) {
+                this.OnDisable();
+            }
         }
     }
 
@@ -71,12 +75,15 @@ public class SaveMapManager : MonoBehaviour {
         if (SceneChangeManager.Instance.CurrentScene == SceneType.BigMap) {
             this.PlayerInBigMap = FindAnyObjectByType<Player>();
             this.OnLoadMap?.Invoke();
-            IsFirstLoad = false;
+            IsEnterBigMap = true;
         }
     }
 
-    private void OnDestroy() {
-        this.BigMapPlayerData.PlayerPosition = this.PlayerInBigMap.transform.position;
+    private void OnDisable() {
+        if (!IsEnterBigMap) return;
+        if (this.PlayerInBigMap) {
+            this.BigMapPlayerData.PlayerPosition = this.PlayerInBigMap.transform.position;
+        }
         string dataJson = JsonUtility.ToJson(this.BigMapPlayerData);
         PlayerPrefs.SetString("PlayerBigMapData", dataJson);
         
@@ -107,9 +114,9 @@ public class SaveMapManager : MonoBehaviour {
         }
     }
 
-    public TaskData CurrentTask {
-        get => this.BigMapPlayerData.CurrentTask;
-        set => this.BigMapPlayerData.CurrentTask = value;
+    public int CurrentTaskIndex {
+        get => this.BigMapPlayerData.CurrentTaskIndex;
+        set => this.BigMapPlayerData.CurrentTaskIndex = value;
     }
 }
 
