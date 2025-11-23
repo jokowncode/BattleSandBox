@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using XNode;
 
@@ -16,6 +17,8 @@ public class DialogManager : MonoBehaviour {
     
     [SerializeField] private Image CharacterPortrait;
     [SerializeField] private TextMeshProUGUI CharacterName;
+
+    [SerializeField] private CanvasGroup DialogContentCanvasGroup;
     [SerializeField] private TypeWriter DialogText;
     [SerializeField] private StoryReviewUI StoryReview;
     
@@ -160,12 +163,26 @@ public class DialogManager : MonoBehaviour {
         this.IsAutoPlay = !this.IsAutoPlay;
     }
 
-    private IEnumerator BackgroundImageFadeInCoroutine() {
-        for (float t = 0.0f; t < this.BackgroundImageFadeInDuration; t += Time.deltaTime) {
-            this.BackgroundImageCanvasGroup.alpha = Mathf.Lerp(0.0f, 1.0f, t / this.BackgroundImageFadeInDuration);
-            yield return null;
+    private IEnumerator BackgroundImageCoroutine(Sprite newBG, bool isFadeIn, bool isFadeOut) {
+        if (isFadeOut) {
+            yield return BackgroundImageFadeCoroutine(1.0f, 0.0f);
+        }
+
+        this.BackgroundImageCanvasGroup.alpha = 0.0f;
+        this.BackgroundImage.sprite = newBG;
+
+        if (isFadeIn) {
+            yield return BackgroundImageFadeCoroutine(0.0f, 1.0f);
         }
         this.BackgroundImageCanvasGroup.alpha = 1.0f;
+    }
+
+    private IEnumerator BackgroundImageFadeCoroutine(float start, float end) {
+        for (float t = 0.0f; t < this.BackgroundImageFadeInDuration; t += Time.deltaTime) {
+            this.BackgroundImageCanvasGroup.alpha = Mathf.Lerp(start, end, t / this.BackgroundImageFadeInDuration);
+            yield return null;
+        }
+        this.BackgroundImageCanvasGroup.alpha = end;
     }
 
     private void SetDialog() {
@@ -173,14 +190,8 @@ public class DialogManager : MonoBehaviour {
         
         this.BackGameObject.SetActive(!data.NotBackground);
         if (!data.NotBackground && data.Background) {
-            this.BackgroundImage.sprite = data.Background;
-            this.BackgroundImageCanvasGroup.alpha = 0.0f;
-            if (data.BackgroundIsFadeIn) {
-                StopAllCoroutines();
-                StartCoroutine(BackgroundImageFadeInCoroutine());
-            } else {
-                this.BackgroundImageCanvasGroup.alpha = 1.0f;
-            }
+            StopAllCoroutines();
+            StartCoroutine(BackgroundImageCoroutine(data.Background, data.BackgroundIsFadeIn, data.BackgroundIsFadeOut));
         }
 
         foreach (Transform child in this.CharacterPortraitContainer) {
@@ -198,11 +209,17 @@ public class DialogManager : MonoBehaviour {
         this.CharacterPortrait.color = new Color(1, 1, 1, data.CharacterPortrait ? 1.0f : 0.0f); 
         this.CharacterPortrait.sprite = data.CharacterPortrait;
         this.CharacterName.text = data.CharacterName;
-        this.DialogText.Play(data.DialogText);
 
+        DialogContentCanvasGroup.alpha = data.DialogText == "" ? 0.0f : 1.0f;
+        this.DialogText.Play(data.DialogText, data.DialogTypeWriterDuration, data.IsConstantVelocity);
+        
         this.HasSound = data.DialogAudio;
         if (data.DialogBGM) {
-            AudioManager.Instance.FadeMainMusic(data.DialogBGM, 2.0f, data.BGMVolume);
+            if (data.IsDialogBGMFade) {
+                AudioManager.Instance.FadeMainMusic(data.DialogBGM, data.DialogBGMFadeTime, data.BGMVolume);
+            } else {
+                AudioManager.Instance.SetMainMusic(data.DialogBGM, data.BGMVolume);   
+            }
         }
         
         if (data.DialogAudio) {
@@ -219,7 +236,10 @@ public class DialogManager : MonoBehaviour {
                 option.SetOptionData(data.Options[i], i);
             }
         }
-        this.StoryReview.AddDialogHistory(data);
+
+        if (data.DialogText != "") {
+            this.StoryReview.AddDialogHistory(data);
+        }
         
         if (data.BeforeDialogInvokeAction != null) {
             DialogEventManager.Instance.RaiseEvent(data.BeforeDialogInvokeAction);

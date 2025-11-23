@@ -26,9 +26,10 @@ public class AudioManager : MonoBehaviour{
         DontDestroyOnLoad(this.gameObject);
     }
 
-    public void SetMainMusic(AudioClip newClip){
+    public void SetMainMusic(AudioClip newClip, float volume = 1.0f){
         this.MainMusicAudioSource.mute = true;
         this.MainMusicAudioSource.clip = newClip;
+        this.MainMusicAudioSource.volume = volume;
         this.MainMusicAudioSource.mute = false;
         this.MainMusicAudioSource.Play();
     }

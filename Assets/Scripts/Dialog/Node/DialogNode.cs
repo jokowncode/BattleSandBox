@@ -11,13 +11,18 @@ public class DialogNode : Node {
     public Sprite[] BackgroundCharacterPortraits;
     public bool NotBackground;
     public bool BackgroundIsFadeIn;
+    public bool BackgroundIsFadeOut = false;
     
     public AudioClip DialogAudio;
     public AudioClip DialogBGM;
+    public bool IsDialogBGMFade = true;
+    public float DialogBGMFadeTime = 1.0f;
     public float CharacterAudioVolume = 1.0f;
     public float BGMVolume = 1.0f;
     
     [TextArea] public string DialogText;
+    public bool IsConstantVelocity = false;
+    public float DialogTypeWriterDuration = 1.0f;
     public string CharacterName;
     public Sprite CharacterPortrait;
     
