@@ -37,7 +37,7 @@ public class SaveMapManager : MonoBehaviour {
 
     private void LoadData() {
         // TODO: TEMP
-        // PlayerPrefs.DeleteAll();
+        PlayerPrefs.DeleteAll();
         if (PlayerPrefs.HasKey("PlayerBigMapData")) {
             this.BigMapPlayerData = JsonUtility.FromJson<PlayerBigMapSaveData>(PlayerPrefs.GetString("PlayerBigMapData"));
         } else {
