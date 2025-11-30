@@ -22,6 +22,11 @@ public class DialogManager : MonoBehaviour {
     [SerializeField] private TypeWriter DialogText;
     [SerializeField] private StoryReviewUI StoryReview;
     
+	[Header("AutoPlay")]
+	[SerializeField] private Sprite AutoPlaySprite;
+    [SerializeField] private Sprite NotAutoPlaySprite;
+    [SerializeField] private Image AutoPlayImage;
+    
     [Header("Background Character Portrait")]
     [SerializeField] private Transform CharacterPortraitContainer;
 
@@ -86,6 +91,7 @@ public class DialogManager : MonoBehaviour {
         this.IsFullScreen = isFullScreen;
         this.PreBGM = AudioManager.Instance.GetCurrentMainMusic();
         AudioManager.Instance.StopFootstep();
+        SetAutoPlay(false);
         
         if (!dialog) return;
         StartNode startNode = FindStartNode(dialog);
@@ -136,7 +142,7 @@ public class DialogManager : MonoBehaviour {
     public void DialogEnd() {
         AudioManager.Instance.StopDialog();
         Transition(false);
-        this.IsAutoPlay = false;
+        SetAutoPlay(false);
 
         AudioManager.Instance.StopMainMusic();
         if(this.PreBGM) AudioManager.Instance.SetMainMusic(this.PreBGM);
@@ -151,7 +157,7 @@ public class DialogManager : MonoBehaviour {
     public void ShowDialogReview() {
         AudioManager.Instance.StopDialog();
         this.StoryReview.Transition(true);
-        this.IsAutoPlay = false;
+        SetAutoPlay(false);
     }
 
     public void HideDialogReview() {
@@ -160,7 +166,16 @@ public class DialogManager : MonoBehaviour {
     }
 
     public void AutoPlay() {
-        this.IsAutoPlay = !this.IsAutoPlay;
+        SetAutoPlay(!this.IsAutoPlay);
+    }
+
+    private void SetAutoPlay(bool isAutoPlay) {
+        this.IsAutoPlay = isAutoPlay;
+        if (this.IsAutoPlay) {
+            this.AutoPlayImage.sprite = this.AutoPlaySprite;
+        } else {
+            this.AutoPlayImage.sprite = this.NotAutoPlaySprite;
+        }
     }
 
     private IEnumerator BackgroundImageCoroutine(Sprite newBG, bool isFadeIn, bool isFadeOut) {
