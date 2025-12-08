@@ -9,7 +9,7 @@ public enum GoodsType {
 
 [CreateAssetMenu(menuName = "PhantomSpirit/StoreGoods", fileName = "StoreGoodsData")]
 public class StoreGoodsData : ScriptableObject {
-    public GameObject GoodsPrefab;
+    public string GoodsName;
     public GoodsType Type;
     public float Value;
     public float Money;

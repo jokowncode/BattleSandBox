@@ -5,14 +5,12 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class HeroWarehouseManager : MonoBehaviour {
-
-    //private List<string> OwnedHeroes;
     
-    [SerializeField]private List<Hero> OwnedHeroes;
+    [SerializeField] private List<Hero> AllHeroes;
     
-    private Dictionary<string, Hero> ownedHeroesDic = new Dictionary<string, Hero>();
-
+    private List<string> OwnedHeroes = new List<string>();
     
+    private Dictionary<string, Hero> AllHeroMap = new Dictionary<string, Hero>();
     public static HeroWarehouseManager Instance;
 
     private void Awake() {
@@ -22,38 +20,45 @@ public class HeroWarehouseManager : MonoBehaviour {
         }
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
-        LoadListToDictionary();
-    }
-    
-    ////////////////////////////////////Utils//////////////////////////////////////
-    
-    /// <summary>
-    /// 将 OwnedHeroes 列表中的对象加载到字典中
-    /// 使用 GameObject.name 作为 key
-    /// </summary>
-    private void LoadListToDictionary(){
-        ownedHeroesDic.Clear(); // 清空旧数据，防止重复
-        foreach (Hero hero in OwnedHeroes){
-            if (hero == null) continue;
-            string heroRef = hero.Name;
-            ownedHeroesDic[heroRef] = hero;
+
+        foreach (Hero hero in AllHeroes) {
+            this.AllHeroMap.Add(hero.Name, hero);
         }
     }
-    
+
+    private void Start() {
+        if (PlayerPrefs.HasKey("OwnedHeroWarehouse")) {
+            string json = PlayerPrefs.GetString("OwnedHeroWarehouse");
+            this.OwnedHeroes = JsonUtility.FromJson<Serialization<string>>(json).ToList();
+        } else {
+            this.OwnedHeroes.Add(this.AllHeroes[0].Name);
+        }
+    }
+
+    private void OnDestroy() {
+        string json = JsonUtility.ToJson(new Serialization<string>(this.OwnedHeroes));
+        PlayerPrefs.SetString("OwnedHeroWarehouse", json);
+    }
+
+    public void AddHero(string heroName) {
+        this.OwnedHeroes.Add(heroName);
+    }
+
+    ////////////////////////////////////Utils//////////////////////////////////////
     /// <summary>
     /// 获取当前所有英雄 GameObject
     /// </summary>
     public List<string> GetOwnedHeroesRef(){
-        return new List<string>(ownedHeroesDic.Keys);
+        return OwnedHeroes;
     }
 
     public Sprite GetHeroSpriteByRef(string heroRef){
-        Hero go = ownedHeroesDic[heroRef];
+        Hero go = AllHeroMap[heroRef];
         return go.GetComponentInChildren<SpriteRenderer>().sprite;
     }
     
     public FighterType GetHeroType(string heroRef){
-        Hero go = ownedHeroesDic[heroRef];
+        Hero go = AllHeroMap[heroRef];
         return go.Type;
     }
 
@@ -61,7 +66,7 @@ public class HeroWarehouseManager : MonoBehaviour {
     /// 根据 heroRef 获取对应的英雄 GameObject
     /// </summary>
     public Hero GetHeroByRef(string heroRef){
-        return ownedHeroesDic.GetValueOrDefault(heroRef);
+        return AllHeroMap.GetValueOrDefault(heroRef);
     }
     
     
