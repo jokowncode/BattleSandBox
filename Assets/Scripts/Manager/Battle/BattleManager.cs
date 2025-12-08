@@ -331,9 +331,12 @@ public class BattleManager : StateMachineController{
         if (EquipPassiveEntrySfx) {
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EquipPassiveEntrySfx);
         }
-        
-        if (Skills1InBattle.TryAdd(selectedHero, data) 
-            && PassiveEntryWarehouseManager.Instance.ContainsPassiveEntry(data.Data.Name)){
+
+        if (!PassiveEntryWarehouseManager.Instance.ContainsPassiveEntry(data.Data.Name)) {
+            return -1;
+        }
+
+        if (Skills1InBattle.TryAdd(selectedHero, data)){
             selectedHero.AddPassiveEntry(data, false);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
@@ -341,8 +344,7 @@ public class BattleManager : StateMachineController{
             return 0;
         }
         
-        if (Skills2InBattle.TryAdd(selectedHero, data)
-            && PassiveEntryWarehouseManager.Instance.ContainsPassiveEntry(data.Data.Name)){
+        if (Skills2InBattle.TryAdd(selectedHero, data)){
             selectedHero.AddPassiveEntry(data, false);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);

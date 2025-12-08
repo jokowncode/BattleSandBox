@@ -24,20 +24,25 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         foreach (PassiveEntry entry in AllPassiveEntries) {
             this.AllPassiveEntryMap.Add(entry.Data.Name, entry);
         }
+        
+        // TODO: TEMP Debug Battle
+        foreach (PassiveEntry entry in AllPassiveEntries) {
+            this.OwnedPassiveEntries.Add(entry.Data.Name);
+        }
     }
 
     private void Start() {
         // TODO: TEMP Debug Battle
-        if (PlayerPrefs.HasKey("OwnedPassiveEntryWarehouse")) {
+        /*if (PlayerPrefs.HasKey("OwnedPassiveEntryWarehouse")) {
             string json = PlayerPrefs.GetString("OwnedPassiveEntryWarehouse");
             this.OwnedPassiveEntries = JsonUtility.FromJson<Serialization<string>>(json).ToList();
-        }
+        }*/
     }
 
     private void OnDestroy() {
         // TODO: TEMP Debug Battle
-        string json = JsonUtility.ToJson(new Serialization<string>(this.OwnedPassiveEntries));
-        PlayerPrefs.SetString("OwnedPassiveEntryWarehouse", json);
+        /*string json = JsonUtility.ToJson(new Serialization<string>(this.OwnedPassiveEntries));
+        PlayerPrefs.SetString("OwnedPassiveEntryWarehouse", json);*/
     }
 
     public List<PassiveEntry> GetPassiveEntryFilterBySort(int sortCode) {
@@ -66,6 +71,7 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
     }
 
     public PassiveEntry GetPassiveEntryByName(string passiveEntryName) {
+        // if (!ContainsPassiveEntry(passiveEntryName)) return null;
         return this.AllPassiveEntryMap.GetValueOrDefault(passiveEntryName);
     }
     
