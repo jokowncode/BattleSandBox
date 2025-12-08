@@ -40,8 +40,17 @@ public class AudioManager : MonoBehaviour{
 
     private IEnumerator FadeMainMusicCoroutine(AudioClip newClip, float duration, float volume) {
         yield return FadeCoroutine(0.0f, duration / 2.0f);
-        SetMainMusic(newClip);
+        SetMainMusic(newClip, 0.0f);
         yield return FadeCoroutine(volume, duration / 2.0f);
+    }
+    
+    private IEnumerator FadeCoroutine(float newVolume, float duration = 0.5f){
+        float startVolume = this.MainMusicAudioSource.volume;
+        for (float t = 0.0f; t < duration; t += Time.deltaTime){
+            this.MainMusicAudioSource.volume = Mathf.Lerp(startVolume, newVolume, t / duration);
+            yield return null;
+        }
+        this.MainMusicAudioSource.volume = newVolume;
     }
 
     public AudioClip GetCurrentMainMusic() {
@@ -82,15 +91,6 @@ public class AudioManager : MonoBehaviour{
 
     public void SetMainMusicVolume(float volume){
         this.MainMusicAudioSource.volume = volume;
-    }
-
-    private IEnumerator FadeCoroutine(float newVolume, float duration = 0.5f){
-        float startVolume = this.MainMusicAudioSource.volume;
-        for (float t = 0.0f; t < duration; t += Time.deltaTime){
-            this.MainMusicAudioSource.volume = Mathf.Lerp(startVolume, newVolume, t / duration);
-            yield return null;
-        }
-        this.MainMusicAudioSource.volume = newVolume;
     }
 
     public void PlaySfxAtPoint(Vector3 point, AudioClip clip, float volume = 1.0f){
