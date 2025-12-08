@@ -65,11 +65,22 @@ public class DialogManager : MonoBehaviour {
         Instance = this;
         DialogCanvasGroup = GetComponent<CanvasGroup>();
         BackgroundImageCanvasGroup = BackgroundImage.GetComponent<CanvasGroup>();
-        Transition(false);
+        StartCoroutine(Transition(false, true));
     }
 
-    private void Transition(bool show) {
-        DialogCanvasGroup.alpha = show ? 1.0f : 0.0f;
+    private IEnumerator Transition(bool show, bool quick) {
+        if (quick) {
+            DialogCanvasGroup.alpha = show ? 1.0f : 0.0f;
+        } else {
+            float start = show ? 0.0f : 1.0f;
+            float end = 1.0f - start;
+            for (float t = 0.0f; t <= 0.5f; t += Time.deltaTime) {
+                this.DialogCanvasGroup.alpha = Mathf.Lerp(start, end, t / 0.5f);
+                yield return null;
+            }
+            this.DialogCanvasGroup.alpha = end;
+        }
+
         DialogCanvasGroup.interactable = show;
         DialogCanvasGroup.blocksRaycasts = show;
     }
@@ -103,7 +114,7 @@ public class DialogManager : MonoBehaviour {
         this.CurrentDialogNode = dialogNode;
         this.StoryReview.Reset();
         SetDialog();
-        Transition(true);
+        StartCoroutine(Transition(true, false));
         
         if (this.IsFullScreen) {
             CameraManager.Instance.MainCamera.cullingMask = 1 << LayerMask.NameToLayer("UI");
@@ -141,7 +152,7 @@ public class DialogManager : MonoBehaviour {
 
     public void DialogEnd() {
         AudioManager.Instance.StopDialog();
-        Transition(false);
+        StartCoroutine(Transition(false, false));
         SetAutoPlay(false);
 
         AudioManager.Instance.StopMainMusic();

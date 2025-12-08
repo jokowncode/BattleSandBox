@@ -24,20 +24,27 @@ public class HeroWarehouseManager : MonoBehaviour {
         foreach (Hero hero in AllHeroes) {
             this.AllHeroMap.Add(hero.Name, hero);
         }
+        
+        // TODO: TEMP Debug Battle
+        foreach (Hero hero in AllHeroes) {
+            this.OwnedHeroes.Add(hero.Name);
+        }
     }
 
     private void Start() {
-        if (PlayerPrefs.HasKey("OwnedHeroWarehouse")) {
+        // TODO: TEMP Debug Battle
+        /*if (PlayerPrefs.HasKey("OwnedHeroWarehouse")) {
             string json = PlayerPrefs.GetString("OwnedHeroWarehouse");
             this.OwnedHeroes = JsonUtility.FromJson<Serialization<string>>(json).ToList();
         } else {
             this.OwnedHeroes.Add(this.AllHeroes[0].Name);
-        }
+        }*/
     }
 
     private void OnDestroy() {
-        string json = JsonUtility.ToJson(new Serialization<string>(this.OwnedHeroes));
-        PlayerPrefs.SetString("OwnedHeroWarehouse", json);
+        // TODO: TEMP Debug Battle
+        /*string json = JsonUtility.ToJson(new Serialization<string>(this.OwnedHeroes));
+        PlayerPrefs.SetString("OwnedHeroWarehouse", json);*/
     }
 
     public void AddHero(string heroName) {
