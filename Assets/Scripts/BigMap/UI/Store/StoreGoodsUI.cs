@@ -40,8 +40,8 @@ public class StoreGoodsUI : MonoBehaviour {
         });
     }
 
-    public void DisablePurchase() {
-        this.PurchaseButton.interactable = false;
+    public void TransitionPurchase(bool canPurchase) {
+        this.PurchaseButton.interactable = canPurchase;
     }
 }
 

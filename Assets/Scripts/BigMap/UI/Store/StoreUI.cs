@@ -29,7 +29,6 @@ public class StoreUI : MonoBehaviour {
     public void HideStoreUI() {
         if (this.IsInstructionMode) return;
         this.CurrentStore = null;
-        this.CurrentGoods.Clear();
         StoreCanvasGroup.alpha = 0.0f;
         StoreCanvasGroup.interactable = false;
         StoreCanvasGroup.blocksRaycasts = false;
@@ -49,7 +48,8 @@ public class StoreUI : MonoBehaviour {
         foreach (Transform oldGoods in this.GoodsContainer) {
             Destroy(oldGoods.gameObject);
         }
-        
+
+        this.CurrentGoods.Clear();
         // Add Current Goods
         foreach (StoreGoodsData goodsData in goods) {
             StoreGoodsUI currentGoods = Instantiate(this.StoreGoodsPrefab, this.GoodsContainer);
@@ -64,14 +64,19 @@ public class StoreUI : MonoBehaviour {
         UpdateStoreUI(this.CurrentStore.Goods);
     }
 
+    public void StartInstructionMode() {
+        this.IsInstructionMode = true;
+        foreach (StoreGoodsUI goods in this.CurrentGoods) {
+            goods.TransitionPurchase(false);
+        }
+    }
+
     public void StoreInstructionMode(int index, Action onGoodsBePurchased = null) {
         if(index < 0 || index >= this.CurrentGoods.Count) return;
-        IsInstructionMode = true;
         this.CurrentGoods[index].OnPurchase += () => this.IsInstructionMode = false;
         this.CurrentGoods[index].OnPurchase += onGoodsBePurchased;
         for (int i = 0; i < this.CurrentGoods.Count; i++) {
-            if (i == index) continue;
-            this.CurrentGoods[i].DisablePurchase();    
+            this.CurrentGoods[i].TransitionPurchase(i == index);    
         }
     }
 }

@@ -16,11 +16,11 @@ public class Store : InteractionObject {
     }
 
     protected override void Interaction() {
-        if (BigMapUIManager.Instance.IsOpenStore) return;
         ShowStore();
     }
 
     public void ShowStore() {
+        if (BigMapUIManager.Instance.IsOpenStore) return;
         StoreUI.Instance.ShowStoreUI(this);
     }
 
