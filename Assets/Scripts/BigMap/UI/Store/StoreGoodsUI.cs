@@ -29,6 +29,9 @@ public class StoreGoodsUI : MonoBehaviour {
                 case GoodsType.Hero:
                     HeroWarehouseManager.Instance.AddHero(data.GoodsName);
                     break;
+                case GoodsType.PassiveEntry:
+                    PassiveEntryWarehouseManager.Instance.AddPassiveEntry(data.GoodsName);
+                    break;
                 case GoodsType.EXP:
                     // Debug.Log("Buy EXP");
                     break;

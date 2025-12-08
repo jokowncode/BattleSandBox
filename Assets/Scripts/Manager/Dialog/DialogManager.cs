@@ -69,6 +69,11 @@ public class DialogManager : MonoBehaviour {
     }
 
     private IEnumerator Transition(bool show, bool quick) {
+        if (!show) {
+            DialogCanvasGroup.interactable = false;
+            DialogCanvasGroup.blocksRaycasts = false;
+        }
+        
         if (quick) {
             DialogCanvasGroup.alpha = show ? 1.0f : 0.0f;
         } else {
@@ -80,9 +85,11 @@ public class DialogManager : MonoBehaviour {
             }
             this.DialogCanvasGroup.alpha = end;
         }
-
-        DialogCanvasGroup.interactable = show;
-        DialogCanvasGroup.blocksRaycasts = show;
+        
+        if (show) {
+            DialogCanvasGroup.interactable = true;
+            DialogCanvasGroup.blocksRaycasts = true;
+        }
     }
 
     private void Update() {

@@ -13,6 +13,7 @@ public class DefeatState : BattleState {
         if (DefeatMusics.Length != 0) AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.DefeatMusics[Random.Range(0, this.DefeatMusics.Length)]);
         BattleUIManager.Instance.GameEnd(this.GameDefeatBannarSprite);
         Controller.ReturnButton.onClick.AddListener(() => {
+            this.Controller.AllHeroRecall();
             GameManager.Instance.GoToMap(true, false);
         });
         GameDefeatVFX?.StartVFX();

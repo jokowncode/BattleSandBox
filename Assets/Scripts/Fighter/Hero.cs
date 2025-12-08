@@ -139,8 +139,8 @@ public class Hero : Fighter{
                 AddPassiveEntry(entry, true);
             }
         }
-        BattleManager.Instance.ShowHeroDetail(this);
         BattleManager.Instance.LoadHeroPassiveEntry(this);
+        BattleManager.Instance.ShowHeroDetail(this);
     }
 
     public void UndressSelfEntry(){

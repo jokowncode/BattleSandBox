@@ -19,7 +19,7 @@ public class PassiveEntryWarehouseUI : WarehouseUI {
         ClickableUI go = Instantiate(warehouseImageUIPrefab, warehouseContent);
         go.passiveEntryData = passiveEntry;
         if (isNewItem) {
-            PassiveEntryWarehouseManager.Instance.AddPassiveEntry(passiveEntry);
+            PassiveEntryWarehouseManager.Instance.AddPassiveEntry(passiveEntry.Data.Name);
         }
     }
 }

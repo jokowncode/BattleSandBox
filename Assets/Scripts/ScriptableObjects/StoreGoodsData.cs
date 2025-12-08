@@ -3,7 +3,8 @@ using UnityEngine;
 
 public enum GoodsType {
     Hero,
-    EXP
+    EXP,
+    PassiveEntry
 }
 
 
