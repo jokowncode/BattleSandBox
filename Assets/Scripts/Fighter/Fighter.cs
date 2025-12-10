@@ -282,10 +282,10 @@ public class Fighter : StateMachineController{
         string propertyName = updateProperty.ToString();
         float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, this);
         float changeValue =  GetPropertyChangeValue(refProperty, modifyWay, propertyRef, value, isUp, refFighter);
-        float increasePercentage = currentValue == 0.0f ? 0.0f : changeValue / currentValue;
         if (updateProperty == FighterProperty.Shield) {
             changeValue *= this.ShieldMultiplier;
         }
+        float increasePercentage = currentValue == 0.0f ? 0.0f : changeValue / currentValue;
 
         float finalValue = currentValue + changeValue;
         ReflectionTools.SetObjectProperty(propertyName, this, finalValue);
