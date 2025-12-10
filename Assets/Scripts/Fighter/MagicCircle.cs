@@ -12,13 +12,17 @@ public class MagicCircle : MonoBehaviour{
         this.MagicCircleDamageMsg = dm;
     }
 
-    public void SetTargetPos(Vector3 targetPos){
+    public void SetTargetPos(Vector3 targetPos) {
+        this.IsHitTarget = false;
         this.TargetPos = targetPos;
-    }
-
-    private void Start(){
+        
         this.transform.position = TargetPos;
-        Destroy(this.gameObject, 1.5f);
+        // Destroy(this.gameObject, 1.5f);
+        if (this.TryGetComponent(out PoolGO poolGO)) {
+            PoolManager.Instance.ReleaseGameObject(poolGO, 1.5f);
+        } else {
+            Destroy(this.gameObject, 1.5f);
+        }
     }
 
     private void OnTriggerEnter(Collider other){

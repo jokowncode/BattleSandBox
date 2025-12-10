@@ -3,15 +3,13 @@ using UnityEngine;
 
 public class MagicCircleAttackState : AttackState{
 
-    [SerializeField] private MagicCircle MagicCirclePrefab;
-
-    protected override void Awake(){
-        base.Awake();
-        IsNeedTarget = false;
-    }
+    [SerializeField] private PoolGO MagicCirclePrefab;
 
     protected void CastMagicCircle(Vector3 position, float percentage){
-        MagicCircle magicCircle = Instantiate(this.MagicCirclePrefab);
+        // MagicCircle magicCircle = Instantiate(this.MagicCirclePrefab);
+
+        PoolGO go = PoolManager.Instance.GetGameObject(this.MagicCirclePrefab);
+        if (!go.TryGetComponent(out MagicCircle magicCircle)) return;
         magicCircle.SetTargetPos(position);
         
         bool criticalTest = Random.value < Controller.Critical / 100.0f;
