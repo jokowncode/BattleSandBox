@@ -157,7 +157,8 @@ public class Fighter : StateMachineController{
             if (this.InBattleShield <= 0){
                 foreach (Transform child in this.Center.transform) {
                     if (child.CompareTag("Shield")) {
-                        Destroy(child.gameObject);
+                        // Destroy(child.gameObject);
+                        child.gameObject.SetActive(false);
                     }
                 }
             }   

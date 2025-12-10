@@ -9,7 +9,7 @@ public class BuffData : ScriptableObject {
     public float TickInterval = 1f;   // 效果触发间隔（0表示只触发一次）
 
     [Header("持续性粒子")]
-    public GameObject ParticlePrefab;
+    public PoolGO ParticlePrefab;
     
     [Header("效果设置")]
     public List<BuffMiniData> ImmediateEffectBuff; // 立即触发效果
