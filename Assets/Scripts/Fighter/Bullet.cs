@@ -23,11 +23,13 @@ public class Bullet : MonoBehaviour {
 
     public void SetTarget(Transform target) {
         IsSetDir = false;
+        IsHitTarget = false;
         this.Target = target;
     }
 
     public void SetTargetDir(Vector3 targetDir) {
         IsSetDir = true;
+        IsHitTarget = false;
         this.TargetDir = targetDir;
     }
 
@@ -49,7 +51,7 @@ public class Bullet : MonoBehaviour {
 
     private void FixedUpdate(){
         if (!this.IsSetDir && !this.Target){
-            Destroy(this.gameObject);
+            this.ReleaseBullet();
             return;
         }
         
@@ -83,6 +85,14 @@ public class Bullet : MonoBehaviour {
                 detachedPrefab.transform.parent = null;
             }
         }
-        Destroy(gameObject);
+        this.ReleaseBullet();
+    }
+
+    private void ReleaseBullet() {
+        if (this.TryGetComponent(out PoolGO poolGO)) {
+            PoolManager.Instance.ReleaseGameObject(poolGO);
+        } else {
+            Destroy(gameObject); 
+        }
     }
 }
