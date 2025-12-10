@@ -1,4 +1,5 @@
 ﻿
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour {
@@ -14,6 +15,7 @@ public class Bullet : MonoBehaviour {
 
     private bool IsHitTarget = false;
     private bool IsSetDir = false;
+    private bool IsStart = true;
     
     private Vector3 MoveVec => Target ? (Target.position - transform.position).normalized : TargetDir.normalized;
     
@@ -24,29 +26,19 @@ public class Bullet : MonoBehaviour {
     public void SetTarget(Transform target) {
         IsSetDir = false;
         IsHitTarget = false;
+        IsStart = true;
         this.Target = target;
     }
 
     public void SetTargetDir(Vector3 targetDir) {
         IsSetDir = true;
         IsHitTarget = false;
+        IsStart = true;
         this.TargetDir = targetDir;
     }
 
     private void Start() {
         rb = GetComponent<Rigidbody>();
-        if (flash != null) {
-            var flashInstance = Instantiate(flash, transform.position, Quaternion.identity);
-            flashInstance.transform.forward = gameObject.transform.forward;
-            var flashPs = flashInstance.GetComponent<ParticleSystem>();
-            if (flashPs != null) {
-                Destroy(flashInstance, flashPs.main.duration);
-            }
-            else {
-                var flashPsParts = flashInstance.transform.GetChild(0).GetComponent<ParticleSystem>();
-                Destroy(flashInstance, flashPsParts.main.duration);
-            }
-        }
     }
 
     private void FixedUpdate(){
@@ -54,7 +46,20 @@ public class Bullet : MonoBehaviour {
             this.ReleaseBullet();
             return;
         }
-        
+
+        if (IsStart) {
+            IsStart = false;
+            if (flash) {
+                var flashInstance = Instantiate(flash, transform.position, Quaternion.identity);
+                flashInstance.transform.forward = gameObject.transform.forward;
+                if (flashInstance.TryGetComponent(out ParticleSystem flashPs)) {
+                    Destroy(flashInstance, flashPs.main.duration);
+                } else if (flashInstance.transform.GetChild(0).TryGetComponent(out ParticleSystem flashPsParts)) {
+                    Destroy(flashInstance, flashPsParts.main.duration);
+                }
+            }
+        }
+
         if (speed != 0){
             rb.MovePosition(rb.position + this.speed * Time.fixedDeltaTime * this.MoveVec);
         }
