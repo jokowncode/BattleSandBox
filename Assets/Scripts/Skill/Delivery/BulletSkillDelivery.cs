@@ -18,7 +18,7 @@ public class BulletSkillDelivery : SkillDelivery{
         SkillRigidbody = GetComponent<Rigidbody>();
     }
 
-    private void Start() {
+    protected override void PrepareDelivery() {
         if (Flash != null) {
             var flashInstance = Instantiate(Flash, transform.position, Quaternion.identity);
             flashInstance.transform.forward = gameObject.transform.forward;
@@ -46,7 +46,12 @@ public class BulletSkillDelivery : SkillDelivery{
                 detachedPrefab.transform.parent = null;
             }
         }
-        Destroy(gameObject);  
+
+        if (this.Effect.InPoolGO) {
+            PoolManager.Instance.ReleaseGameObject(this.Effect.InPoolGO);
+        } else {
+            Destroy(gameObject);  
+        }
     }
 
     protected override void TriggerTargetIn(Collider other){

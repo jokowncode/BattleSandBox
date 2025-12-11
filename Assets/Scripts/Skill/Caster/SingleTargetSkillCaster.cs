@@ -7,7 +7,14 @@ public class SingleTargetSkillCaster : SkillCaster {
         Vector3 selfPos = OwnedFighter.Center.transform.position;
         selfPos.y = attackTargetPosition.y;
         Vector3 moveVec = (attackTargetPosition - selfPos).normalized;
-        SkillDelivery delivery = Instantiate(this.Data.SkillDeliveryPrefab, transform.position, Quaternion.LookRotation(moveVec));
+        // SkillDelivery delivery = Instantiate(this.Data.SkillDeliveryPrefab, transform.position, Quaternion.LookRotation(moveVec));
+
+        PoolGO go = PoolManager.Instance.GetGameObject(this.Data.SkillDeliveryPrefab);
+        if (!go.TryGetComponent(out SkillDelivery delivery)) return;
+
+        delivery.transform.position = this.transform.position;
+        delivery.transform.rotation = Quaternion.LookRotation(moveVec);
+        
         float value = GetSkillEffectValue(out bool isCritical);
         delivery.StartDelivery(this.OwnedFighter.gameObject, attackTargetPosition, new EffectData {
             TargetType = this.Data.TargetType,

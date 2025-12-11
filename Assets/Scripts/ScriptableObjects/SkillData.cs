@@ -21,6 +21,7 @@ public class SkillData : ScriptableObject{
 
     public bool SkillNeedTarget = true;
     
-    public SkillDelivery SkillDeliveryPrefab;
+    // public SkillDelivery SkillDeliveryPrefab;
+    public PoolGO SkillDeliveryPrefab;
 }
 

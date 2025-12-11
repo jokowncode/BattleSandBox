@@ -7,9 +7,15 @@ public class SplitSkillEnd : SkillEnd{
     [SerializeField] private int SplitCount = 3;
     [SerializeField] private float BaseAngle = 30.0f;
     
-    private void CastNewSkill(Fighter influenceFighter, SkillEffect effect, EffectData effectData, float angle){
-        GameObject skill = Instantiate(effect.gameObject, effect.transform.position + Vector3.right, Quaternion.identity);
-        if (!skill.TryGetComponent(out SkillDelivery delivery)) return;
+    private void CastNewSkill(Fighter influenceFighter, SkillEffect effect, EffectData effectData, float angle) {
+        if (!effect.InPoolGO) return;
+
+        // GameObject skill = Instantiate(effect.gameObject, effect.transform.position + Vector3.right, Quaternion.identity);
+        // if (!skill.TryGetComponent(out SkillDelivery delivery)) return;
+        
+        PoolGO go = PoolManager.Instance.GetGameObject(effect.InPoolGO);
+        if (!go.TryGetComponent(out SkillDelivery delivery)) return;
+        delivery.transform.position = effect.transform.position + Vector3.right;
         
         effectData.Value *= 1.0f / SplitCount;
         delivery.transform.rotation = effect.Delivery.transform.rotation * Quaternion.AngleAxis(angle, Vector3.up);
