@@ -10,10 +10,12 @@ public class InPlaceSkillDelivery : SkillDelivery{
     private float Duration;
     private bool IsApplyEffect = false;
 
-    private void Start(){
+    protected override void PrepareDelivery() {
+        this.IsApplyEffect = false;
         this.transform.position = this.TargetPosition;
         this.Duration = this.EffectData.Duration > 0.0f ? this.EffectData.Duration : this.DefaultDuration;
-        Destroy(gameObject, this.Duration);
+        // Destroy(gameObject, this.Duration);
+        PoolManager.Instance.ReleaseGameObject(this.Effect.InPoolGO, this.Duration);
     }
 
     protected override void TriggerTargetIn(Collider other){

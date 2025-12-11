@@ -19655,6 +19655,7 @@ GameObject:
   - component: {fileID: -147475646766471601}
   - component: {fileID: 1316131019031905632}
   - component: {fileID: -5330814291584705058}
+  - component: {fileID: -7954838513013426641}
   m_Layer: 0
   m_Name: "\u6BC1\u706D\u6253\u51FB"
   m_TagString: Untagged
@@ -19752,9 +19753,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15198b709cfa4801aeca1db8c697dbc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EffectParticle: {fileID: 0}
   SkillApplyEffectSfx: {fileID: 8300000, guid: 378a943922e7e3a4ab2bec7ba9bf36ab, type: 3}
+  SkillEndBuff: {fileID: 0}
+  BuffTargetIsSelf: 1
   DamageInterval: 1
+--- !u!114 &-7954838513013426641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2348986143147364520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 519851fe1fb14474984beea5e6f8f6b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <PoolName>k__BackingField: "\u6BC1\u706D\u6253\u51FB"
 --- !u!1 &2348986143160329484
 GameObject:
   m_ObjectHideFlags: 0

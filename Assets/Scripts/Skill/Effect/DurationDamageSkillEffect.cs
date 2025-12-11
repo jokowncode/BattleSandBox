@@ -19,7 +19,9 @@ public class DurationDamageSkillEffect : SkillEffect{
         this.InMagicCircleAreaFighters = new List<Fighter>();
     }
 
-    private void Start() {
+    public override void PrepareEffect() {
+        this.InMagicCircleAreaFighters.Clear();
+        this.LastDamageTime = -1.0f;
         if (this.Delivery) return;
         Fighter fighter = this.GetComponentInParent<Fighter>();
         float value = fighter.FighterSkillCaster.GetSkillEffectValue(out bool isCritical);

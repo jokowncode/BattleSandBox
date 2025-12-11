@@ -13,10 +13,14 @@ public abstract class SkillEffect : MonoBehaviour {
     
     public List<SkillEnd> SkillEndPlugins{ get; private set; }
     public SkillDelivery Delivery{ get; private set; }
+    public PoolGO InPoolGO { get; private set; }
 
     protected virtual void Awake(){
         Delivery = GetComponent<SkillDelivery>();
+        InPoolGO = GetComponent<PoolGO>();
     }
+
+    public virtual void PrepareEffect() { }
 
     public void SetEndPlugins(List<SkillEnd> endPlugins, bool isNew){
         this.SkillEndPlugins = endPlugins;
