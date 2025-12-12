@@ -746,7 +746,7 @@ MonoBehaviour:
   DialogBGMFadeTime: 1
   CharacterAudioVolume: 1
   BGMVolume: 1
-  DialogText: "\u62B1\u6B49\uFF0C\u8FD9\u6B21\u7684\u5371\u673A\u53D7\u592A\u591A\u53D8\u91CF\u5F71\u54CD\uFF0C\u6211\u770B\u4E0D\u6E05\u4E86\u2026\u2026\u6211\u6BD5\u7ADF\u4E0D\u662F\u4E0A\u5E1D\uFF0C\u53EA\u80FD\u505A\u5230\u8FD9\u79CD\u7A0B\u5EA6\u4E86\u3002"
+  DialogText: "\u62B1\u6B49\uFF0C\u8FD9\u6B21\u7684\u5371\u673A\u53D7\u592A\u591A\u53D8\u91CF\u5F71\u54CD\uFF0C\u6211\u5B8C\u5168\u89C2\u6D4B\u4E0D\u5230\u6709\u4EFB\u4F55\u4FE1\u606F\u2026\u2026\u53EA\u80FD\u5224\u65AD\u8FD9\u4E00\u4E8B\u4EF6\u5C31\u5728\u51E0\u5929\u4E4B\u5185\u3002"
   IsConstantVelocity: 1
   DialogTypeWriterDuration: 1
   CharacterName: "\u58A8\u9E26"
@@ -1103,7 +1103,7 @@ MonoBehaviour:
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
-  DialogAudio: {fileID: 0}
+  DialogAudio: {fileID: 8300000, guid: 15cc52bf8a3c54040832f25eed3950eb, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
   DialogBGMFadeTime: 1
@@ -1170,8 +1170,9 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  Background: {fileID: 21300000, guid: 516d38cb159ec134bae736f2618d8f2e, type: 3}
-  BackgroundCharacterPortraits: []
+  Background: {fileID: 21300000, guid: bd308837b3d11af43af3102e328f2c7c, type: 3}
+  BackgroundCharacterPortraits:
+  - {fileID: 21300000, guid: d171e46218d52204aa45512ec1986cc3, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 1
   BackgroundIsFadeOut: 1
@@ -1180,7 +1181,7 @@ MonoBehaviour:
   IsDialogBGMFade: 1
   DialogBGMFadeTime: 1
   CharacterAudioVolume: 1
-  BGMVolume: 0.3
+  BGMVolume: 0.2
   DialogText: "\u58A8\u9E26\u5FEB\u6B65\u8D70\u5230\u5B9E\u9A8C\u5BA4\u4E00\u4E2A\u76F8\u5BF9\u5B89\u9759\u7684\u89D2\u843D\uFF0C\u5E2D\u5730\u800C\u5750\uFF0C\u5C06\u4ED6\u90A3\u672C\u539A\u91CD\u7684\u4E66\u548C\u4E00\u53E0\u56FE\u6848\u5404\u5F02\u7684\u724C\u653E\u5728\u9762\u524D\u3002\u4ED6\u95ED\u4E0A\u773C\uFF0C\u53CC\u624B\u5728\u724C\u5806\u4E2D\u8F7B\u70B9\u7740\uFF0C\u547C\u5438\u53D8\u5F97\u7F13\u6162\u800C\u6DF1\u957F\uFF0C\u6574\u4E2A\u4EBA\u8FDB\u5165\u4E00\u79CD\u6781\u5EA6\u4E13\u6CE8\u7684\u72B6\u6001\u3002"
   IsConstantVelocity: 1
   DialogTypeWriterDuration: 1
@@ -2232,7 +2233,8 @@ MonoBehaviour:
       _dynamic: 0
   PreNode: {fileID: 0}
   Background: {fileID: 0}
-  BackgroundCharacterPortraits: []
+  BackgroundCharacterPortraits:
+  - {fileID: 21300000, guid: d171e46218d52204aa45512ec1986cc3, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
@@ -2604,7 +2606,7 @@ MonoBehaviour:
   DialogBGMFadeTime: 1
   CharacterAudioVolume: 1
   BGMVolume: 1
-  DialogText: "\u55EF\uFF0C\u96C6\u4E2D\u5728\u4E00\u8D77\u597D\uFF0C\u4E92\u76F8\u6709\u4E2A\u7167\u5E94\u3002"
+  DialogText: "\u6CA1\u95EE\u9898\uFF0C\u96C6\u4E2D\u5728\u4E00\u8D77\u597D\uFF0C\u4E92\u76F8\u6709\u4E2A\u7167\u5E94\u3002"
   IsConstantVelocity: 1
   DialogTypeWriterDuration: 1
   CharacterName: "\u970D\u5C14\u7279"
@@ -2753,7 +2755,7 @@ MonoBehaviour:
   IsConstantVelocity: 1
   DialogTypeWriterDuration: 1
   CharacterName: 
-  CharacterPortrait: {fileID: 21300000, guid: 540b30864d2afa94a89beba27dc2e158, type: 3}
+  CharacterPortrait: {fileID: 0}
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -2810,11 +2812,12 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  Background: {fileID: 0}
-  BackgroundCharacterPortraits: []
+  Background: {fileID: 21300000, guid: 516d38cb159ec134bae736f2618d8f2e, type: 3}
+  BackgroundCharacterPortraits:
+  - {fileID: 21300000, guid: d978f80ed103e3746834b749f4d6f24e, type: 3}
   NotBackground: 0
-  BackgroundIsFadeIn: 0
-  BackgroundIsFadeOut: 0
+  BackgroundIsFadeIn: 1
+  BackgroundIsFadeOut: 1
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -2883,7 +2886,8 @@ MonoBehaviour:
       _dynamic: 0
   PreNode: {fileID: 0}
   Background: {fileID: 0}
-  BackgroundCharacterPortraits: []
+  BackgroundCharacterPortraits:
+  - {fileID: 21300000, guid: d171e46218d52204aa45512ec1986cc3, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
