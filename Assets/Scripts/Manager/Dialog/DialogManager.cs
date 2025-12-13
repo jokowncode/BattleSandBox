@@ -17,7 +17,8 @@ public class DialogManager : MonoBehaviour {
     
     [SerializeField] private Image CharacterPortrait;
     [SerializeField] private TextMeshProUGUI CharacterName;
-
+    [SerializeField] private GameObject CharacterNameShadow;
+    
     [SerializeField] private CanvasGroup DialogContentCanvasGroup;
     [SerializeField] private TypeWriter DialogText;
     [SerializeField] private StoryReviewUI StoryReview;
@@ -35,6 +36,7 @@ public class DialogManager : MonoBehaviour {
     [SerializeField] private DialogOption DialogOptionPrefab;
     
     public static DialogManager Instance;
+    
     // private int CurrentIndex;
     private CanvasGroup DialogCanvasGroup;
     public bool IsAutoPlay { get; private set; } = false;
@@ -56,6 +58,8 @@ public class DialogManager : MonoBehaviour {
     private DialogNode CurrentDialogNode;
 
     private bool Pause = false;
+
+    private Animator DialogAnimator;
     
     private void Awake() {
         if (Instance != null) {
@@ -65,7 +69,18 @@ public class DialogManager : MonoBehaviour {
         Instance = this;
         DialogCanvasGroup = GetComponent<CanvasGroup>();
         BackgroundImageCanvasGroup = BackgroundImage.GetComponent<CanvasGroup>();
+        DialogAnimator = GetComponent<Animator>();
         StartCoroutine(Transition(false, true));
+    }
+
+    private void Start() {
+        DialogEventManager.Instance.AddEvent("ShakeCamera", () => {
+            this.DialogAnimator.SetTrigger(AnimationParams.Shake);
+        });
+        
+        DialogEventManager.Instance.AddEvent("TurnRed", () => {
+            this.DialogAnimator.SetTrigger(AnimationParams.Red);
+        });
     }
 
     private IEnumerator Transition(bool show, bool quick) {
@@ -242,6 +257,7 @@ public class DialogManager : MonoBehaviour {
         this.CharacterPortrait.color = new Color(1, 1, 1, data.CharacterPortrait ? 1.0f : 0.0f); 
         this.CharacterPortrait.sprite = data.CharacterPortrait;
         this.CharacterName.text = data.CharacterName;
+        this.CharacterNameShadow.SetActive(this.CharacterName.text != "");
 
         DialogContentCanvasGroup.alpha = data.DialogText == "" ? 0.0f : 1.0f;
         this.DialogText.Play(data.DialogText, data.DialogTypeWriterDuration, data.IsConstantVelocity);

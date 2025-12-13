@@ -9,5 +9,7 @@ public static class AnimationParams{
     public static readonly int AttackAnimSpeedMultiplier = Animator.StringToHash("AttackAnimSpeedMultiplier");
     public static readonly int Hit = Animator.StringToHash("Hit");
     public static readonly int Show = Animator.StringToHash("Show");
+    public static readonly int Shake = Animator.StringToHash("Shake");
+    public static readonly int Red = Animator.StringToHash("Red");
 }
 
