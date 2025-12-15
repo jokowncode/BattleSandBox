@@ -12,6 +12,7 @@ public class DialogNode : Node {
     public bool NotBackground;
     public bool BackgroundIsFadeIn;
     public bool BackgroundIsFadeOut = false;
+    public DialogUISlot SlotPrefab;
     
     public AudioClip DialogAudio;
     public AudioClip DialogBGM;
@@ -25,6 +26,8 @@ public class DialogNode : Node {
     public float DialogTypeWriterDuration = 1.0f;
     public string CharacterName;
     public Sprite CharacterPortrait;
+
+    public bool HasProgressBar = false;
     
     public string BeforeDialogInvokeAction;
     public string AfterDialogInvokeAction;

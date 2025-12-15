@@ -14,6 +14,7 @@ public class DialogManager : MonoBehaviour {
     [SerializeField] private GameObject BackGameObject;
     [SerializeField] private Image BackgroundImage;
     [SerializeField] private float BackgroundImageFadeInDuration = 0.5f;
+    [SerializeField] private Transform SlotContainer;
     
     [SerializeField] private Image CharacterPortrait;
     [SerializeField] private TextMeshProUGUI CharacterName;
@@ -34,6 +35,9 @@ public class DialogManager : MonoBehaviour {
     [Header("Dialog Option")] 
     [SerializeField] private Transform DialogOptionContainer;
     [SerializeField] private DialogOption DialogOptionPrefab;
+
+    [Header("Progress Bar")] 
+    [SerializeField] private DialogAudioProgressBar ProgressBar;
     
     public static DialogManager Instance;
     
@@ -254,15 +258,32 @@ public class DialogManager : MonoBehaviour {
             }
         }
 
+        foreach (Transform child in this.SlotContainer) {
+            if (child.TryGetComponent(out DialogUISlot dus)) {
+                dus.End();
+            }
+            Destroy(child.gameObject);
+        }
+        if (data.SlotPrefab) {
+            DialogUISlot dus = Instantiate(data.SlotPrefab, this.SlotContainer);
+            dus.Init();
+        }
+
         this.CharacterPortrait.color = new Color(1, 1, 1, data.CharacterPortrait ? 1.0f : 0.0f); 
         this.CharacterPortrait.sprite = data.CharacterPortrait;
         this.CharacterName.text = data.CharacterName;
         this.CharacterNameShadow.SetActive(this.CharacterName.text != "");
 
-        DialogContentCanvasGroup.alpha = data.DialogText == "" ? 0.0f : 1.0f;
-        this.DialogText.Play(data.DialogText, data.DialogTypeWriterDuration, data.IsConstantVelocity);
-        
         this.HasSound = data.DialogAudio;
+        bool notDialog = data.DialogText == "" || (data.HasProgressBar && data.DialogAudio);
+        bool hasProgressBar = data.HasProgressBar && this.HasSound;
+        
+        DialogContentCanvasGroup.alpha = notDialog ? 0.0f : 1.0f;
+        DialogContentCanvasGroup.interactable = !notDialog;
+
+        bool autoNext = data.DialogText == "" && !hasProgressBar;
+        this.DialogText.Play(data.DialogText, data.DialogTypeWriterDuration, data.IsConstantVelocity, autoNext);
+        
         if (data.DialogBGM) {
             if (data.IsDialogBGMFade) {
                 AudioManager.Instance.FadeMainMusic(data.DialogBGM, data.DialogBGMFadeTime, data.BGMVolume);
@@ -271,6 +292,13 @@ public class DialogManager : MonoBehaviour {
             }
         }
         
+        this.ProgressBar.StopProgressBar();
+        this.ProgressBar.gameObject.SetActive(hasProgressBar);
+        if (hasProgressBar) {
+            this.ProgressBar.StartProgressBar(data.DialogAudio.length);
+        }
+        
+        AudioManager.Instance.StopDialog();
         if (data.DialogAudio) {
             AudioManager.Instance.SetDialog(data.DialogAudio, data.CharacterAudioVolume);
         }

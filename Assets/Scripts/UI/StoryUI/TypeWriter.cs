@@ -20,15 +20,15 @@ public class TypeWriter : MonoBehaviour {
         this.EndDelayTimer = new WaitForSeconds(this.EndDelayTime);
     }
 
-    public void Play(string text, float duration, bool isConstantVelocity) {
+    public void Play(string text, float duration, bool isConstantVelocity, bool autoNextIfNotContent) {
         StopAllCoroutines();
         IsDelayEnd = false;
         IsPlayEnd = false;
         CurrentContent = text;
-        StartCoroutine(PlayCoroutine(text, duration, isConstantVelocity));
+        StartCoroutine(PlayCoroutine(text, duration, isConstantVelocity, autoNextIfNotContent));
     }
 
-    private IEnumerator PlayCoroutine(string content, float duration, bool isConstantVelocity) {
+    private IEnumerator PlayCoroutine(string content, float duration, bool isConstantVelocity, bool autoNextIfNotContent) {
         if (content != "") {
             float interval = isConstantVelocity ? this.ShowNextCharacterInterval : duration / content.Length;
             WaitForSeconds wait = new WaitForSeconds(interval);
@@ -42,8 +42,8 @@ public class TypeWriter : MonoBehaviour {
         yield return EndDelayTimer;
         this.Text.text = content;
         this.IsDelayEnd = true;
-
-        if (content == "" && !DialogManager.Instance.IsAutoPlay) {
+        
+        if (content == "" && !DialogManager.Instance.IsAutoPlay && autoNextIfNotContent) {
             DialogManager.Instance.Next();
         }
     }
