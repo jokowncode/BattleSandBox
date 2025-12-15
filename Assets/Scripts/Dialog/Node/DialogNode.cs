@@ -28,6 +28,7 @@ public class DialogNode : Node {
     public Sprite CharacterPortrait;
 
     public bool HasProgressBar = false;
+    public bool AutoPlayIfNotContent = true;
     
     public string BeforeDialogInvokeAction;
     public string AfterDialogInvokeAction;

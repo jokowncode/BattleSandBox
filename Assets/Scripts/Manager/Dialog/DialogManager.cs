@@ -281,8 +281,7 @@ public class DialogManager : MonoBehaviour {
         DialogContentCanvasGroup.alpha = notDialog ? 0.0f : 1.0f;
         DialogContentCanvasGroup.interactable = !notDialog;
 
-        bool autoNext = data.DialogText == "" && !hasProgressBar;
-        this.DialogText.Play(data.DialogText, data.DialogTypeWriterDuration, data.IsConstantVelocity, autoNext);
+        this.DialogText.Play(data.DialogText, data.DialogTypeWriterDuration, data.IsConstantVelocity, data.AutoPlayIfNotContent);
         
         if (data.DialogBGM) {
             if (data.IsDialogBGMFade) {
