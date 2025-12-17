@@ -12,6 +12,10 @@ public class HeroWarehouseManager : MonoBehaviour {
     
     private Dictionary<string, Hero> AllHeroMap = new Dictionary<string, Hero>();
     public static HeroWarehouseManager Instance;
+    
+    private Dictionary<string, int> HeroIndexMap = new Dictionary<string, int>();
+
+    public int TotalHeroCount => this.AllHeroes.Count;
 
     private void Awake() {
         if (Instance != null) {
@@ -21,14 +25,20 @@ public class HeroWarehouseManager : MonoBehaviour {
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
 
-        foreach (Hero hero in AllHeroes) {
+        for (int i = 0; i < this.AllHeroes.Count; i++) {
+            Hero hero = this.AllHeroes[i];
             this.AllHeroMap.Add(hero.Name, hero);
+            this.HeroIndexMap.Add(hero.Name, i);
         }
         
         // TODO: TEMP Debug Battle
         foreach (Hero hero in AllHeroes) {
             this.OwnedHeroes.Add(hero.Name);
         }
+    }
+
+    public int GetHeroIndex(string heroName) {
+        return this.HeroIndexMap.GetValueOrDefault(heroName, -1);
     }
 
     private void Start() {
