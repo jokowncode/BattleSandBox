@@ -47,6 +47,25 @@ public class ProgressText : DialogUISlot {
         StartCoroutine(ProgressTextCoroutine());
     }
 
+    public override void DialogAudioChange(float seconds) {
+        StopAllCoroutines();
+        int index = this.CurrentIndex == 0 ? this.CurrentIndex : this.CurrentIndex - 1;
+        if (index >= 0 && index < this.TextUI.Count) {
+            this.TextUI[index].color = Color.gray;
+        }
+
+        this.CurrentIndex = 0;
+        for (; this.CurrentIndex < this.Seconds.Count; this.CurrentIndex++) {
+            if (this.Seconds[this.CurrentIndex] <= seconds && 
+                (this.CurrentIndex == this.Seconds.Count - 1 || this.Seconds[this.CurrentIndex+1] > seconds)) {
+                break;
+            }
+        }
+
+        this.CurrentSecond = (int)seconds;
+        StartCoroutine(ProgressTextCoroutine());
+    }
+
     private IEnumerator ProgressTextCoroutine() {
         while (this.CurrentIndex < this.TextUI.Count) {
             if (this.Seconds[this.CurrentIndex] <= this.CurrentSecond) {
@@ -64,6 +83,7 @@ public class ProgressText : DialogUISlot {
     }
 
     public override void End() {
+        StopAllCoroutines();
         Resources.UnloadAsset(this.CurrentAsset);
     }
 }

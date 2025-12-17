@@ -75,6 +75,16 @@ public class AudioManager : MonoBehaviour{
         this.CurrentDialogCoroutine = StartCoroutine(DialogPlayCoroutine(newClip.length));
     }
 
+    public void SetDialogPlayPos(float seconds) {
+        this.DialogAudioSource.time = seconds;
+        if (this.CurrentDialogCoroutine != null) {
+            StopCoroutine(this.CurrentDialogCoroutine);
+        }
+
+        float remain = this.DialogAudioSource.clip.length - seconds;
+        this.CurrentDialogCoroutine = StartCoroutine(DialogPlayCoroutine(remain));
+    }
+
     private IEnumerator DialogPlayCoroutine(float length) {
         yield return new WaitForSeconds(length);
         this.DialogIsFinished = true;

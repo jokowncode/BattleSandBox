@@ -75,6 +75,27 @@ public class DialogManager : MonoBehaviour {
         BackgroundImageCanvasGroup = BackgroundImage.GetComponent<CanvasGroup>();
         DialogAnimator = GetComponent<Animator>();
         StartCoroutine(Transition(false, true));
+
+        if (this.ProgressBar) {
+            this.ProgressBar.OnProgress += () => {
+                this.DialogContentCanvasGroup.interactable = false;
+                this.DialogContentCanvasGroup.blocksRaycasts = false;
+            };
+
+            this.ProgressBar.OnEndProgress += () => {
+                this.DialogContentCanvasGroup.interactable = true;
+                this.DialogContentCanvasGroup.blocksRaycasts = true;
+            };
+
+            this.ProgressBar.OnChangeProgress += (seconds) => {
+                AudioManager.Instance.SetDialogPlayPos(seconds);
+                foreach (Transform child in this.SlotContainer) {
+                    if (child.TryGetComponent(out DialogUISlot dus)) {
+                        dus.DialogAudioChange(seconds);
+                    }
+                }
+            };
+        }
     }
 
     private void Start() {
@@ -187,8 +208,22 @@ public class DialogManager : MonoBehaviour {
         if (this.IsFullScreen) {
             CameraManager.Instance.MainCamera.cullingMask = ~0;
         }
+
+        if (this.ProgressBar) {
+            this.ProgressBar.StopProgressBar();
+        }
         
+        this.UnloadSlot();
         this.OnDialogEnded?.Invoke();
+    }
+
+    private void UnloadSlot() {
+        foreach (Transform child in this.SlotContainer) {
+            if (child.TryGetComponent(out DialogUISlot dus)) {
+                dus.End();
+            }
+            Destroy(child.gameObject);
+        }
     }
 
     public void ShowDialogReview() {
@@ -258,12 +293,7 @@ public class DialogManager : MonoBehaviour {
             }
         }
 
-        foreach (Transform child in this.SlotContainer) {
-            if (child.TryGetComponent(out DialogUISlot dus)) {
-                dus.End();
-            }
-            Destroy(child.gameObject);
-        }
+        this.UnloadSlot();
         if (data.SlotPrefab) {
             DialogUISlot dus = Instantiate(data.SlotPrefab, this.SlotContainer);
             dus.Init();
@@ -279,8 +309,6 @@ public class DialogManager : MonoBehaviour {
         bool hasProgressBar = data.HasProgressBar && this.HasSound;
         
         DialogContentCanvasGroup.alpha = notDialog ? 0.0f : 1.0f;
-        DialogContentCanvasGroup.interactable = !notDialog;
-
         this.DialogText.Play(data.DialogText, data.DialogTypeWriterDuration, data.IsConstantVelocity, data.AutoPlayIfNotContent);
         
         if (data.DialogBGM) {
