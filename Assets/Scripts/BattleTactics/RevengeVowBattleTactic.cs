@@ -9,5 +9,9 @@ public class RevengeVowBattleTactic : BattleTactic {
         if (!hero1) return;
         hero1.StopRevengeVow(hero2);
     }
+
+    public string GetDescription() {
+        return "复仇誓言";
+    }
 }
 

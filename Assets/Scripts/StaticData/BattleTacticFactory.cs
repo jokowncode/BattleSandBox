@@ -29,6 +29,11 @@ public static class BattleTacticFactory {
         if (tactic != null) Tactics.Add(type, tactic);
         return tactic;
     }
+
+    public static string GetBattleTacticDescription(BattleTacticType type) {
+        BattleTactic tactic = CreateBattleTactic(type);
+        return tactic == null ? "" : tactic.GetDescription();
+    }
 }
 
 

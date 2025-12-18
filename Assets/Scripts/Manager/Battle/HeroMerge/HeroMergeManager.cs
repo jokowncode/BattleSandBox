@@ -123,10 +123,13 @@ public class HeroMergeManager : MonoBehaviour {
             hero1E < this.MergeEnergy ||
             hero2E < this.MergeEnergy) return;
 
-        StartCoroutine(MergeHeroTacticVersionCoroutine(hero1, hero2));
+        StartCoroutine(MergeHeroTacticVersionCoroutine(hero1, hero2, this.UseTacticType));
     }
 
-    private IEnumerator MergeHeroTacticVersionCoroutine(Hero hero1, Hero hero2) {
+    private IEnumerator MergeHeroTacticVersionCoroutine(Hero hero1, Hero hero2, BattleTacticType tacticType) {
+        
+        BattleTactic tactic = BattleTacticFactory.CreateBattleTactic(tacticType);
+        if(tactic == null) yield break;
         
         hero1.IsMerge = true;
         hero2.IsMerge = true;
@@ -136,7 +139,6 @@ public class HeroMergeManager : MonoBehaviour {
         BattleUIManager.Instance.heroPortraitUI.SetHeroEnergy(hero1, 0);
         BattleUIManager.Instance.heroPortraitUI.SetHeroEnergy(hero2, 0);
         
-        BattleTactic tactic = BattleTacticFactory.CreateBattleTactic(this.UseTacticType);
         tactic.CastTactic(hero1, hero2);
         
         // 设置主动技能升级

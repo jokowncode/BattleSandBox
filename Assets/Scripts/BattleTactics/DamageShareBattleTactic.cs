@@ -8,5 +8,9 @@ public class DamageShareBattleTactic : BattleTactic {
         if (!hero1) return;
         hero1.ShareDamage(null);
     }
+
+    public string GetDescription() {
+        return "伤害共享";
+    }
 }
 
