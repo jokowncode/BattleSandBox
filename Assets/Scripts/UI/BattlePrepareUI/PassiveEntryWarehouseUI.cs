@@ -22,7 +22,6 @@ public class PassiveEntryWarehouseUI : WarehouseUI {
     }
 
     public void RecallPassiveEntry(PassiveEntry entry, int count = 1) {
-        PassiveEntryWarehouseManager.Instance.AddPassiveEntry(entry.Data.Name, count);
         foreach (Transform child in warehouseContent) {
             if (child.TryGetComponent(out ClickableUI ui) && ui.passiveEntryData == entry) {
                 ui.UpdatePassiveEntryCount(ui.passiveEntryCount + count);

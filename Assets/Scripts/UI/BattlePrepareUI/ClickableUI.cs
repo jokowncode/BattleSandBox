@@ -33,21 +33,38 @@ public class ClickableUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     public void OnPointerClick(PointerEventData eventData) {
-        Click();
+        // TODO: TEMP -> TEST PASSIVE ENTRY SYNTH
+        if (eventData.button == PointerEventData.InputButton.Left) {
+            Click();    
+        } else {
+            Synth();
+        }
+    }
+
+    private void Synth() {
+        if (this.passiveEntryCount < 3) return;
+        if (!this.passiveEntryData.UpgradePassiveEntry) return;
+        if (!PassiveEntryWarehouseManager.Instance.UpgradePassiveEntry(this.passiveEntryData.Data.Name)) return;
+        
+        // TODO: TEMP -> IN CAMP SYNTH PASSIVE ENTRY, DONT HAVE BattleUIManager
+        BattleUIManager.Instance.PassiveEntryWarehouseUI.RecallPassiveEntry(this.passiveEntryData.UpgradePassiveEntry, 1);
+        
+        this.UpdatePassiveEntryCount(this.passiveEntryCount - 3);
     }
 
     private void Click() {
         int recall = BattleManager.Instance.AddPassiveEntry(passiveEntryData);
         if (recall >= 0) {
             this.UpdatePassiveEntryCount(this.passiveEntryCount - 1);
-            if (passiveEntryCount > 0) return;
-            if(this.CurrentTooltip) Destroy(this.CurrentTooltip.gameObject);
-            Destroy(gameObject);
         }
     }
 
     public void UpdatePassiveEntryCount(int count) {
         this.passiveEntryCount = count;
         this.PassiveEntryNameText.text = this.passiveEntryData.Data.Name + (count > 1 ? "*"+count : "");
+
+        if (passiveEntryCount > 0) return;
+        if(this.CurrentTooltip) Destroy(this.CurrentTooltip.gameObject);
+        Destroy(gameObject);
     }
 }

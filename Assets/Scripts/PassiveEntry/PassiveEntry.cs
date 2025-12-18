@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class PassiveEntry : MonoBehaviour{
 
     [field: SerializeField] public PassiveEntryData Data{ get; private set; }
+    [field: SerializeField] public PassiveEntry UpgradePassiveEntry { get; private set; }
 
     private int PassiveEntrySortCode = -1;
     

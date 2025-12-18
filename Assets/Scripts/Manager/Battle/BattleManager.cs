@@ -399,8 +399,9 @@ public class BattleManager : StateMachineController{
         }
     }
 
-    private void RecallSelectedPassiveEntry(PassiveEntry passiveEntry){
-        BattleUIManager.Instance.PassiveEntryWarehouseUI.RecallPassiveEntry(passiveEntry, 1);
+    private void RecallSelectedPassiveEntry(PassiveEntry passiveEntry, int count = 1){
+        PassiveEntryWarehouseManager.Instance.AddPassiveEntry(passiveEntry.Data.Name, count);
+        BattleUIManager.Instance.PassiveEntryWarehouseUI.RecallPassiveEntry(passiveEntry, count);
     }
     
     /// <summary>

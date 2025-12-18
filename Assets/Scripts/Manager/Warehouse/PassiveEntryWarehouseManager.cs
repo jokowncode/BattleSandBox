@@ -30,7 +30,7 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         
         // TODO: TEMP Debug Battle
         foreach (PassiveEntry entry in AllPassiveEntries) {
-            this.OwnedPassiveEntries.Add(entry.Data.Name, 2);
+            this.OwnedPassiveEntries.Add(entry.Data.Name, 3);
         }
     }
 
@@ -82,5 +82,17 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         // if (!ContainsPassiveEntry(passiveEntryName)) return null;
         return this.AllPassiveEntryMap.GetValueOrDefault(passiveEntryName);
     }
-    
+
+    public bool UpgradePassiveEntry(string entryName) {
+        if (!ContainsPassiveEntry(entryName)) return false;
+        if (this.OwnedPassiveEntries[entryName] < 3) return false;
+
+        PassiveEntry entry = GetPassiveEntryByName(entryName);
+        if (!entry.UpgradePassiveEntry) return false;
+
+        this.OwnedPassiveEntries[entryName] -= 3;
+        string upgradePassiveEntryName = entry.UpgradePassiveEntry.Data.Name;
+        this.AddPassiveEntry(upgradePassiveEntryName, 1);
+        return true;
+    }
 }
