@@ -367,14 +367,17 @@ public class BattleManager : StateMachineController{
     /// 只从第一个技能槽中移除指定 GameObject 的技能。
     /// </summary>
     public void RemoveSkillFromSlot1(){
-        if (UndressPassiveEntrySfx) {
+        if (UndressPassiveEntrySfx && !IsBattleStart) {
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
         }
         if (Skills1InBattle.Remove(selectedHero, out PassiveEntry removedSkillData)){
             RecallSelectedPassiveEntry(removedSkillData);
             selectedHero.RemovePassiveEntry(removedSkillData, false);
-            BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
-            UpdatePassiveEntryUI(selectedHero);
+
+            if (!IsBattleStart) {
+                BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
+                UpdatePassiveEntryUI(selectedHero);
+            }
         }
     }
     
@@ -382,19 +385,22 @@ public class BattleManager : StateMachineController{
     /// 只从第二个技能槽中移除指定 GameObject 的技能。
     /// </summary>
     public void RemoveSkillFromSlot2(){
-        if (UndressPassiveEntrySfx) {
+        if (UndressPassiveEntrySfx&& !IsBattleStart) {
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
         }
         if (Skills2InBattle.Remove(selectedHero, out PassiveEntry removedSkillData)){
             RecallSelectedPassiveEntry(removedSkillData);
             selectedHero.RemovePassiveEntry(removedSkillData, false);
-            BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
-            UpdatePassiveEntryUI(selectedHero);
+            
+            if (!IsBattleStart) {
+                BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
+                UpdatePassiveEntryUI(selectedHero);
+            }
         }
     }
 
     private void RecallSelectedPassiveEntry(PassiveEntry passiveEntry){
-        BattleUIManager.Instance.PassiveEntryWarehouseUI.AddItem(passiveEntry, true);
+        BattleUIManager.Instance.PassiveEntryWarehouseUI.RecallPassiveEntry(passiveEntry, 1);
     }
     
     /// <summary>

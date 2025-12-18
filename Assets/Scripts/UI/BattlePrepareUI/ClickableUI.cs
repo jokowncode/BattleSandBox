@@ -7,22 +7,16 @@ using UnityEngine.UI;
 public class ClickableUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler{
 
     [SerializeField] private PassiveEntryTooltip TooltipPrefab;
+    [SerializeField] private TextMeshProUGUI PassiveEntryNameText;
     
-    public PassiveEntry passiveEntryData;
-    private TextMeshProUGUI PassiveEntryNameText;
+    [HideInInspector] public PassiveEntry passiveEntryData;
+    [HideInInspector] public int passiveEntryCount;
 
     private PassiveEntryTooltip CurrentTooltip;
     private RectTransform PassiveEntryRect;
 
     private void Awake(){
-        PassiveEntryNameText = GetComponentInChildren<TextMeshProUGUI>();
         PassiveEntryRect = this.GetComponent<RectTransform>();
-    }
-
-    private void Start(){
-        if (passiveEntryData != null && PassiveEntryNameText != null){
-            PassiveEntryNameText.text = passiveEntryData.Data.Name;
-        }
     }
 
     public void OnPointerEnter(PointerEventData eventData){
@@ -42,11 +36,18 @@ public class ClickableUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         Click();
     }
 
-    public void Click() {
+    private void Click() {
         int recall = BattleManager.Instance.AddPassiveEntry(passiveEntryData);
-        if (recall >= 0){
+        if (recall >= 0) {
+            this.UpdatePassiveEntryCount(this.passiveEntryCount - 1);
+            if (passiveEntryCount > 0) return;
             if(this.CurrentTooltip) Destroy(this.CurrentTooltip.gameObject);
             Destroy(gameObject);
         }
+    }
+
+    public void UpdatePassiveEntryCount(int count) {
+        this.passiveEntryCount = count;
+        this.PassiveEntryNameText.text = this.passiveEntryData.Data.Name + (count > 1 ? "*"+count : "");
     }
 }

@@ -7,7 +7,10 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
 
     [SerializeField] private List<PassiveEntry> AllPassiveEntries;
     
-    private List<string> OwnedPassiveEntries = new List<string>();
+    // private List<string> OwnedPassiveEntries = new List<string>();
+    
+    private Dictionary<string, int> OwnedPassiveEntries = new Dictionary<string, int>();
+    
     public static PassiveEntryWarehouseManager Instance;
 
     private Dictionary<string, PassiveEntry> AllPassiveEntryMap;
@@ -27,7 +30,7 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         
         // TODO: TEMP Debug Battle
         foreach (PassiveEntry entry in AllPassiveEntries) {
-            this.OwnedPassiveEntries.Add(entry.Data.Name);
+            this.OwnedPassiveEntries.Add(entry.Data.Name, 2);
         }
     }
 
@@ -35,39 +38,44 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         // TODO: TEMP Debug Battle
         /*if (PlayerPrefs.HasKey("OwnedPassiveEntryWarehouse")) {
             string json = PlayerPrefs.GetString("OwnedPassiveEntryWarehouse");
-            this.OwnedPassiveEntries = JsonUtility.FromJson<Serialization<string>>(json).ToList();
+            this.OwnedPassiveEntries = JsonUtility.FromJson<Serialization<string, int>>(json)
+                .ToDictionary();
         }*/
     }
 
     private void OnDestroy() {
         // TODO: TEMP Debug Battle
-        /*string json = JsonUtility.ToJson(new Serialization<string>(this.OwnedPassiveEntries));
+        /*string json = JsonUtility.ToJson(new Serialization<string, int>(this.OwnedPassiveEntries));
         PlayerPrefs.SetString("OwnedPassiveEntryWarehouse", json);*/
     }
 
-    public List<PassiveEntry> GetPassiveEntryFilterBySort(int sortCode) {
-        List<PassiveEntry> result = new List<PassiveEntry>();
-        foreach (string passiveEntryName in this.OwnedPassiveEntries) {
-            if (this.AllPassiveEntryMap.TryGetValue(passiveEntryName, out PassiveEntry entry)) {
+    public Dictionary<PassiveEntry, int> GetPassiveEntryFilterBySort(int sortCode) {
+        Dictionary<PassiveEntry, int> result = new Dictionary<PassiveEntry, int>();
+        foreach (var passiveEntryPair in this.OwnedPassiveEntries) {
+            if (this.AllPassiveEntryMap.TryGetValue(passiveEntryPair.Key, out PassiveEntry entry)) {
                 if ((entry.GetSortCode() & sortCode) == 0) continue;
-                result.Add(entry);    
+                result.Add(entry, passiveEntryPair.Value);    
             }
         }
         return result;
     }
 
-    public void AddPassiveEntry(string passiveEntry) {
-        this.OwnedPassiveEntries.Add(passiveEntry);
+    public void AddPassiveEntry(string passiveEntry, int count) {
+        this.OwnedPassiveEntries.TryAdd(passiveEntry, 0);
+        this.OwnedPassiveEntries[passiveEntry] += count;
     }
 
     public void RemovePassiveEntry(string passiveEntry) {
         if (ContainsPassiveEntry(passiveEntry)) {
-            this.OwnedPassiveEntries.Remove(passiveEntry);
+            this.OwnedPassiveEntries[passiveEntry] -= 1;
+            if (this.OwnedPassiveEntries[passiveEntry] <= 0) {
+                this.OwnedPassiveEntries.Remove(passiveEntry);
+            }
         }
     }
 
     public bool ContainsPassiveEntry(string passiveEntry) {
-        return this.OwnedPassiveEntries.Contains(passiveEntry);
+        return this.OwnedPassiveEntries.ContainsKey(passiveEntry);
     }
 
     public PassiveEntry GetPassiveEntryByName(string passiveEntryName) {
