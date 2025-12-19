@@ -46,6 +46,7 @@ public class BuffMiniDataEditor : Editor {
         EditorGUILayout.PropertyField(Obj.FindProperty("IsDestroyImmediate"));
         EditorGUILayout.PropertyField(Obj.FindProperty("DestroyDelay"));
         EditorGUILayout.PropertyField(Obj.FindProperty("EffectParticlePrefab"));
+        EditorGUILayout.PropertyField(Obj.FindProperty("EffectParticleGenerateCenter"));
 
         if (Obj.hasModifiedProperties) {
             Obj.ApplyModifiedProperties();

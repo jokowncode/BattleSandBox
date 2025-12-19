@@ -10,6 +10,7 @@ public class BuffData : ScriptableObject {
 
     [Header("持续性粒子")]
     public PoolGO ParticlePrefab;
+    public bool ParticleGenerateCenter = true;
     
     [Header("效果设置")]
     public List<BuffMiniData> ImmediateEffectBuff; // 立即触发效果

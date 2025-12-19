@@ -6,7 +6,6 @@ public class MagicCircle : MonoBehaviour{
 
     private bool IsHitTarget = false;
     private EffectData MagicCircleDamageMsg;
-    private Vector3 TargetPos;
     
     public void SetDamageMessage(EffectData dm) {
         this.MagicCircleDamageMsg = dm;
@@ -14,9 +13,7 @@ public class MagicCircle : MonoBehaviour{
 
     public void SetTargetPos(Vector3 targetPos) {
         this.IsHitTarget = false;
-        this.TargetPos = targetPos;
-        
-        this.transform.position = TargetPos;
+        this.transform.position = targetPos;
         // Destroy(this.gameObject, 1.5f);
         if (this.TryGetComponent(out PoolGO poolGO)) {
             PoolManager.Instance.ReleaseGameObject(poolGO, 1.5f);

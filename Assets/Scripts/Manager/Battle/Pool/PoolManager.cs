@@ -24,6 +24,7 @@ public class PoolManager : MonoBehaviour {
                 go.gameObject.SetActive(true);
                 go.IsRelease = false;
             }, (go) => {
+                go.transform.SetParent(this.transform, false);
                 go.gameObject.SetActive(false);
                 go.IsRelease = true;
             }));

@@ -15,7 +15,7 @@ public class Fighter : StateMachineController{
     [SerializeField] private Image ShieldBarImage;
     [field: SerializeField] public SkillNameUI SkillNameText{ get; private set; }
     [SerializeField] private ParticleSystem BloodParticle;
-    [SerializeField] private ParticleSystem HealParticlePrefab;
+    [SerializeField] private PoolGO HealParticlePrefab;
     [SerializeField] private DamageUI DamageUIPrefab;
     [field: SerializeField] public Transform Center { get; private set; }
     [field: SerializeField] public Transform AttackCaster { get; private set; }
@@ -219,9 +219,11 @@ public class Fighter : StateMachineController{
     }
 
     public void BeHealed(EffectData effectData) {
-        if (this.HealParticlePrefab&& !effectData.NotShowParticle){
-            ParticleSystem healParticle = Instantiate(this.HealParticlePrefab, this.transform.position, Quaternion.identity);
-            Destroy(healParticle.gameObject, 0.7f);
+        if (this.HealParticlePrefab&& !effectData.NotShowParticle) {
+            PoolGO go = PoolManager.Instance.GetGameObject(this.HealParticlePrefab);
+            go.transform.SetParent(this.transform, false);
+            go.transform.localPosition = Vector3.zero;
+            PoolManager.Instance.ReleaseGameObject(go, 0.7f);
         }
         
         this.InBattleHealth = Mathf.Min(this.CurrentData.Health, this.InBattleHealth + effectData.Value);

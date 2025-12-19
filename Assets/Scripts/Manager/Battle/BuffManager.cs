@@ -34,7 +34,8 @@ public class BuffManager : MonoBehaviour {
             // particle.transform.localPosition = Vector3.zero;
 
             PoolGO particle = PoolManager.Instance.GetGameObject(buffData.ParticlePrefab);
-            particle.transform.SetParent(target.Center.transform, false);
+            Transform parentTrans = buffData.ParticleGenerateCenter ? target.Center.transform : target.transform;
+            particle.transform.SetParent(parentTrans, false);
             particle.transform.localPosition = Vector3.zero;
             buffParticles.Add(particle);
         }
@@ -89,7 +90,8 @@ public class BuffManager : MonoBehaviour {
         // particle.transform.localPosition = Vector3.zero;
 
         PoolGO particle = PoolManager.Instance.GetGameObject(data.EffectParticlePrefab);
-        particle.transform.SetParent(target.Center.transform, false);
+        Transform parentTrans = data.EffectParticleGenerateCenter ? target.Center.transform : target.transform;
+        particle.transform.SetParent(parentTrans, false);
         particle.transform.localPosition = Vector3.zero;
         
         if (data.IsDestroyImmediate) {
