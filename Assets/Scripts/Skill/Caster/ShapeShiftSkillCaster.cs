@@ -10,6 +10,10 @@ public class ShapeShiftSkillCaster : SkillCaster {
     [Header("Buff")]
     [SerializeField] private float Duration = 10.0f;
     [SerializeField] private BuffData ShapeShiftBuff;
+    
+    [Header("Prefab Settings")]
+    [SerializeField] private GameObject prefabToCreate;  // 要创建的Prefab
+    [SerializeField] private Transform targetChild;     // 目标子物体的名称
 
     private BuffData CurrentBuffData;
     private bool IsShapeShift;
@@ -30,6 +34,7 @@ public class ShapeShiftSkillCaster : SkillCaster {
         this.OwnedFighter.AnimationEvent.SkillEnd();
         if(ShapeShiftBuff) BuffManager.Instance.AddBuff(this.OwnedFighter, this.OwnedFighter, this.CurrentBuffData);
         float delay = ShapeShiftBuff ? 0.2f : 0.0f;
+        CreatePrefabOnTargetChild();
         Invoke(nameof(Recover), this.Duration + delay);
     }
 
@@ -43,6 +48,16 @@ public class ShapeShiftSkillCaster : SkillCaster {
 
     public override bool CanCastSkill() {
         return base.CanCastSkill() && !IsShapeShift;
+    }
+    
+    public void CreatePrefabOnTargetChild()
+    {
+        if (prefabToCreate == null || targetChild == null)
+            return;
+        
+        GameObject instantiatedPrefab = Instantiate(prefabToCreate, targetChild);
+        instantiatedPrefab.transform.localPosition = Vector3.zero;
+        instantiatedPrefab.transform.rotation = prefabToCreate.transform.rotation;
     }
 }
 

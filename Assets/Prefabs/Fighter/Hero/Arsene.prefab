@@ -24583,11 +24583,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2996493575322379702, guid: 6b51b904c80abf144a9aa18ae7669f79,
         type: 3}
-    - target: {fileID: 1593314390621504107, guid: 73e558a38b9f460459e333776a739292,
-        type: 3}
-      propertyPath: <HeroUpdateSkillCaster>k__BackingField
-      value: 
-      objectReference: {fileID: 5745138190163449868}
     - target: {fileID: 1696080231649588743, guid: 73e558a38b9f460459e333776a739292,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -24699,6 +24694,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Arsene
       objectReference: {fileID: 0}
+    - target: {fileID: 8075593516157350898, guid: 73e558a38b9f460459e333776a739292,
+        type: 3}
+      propertyPath: m_TagString
+      value: Hero
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -24710,7 +24710,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5146907964074952245, guid: 73e558a38b9f460459e333776a739292,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5745138190163449868}
+      addedObject: {fileID: 2116050490633251461}
   m_SourcePrefab: {fileID: 100100000, guid: 73e558a38b9f460459e333776a739292, type: 3}
 --- !u!4 &4657929999247276667 stripped
 Transform:
@@ -24724,7 +24724,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 404136225851160801}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5745138190163449868
+--- !u!114 &2116050490633251461
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -24733,10 +24733,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 4825248867243572948}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2604aea48054261b8a188afce0aa173, type: 3}
+  m_Script: {fileID: 11500000, guid: caa367f0cc9c13f4bb2cb59c75788093, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   InitialData: {fileID: 11400000, guid: 99bfc0cd2daa55a48bca7b808153243a, type: 2}
   SkillStartParticle: {fileID: 0}
   SkillCastSfx: {fileID: 8300000, guid: 65a6250fcfc8d5d45ba317f49892c90a, type: 3}
   <Sort>k__BackingField: 16
+  skillPrefab: {fileID: 2510179721754785166, guid: 90cd4393cff3e494e8111a7282957b7f,
+    type: 3}
+  moveSpeed: 8
+  attackRange: 10
+  overshootDistance: 3
+  destroyDelay: 0.5
+  moveCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  useForwardDirection: 0
+  customDirection: {x: 1, y: 0, z: 0}
