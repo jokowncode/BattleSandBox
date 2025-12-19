@@ -15,7 +15,7 @@ public class RandomEnemyMagicCircleAttackState : MagicCircleAttackState{
         for (int i = 0; i < RandomEnemyCount; i++){
             Fighter fighter = BattleManager.Instance.GetRandomFighter(Controller.AttackTargetType);
             if (fighter) {
-                CastMagicCircle(fighter.transform.position, 1.0f / RandomEnemyCount);
+                CastMagicCircle(fighter.transform, 1.0f / RandomEnemyCount);
             }
         }
     }

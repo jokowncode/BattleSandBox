@@ -1,6 +1,7 @@
 ﻿
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -21,13 +22,14 @@ public class PoolManager : MonoBehaviour {
     public PoolGO GetGameObject(PoolGO prefab) {
         if (!Pools.ContainsKey(prefab.PoolName)) {
             Pools.Add(prefab.PoolName, new ObjectPool<PoolGO>(() => Instantiate(prefab), (go) => {
+                go.transform.SetParent(null, false);
                 go.gameObject.SetActive(true);
                 go.IsRelease = false;
             }, (go) => {
                 go.transform.SetParent(this.transform, false);
                 go.gameObject.SetActive(false);
                 go.IsRelease = true;
-            }));
+            }, collectionCheck: true));
         }
         return Pools[prefab.PoolName].Get();
     }
@@ -42,6 +44,8 @@ public class PoolManager : MonoBehaviour {
             yield return new WaitForSeconds(delay);
         }
         
+        // TODO: BUG NOT SOLVED COMPLETELY -> In ObjectPool exists null
+        if(!go) yield break;
         if (Pools.ContainsKey(go.PoolName)) {
             if(!go.IsRelease) Pools[go.PoolName].Release(go);
         } else {

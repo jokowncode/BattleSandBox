@@ -11,9 +11,8 @@ public class MagicCircle : MonoBehaviour{
         this.MagicCircleDamageMsg = dm;
     }
 
-    public void SetTargetPos(Vector3 targetPos) {
+    public void Init() {
         this.IsHitTarget = false;
-        this.transform.position = targetPos;
         // Destroy(this.gameObject, 1.5f);
         if (this.TryGetComponent(out PoolGO poolGO)) {
             PoolManager.Instance.ReleaseGameObject(poolGO, 1.5f);

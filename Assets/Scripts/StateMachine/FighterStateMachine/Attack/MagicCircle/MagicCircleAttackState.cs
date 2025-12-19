@@ -5,12 +5,14 @@ public class MagicCircleAttackState : AttackState{
 
     [SerializeField] private PoolGO MagicCirclePrefab;
 
-    protected void CastMagicCircle(Vector3 position, float percentage){
+    protected void CastMagicCircle(Transform target, float percentage){
         // MagicCircle magicCircle = Instantiate(this.MagicCirclePrefab);
 
         PoolGO go = PoolManager.Instance.GetGameObject(this.MagicCirclePrefab);
         if (!go.TryGetComponent(out MagicCircle magicCircle)) return;
-        magicCircle.SetTargetPos(position);
+        magicCircle.transform.SetParent(target, false);
+        magicCircle.transform.localPosition = Vector3.zero;
+        magicCircle.Init();
         
         bool criticalTest = Random.value < Controller.Critical / 100.0f;
         float critical = criticalTest ? 1.5f : 1.0f;
