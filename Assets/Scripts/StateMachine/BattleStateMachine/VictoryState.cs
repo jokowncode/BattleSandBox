@@ -10,6 +10,7 @@ public class VictoryState : BattleState{
         if (VictoryMusics.Length != 0) AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.VictoryMusics[Random.Range(0, this.VictoryMusics.Length)]);
         BattleUIManager.Instance.GameEnd(this.GameVictoryBannarSprite);
         Controller.ReturnButton.onClick.AddListener(() => {
+            this.Controller.AllHeroRecall();
             GameManager.Instance.GoToMap(true, true);
         });
         

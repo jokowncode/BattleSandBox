@@ -5,9 +5,29 @@ using UnityEngine;
 public abstract class InteractionObject : MonoBehaviour{
 
     protected Player InAreaPlayer;
+    protected bool IsEnd = false;
+
+    public Action OnInteractionEnded;
+
+    protected abstract string GetName();
     
     protected virtual void Awake(){
+        SaveMapManager.Instance.OnLoadMap += OnLoadMap;
         this.enabled = false;
+    }
+
+    private void OnLoadMap() {
+        SaveMapManager.Instance.OnLoadMap -= OnLoadMap;
+        this.IsEnd = SaveMapManager.Instance.LoadInteractionObject(this.GetName());
+        this.LoadBigMapData();
+    }
+
+    protected virtual void LoadBigMapData() { }
+
+    protected void EndInteraction() {
+        this.IsEnd = true;
+        SaveMapManager.Instance.SaveInteractionObject(this.GetName(), this.IsEnd);
+        this.OnInteractionEnded?.Invoke();
     }
 
     protected virtual void OnTriggerEnter(Collider other){

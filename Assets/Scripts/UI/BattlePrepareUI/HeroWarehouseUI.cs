@@ -40,9 +40,9 @@ public class HeroWarehouseUI : MonoBehaviour {
             go = Instantiate(heroWarehouseMageUIPrefab, heroWarehouseContent);
         else
             go = Instantiate(heroWarehousePriestUIPrefab, heroWarehouseContent);
-        if(go.GetComponent<DraggableUI>()==null)
-            go.AddComponent<DraggableUI>();
-        go.GetComponent<DraggableUI>().prefabReference = heroRef;
-        go.SetPortrait(HeroWarehouseManager.Instance.GetHeroByRef(heroRef).WarehouseHeroPortrait);
+
+        DraggableUI draggableUI = go.AddComponent<DraggableUI>();
+        draggableUI.prefabReference = heroRef;
+        go.SetPortrait(HeroWarehouseManager.Instance.GetHeroByRef(heroRef).WarehouseHeroPortrait, false);
     }
 }

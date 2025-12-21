@@ -13,28 +13,19 @@ public class HeroPortraitUI : MonoBehaviour {
     public HeroPanelUI heroMagePortraitUIPrefab;
     public Transform heroPortraitContent;
     
-    [SerializeField] private List<Hero> heroPortraits;
     private Dictionary<Hero,HeroPanelUI> heroPortraitUIDict;
     
     private void Awake() {
         heroPortraitUIDict = new Dictionary<Hero,HeroPanelUI>();
     }
-    
-    
-    public void PushHeros(List<Hero> heroes){
-        heroPortraits.Clear();
-        heroPortraits.AddRange(heroes);
-        //heroPortraits = heroes;
-        CreateUIProtraits();
-    }
 
-    private void CreateUIProtraits(){
+    public void CreateUIProtraits(List<Hero> heroes){
         foreach (Transform child in heroPortraitContent.transform){
             Destroy(child.gameObject);
         }
         // 清空旧字典
         heroPortraitUIDict.Clear();
-        foreach (Hero hero in heroPortraits){
+        foreach (Hero hero in heroes){
             FighterType tempType = hero.Type;
             HeroPanelUI go;
             if(tempType == FighterType.Warrior)
@@ -44,7 +35,7 @@ public class HeroPortraitUI : MonoBehaviour {
             else
                 go=Instantiate(heroPriestPortraitUIPrefab, heroPortraitContent);
             
-            go.SetPortrait(hero.WarehouseHeroPortrait);
+            go.SetPortrait(hero.WarehouseHeroPortrait, true);
             heroPortraitUIDict.Add(hero,go);
         }
         heroPortraitContent.GetComponent<UILayoutManual>().LayoutChildren();
@@ -57,5 +48,10 @@ public class HeroPortraitUI : MonoBehaviour {
         }
         heroPortraitUIDict[hero].HeroDead();
     }
-    
+
+    public void SetHeroEnergy(Hero hero, float value) {
+        if (heroPortraitUIDict.ContainsKey(hero)) {
+            heroPortraitUIDict[hero].SetHeroEnergy(value);
+        }
+    }
 }

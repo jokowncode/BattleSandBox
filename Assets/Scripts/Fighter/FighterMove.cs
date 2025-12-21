@@ -43,7 +43,15 @@ public class FighterMove : MonoBehaviour{
         RendererTransform.localScale = new Vector3(scaleX, 
             RendererTransform.localScale.y, RendererTransform.localScale.z);
     }
-    
+
+    public void ChangeSpeed(float speed) {
+        this.Agent.speed = speed;
+    }
+
+    public void RecoverSpeed() {
+        this.Agent.speed = Owner.Speed;
+    }
+
     public void MoveTo(Vector3 targetPos) {
         if (!CanMove) return;
         if (this.Owner.IsDead) return;

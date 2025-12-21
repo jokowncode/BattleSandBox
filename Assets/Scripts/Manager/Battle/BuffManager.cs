@@ -27,15 +27,21 @@ public class BuffManager : MonoBehaviour {
     private IEnumerator BuffCoroutine(Fighter caster, Fighter target, BuffData buffData) {
         
         Dictionary<FighterProperty, float> buffChangeProperty = new Dictionary<FighterProperty, float>();
+        List<PoolGO> buffParticles = new List<PoolGO>();
 
         if (buffData.ParticlePrefab) {
-            GameObject particle = Instantiate(buffData.ParticlePrefab, target.Center.transform);
+            // GameObject particle = Instantiate(buffData.ParticlePrefab, target.Center.transform);
+            // particle.transform.localPosition = Vector3.zero;
+
+            PoolGO particle = PoolManager.Instance.GetGameObject(buffData.ParticlePrefab);
+            particle.transform.SetParent(target.Center.transform, false);
             particle.transform.localPosition = Vector3.zero;
+            buffParticles.Add(particle);
         }
 
         // Apply Immediate Buff
         foreach (BuffMiniData data in buffData.ImmediateEffectBuff) {
-            ApplyBuff(caster, target, data, true, buffChangeProperty);
+            ApplyBuff(caster, target, data, true, buffChangeProperty, buffParticles);
         }
         
         // Apply Long Time Buff
@@ -49,10 +55,10 @@ public class BuffManager : MonoBehaviour {
             bool isFirstTime = t == 0.0f;
             foreach (BuffMiniData data in buffData.LongTimeEffectBuff) {
                 if (isFirstTime) {
-                    float changeValue = ApplyBuff(caster, target, data, true, buffChangeProperty);
+                    float changeValue = ApplyBuff(caster, target, data, true, buffChangeProperty, buffParticles);
                     longTimeBuffChangeValue.Add(data, changeValue);
                 } else {
-                    ApplyBuff(data, target, longTimeBuffChangeValue[data], false, buffChangeProperty);
+                    ApplyBuff(data, target, longTimeBuffChangeValue[data], false, buffChangeProperty, buffParticles);
                 }
             }
             yield return wait;
@@ -64,8 +70,9 @@ public class BuffManager : MonoBehaviour {
         }
         
         // Remove Particle
-        foreach (Transform buffParticle in target.Center) {
-            if(buffParticle) Destroy(buffParticle.gameObject);    
+        foreach (PoolGO buffParticle in buffParticles) {
+            // if(buffParticle) Destroy(buffParticle);    
+            if(buffParticle) PoolManager.Instance.ReleaseGameObject(buffParticle);
         }
         
         // Apply Last Buff
@@ -74,19 +81,28 @@ public class BuffManager : MonoBehaviour {
         }
     }
 
-    private void ApplyParticle(BuffMiniData data, Fighter target, bool isFirstTime) {
+    private void ApplyParticle(BuffMiniData data, Fighter target, bool isFirstTime, List<PoolGO> particles) {
         if (!data.EffectParticlePrefab) return;
         if (!data.IsDestroyImmediate && !isFirstTime) return;
-        GameObject particle = Instantiate(data.EffectParticlePrefab, target.Center.transform);
+        
+        // GameObject particle = Instantiate(data.EffectParticlePrefab, target.Center.transform);
+        // particle.transform.localPosition = Vector3.zero;
+
+        PoolGO particle = PoolManager.Instance.GetGameObject(data.EffectParticlePrefab);
+        particle.transform.SetParent(target.Center.transform, false);
         particle.transform.localPosition = Vector3.zero;
+        
         if (data.IsDestroyImmediate) {
-            Destroy(particle, data.DestroyDelay);    
+            // Destroy(particle, data.DestroyDelay);    
+            PoolManager.Instance.ReleaseGameObject(particle, data.DestroyDelay);
+        } else {
+            particles.Add(particle);
         }
     }
 
     private void ApplyBuff(BuffMiniData data, Fighter target, float changeValue, bool isFirstTime, 
-        Dictionary<FighterProperty, float> record) {
-        ApplyParticle(data, target, isFirstTime);
+        Dictionary<FighterProperty, float> record, List<PoolGO> particles) {
+        ApplyParticle(data, target, isFirstTime, particles);
         
         if (data.TargetUpdateProperty != FighterProperty.Health || data.IsChangeProperty) {
             target.FighterPropertyChange(data.TargetUpdateProperty, data.TargetUpdateProperty, 
@@ -101,9 +117,9 @@ public class BuffManager : MonoBehaviour {
     }
 
     private float ApplyBuff(Fighter caster, Fighter target, BuffMiniData data, bool isFirstTime,
-         Dictionary<FighterProperty, float> record) {
+         Dictionary<FighterProperty, float> record, List<PoolGO> particles) {
         
-        ApplyParticle(data, target, isFirstTime);
+        ApplyParticle(data, target, isFirstTime, particles);
         
         Fighter refFighter = data.Ref == BuffRef.Caster ? caster : target;
         FighterProperty refProperty = data.Ref == BuffRef.Caster ? data.CasterProperty : data.TargetRefProperty;

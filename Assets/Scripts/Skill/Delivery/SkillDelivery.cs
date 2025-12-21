@@ -36,7 +36,11 @@ public abstract class SkillDelivery : MonoBehaviour {
         this.Caster = caster;
         this.CasterType = casterType;
         this.EffectData = effectData;
+        this.PrepareDelivery();
+        this.Effect.PrepareEffect();
     }
+
+    protected virtual void PrepareDelivery() { }
 
     public void SetPlugins(List<SkillMiddle> middlePlugins, List<SkillEnd> endPlugins, bool isNew){
         this.SkillMiddlePlugins = middlePlugins;

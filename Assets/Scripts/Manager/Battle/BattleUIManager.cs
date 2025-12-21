@@ -37,6 +37,8 @@ public class BattleUIManager : MonoBehaviour {
     private Image Skill2Image;
     private Image SkillBackgroundImage;
 
+    public Action OnUpdateWarehouse;
+
     private void Awake() {
         if (Instance != null) {
             Destroy(this.gameObject);
@@ -57,7 +59,8 @@ public class BattleUIManager : MonoBehaviour {
 
     private void Start() {
         heroWarehouseUI.UpdateHeroWarehouse();
-        BattleManager.Instance.LoadHeroDeploy();
+        OnUpdateWarehouse?.Invoke();
+        // BattleManager.Instance.LoadHeroDeploy();
         // PassiveEntryWarehouseUI.UpdatePassiveEntryWarehouse();
     }
 
@@ -67,7 +70,7 @@ public class BattleUIManager : MonoBehaviour {
 
     public void ShowHeroDetail(Hero hero) {
         if (!hero) return;
-        this.RecallHeroButton.gameObject.SetActive(true);
+        this.RecallHeroButton.gameObject.SetActive(!hero.IsOriginExist);
         SetHeroPanelActive(true);
         UpdatePassiveEntryWarehouse(hero.HeroAvailablePassiveEntrySortCode);
         heroDetailUI.ChangeHeroDetailUIValue(hero.DetailPortrait);

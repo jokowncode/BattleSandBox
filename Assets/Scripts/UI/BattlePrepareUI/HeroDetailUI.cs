@@ -63,7 +63,7 @@ public class HeroDetailUI : MonoBehaviour {
     }
 
     private string GetPropertyDiff(float current, float initial){
-        float diff = current - initial;
+        double diff = Math.Round(current - initial, 1);
         if (diff == 0){
             return "";
         }

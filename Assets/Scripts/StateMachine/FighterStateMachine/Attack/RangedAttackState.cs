@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RangedAttackState : AttackState {
 
-    [SerializeField] private Bullet BulletPrefab;
+    [SerializeField] private PoolGO BulletPrefab;
     
     protected override void NormalAttack(){
         if(AttackParticle) AttackParticle.Play();
@@ -15,8 +15,15 @@ public class RangedAttackState : AttackState {
 
         Vector3 targetPos = AttackTarget.Center.position;
         Vector3 attackVec = (targetPos - attackPos).normalized;
-        Bullet bullet = Instantiate(BulletPrefab, attackPos, Quaternion.LookRotation(attackVec));
+        
+        // Bullet bullet = Instantiate(BulletPrefab, attackPos, Quaternion.LookRotation(attackVec));
 
+        PoolGO go = PoolManager.Instance.GetGameObject(this.BulletPrefab);
+        if (!go.TryGetComponent(out Bullet bullet)) return;
+
+        bullet.transform.position = attackPos;
+        bullet.transform.rotation = Quaternion.LookRotation(attackVec);
+        
         bool criticalTest = Random.value < Controller.Critical / 100.0f;
         float critical = criticalTest ? 1.5f : 1.0f;
         EffectData damageMsg = new EffectData{

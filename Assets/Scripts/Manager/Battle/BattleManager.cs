@@ -37,7 +37,9 @@ public class BattleManager : StateMachineController{
 
     public Action<Hero> OnHeroEnterTheField;
     public Action<Hero> OnHeroExitTheField;
+    
     public Action OnBattleStart;
+    public Action OnBattleStartInRound;
 
     public bool IsGameOver => EnemiesInBattle.Count <= 0 || HeroesInBattle.Count <= 0;
     public bool IsFullHero => this.HeroesInBattle.Count >= this.Data.MaxHeroCount;
@@ -83,7 +85,10 @@ public class BattleManager : StateMachineController{
         if (this.HeroParent.childCount != 0) {
             foreach (Transform child in this.HeroParent.transform) {
                 if (child.TryGetComponent(out Hero hero)) {
+                    hero.IsOriginExist = true;
+                    hero.SetStartPosition();
                     this.HeroesInBattle.Add(hero);
+                    // OnHeroEnterTheField?.Invoke(hero);
                 }
             }
         }
@@ -133,6 +138,16 @@ public class BattleManager : StateMachineController{
         }
     }
 
+    public void StartBattleInRound() {
+        foreach (Enemy enemy in this.EnemiesInBattle){
+            enemy.BattleStart();
+        }
+        foreach (Hero hero in this.HeroesInBattle) {
+            hero.BattleStart();
+        }
+        OnBattleStartInRound?.Invoke();
+    }
+
     public void StartBattle(){
         if (this.HeroesInBattle.Count <= 0){
             PlayErrorSfx();
@@ -149,7 +164,7 @@ public class BattleManager : StateMachineController{
         this.BattleStartTime = Time.time;
 #endif
         BattleUIManager.Instance.SetHeroPortraitActive(true);
-        BattleUIManager.Instance.heroPortraitUI.PushHeros(HeroesInBattle);
+        BattleUIManager.Instance.heroPortraitUI.CreateUIProtraits(HeroesInBattle);
         OnBattleStart?.Invoke();
         SaveHeroDeploy();
         SaveHeroPassiveEntry();
@@ -158,6 +173,7 @@ public class BattleManager : StateMachineController{
     private void SaveHeroDeploy() {
         List<HeroDeployData> data = new List<HeroDeployData>();
         foreach (Hero hero in HeroesInBattle) {
+            if(hero.IsOriginExist) continue;
             data.Add(new HeroDeployData {
                 HeroName = hero.Name,
                 HeroPosition = hero.transform.position,
@@ -206,20 +222,19 @@ public class BattleManager : StateMachineController{
 
     public void LoadHeroPassiveEntry(Hero hero) {
         // TODO: Optimize Speed
+        if (!PlayerPrefs.HasKey(hero.Name + "PassiveEntry")) return;
         string result = PlayerPrefs.GetString(hero.Name + "PassiveEntry", "");
         if (result == "") {
             return;
         }
 
+        this.selectedHero = hero;
         string[] passiveEntries = result.Split("|");
         foreach (string entryName in passiveEntries) {
-            foreach (Transform child in PassiveEntryParent) {
-                if (child.TryGetComponent(out ClickableUI clickableUI) 
-                    && clickableUI.passiveEntryData.Data.Name == entryName) {
-                    clickableUI.Click();
-                    break;
-                }
-            }    
+            PassiveEntry data = PassiveEntryWarehouseManager.Instance.GetPassiveEntryByName(entryName);
+            if (data) {
+                this.AddPassiveEntry(data);
+            }
         }
     }
 
@@ -233,6 +248,12 @@ public class BattleManager : StateMachineController{
     public void BattleVictory() {
         if (TryGetComponent(out VictoryState victory)) {
             ChangeState(victory);    
+        }
+    }
+
+    public void BattleDefeat() {
+        if (TryGetComponent(out DefeatState defeat)) {
+            ChangeState(defeat);    
         }
     }
 
@@ -310,22 +331,24 @@ public class BattleManager : StateMachineController{
         if (EquipPassiveEntrySfx) {
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EquipPassiveEntrySfx);
         }
-        
-        if (Skills1InBattle.TryAdd(selectedHero, data) 
-            && PassiveEntryWarehouseManager.Instance.ContainsPassiveEntry(data)){
+
+        if (!PassiveEntryWarehouseManager.Instance.ContainsPassiveEntry(data.Data.Name)) {
+            return -1;
+        }
+
+        if (Skills1InBattle.TryAdd(selectedHero, data)){
             selectedHero.AddPassiveEntry(data, false);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
-            PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data);
+            PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data.Data.Name);
             return 0;
         }
         
-        if (Skills2InBattle.TryAdd(selectedHero, data)
-            && PassiveEntryWarehouseManager.Instance.ContainsPassiveEntry(data)){
+        if (Skills2InBattle.TryAdd(selectedHero, data)){
             selectedHero.AddPassiveEntry(data, false);
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
-            PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data);
+            PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data.Data.Name);
             return 1;
         }
 
@@ -344,14 +367,17 @@ public class BattleManager : StateMachineController{
     /// 只从第一个技能槽中移除指定 GameObject 的技能。
     /// </summary>
     public void RemoveSkillFromSlot1(){
-        if (UndressPassiveEntrySfx) {
+        if (UndressPassiveEntrySfx && !IsBattleStart) {
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
         }
         if (Skills1InBattle.Remove(selectedHero, out PassiveEntry removedSkillData)){
             RecallSelectedPassiveEntry(removedSkillData);
             selectedHero.RemovePassiveEntry(removedSkillData, false);
-            BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
-            UpdatePassiveEntryUI(selectedHero);
+
+            if (!IsBattleStart) {
+                BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
+                UpdatePassiveEntryUI(selectedHero);
+            }
         }
     }
     
@@ -359,19 +385,23 @@ public class BattleManager : StateMachineController{
     /// 只从第二个技能槽中移除指定 GameObject 的技能。
     /// </summary>
     public void RemoveSkillFromSlot2(){
-        if (UndressPassiveEntrySfx) {
+        if (UndressPassiveEntrySfx&& !IsBattleStart) {
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
         }
         if (Skills2InBattle.Remove(selectedHero, out PassiveEntry removedSkillData)){
             RecallSelectedPassiveEntry(removedSkillData);
             selectedHero.RemovePassiveEntry(removedSkillData, false);
-            BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
-            UpdatePassiveEntryUI(selectedHero);
+            
+            if (!IsBattleStart) {
+                BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
+                UpdatePassiveEntryUI(selectedHero);
+            }
         }
     }
 
-    private void RecallSelectedPassiveEntry(PassiveEntry passiveEntry){
-        BattleUIManager.Instance.PassiveEntryWarehouseUI.AddItem(passiveEntry, true);
+    private void RecallSelectedPassiveEntry(PassiveEntry passiveEntry, int count = 1){
+        PassiveEntryWarehouseManager.Instance.AddPassiveEntry(passiveEntry.Data.Name, count);
+        BattleUIManager.Instance.PassiveEntryWarehouseUI.RecallPassiveEntry(passiveEntry, count);
     }
     
     /// <summary>
@@ -431,7 +461,37 @@ public class BattleManager : StateMachineController{
         }
         return result;
     }
-    
+
+    private List<Fighter> GetSortedFightersByDistance(Fighter self) {
+        List<Fighter> result = new List<Fighter>();
+        if (self.AttackTargetType == TargetType.Hero) {
+            foreach (Hero hero in this.HeroesInBattle) {
+                result.Add(hero);
+            }
+        }else if (self.AttackTargetType == TargetType.Enemy) {
+            foreach (Enemy enemy in this.EnemiesInBattle) {
+                result.Add(enemy);
+            }
+        }
+        result.Sort((Fighter f1, Fighter f2) => {
+            float d1 = (self.transform.position - f1.transform.position).sqrMagnitude;
+            float d2 = (self.transform.position - f2.transform.position).sqrMagnitude;
+            return d1 > d2 ? 1 : (d1 < d2 ? -1 : 0);
+        });
+        return result;
+    }
+
+    public Fighter GetNearestFighter(Fighter selfFighter, Func<Fighter, bool> condition = null) {
+        List<Fighter> sortedFighter = GetSortedFightersByDistance(selfFighter);
+        if (condition == null) return sortedFighter[0];
+        foreach (Fighter f in sortedFighter) {
+            if (condition(f)) {
+                return f;
+            }
+        }
+        return null;
+    }
+
     public Fighter GetRandomFighter(TargetType type, Func<Fighter, bool> condition = null) {
         if (IsGameOver) return null;
         int randomIndex = -1;

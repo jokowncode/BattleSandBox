@@ -8,13 +8,28 @@ public class DialogNode : Node {
     [Input] public Node PreNode;
     
     public Sprite Background;
+    public Sprite[] BackgroundCharacterPortraits;
     public bool NotBackground;
     public bool BackgroundIsFadeIn;
+    public bool BackgroundIsFadeOut = false;
+    public DialogUISlot SlotPrefab;
+    
     public AudioClip DialogAudio;
+    public AudioClip DialogBGM;
+    public bool IsDialogBGMFade = true;
+    public float DialogBGMFadeTime = 1.0f;
+    public float CharacterAudioVolume = 1.0f;
+    public float BGMVolume = 1.0f;
+    
     [TextArea] public string DialogText;
+    public bool IsConstantVelocity = false;
+    public float DialogTypeWriterDuration = 1.0f;
     public string CharacterName;
     public Sprite CharacterPortrait;
 
+    public bool HasProgressBar = false;
+    public bool AutoPlayIfNotContent = true;
+    
     public string BeforeDialogInvokeAction;
     public string AfterDialogInvokeAction;
     

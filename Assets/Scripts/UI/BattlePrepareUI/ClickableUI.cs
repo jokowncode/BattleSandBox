@@ -7,22 +7,16 @@ using UnityEngine.UI;
 public class ClickableUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler{
 
     [SerializeField] private PassiveEntryTooltip TooltipPrefab;
+    [SerializeField] private TextMeshProUGUI PassiveEntryNameText;
     
-    public PassiveEntry passiveEntryData;
-    private TextMeshProUGUI PassiveEntryNameText;
+    [HideInInspector] public PassiveEntry passiveEntryData;
+    [HideInInspector] public int passiveEntryCount;
 
     private PassiveEntryTooltip CurrentTooltip;
     private RectTransform PassiveEntryRect;
 
     private void Awake(){
-        PassiveEntryNameText = GetComponentInChildren<TextMeshProUGUI>();
         PassiveEntryRect = this.GetComponent<RectTransform>();
-    }
-
-    private void Start(){
-        if (passiveEntryData != null && PassiveEntryNameText != null){
-            PassiveEntryNameText.text = passiveEntryData.Data.Name;
-        }
     }
 
     public void OnPointerEnter(PointerEventData eventData){
@@ -39,14 +33,38 @@ public class ClickableUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     public void OnPointerClick(PointerEventData eventData) {
-        Click();
+        // TODO: TEMP -> TEST PASSIVE ENTRY SYNTH
+        if (eventData.button == PointerEventData.InputButton.Left) {
+            Click();    
+        } else {
+            Synth();
+        }
     }
 
-    public void Click() {
+    private void Synth() {
+        if (this.passiveEntryCount < 3) return;
+        if (!this.passiveEntryData.UpgradePassiveEntry) return;
+        if (!PassiveEntryWarehouseManager.Instance.UpgradePassiveEntry(this.passiveEntryData.Data.Name)) return;
+        
+        // TODO: TEMP -> IN CAMP SYNTH PASSIVE ENTRY, DONT HAVE BattleUIManager
+        BattleUIManager.Instance.PassiveEntryWarehouseUI.RecallPassiveEntry(this.passiveEntryData.UpgradePassiveEntry, 1);
+        
+        this.UpdatePassiveEntryCount(this.passiveEntryCount - 3);
+    }
+
+    private void Click() {
         int recall = BattleManager.Instance.AddPassiveEntry(passiveEntryData);
-        if (recall >= 0){
-            if(this.CurrentTooltip) Destroy(this.CurrentTooltip.gameObject);
-            Destroy(gameObject);
+        if (recall >= 0) {
+            this.UpdatePassiveEntryCount(this.passiveEntryCount - 1);
         }
+    }
+
+    public void UpdatePassiveEntryCount(int count) {
+        this.passiveEntryCount = count;
+        this.PassiveEntryNameText.text = this.passiveEntryData.Data.Name + (count > 1 ? "*"+count : "");
+
+        if (passiveEntryCount > 0) return;
+        if(this.CurrentTooltip) Destroy(this.CurrentTooltip.gameObject);
+        Destroy(gameObject);
     }
 }

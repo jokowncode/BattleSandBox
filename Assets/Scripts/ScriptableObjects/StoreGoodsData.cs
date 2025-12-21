@@ -3,13 +3,14 @@ using UnityEngine;
 
 public enum GoodsType {
     Hero,
-    EXP
+    EXP,
+    PassiveEntry
 }
 
 
 [CreateAssetMenu(menuName = "PhantomSpirit/StoreGoods", fileName = "StoreGoodsData")]
 public class StoreGoodsData : ScriptableObject {
-    public GameObject GoodsPrefab;
+    public string GoodsName;
     public GoodsType Type;
     public float Value;
     public float Money;

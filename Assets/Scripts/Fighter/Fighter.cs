@@ -23,7 +23,9 @@ public class Fighter : StateMachineController{
     
     protected FighterData CurrentData;
     public Fighter AttackTarget { get; private set; }
+    public SkillCaster OriginFighterSkillCaster { get; protected set; }
     public SkillCaster FighterSkillCaster { get; protected set; }
+
     public Animator FighterAnimator{ get; private set; }
     public FighterMove Move{ get; private set; }
     public FighterAnimationEvent AnimationEvent { get; private set; }
@@ -55,7 +57,9 @@ public class Fighter : StateMachineController{
 
     protected virtual void Awake(){
         GetRendererComponent();
-        this.FighterSkillCaster = GetComponentInChildren<SkillCaster>();
+        this.OriginFighterSkillCaster = GetComponentInChildren<SkillCaster>();
+        this.FighterSkillCaster = this.OriginFighterSkillCaster;
+        
         this.Move = GetComponent<FighterMove>();
         this.FighterPatrol = GetComponent<PatrolState>();
         this.FighterSkill = GetComponent<SkillState>();
@@ -153,13 +157,21 @@ public class Fighter : StateMachineController{
             if (this.InBattleShield <= 0){
                 foreach (Transform child in this.Center.transform) {
                     if (child.CompareTag("Shield")) {
-                        Destroy(child.gameObject);
+                        // Destroy(child.gameObject);
+                        child.gameObject.SetActive(false);
                     }
                 }
             }   
             UpdateShieldBar();
         }
-        
+
+        if (this is Hero hero && hero.ShareDamageHero) {
+            finalDamage /= 2;
+            hero.ShareDamageHero.BeDamaged(new EffectData() {
+                Value = finalDamage
+            });
+        }
+
         ShowDamage(finalDamage, effectData.IsCritical);
         
         this.InBattleHealth = Mathf.Min(this.CurrentData.Health, this.InBattleHealth - finalDamage);
@@ -270,10 +282,10 @@ public class Fighter : StateMachineController{
         string propertyName = updateProperty.ToString();
         float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, this);
         float changeValue =  GetPropertyChangeValue(refProperty, modifyWay, propertyRef, value, isUp, refFighter);
-        float increasePercentage = currentValue == 0.0f ? 0.0f : changeValue / currentValue;
         if (updateProperty == FighterProperty.Shield) {
             changeValue *= this.ShieldMultiplier;
         }
+        float increasePercentage = currentValue == 0.0f ? 0.0f : changeValue / currentValue;
 
         float finalValue = currentValue + changeValue;
         ReflectionTools.SetObjectProperty(propertyName, this, finalValue);

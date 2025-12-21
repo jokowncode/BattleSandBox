@@ -1,8 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class SimpleProjectile : MonoBehaviour
-{
+public class SimpleProjectile : MonoBehaviour {
     [Header("飞行设置")]
     public Vector3 originPos;
     public Vector3 targetPos;
@@ -14,20 +13,19 @@ public class SimpleProjectile : MonoBehaviour
     private float startTime;
     private bool hasReachedTarget = false;
 
-    void Start()
-    {
+    private Hero CurrentHero = null;
+    
+    void Start(){
         transform.position = originPos;
         
-        if (targetPos != originPos)
-        {
+        if (targetPos != originPos) {
             transform.forward = (targetPos - originPos).normalized;
         }
         
         startTime = Time.time;
         
         LightingLine lightingLine = gameObject.GetComponent<LightingLine>();
-        if (lightingLine != null)
-        {
+        if (lightingLine != null) {
             lightingLine.StartPos = originPos;
             lightingLine.TargetPos = targetPos;
         }
@@ -35,11 +33,9 @@ public class SimpleProjectile : MonoBehaviour
         StartCoroutine(FlyToTarget());
     }
 
-    private IEnumerator FlyToTarget()
-    {
+    private IEnumerator FlyToTarget() {
         // 飞行过程
-        while (Time.time - startTime < flightTime)
-        {
+        while (Time.time - startTime < flightTime) {
             float progress = (Time.time - startTime) / flightTime;
             transform.position = Vector3.Lerp(originPos, targetPos, progress);
             yield return null;
@@ -47,15 +43,23 @@ public class SimpleProjectile : MonoBehaviour
         
         transform.position = targetPos;
         hasReachedTarget = true;
+        if (CurrentHero) {
+            CurrentHero.TransitionShow(true);
+        }
         
         yield return new WaitForSeconds(destroyDelay);
         Destroy(gameObject);
     }
     
-    public void SetFlightParameters(Vector3 origin, Vector3 target)
-    {
+    public void SetFlightParameters(Vector3 origin, Vector3 target, Hero hero) {
+        if (hero) {
+            hero.TransitionShow(false);
+            hero.transform.position = target;
+        }
+
         originPos = origin;
         targetPos = target;
+        CurrentHero = hero;
         // flightTime = time;
         // destroyDelay = delay;
     }

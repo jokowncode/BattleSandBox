@@ -23,11 +23,14 @@ public class StoreGoodsUI : MonoBehaviour {
         this.GoodsImage.sprite = data.GoodsSprite;
         this.GoodsOutline.effectColor = data.GoodsColor;
         
-        // TODO: Player Current Money is Enough To Buy This Goods
+        // TODO: Player Current Money is Enough To Buy This Goods And Minus Money
         this.PurchaseButton.onClick.AddListener(() => {
             switch (data.Type) {
                 case GoodsType.Hero:
-                    // Debug.Log("Buy Hero");
+                    HeroWarehouseManager.Instance.AddHero(data.GoodsName);
+                    break;
+                case GoodsType.PassiveEntry:
+                    PassiveEntryWarehouseManager.Instance.AddPassiveEntry(data.GoodsName, 1);
                     break;
                 case GoodsType.EXP:
                     // Debug.Log("Buy EXP");
@@ -40,8 +43,8 @@ public class StoreGoodsUI : MonoBehaviour {
         });
     }
 
-    public void DisablePurchase() {
-        this.PurchaseButton.interactable = false;
+    public void TransitionPurchase(bool canPurchase) {
+        this.PurchaseButton.interactable = canPurchase;
     }
 }
 

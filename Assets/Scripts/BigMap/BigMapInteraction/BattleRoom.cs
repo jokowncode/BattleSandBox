@@ -1,14 +1,19 @@
 ﻿
 using UnityEngine;
 
-public class BattleRoom : InteractionObject{
+public class BattleRoom : InteractionObject {
 
     [SerializeField] protected BattleData Data;
     [SerializeField] private Transform Enemies;
+    [SerializeField] private Dialogue NextActiveDialogue;
     
     private BoxCollider Collider;
-    protected bool IsEnd;
-    
+
+    protected override string GetName() {
+        if (!this.Data) return "UnknownBattleRoom";
+        return this.Data.BattleName;
+    }
+
     protected override void Awake(){
         base.Awake();
         this.Collider = this.GetComponent<BoxCollider>();
@@ -21,6 +26,10 @@ public class BattleRoom : InteractionObject{
         GameManager.Instance.GoToBattle(this.Data);
     }
 
+    protected override void LoadBigMapData() {
+        if(this.IsEnd && this.Enemies) Destroy(this.Enemies.gameObject);
+    }
+
     protected override void Update(){
         base.Update();
         if (!this.IsEnd && this.Collider.bounds.Contains(this.InAreaPlayer.transform.position)){
@@ -31,7 +40,13 @@ public class BattleRoom : InteractionObject{
     protected override void OnTriggerEnter(Collider other){
         base.OnTriggerEnter(other);
         if (this.IsEnd || (GameManager.Instance.IsBattleEnd && GameManager.Instance.IsBattleVictory)){
-            this.IsEnd = true;
+            if (!this.IsEnd) {
+                if (NextActiveDialogue) {
+                    NextActiveDialogue.Activate();
+                }
+                // this.IsEnd = true;
+                this.EndInteraction();
+            }
             this.InAreaPlayer.TransitionInteractionTip(false);
             this.enabled = false;
             if(this.Enemies) Destroy(this.Enemies.gameObject);

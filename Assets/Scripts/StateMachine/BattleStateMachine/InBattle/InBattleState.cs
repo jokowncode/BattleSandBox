@@ -31,12 +31,7 @@ public class InBattleState : BattleState{
     }
 
     protected virtual void InitializeFighters() {
-        foreach (Enemy enemy in Controller.EnemiesInBattle){
-            enemy.BattleStart();
-        }
-        foreach (Hero hero in Controller.HeroesInBattle) {
-            hero.BattleStart();
-        }
+        Controller.StartBattleInRound();
     }
 
     protected virtual void VictoryTransition() {

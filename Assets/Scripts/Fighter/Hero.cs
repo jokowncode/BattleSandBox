@@ -12,7 +12,13 @@ public class Hero : Fighter{
     [SerializeField] private PassiveEntry[] HeroSelfPassiveEntries;
     [field: SerializeField] public SkillCaster HeroUpdateSkillCaster { get; private set; }
     [SerializeField] private GameObject Shadow;
+    
+    [Header("Trail")]
+    [SerializeField] private SimpleProjectile SkillTrailPrefab;
 
+    [Header("Revenge")] 
+    [SerializeField] private BuffData RevengeBuff;
+    
     private List<PassiveEntry> EquipPassiveEntries;
     private List<PassiveEntry> SelfPassiveEntries;
     
@@ -24,7 +30,11 @@ public class Hero : Fighter{
     public Action<Hero> OnShowHeroDetail;
     public Dictionary<string, Object> Records = new();
 
-    public int MergeGroupIndex { get; set; } = -1;
+    // public int MergeGroupIndex { get; set; } = -1;
+    public bool IsOriginExist { get; set; } = false;
+
+    public Hero ShareDamageHero { get; private set; } = null;
+    public bool IsMerge { get; set; } = false;
 
     protected override void Awake(){
         base.Awake();
@@ -38,6 +48,24 @@ public class Hero : Fighter{
         }
     }
 
+    public void ShareDamage(Hero hero) {
+        this.ShareDamageHero = hero;
+    }
+
+    public void StartRevengeVow(Hero hero) {
+        hero.OnDead += OnRevengeDead;
+    }
+    
+    public void StopRevengeVow(Hero hero) {
+        if (!hero) return;
+        hero.OnDead -= OnRevengeDead;
+    }
+
+    private void OnRevengeDead(Fighter deadHero) {
+        deadHero.OnDead -= OnRevengeDead;
+        BuffManager.Instance.AddBuff(this, this, this.RevengeBuff);
+    }
+
     public void SetMergeData(FighterData data) {
         this.InitialData = data;
         this.CurrentData = Instantiate(this.InitialData);
@@ -48,6 +76,26 @@ public class Hero : Fighter{
         newSkillCaster.gameObject.SetActive(true);
         newSkillCaster.transform.position = this.FighterSkillCaster.transform.position;
         this.FighterSkillCaster = newSkillCaster;
+    }
+    
+    public void ChangePositionWithTrail(Vector3 targetPosition) {
+        if (SkillTrailPrefab) {
+            SimpleProjectile projectile = Instantiate(SkillTrailPrefab, this.Center.position, Quaternion.identity);
+            projectile.SetFlightParameters(this.Center.position, targetPosition, this);
+        } else {
+            this.transform.position = targetPosition; 
+        }
+    }
+
+    public void SkillChange(bool isUpdate) {
+        SkillCaster newSkill = isUpdate ? this.HeroUpdateSkillCaster : this.OriginFighterSkillCaster;
+        SkillCaster oldSkill = isUpdate ? this.OriginFighterSkillCaster : this.HeroUpdateSkillCaster;
+        
+        newSkill.gameObject.SetActive(true);
+        oldSkill.gameObject.SetActive(false);
+        if(this.FighterSkillCaster) newSkill.transform.position = this.FighterSkillCaster.transform.position;
+        this.FighterSkillCaster = newSkill;
+        if(this.FighterSkillCaster) this.SkillNameText.SetSkillName(this.FighterSkillCaster.Data.Name);
     }
 
     public void TransitionShow(bool show) {
@@ -74,8 +122,12 @@ public class Hero : Fighter{
         this.Move.Agent.enabled = false;
     }
 
-    public void Deploy(int deployAreaIndex) {
+    public void SetStartPosition() {
         this.StartPosition = this.transform.position;
+    }
+
+    public void Deploy(int deployAreaIndex) {
+        this.SetStartPosition();
         this.DeployAreaIndex = deployAreaIndex;
         this.Move.Agent.enabled = true;
         if(DeployHeroSfx)
@@ -87,8 +139,8 @@ public class Hero : Fighter{
                 AddPassiveEntry(entry, true);
             }
         }
-        BattleManager.Instance.ShowHeroDetail(this);
         BattleManager.Instance.LoadHeroPassiveEntry(this);
+        BattleManager.Instance.ShowHeroDetail(this);
     }
 
     public void UndressSelfEntry(){
