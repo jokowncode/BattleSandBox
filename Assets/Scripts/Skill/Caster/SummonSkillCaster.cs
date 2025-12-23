@@ -20,6 +20,8 @@ public class SummonSkillCaster : SkillCaster{
     private const int MaxSummonCount = 5;
     private List<Fighter> SummonPets;
 
+    public Action<Fighter> OnSummon;
+
     protected override void Awake(){
         base.Awake();
         SummonPets = new List<Fighter>();
@@ -63,6 +65,7 @@ public class SummonSkillCaster : SkillCaster{
             pet.Type == FighterType.Warrior ? pet.PhysicsAttack : pet.MagicAttack);
 
         pet.OnDead += _ => this.SummonPets.Remove(pet);
+        this.OnSummon?.Invoke(pet);
         this.SummonPets.Add(pet);
     }
 
