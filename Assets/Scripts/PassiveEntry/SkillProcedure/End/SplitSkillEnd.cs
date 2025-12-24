@@ -13,7 +13,7 @@ public class SplitSkillEnd : SkillEnd{
         // GameObject skill = Instantiate(effect.gameObject, effect.transform.position + Vector3.right, Quaternion.identity);
         // if (!skill.TryGetComponent(out SkillDelivery delivery)) return;
         
-        PoolGO go = PoolManager.Instance.GetGameObject(effect.InPoolGO);
+        PoolGO go = PoolManager.Instance.GetGameObject(effect.InPoolGO, null);
         if (!go.TryGetComponent(out SkillDelivery delivery)) return;
         delivery.transform.position = effect.transform.position + Vector3.right;
         

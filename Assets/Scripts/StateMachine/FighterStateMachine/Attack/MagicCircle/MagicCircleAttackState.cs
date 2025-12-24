@@ -8,10 +8,8 @@ public class MagicCircleAttackState : AttackState{
     protected void CastMagicCircle(Transform target, float percentage){
         // MagicCircle magicCircle = Instantiate(this.MagicCirclePrefab);
 
-        PoolGO go = PoolManager.Instance.GetGameObject(this.MagicCirclePrefab);
+        PoolGO go = PoolManager.Instance.GetGameObject(this.MagicCirclePrefab, target);
         if (!go.TryGetComponent(out MagicCircle magicCircle)) return;
-        magicCircle.transform.SetParent(target, false);
-        magicCircle.transform.localPosition = Vector3.zero;
         magicCircle.Init();
         
         bool criticalTest = Random.value < Controller.Critical / 100.0f;

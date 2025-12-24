@@ -32,11 +32,9 @@ public class BuffManager : MonoBehaviour {
         if (buffData.ParticlePrefab) {
             // GameObject particle = Instantiate(buffData.ParticlePrefab, target.Center.transform);
             // particle.transform.localPosition = Vector3.zero;
-
-            PoolGO particle = PoolManager.Instance.GetGameObject(buffData.ParticlePrefab);
+            
             Transform parentTrans = buffData.ParticleGenerateCenter ? target.Center.transform : target.transform;
-            particle.transform.SetParent(parentTrans, false);
-            particle.transform.localPosition = Vector3.zero;
+            PoolGO particle = PoolManager.Instance.GetGameObject(buffData.ParticlePrefab, parentTrans);
             buffParticles.Add(particle);
         }
 
@@ -89,10 +87,8 @@ public class BuffManager : MonoBehaviour {
         // GameObject particle = Instantiate(data.EffectParticlePrefab, target.Center.transform);
         // particle.transform.localPosition = Vector3.zero;
 
-        PoolGO particle = PoolManager.Instance.GetGameObject(data.EffectParticlePrefab);
         Transform parentTrans = data.EffectParticleGenerateCenter ? target.Center.transform : target.transform;
-        particle.transform.SetParent(parentTrans, false);
-        particle.transform.localPosition = Vector3.zero;
+        PoolGO particle = PoolManager.Instance.GetGameObject(data.EffectParticlePrefab, parentTrans);
         
         if (data.IsDestroyImmediate) {
             // Destroy(particle, data.DestroyDelay);    

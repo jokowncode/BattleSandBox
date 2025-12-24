@@ -19,7 +19,7 @@ public class PoolManager : MonoBehaviour {
         Instance = this;
     }
 
-    public PoolGO GetGameObject(PoolGO prefab) {
+    public PoolGO GetGameObject(PoolGO prefab, Transform parent = null) {
         if (!Pools.ContainsKey(prefab.PoolName)) {
             Pools.Add(prefab.PoolName, new ObjectPool<PoolGO>(() => Instantiate(prefab), (go) => {
                 go.transform.SetParent(null, false);
@@ -31,7 +31,13 @@ public class PoolManager : MonoBehaviour {
                 go.IsRelease = true;
             }, collectionCheck: true));
         }
-        return Pools[prefab.PoolName].Get();
+        PoolGO go =  Pools[prefab.PoolName].Get();
+        if (parent) {
+            go.transform.SetParent(parent, false);
+            go.transform.localPosition = Vector3.zero;
+            go.transform.rotation = Quaternion.identity;
+        }
+        return go;
     }
 
     public void ReleaseGameObject(PoolGO go, float delay = 0.0f) {
@@ -49,7 +55,7 @@ public class PoolManager : MonoBehaviour {
         if (Pools.ContainsKey(go.PoolName)) {
             if(!go.IsRelease) Pools[go.PoolName].Release(go);
         } else {
-            Destroy(go);
+            Destroy(go.gameObject);
         }
     }
 }

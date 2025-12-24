@@ -9,7 +9,7 @@ public class SingleTargetSkillCaster : SkillCaster {
         Vector3 moveVec = (attackTargetPosition - selfPos).normalized;
         // SkillDelivery delivery = Instantiate(this.Data.SkillDeliveryPrefab, transform.position, Quaternion.LookRotation(moveVec));
 
-        PoolGO go = PoolManager.Instance.GetGameObject(this.Data.SkillDeliveryPrefab);
+        PoolGO go = PoolManager.Instance.GetGameObject(this.Data.SkillDeliveryPrefab, null);
         if (!go.TryGetComponent(out SkillDelivery delivery)) return;
 
         delivery.transform.position = this.transform.position;

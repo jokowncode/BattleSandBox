@@ -18,7 +18,7 @@ public class RangedAttackState : AttackState {
         
         // Bullet bullet = Instantiate(BulletPrefab, attackPos, Quaternion.LookRotation(attackVec));
 
-        PoolGO go = PoolManager.Instance.GetGameObject(this.BulletPrefab);
+        PoolGO go = PoolManager.Instance.GetGameObject(this.BulletPrefab, null);
         if (!go.TryGetComponent(out Bullet bullet)) return;
 
         bullet.transform.position = attackPos;

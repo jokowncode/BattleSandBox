@@ -220,9 +220,7 @@ public class Fighter : StateMachineController{
 
     public void BeHealed(EffectData effectData) {
         if (this.HealParticlePrefab&& !effectData.NotShowParticle) {
-            PoolGO go = PoolManager.Instance.GetGameObject(this.HealParticlePrefab);
-            go.transform.SetParent(this.transform, false);
-            go.transform.localPosition = Vector3.zero;
+            PoolGO go = PoolManager.Instance.GetGameObject(this.HealParticlePrefab, this.transform);
             PoolManager.Instance.ReleaseGameObject(go, 0.7f);
         }
         

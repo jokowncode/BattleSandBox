@@ -17,7 +17,7 @@ public abstract class BaseCircleSpecialAttack : MeleeAttackState {
             
             // Bullet bullet = Instantiate(BulletPrefab, pos, Quaternion.LookRotation(rotVec));
 
-            PoolGO go = PoolManager.Instance.GetGameObject(this.BulletPrefab);
+            PoolGO go = PoolManager.Instance.GetGameObject(this.BulletPrefab, null);
             if (!go.TryGetComponent(out Bullet bullet)) return;
 
             bullet.transform.position = pos;
