@@ -9,7 +9,9 @@ public class GameManager : MonoBehaviour{
     [SerializeField] private Texture2D MouseCursor;
     
     public static GameManager Instance;
-    
+
+    public float Money { get; private set; } = 0.0f;
+        
     private BattleData NextBattleData;
     
     public bool IsBattleEnd{ get; private set; }
@@ -24,6 +26,29 @@ public class GameManager : MonoBehaviour{
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void Start() {
+        if (PlayerPrefs.HasKey("PlayerMoney")) {
+            SetMoney(PlayerPrefs.GetFloat("PlayerMoney"));
+        } else {
+            SetMoney(0.0f);
+        }
+        
+        // TODO: TEMP -> For Debug
+        SetMoney(200.0f);
+    }
+
+    public void SetMoney(float money) {
+        this.Money = money;
+        if (BigMapUIManager.Instance) {
+            BigMapUIManager.Instance.SetMoneyText(this.Money);
+        }
+    }
+
+    private void OnDestroy() {
+        // TODO: TEMP -> For Debug
+        // PlayerPrefs.SetFloat("PlayerMoney", this.Money);
     }
 
     private void Update(){

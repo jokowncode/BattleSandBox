@@ -23,8 +23,14 @@ public class StoreGoodsUI : MonoBehaviour {
         this.GoodsImage.sprite = data.GoodsSprite;
         this.GoodsOutline.effectColor = data.GoodsColor;
         
-        // TODO: Player Current Money is Enough To Buy This Goods And Minus Money
         this.PurchaseButton.onClick.AddListener(() => {
+
+            float currentMoney = GameManager.Instance.Money;
+            if (currentMoney < data.Money) {
+                return;
+            }
+            GameManager.Instance.SetMoney(currentMoney - data.Money);
+
             switch (data.Type) {
                 case GoodsType.Hero:
                     HeroWarehouseManager.Instance.AddHero(data.GoodsName);
