@@ -5,7 +5,8 @@ public enum SceneType{
     AboutUs,
     Loading,
     BigMap,
-    Battle
+    Battle,
+    Dungeons_Level1
 }
 
 

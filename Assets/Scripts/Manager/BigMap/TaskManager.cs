@@ -17,13 +17,16 @@ public class TaskManager : MonoBehaviour {
             return;
         }
         Instance = this;
-        SaveMapManager.Instance.OnLoadMap += OnLoadMap;
+        // SaveMapManager.Instance.OnLoadMap += OnLoadMap;
     }
-    
-    private void OnLoadMap() {
-        SaveMapManager.Instance.OnLoadMap -= OnLoadMap;
+
+    private void Start() {
         this.CurrentTaskIndex = SaveMapManager.Instance.CurrentTaskIndex;
         this.SetTask();
+    }
+
+    private void OnLoadMap() {
+        // SaveMapManager.Instance.OnLoadMap -= OnLoadMap;
     }
 
     public void NextTask() {

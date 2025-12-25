@@ -25,6 +25,10 @@ public class BigMapUIManager : MonoBehaviour{
         SetMoneyText(GameManager.Instance.Money);
     }
 
+    private void Start() {
+        GameManager.Instance.LoadDungeonSubScene();
+    }
+
     public void SetMoneyText(float money) {
         this.MoneyText.text = money.ToString();
     }

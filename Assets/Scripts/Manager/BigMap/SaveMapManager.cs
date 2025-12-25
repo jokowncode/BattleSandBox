@@ -8,7 +8,7 @@ public class SaveMapManager : MonoBehaviour {
 
     public static SaveMapManager Instance;
     
-    public Action OnLoadMap;
+    // public Action OnLoadMap;
     
     public Player PlayerInBigMap { get; private set; }
 
@@ -24,20 +24,12 @@ public class SaveMapManager : MonoBehaviour {
             return;
         }
         Instance = this;
-        this.LoadData();
-
-        this.OnLoadMap += () => {
-            if (this.BigMapPlayerData.PlayerPosition != Vector3.zero) {
-                this.PlayerInBigMap.transform.position = this.BigMapPlayerData.PlayerPosition;
-            }
-        };
+        // this.LoadData();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void LoadData() {
-        // TODO: TEMP
-        PlayerPrefs.DeleteAll();
+    public void LoadData() {
         if (PlayerPrefs.HasKey("PlayerBigMapData")) {
             this.BigMapPlayerData = JsonUtility.FromJson<PlayerBigMapSaveData>(PlayerPrefs.GetString("PlayerBigMapData"));
         } else {
@@ -74,7 +66,10 @@ public class SaveMapManager : MonoBehaviour {
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         if (SceneChangeManager.Instance.CurrentScene == SceneType.BigMap) {
             this.PlayerInBigMap = FindAnyObjectByType<Player>();
-            this.OnLoadMap?.Invoke();
+            // this.OnLoadMap?.Invoke();
+            if (this.BigMapPlayerData.PlayerPosition != Vector3.zero) {
+                this.PlayerInBigMap.transform.position = this.BigMapPlayerData.PlayerPosition;
+            }
             IsEnterBigMap = true;
         }
     }

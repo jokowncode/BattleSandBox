@@ -41,11 +41,12 @@ public class PlayerMove : MonoBehaviour{
             PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
             return;
         }
-
-        if (newPos.x - 1.5f <= LeftBorder.bounds.min.x || newPos.x + 1.5f >= RightBorder.bounds.max.x){
+        
+        // TODO: Border
+        /*if (newPos.x - 1.5f <= LeftBorder.bounds.min.x || newPos.x + 1.5f >= RightBorder.bounds.max.x){
             PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
             return;
-        }
+        }*/
 
         this.transform.position = newPos;
         PlayerAnimator.SetFloat(AnimationParams.Velocity, Mathf.Abs(x));

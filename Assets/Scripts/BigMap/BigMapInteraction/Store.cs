@@ -14,6 +14,7 @@ public class Store : InteractionObject {
 
     protected override void Awake() {
         base.Awake();
+        // TODO: BUG: Different Dungeons -> Wrong Data
         if (PlayerPrefs.HasKey(GetName())) {
             string json = PlayerPrefs.GetString(GetName());
             this.Goods = JsonUtility.FromJson<Serialization<string>>(json).ToList();
