@@ -71,7 +71,7 @@ public class BuffManager : MonoBehaviour {
         // Remove Particle
         foreach (PoolGO buffParticle in buffParticles) {
             // if(buffParticle) Destroy(buffParticle);    
-            if(buffParticle) PoolManager.Instance.ReleaseGameObject(buffParticle);
+            PoolManager.Instance.ReleaseGameObject(buffParticle);
         }
         
         // Apply Last Buff

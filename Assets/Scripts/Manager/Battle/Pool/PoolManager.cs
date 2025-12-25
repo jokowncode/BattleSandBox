@@ -9,7 +9,7 @@ public class PoolManager : MonoBehaviour {
 
     public static PoolManager Instance;
 
-    private Dictionary<string, ObjectPool<PoolGO>> Pools = new Dictionary<string, ObjectPool<PoolGO>>();
+    private Dictionary<string, MyObjectPool<PoolGO>> Pools = new Dictionary<string, MyObjectPool<PoolGO>>();
     
     private void Awake() {
         if (Instance != null) {
@@ -21,7 +21,7 @@ public class PoolManager : MonoBehaviour {
 
     public PoolGO GetGameObject(PoolGO prefab, Transform parent = null) {
         if (!Pools.ContainsKey(prefab.PoolName)) {
-            Pools.Add(prefab.PoolName, new ObjectPool<PoolGO>(() => Instantiate(prefab), (go) => {
+            Pools.Add(prefab.PoolName, new MyObjectPool<PoolGO>(() => Instantiate(prefab), (go) => {
                 go.transform.SetParent(null, false);
                 go.gameObject.SetActive(true);
                 go.IsRelease = false;
@@ -29,6 +29,8 @@ public class PoolManager : MonoBehaviour {
                 go.transform.SetParent(this.transform, false);
                 go.gameObject.SetActive(false);
                 go.IsRelease = true;
+            }, (go) => {
+                if(go) Destroy(go.gameObject);
             }, collectionCheck: true));
         }
         PoolGO go =  Pools[prefab.PoolName].Get();
@@ -45,13 +47,22 @@ public class PoolManager : MonoBehaviour {
         StartCoroutine(ReleaseGameObjectCoroutine(go, delay));
     }
 
+    private void RemoveNullObj() {
+        foreach (var poolPair in this.Pools) {
+            poolPair.Value.RemoveNullObj();
+        }
+    }
+
     private IEnumerator ReleaseGameObjectCoroutine(PoolGO go, float delay) {
         if (delay > 0.01f) {
             yield return new WaitForSeconds(delay);
         }
         
-        // TODO: BUG NOT SOLVED COMPLETELY -> In ObjectPool exists null
-        if(!go) yield break;
+        if (!go) {
+            this.RemoveNullObj();   
+            yield break;
+        }
+
         if (Pools.ContainsKey(go.PoolName)) {
             if(!go.IsRelease) Pools[go.PoolName].Release(go);
         } else {
