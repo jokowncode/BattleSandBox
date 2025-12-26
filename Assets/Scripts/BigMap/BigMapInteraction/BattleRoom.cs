@@ -14,8 +14,7 @@ public class BattleRoom : InteractionObject {
         return this.Data.BattleName;
     }
 
-    protected override void Awake(){
-        base.Awake();
+    private void Awake(){
         this.Collider = this.GetComponent<BoxCollider>();
     }
 

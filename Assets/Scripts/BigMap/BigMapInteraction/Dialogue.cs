@@ -22,8 +22,7 @@ public class Dialogue : InteractionObject {
         return this.DialogueName;
     }
 
-    protected override void Awake() {
-        base.Awake();
+    private void Awake() {
         this.IsActive = this.IsActiveWhenAwake;
     }
 
