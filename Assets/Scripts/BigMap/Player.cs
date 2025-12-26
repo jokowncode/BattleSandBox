@@ -2,6 +2,12 @@
 using System;
 using UnityEngine;
 
+public enum PlayerInAreaColliderDir {
+    Both,
+    Left,
+    Right
+}
+
 public class Player : MonoBehaviour{
 
     [SerializeField] private GameObject InteractionTip;
@@ -16,8 +22,8 @@ public class Player : MonoBehaviour{
         InteractionTip.SetActive(show);
     }
 
-    public void SetCollider(BoxCollider inAreaCollider){
-        Move.SetInAreaCollider(inAreaCollider);
+    public void SetCollider(BoxCollider inAreaCollider, PlayerInAreaColliderDir dir = PlayerInAreaColliderDir.Both){
+        Move.SetInAreaCollider(inAreaCollider, dir);
     }
 
     public void TransMove(bool canMove){

@@ -11,13 +11,16 @@ public class PlayerMove : MonoBehaviour{
     
     private Animator PlayerAnimator;
     private BoxCollider PlayerInAreaCollider;
+    private PlayerInAreaColliderDir PlayerInAreaColliderDir;
+    
     private float LastPlayFootstepTime = -1.0f;
 
     private void Awake(){
         PlayerAnimator = GetComponentInChildren<Animator>();
     }
 
-    public void SetInAreaCollider(BoxCollider inAreaCollider){
+    public void SetInAreaCollider(BoxCollider inAreaCollider, PlayerInAreaColliderDir dir) {
+        this.PlayerInAreaColliderDir = dir;
         this.PlayerInAreaCollider = inAreaCollider;
     }
 
@@ -39,9 +42,30 @@ public class PlayerMove : MonoBehaviour{
         Vector3 velocity = new Vector3(x, 0.0f, 0.0f);
 
         Vector3 newPos = this.transform.position + Speed * Time.deltaTime * velocity;
-        if (PlayerInAreaCollider && !PlayerInAreaCollider.bounds.Contains(newPos)){
-            PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
-            return;
+        if (PlayerInAreaCollider) {
+            bool isStop = false;
+            switch (this.PlayerInAreaColliderDir) {
+                case PlayerInAreaColliderDir.Both:
+                    if (!PlayerInAreaCollider.bounds.Contains(newPos)) {
+                        isStop = true;
+                    }
+                    break;
+                case PlayerInAreaColliderDir.Left:
+                    if (x > 0.0f && newPos.x + 0.5f > this.PlayerInAreaCollider.bounds.min.x) {
+                        isStop = true;
+                    }
+                    break;
+                case PlayerInAreaColliderDir.Right:
+                    if (x < 0.0f && newPos.x - 0.5f < this.PlayerInAreaCollider.bounds.max.x) {
+                        isStop = true;
+                    }
+                    break;
+            }
+
+            if (isStop) {
+                PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
+                return;
+            }
         }
 
         if (newPos.x - 0.5f <= EdgeManager.Instance.LeftEdgeX || newPos.x + 0.5f >= EdgeManager.Instance.RightEdgeX) {
