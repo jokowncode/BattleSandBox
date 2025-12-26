@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,6 +22,8 @@ public class GameManager : MonoBehaviour{
     public bool IsBattleEnd{ get; private set; }
     public bool IsBattleVictory{ get; private set; }
 
+    private List<SceneType> CompleteDungeons;
+
     private void Awake(){
         if (Instance != null){
             Destroy(this.gameObject);
@@ -30,6 +33,12 @@ public class GameManager : MonoBehaviour{
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
+        
+        if (PlayerPrefs.HasKey("CompleteDungeons")) {
+            this.CompleteDungeons = JsonUtility.FromJson<Serialization<SceneType>>(PlayerPrefs.GetString("CompleteDungeons")).ToList();
+        } else {
+            this.CompleteDungeons = new List<SceneType>();
+        }
     }
 
     private void Start() {
@@ -53,6 +62,9 @@ public class GameManager : MonoBehaviour{
     private void OnDestroy() {
         // TODO: TEMP -> For Debug
         // PlayerPrefs.SetFloat("PlayerMoney", this.Money);
+        
+        string dungeonsJson = JsonUtility.ToJson(new Serialization<SceneType>(this.CompleteDungeons));
+        PlayerPrefs.SetString("CompleteDungeons", dungeonsJson);
     }
 
     private void Update(){
