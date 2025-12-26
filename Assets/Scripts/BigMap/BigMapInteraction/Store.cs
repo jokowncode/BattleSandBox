@@ -12,10 +12,14 @@ public class Store : InteractionObject {
         return $"Store_{pos.x}_{pos.y}_{pos.z}";
     }
 
-    protected override void Awake() {
-        base.Awake();
-        // TODO: BUG: Different Dungeons -> Wrong Data
-        if (PlayerPrefs.HasKey(GetName())) {
+    protected override void LoadBigMapData() {
+        bool hasKey = PlayerPrefs.HasKey(GetName());
+        if (!this.IsEnd) {
+            if(hasKey) PlayerPrefs.DeleteKey(GetName());
+            this.EndInteraction();
+        }
+
+        if (hasKey) {
             string json = PlayerPrefs.GetString(GetName());
             this.Goods = JsonUtility.FromJson<Serialization<string>>(json).ToList();
         }

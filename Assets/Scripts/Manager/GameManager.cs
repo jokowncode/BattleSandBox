@@ -113,8 +113,6 @@ public class GameManager : MonoBehaviour{
         PlayerPrefs.DeleteKey("PlayerBigMapData");
         PlayerPrefs.DeleteKey("InteractionObjectEnd");
         PlayerPrefs.DeleteKey("AvailableDialogues");
-        
-        // TODO: Clear Store Data Here?
     }
 
     public void GoToMap(bool isBattleEnd, bool isBattleVictory){
