@@ -88,6 +88,12 @@ public class SaveMapManager : MonoBehaviour {
         string dialoguesJson = JsonUtility.ToJson(new Serialization<string>(this.AvailableDialogues));
         PlayerPrefs.SetString("AvailableDialogues", dialoguesJson);
     }
+    
+    public void ClearDungeonData() {
+        PlayerPrefs.DeleteKey("PlayerBigMapData");
+        PlayerPrefs.DeleteKey("InteractionObjectEnd");
+        PlayerPrefs.DeleteKey("AvailableDialogues");
+    }
 
     public void SaveInteractionObject(string objName, bool isEnd) {
         if (!this.InteractionObjectsEndMap.TryAdd(objName, isEnd)) {

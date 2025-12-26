@@ -71,19 +71,13 @@ public class SceneChangeManager : MonoBehaviour{
         this.Loading.UpdateLoadingProgress(1.0f);
         this.Loading.Transition(false);
     }
-    
-    private void ClearDungeonData() {
-        PlayerPrefs.DeleteKey("PlayerBigMapData");
-        PlayerPrefs.DeleteKey("InteractionObjectEnd");
-        PlayerPrefs.DeleteKey("AvailableDialogues");
-    }
 
     public void GoToDungeon(SceneType dungeonType) {
         this.DungeonScene = dungeonType;
         if (!PlayerPrefs.HasKey("CurrentDungeon") 
             || PlayerPrefs.GetString("CurrentDungeon") != this.DungeonScene.ToString()) {
             PlayerPrefs.SetString("CurrentDungeon", this.DungeonScene.ToString());
-            this.ClearDungeonData();
+            SaveMapManager.Instance.ClearDungeonData();
         }
         SaveMapManager.Instance.LoadData();
         this.GoToScene(SceneType.BigMap, true);
