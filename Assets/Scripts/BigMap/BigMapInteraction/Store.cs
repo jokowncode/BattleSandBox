@@ -13,13 +13,12 @@ public class Store : InteractionObject {
     }
 
     protected override void LoadBigMapData() {
-        bool hasKey = PlayerPrefs.HasKey(GetName());
         if (!this.IsEnd) {
-            if(hasKey) PlayerPrefs.DeleteKey(GetName());
+            if(PlayerPrefs.HasKey(GetName())) PlayerPrefs.DeleteKey(GetName());
             this.EndInteraction();
         }
 
-        if (hasKey) {
+        if (PlayerPrefs.HasKey(GetName())) {
             string json = PlayerPrefs.GetString(GetName());
             this.Goods = JsonUtility.FromJson<Serialization<string>>(json).ToList();
         }

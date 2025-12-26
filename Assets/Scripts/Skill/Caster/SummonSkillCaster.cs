@@ -8,8 +8,8 @@ using UnityEngine.Serialization;
 public class SummonSkillCaster : SkillCaster{
 
     [SerializeField] private Fighter SummonPetPrefab;
-    [SerializeField] private float HealthPercentage = 0.6f;
-    [SerializeField] private float AttackPercentage = 0.6f;
+    [SerializeField] private float HealthPercentage = 60.0f;
+    [SerializeField] private float AttackPercentage = 60.0f;
     
     [Header("Formation")]
     [SerializeField] private float Angle = 30.0f; 
@@ -58,14 +58,16 @@ public class SummonSkillCaster : SkillCaster{
 
     private void SummonPet() {
         Fighter pet = Instantiate(SummonPetPrefab, GetSummonPetPosition(this.SummonPets.Count+1), Quaternion.identity);
-        pet.Health = OwnedFighter.Health * HealthPercentage;
-        pet.Attack = OwnedFighter.Attack * AttackPercentage;
+        pet.FighterPropertyChange(FighterProperty.Health, FighterProperty.Health, PropertyModifyWay.Percentage,
+            PropertyRef.Current, this.HealthPercentage, true, OwnedFighter);
+        pet.FighterPropertyChange(FighterProperty.Attack, FighterProperty.Attack, PropertyModifyWay.Percentage,
+            PropertyRef.Current, this.AttackPercentage, true, OwnedFighter);
+        this.OnSummon?.Invoke(pet);
         pet.BattleStart(true);
         ApplySkillStart(pet.gameObject, 
             pet.Type == FighterType.Warrior ? pet.PhysicsAttack : pet.MagicAttack);
 
         pet.OnDead += _ => this.SummonPets.Remove(pet);
-        this.OnSummon?.Invoke(pet);
         this.SummonPets.Add(pet);
     }
 

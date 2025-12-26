@@ -2,8 +2,8 @@
 using System;
 using UnityEngine;
 
-public abstract class InteractionObject : MonoBehaviour{
-
+public abstract class InteractionObject : MonoBehaviour {
+    
     protected Player InAreaPlayer;
     protected bool IsEnd = false;
 
@@ -25,7 +25,7 @@ public abstract class InteractionObject : MonoBehaviour{
 
     protected void EndInteraction() {
         this.IsEnd = true;
-        SaveMapManager.Instance.SaveInteractionObject(this.GetName(), this.IsEnd);
+        SaveMapManager.Instance.SaveInteractionObject(this.GetName());
         this.OnInteractionEnded?.Invoke();
     }
 

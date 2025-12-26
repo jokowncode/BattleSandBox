@@ -20,8 +20,8 @@ public class Fighter : StateMachineController{
     [field: SerializeField] public Transform Center { get; private set; }
     [field: SerializeField] public Transform AttackCaster { get; private set; }
     [SerializeField] private AudioClip BeDamagedSfx;
-    
-    protected FighterData CurrentData;
+
+    public FighterData CurrentData { get; protected set; }
     public Fighter AttackTarget { get; private set; }
     public SkillCaster OriginFighterSkillCaster { get; protected set; }
     public SkillCaster FighterSkillCaster { get; protected set; }
@@ -43,12 +43,14 @@ public class Fighter : StateMachineController{
     public Action<Fighter> OnDead;
     public Action OnDisappear;
 
-    private float InBattleHealth;
+    protected float InBattleHealth;
     private float InBattleShield;
 
     private bool IsBattleStart;
     public bool IsDisappear { get; protected set; } = false;
-    
+
+    public bool IsSummon { get; private set; } = false;
+
     public float HealthPercentage => this.CurrentData.Health == 0.0f ? 0.0f : this.InBattleHealth / this.CurrentData.Health;
 
 #if DEBUG_MODE
@@ -67,6 +69,18 @@ public class Fighter : StateMachineController{
         if(this.InitialData) this.CurrentData = Instantiate(this.InitialData);
         this.CurrentFighterType = this.gameObject.layer == LayerMask.NameToLayer("Hero") ? TargetType.Hero : TargetType.Enemy;
         this.BloodBarImage.color = InitialColor;
+        this.InitHealth();
+    }
+
+    public void SetCurrentData(FighterData data) {
+        this.CurrentData = Instantiate(data);
+        this.InitHealth();
+    }
+
+    private void InitHealth() {
+        float health = SaveMapManager.Instance.GetHeroHealth(this.Name);
+        this.InBattleHealth = health < 0.0f ? this.CurrentData.Health : health;
+        UpdateBloodBar();
     }
 
     public void GetRendererComponent() {
@@ -87,6 +101,7 @@ public class Fighter : StateMachineController{
     }
 
     public void BattleStart(bool isSummon = false) {
+        this.IsSummon = isSummon;
         // Turn To Patrol State / Skill State
         if (FighterSkillCaster) {
             FighterSkillCaster.BattleStart();
@@ -99,12 +114,10 @@ public class Fighter : StateMachineController{
         }
         if(FighterPatrol) FighterPatrol.OnFindAttackTarget += OnFindAttackTarget;
         if (SkillNameText) SkillNameText.Hide(true);
-
-        if (!IsBattleStart || isSummon) {
+        
+        if (!IsBattleStart || this.IsSummon) {
             IsBattleStart = true;
-            this.InBattleHealth = this.CurrentData.Health;
             this.InBattleShield = this.CurrentData.Shield;
-            UpdateBloodBar();
             UpdateShieldBar();
         }
     }
@@ -199,7 +212,6 @@ public class Fighter : StateMachineController{
     public void FighterDead() {
         IsDead = true;
         OnDead?.Invoke(this);
-        this.Renderer.Dead();
         this.FighterCanvas.gameObject.SetActive(false);
         this.gameObject.layer = LayerMask.NameToLayer("Default");
         this.Move.StopMove();
@@ -210,12 +222,13 @@ public class Fighter : StateMachineController{
             Debug.Log($"{this.gameObject.name} Dead -> Caused Total Damage: {this.TotalDamage}");    
         }    
 #endif
-        if (this is Hero hero){
+        if (this is Hero hero){ 
             BattleUIManager.Instance.heroPortraitUI.SetHeroPortraitsGray(hero);
             BattleManager.Instance.RemoveHero(hero);
         }else if (this is Enemy enemy) {
             BattleManager.Instance.RemoveEnemy(enemy);
         }
+        this.Renderer.Dead();
     }
 
     public void BeHealed(EffectData effectData) {
@@ -300,7 +313,7 @@ public class Fighter : StateMachineController{
             UpdateShieldBar();
         }
 
-        if (updateProperty == FighterProperty.Health && IsBattleStart) {
+        if (updateProperty == FighterProperty.Health) {
             if (finalValue <= 0.0f) {
                 this.InBattleHealth = 0.0f;
             } else {

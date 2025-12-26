@@ -12,7 +12,6 @@ public class Dialogue : InteractionObject {
     
     [Header("Next Dialog")]
     [SerializeField] private bool IsActiveWhenAwake = true;
-    [SerializeField] private Dialogue NextActiveDialogue;
     
     private bool IsCurrentConversation;
     private bool IsActive = false;
@@ -58,9 +57,6 @@ public class Dialogue : InteractionObject {
         // this.IsEnd = true;
         if (!this.IsEnd) {
             this.EndInteraction();
-            if (NextActiveDialogue) {
-                NextActiveDialogue.Activate();
-            }
         }
     }
 

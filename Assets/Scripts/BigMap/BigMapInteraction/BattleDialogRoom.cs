@@ -1,6 +1,7 @@
 ﻿
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BattleDialogRoom : BattleRoom {
 
@@ -20,21 +21,8 @@ public class BattleDialogRoom : BattleRoom {
         DialogManager.Instance.OnDialogEnded -= OnDialogEnded;
         if (CurrentState == State.PreBattle) {
             GameManager.Instance.GoToBattle(this.Data);
-            return;
-        }
-
-        if (CurrentState == State.Victory) {
-            OnVictoryDialogEnded();
-            return;
-        }
-
-        if (CurrentState == State.Lose) {
-            OnLoseDialogEnded();
         }
     }
-
-    protected virtual void OnVictoryDialogEnded() { }
-    protected virtual void OnLoseDialogEnded() { }
 
     protected override void OnTriggerEnter(Collider other) {
         base.OnTriggerEnter(other);
