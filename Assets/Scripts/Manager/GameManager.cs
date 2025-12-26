@@ -33,12 +33,6 @@ public class GameManager : MonoBehaviour{
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
-        
-        if (PlayerPrefs.HasKey("CompleteDungeons")) {
-            this.CompleteDungeons = JsonUtility.FromJson<Serialization<SceneType>>(PlayerPrefs.GetString("CompleteDungeons")).ToList();
-        } else {
-            this.CompleteDungeons = new List<SceneType>();
-        }
     }
 
     private void Start() {
@@ -46,6 +40,12 @@ public class GameManager : MonoBehaviour{
             SetMoney(PlayerPrefs.GetFloat("PlayerMoney"));
         } else {
             SetMoney(0.0f);
+        }
+        
+        if (PlayerPrefs.HasKey("CompleteDungeons")) {
+            this.CompleteDungeons = JsonUtility.FromJson<Serialization<SceneType>>(PlayerPrefs.GetString("CompleteDungeons")).ToList();
+        } else {
+            this.CompleteDungeons = new List<SceneType>();
         }
         
         // TODO: TEMP -> For Debug
@@ -63,8 +63,8 @@ public class GameManager : MonoBehaviour{
         // TODO: TEMP -> For Debug
         // PlayerPrefs.SetFloat("PlayerMoney", this.Money);
         
-        string dungeonsJson = JsonUtility.ToJson(new Serialization<SceneType>(this.CompleteDungeons));
-        PlayerPrefs.SetString("CompleteDungeons", dungeonsJson);
+        /*string dungeonsJson = JsonUtility.ToJson(new Serialization<SceneType>(this.CompleteDungeons));
+        PlayerPrefs.SetString("CompleteDungeons", dungeonsJson);*/
     }
 
     private void Update(){
