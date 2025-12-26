@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Dialogue : InteractionObject {
 
-    [SerializeField] private string DialogueName;
     [SerializeField] private DialogGraph Dialogs;
     [SerializeField] private bool CanRepeat = true;
     [SerializeField] private bool IsForce = false;
@@ -19,7 +18,8 @@ public class Dialogue : InteractionObject {
     private bool IsActive = false;
 
     protected override string GetName() {
-        return this.DialogueName;
+        Vector3 pos = this.transform.position;
+        return $"Dialogue_{pos.x}_{pos.y}_{pos.z}";
     }
 
     private void Awake() {
