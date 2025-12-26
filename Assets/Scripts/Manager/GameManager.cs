@@ -8,9 +8,6 @@ public class GameManager : MonoBehaviour{
 
     [SerializeField] private AudioClip GoToBattleSfx;
     [SerializeField] private Texture2D MouseCursor;
-
-    // TODO: TEMP -> Link UI (Dungeon Choose)
-    [SerializeField] private SceneType TestDungeon = SceneType.Dungeons_Level1;
     
     public static GameManager Instance;
 
@@ -20,8 +17,6 @@ public class GameManager : MonoBehaviour{
     
     public bool IsBattleEnd{ get; private set; }
     public bool IsBattleVictory{ get; private set; }
-
-    private SceneType GoToDungeon;
 
     private void Awake(){
         if (Instance != null){
@@ -61,23 +56,6 @@ public class GameManager : MonoBehaviour{
         Cursor.SetCursor(this.MouseCursor, Vector2.zero, CursorMode.Auto);
     }
 
-
-    public void LoadDungeonSubScene(Action<float> progressCallback = null, Action completeCallback = null) {
-        StartCoroutine(LoadDungeonSubSceneCoroutine(progressCallback, completeCallback));
-    }
-
-    private IEnumerator LoadDungeonSubSceneCoroutine(Action<float> progressCallback, Action completeCallback) {
-        AsyncOperation ao = SceneManager.LoadSceneAsync((int)this.GoToDungeon, LoadSceneMode.Additive);
-        if (ao == null) yield break;
-        if (progressCallback == null) yield break;
-
-        while (!ao.isDone) {
-            progressCallback?.Invoke(ao.progress);
-            yield return null;
-        }
-        completeCallback?.Invoke();
-    }
-
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode){
         if (SceneChangeManager.Instance.CurrentScene == SceneType.Battle){
             BattleManager.Instance.SetBattleData(this.NextBattleData);
@@ -97,22 +75,7 @@ public class GameManager : MonoBehaviour{
     }
 
     public void StartGame(){
-        // TODO: TEMP -> Link Camp UI
-        PlayerPrefs.DeleteAll();
-        this.GoToDungeon = this.TestDungeon;
-        if (!PlayerPrefs.HasKey("CurrentDungeon") 
-            || PlayerPrefs.GetString("CurrentDungeon") != this.GoToDungeon.ToString()) {
-            PlayerPrefs.SetString("CurrentDungeon", this.GoToDungeon.ToString());
-            this.ClearDungeonData();
-        }
-        SaveMapManager.Instance.LoadData();
         this.GoToMap(false, false);    
-    }
-
-    private void ClearDungeonData() {
-        PlayerPrefs.DeleteKey("PlayerBigMapData");
-        PlayerPrefs.DeleteKey("InteractionObjectEnd");
-        PlayerPrefs.DeleteKey("AvailableDialogues");
     }
 
     public void GoToMap(bool isBattleEnd, bool isBattleVictory){

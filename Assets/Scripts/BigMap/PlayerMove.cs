@@ -1,20 +1,18 @@
 ﻿
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMove : MonoBehaviour{
 
     [SerializeField] private float FootstepCycle = 4.0f;
     [SerializeField] private float Speed = 5.0f;
     [SerializeField] private Transform RendererTransform;
-
-    [SerializeField] private Collider LeftBorder;
-    [SerializeField] private Collider RightBorder;
     
     private Animator PlayerAnimator;
     private BoxCollider PlayerInAreaCollider;
     private float LastPlayFootstepTime = -1.0f;
-    
+
     private void Awake(){
         PlayerAnimator = GetComponentInChildren<Animator>();
     }
@@ -32,6 +30,10 @@ public class PlayerMove : MonoBehaviour{
             PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
             return;
         }
+        
+        if (!EdgeManager.Instance) {
+            return;
+        }
 
         float x = Input.GetAxisRaw("Horizontal");
         Vector3 velocity = new Vector3(x, 0.0f, 0.0f);
@@ -41,12 +43,11 @@ public class PlayerMove : MonoBehaviour{
             PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
             return;
         }
-        
-        // TODO: Border
-        /*if (newPos.x - 1.5f <= LeftBorder.bounds.min.x || newPos.x + 1.5f >= RightBorder.bounds.max.x){
+
+        if (newPos.x - 0.5f <= EdgeManager.Instance.LeftEdgeX || newPos.x + 0.5f >= EdgeManager.Instance.RightEdgeX) {
             PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
             return;
-        }*/
+        }
 
         this.transform.position = newPos;
         PlayerAnimator.SetFloat(AnimationParams.Velocity, Mathf.Abs(x));

@@ -6,18 +6,28 @@ using UnityEngine.SceneManagement;
 
 public class SceneChangeManager : MonoBehaviour{
 
+    [Header("Music")]
     [SerializeField] private AudioClip MainMenuBGM;
     [SerializeField] private AudioClip BigMapBGM;
     [SerializeField] private AudioClip AboutUsBGM;
 
+    [Header("UI")] 
+    [SerializeField] private CanvasGroup BlackCanvasGroup;
+    [SerializeField] private LoadingUI Loading;
+    
     [Header("Black Screen")] 
     [SerializeField] private float Duration = 1.0f;
+
+    [Header("Debug")] 
+    [SerializeField] private SceneType TestDungeon = SceneType.Dungeons_Level1;
     
     public static SceneChangeManager Instance;
     public SceneType CurrentScene{ get; private set; }
 
     public Action<SceneType, SceneType> OnSceneChange;
-    private CanvasGroup BlackCanvasGroup;
+
+    private SceneType GoToDungeon;
+    private bool IsLoadDungeon = false;
 
     private void Awake(){
         if (Instance != null){
@@ -27,8 +37,6 @@ public class SceneChangeManager : MonoBehaviour{
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
-
-        this.BlackCanvasGroup = this.GetComponent<CanvasGroup>();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode){
@@ -36,8 +44,10 @@ public class SceneChangeManager : MonoBehaviour{
             AudioManager.Instance.SetMainMusic(this.MainMenuBGM);
         }
 
-        if (this.CurrentScene == SceneType.BigMap){
+        if (this.CurrentScene == SceneType.BigMap && !this.IsLoadDungeon){
+            this.IsLoadDungeon = true;
             AudioManager.Instance.SetMainMusic(this.BigMapBGM);
+            StartCoroutine(AsyncLoadSceneCallback(this.GoToDungeon));
         }
 
         if (this.CurrentScene == SceneType.AboutUs){
@@ -46,11 +56,44 @@ public class SceneChangeManager : MonoBehaviour{
         AudioManager.Instance.StopFootstep();
         this.BlackCanvasGroup.alpha = 0.0f;
     }
+    
+    private IEnumerator AsyncLoadSceneCallback(SceneType scene, LoadSceneMode mode = LoadSceneMode.Additive) {
+        this.Loading.Transition(true);
+        this.Loading.UpdateLoadingProgress(0.0f);
+
+        AsyncOperation ao = SceneManager.LoadSceneAsync((int)scene, mode);
+        if (ao == null) yield break;
+
+        while (!ao.isDone) {
+            this.Loading.UpdateLoadingProgress(ao.progress);
+            yield return null;
+        }
+        this.Loading.UpdateLoadingProgress(1.0f);
+        this.Loading.Transition(false);
+    }
+    
+    private void ClearDungeonData() {
+        PlayerPrefs.DeleteKey("PlayerBigMapData");
+        PlayerPrefs.DeleteKey("InteractionObjectEnd");
+        PlayerPrefs.DeleteKey("AvailableDialogues");
+    }
 
     public void GoToScene(SceneType type, bool isBlackScreen = false) {
+        if (type == SceneType.BigMap) {
+            this.IsLoadDungeon = false;
+            // TODO: TEMP -> Link Camp UI
+            PlayerPrefs.DeleteAll();
+            this.GoToDungeon = this.TestDungeon;
+            if (!PlayerPrefs.HasKey("CurrentDungeon") 
+                || PlayerPrefs.GetString("CurrentDungeon") != this.GoToDungeon.ToString()) {
+                PlayerPrefs.SetString("CurrentDungeon", this.GoToDungeon.ToString());
+                this.ClearDungeonData();
+            }
+            SaveMapManager.Instance.LoadData();
+        }
+
         this.OnSceneChange?.Invoke(this.CurrentScene, type);
         this.CurrentScene = type;
-        CameraManager.Instance.MainCamera.cullingMask = 0;
         StartCoroutine(SceneChangeCoroutine(type, isBlackScreen));
     }
 
