@@ -90,8 +90,7 @@ public class GameManager : MonoBehaviour{
     }
 
     public void StartGame(){
-        this.IsBattleEnd = false;
-        this.IsBattleVictory = false;
+        this.ResetBattleFlag();
         SceneChangeManager.Instance.GoToDungeon(this.TestDungeon);
     }
 
