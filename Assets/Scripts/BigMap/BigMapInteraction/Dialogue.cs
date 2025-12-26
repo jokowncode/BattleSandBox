@@ -37,6 +37,7 @@ public class Dialogue : InteractionObject {
 
         // this.IsEnd = true;
         if (!this.IsEnd) {
+            this.IsForce = false;
             this.EndInteraction();
         }
     }
