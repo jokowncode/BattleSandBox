@@ -17,16 +17,13 @@ public class SceneChangeManager : MonoBehaviour{
     
     [Header("Black Screen")] 
     [SerializeField] private float Duration = 1.0f;
-
-    [Header("Debug")] 
-    [SerializeField] private SceneType TestDungeon = SceneType.Dungeons_Level1;
     
     public static SceneChangeManager Instance;
     public SceneType CurrentScene{ get; private set; }
 
     public Action<SceneType, SceneType> OnSceneChange;
 
-    private SceneType GoToDungeon;
+    private SceneType DungeonScene;
     private bool IsLoadDungeon = false;
 
     private void Awake(){
@@ -37,6 +34,9 @@ public class SceneChangeManager : MonoBehaviour{
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
+        
+        // TODO: TEMP -> FOR DEBUG
+        PlayerPrefs.DeleteAll();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode){
@@ -47,7 +47,7 @@ public class SceneChangeManager : MonoBehaviour{
         if (this.CurrentScene == SceneType.BigMap && !this.IsLoadDungeon){
             this.IsLoadDungeon = true;
             AudioManager.Instance.SetMainMusic(this.BigMapBGM);
-            StartCoroutine(AsyncLoadSceneCallback(this.GoToDungeon));
+            StartCoroutine(AsyncLoadSceneCallback(this.DungeonScene));
         }
 
         if (this.CurrentScene == SceneType.AboutUs){
@@ -78,18 +78,20 @@ public class SceneChangeManager : MonoBehaviour{
         PlayerPrefs.DeleteKey("AvailableDialogues");
     }
 
+    public void GoToDungeon(SceneType dungeonType) {
+        this.DungeonScene = dungeonType;
+        if (!PlayerPrefs.HasKey("CurrentDungeon") 
+            || PlayerPrefs.GetString("CurrentDungeon") != this.DungeonScene.ToString()) {
+            PlayerPrefs.SetString("CurrentDungeon", this.DungeonScene.ToString());
+            this.ClearDungeonData();
+        }
+        SaveMapManager.Instance.LoadData();
+        this.GoToScene(SceneType.BigMap, true);
+    }
+
     public void GoToScene(SceneType type, bool isBlackScreen = false) {
         if (type == SceneType.BigMap) {
             this.IsLoadDungeon = false;
-            // TODO: TEMP -> Link Camp UI
-            PlayerPrefs.DeleteAll();
-            this.GoToDungeon = this.TestDungeon;
-            if (!PlayerPrefs.HasKey("CurrentDungeon") 
-                || PlayerPrefs.GetString("CurrentDungeon") != this.GoToDungeon.ToString()) {
-                PlayerPrefs.SetString("CurrentDungeon", this.GoToDungeon.ToString());
-                this.ClearDungeonData();
-            }
-            SaveMapManager.Instance.LoadData();
         }
 
         this.OnSceneChange?.Invoke(this.CurrentScene, type);

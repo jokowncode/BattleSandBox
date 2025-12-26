@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour{
     [SerializeField] private AudioClip GoToBattleSfx;
     [SerializeField] private Texture2D MouseCursor;
     
+    [Header("Debug")] 
+    [SerializeField] private SceneType TestDungeon = SceneType.Dungeons_Level1;
+    
     public static GameManager Instance;
 
     public float Money { get; private set; } = 0.0f;
@@ -75,7 +78,9 @@ public class GameManager : MonoBehaviour{
     }
 
     public void StartGame(){
-        this.GoToMap(false, false);    
+        this.IsBattleEnd = false;
+        this.IsBattleVictory = false;
+        SceneChangeManager.Instance.GoToDungeon(this.TestDungeon);
     }
 
     public void GoToMap(bool isBattleEnd, bool isBattleVictory){

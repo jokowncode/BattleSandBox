@@ -7,7 +7,6 @@ public class TaskManager : MonoBehaviour {
     public static TaskManager Instance;
 
     [SerializeField] private TaskData[] GameTasks;
-    [SerializeField] private TaskUI Task;
 
     private int CurrentTaskIndex = 0;
     
@@ -37,9 +36,9 @@ public class TaskManager : MonoBehaviour {
 
     private void SetTask() {
         if (this.CurrentTaskIndex < this.GameTasks.Length) {
-            Task.SetTask(this.GameTasks[this.CurrentTaskIndex]);
+            BigMapUIManager.Instance.TaskUI.SetTask(this.GameTasks[this.CurrentTaskIndex]);
         } else {
-            Task.gameObject.SetActive(false);
+            BigMapUIManager.Instance.TaskUI.gameObject.SetActive(false);
         }
     }
 }
