@@ -24,8 +24,8 @@ public class BattleDialogRoom : BattleRoom {
         }
     }
 
-    protected override void OnTriggerEnter(Collider other) {
-        base.OnTriggerEnter(other);
+    protected override void PlayerEnter() {
+        base.PlayerEnter();
         this.CurrentState = State.PreBattle;
         if (GameManager.Instance.IsBattleEnd) {
             if (GameManager.Instance.IsBattleVictory && this.BattleVictoryDialog) {

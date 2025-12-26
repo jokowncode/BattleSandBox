@@ -502,11 +502,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab6e184bf2c348f29ed8ad99ba189130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsActiveWhenAwake: 0
   Dialogs: {fileID: 11400000, guid: 50991878b64500f4988c00a533e278ed, type: 2}
-  CanRepeat: 0
+  CanRepeat: 1
   IsForce: 1
   IsFullScreen: 1
-  IsActiveWhenAwake: 0
 --- !u!65 &751676002
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -586,11 +586,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab6e184bf2c348f29ed8ad99ba189130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsActiveWhenAwake: 0
   Dialogs: {fileID: 11400000, guid: 54baf14c4537c4b4bb020987d25a60a8, type: 2}
   CanRepeat: 0
   IsForce: 1
   IsFullScreen: 1
-  IsActiveWhenAwake: 0
 --- !u!65 &773218821
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -690,11 +690,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab6e184bf2c348f29ed8ad99ba189130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsActiveWhenAwake: 1
   Dialogs: {fileID: 11400000, guid: 8723df50b1f316f458686bdcbd378c07, type: 2}
   CanRepeat: 0
   IsForce: 1
   IsFullScreen: 0
-  IsActiveWhenAwake: 1
 --- !u!1 &907375877
 GameObject:
   m_ObjectHideFlags: 0
@@ -950,6 +950,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2e632f496d548518e1506a6a7dfbac6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsActiveWhenAwake: 0
   Data: {fileID: 11400000, guid: ff8484900cff56f4cbe951f1ba658736, type: 2}
   Enemies: {fileID: 1076732570}
   IsDefeatGameOver: 1
@@ -1346,6 +1347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0af32c461984c5588b9e9b352127047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsActiveWhenAwake: 1
   Data: {fileID: 11400000, guid: ff8484900cff56f4cbe951f1ba658736, type: 2}
   Enemies: {fileID: 1648549087}
   IsDefeatGameOver: 0
@@ -1426,6 +1428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 290533fc3b8942538e3eb98b3b0fead7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsActiveWhenAwake: 1
   <Goods>k__BackingField:
   - 100EXP
   - Bullock
@@ -1600,10 +1603,19 @@ MonoBehaviour:
   GameTasks:
   - TaskDescription: "\u6218\u6597"
     TaskPosition: {fileID: 1648549086}
+    ActivateInteractionObjects: []
   - TaskDescription: "\u5BF9\u8BDD"
     TaskPosition: {fileID: 773218819}
+    ActivateInteractionObjects:
+    - {fileID: 773218820}
   - TaskDescription: "\u5BF9\u8BDD"
     TaskPosition: {fileID: 751676000}
+    ActivateInteractionObjects:
+    - {fileID: 751676001}
+  - TaskDescription: "\u6218\u6597"
+    TaskPosition: {fileID: 1076732569}
+    ActivateInteractionObjects:
+    - {fileID: 1076732575}
 --- !u!1001 &2011903851
 PrefabInstance:
   m_ObjectHideFlags: 0

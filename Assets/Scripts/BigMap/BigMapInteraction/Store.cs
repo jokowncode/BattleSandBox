@@ -7,6 +7,11 @@ public class Store : InteractionObject {
 
     [field: SerializeField] public List<string> Goods { get; private set; }
 
+    protected override void Awake() {
+        base.Awake();
+        this.IsEndCanEnableInteraction = true;
+    }
+
     protected override string GetName() {
         Vector3 pos = this.transform.position;
         return $"Store_{pos.x}_{pos.y}_{pos.z}";

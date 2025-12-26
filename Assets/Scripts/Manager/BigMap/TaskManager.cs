@@ -37,6 +37,13 @@ public class TaskManager : MonoBehaviour {
     private void SetTask() {
         if (this.CurrentTaskIndex < this.GameTasks.Length) {
             BigMapUIManager.Instance.TaskUI.SetTask(this.GameTasks[this.CurrentTaskIndex]);
+
+            InteractionObject[] waitingActivate = this.GameTasks[this.CurrentTaskIndex].ActivateInteractionObjects;
+            if (waitingActivate != null && waitingActivate.Length != 0) {
+                foreach (InteractionObject obj in waitingActivate) {
+                    obj.Activate();
+                }
+            }
         } else {
             BigMapUIManager.Instance.TaskUI.gameObject.SetActive(false);
         }

@@ -19,7 +19,8 @@ public class BattleRoom : InteractionObject {
         return this.Data.BattleName;
     }
 
-    private void Awake(){
+    protected override void Awake(){
+        base.Awake();
         this.Collider = this.GetComponent<BoxCollider>();
     }
 
@@ -32,6 +33,16 @@ public class BattleRoom : InteractionObject {
 
     protected override void LoadBigMapData() {
         if(this.IsEnd && this.Enemies) Destroy(this.Enemies.gameObject);
+        if (!this.IsActive && this.Enemies) {
+            this.Enemies.gameObject.SetActive(false);
+        }
+    }
+
+    public override void Activate() {
+        base.Activate();
+        if (this.Enemies) {
+            this.Enemies.gameObject.SetActive(true);
+        }
     }
 
     protected override void Update(){
@@ -41,16 +52,14 @@ public class BattleRoom : InteractionObject {
         } 
     }
 
-    protected override void OnTriggerEnter(Collider other){
-        base.OnTriggerEnter(other);
-        if (this.IsEnd || GameManager.Instance.IsBattleEnd){
+    protected override void PlayerEnter() {
+        if (GameManager.Instance.IsBattleEnd){
             if (GameManager.Instance.IsBattleVictory) {
                 if (!this.IsEnd) {
                     // this.IsEnd = true;
                     this.EndInteraction();
                 }
-                this.InAreaPlayer.TransitionInteractionTip(false);
-                this.enabled = false;
+                this.EnableInteraction(false);
                 if(this.Enemies) Destroy(this.Enemies.gameObject);
                 OnVictory?.Invoke();
             } else {

@@ -14,7 +14,7 @@ public class SaveMapManager : MonoBehaviour {
 
     private PlayerBigMapSaveData BigMapPlayerData;
     private List<string> InteractionObjectsEnds;
-    private List<string> AvailableDialogues;
+    private List<string> InteractionObjectsAvailable;
     private Dictionary<string, float> DungeonHeroHealth;
 
     private bool IsEnterBigMap = false;
@@ -44,10 +44,10 @@ public class SaveMapManager : MonoBehaviour {
             this.InteractionObjectsEnds = new List<string>();
         }
         
-        if (PlayerPrefs.HasKey("AvailableDialogues")) {
-            this.AvailableDialogues = JsonUtility.FromJson<Serialization<string>>(PlayerPrefs.GetString("AvailableDialogues")).ToList();
+        if (PlayerPrefs.HasKey("InteractionObjectsAvailable")) {
+            this.InteractionObjectsAvailable = JsonUtility.FromJson<Serialization<string>>(PlayerPrefs.GetString("InteractionObjectsAvailable")).ToList();
         } else {
-            this.AvailableDialogues = new List<string>();
+            this.InteractionObjectsAvailable = new List<string>();
         }
         
         if (PlayerPrefs.HasKey("DungeonHeroHealth")) {
@@ -93,8 +93,8 @@ public class SaveMapManager : MonoBehaviour {
         string interactionJson = JsonUtility.ToJson(new Serialization<string>(this.InteractionObjectsEnds));
         PlayerPrefs.SetString("InteractionObjectEnd", interactionJson);
         
-        string dialoguesJson = JsonUtility.ToJson(new Serialization<string>(this.AvailableDialogues));
-        PlayerPrefs.SetString("AvailableDialogues", dialoguesJson);
+        string dialoguesJson = JsonUtility.ToJson(new Serialization<string>(this.InteractionObjectsAvailable));
+        PlayerPrefs.SetString("InteractionObjectsAvailable", dialoguesJson);
         
         string dungeonHeroHealthJson = JsonUtility.ToJson(new Serialization<string, float>(this.DungeonHeroHealth));
         PlayerPrefs.SetString("DungeonHeroHealth", dungeonHeroHealthJson);
@@ -103,27 +103,27 @@ public class SaveMapManager : MonoBehaviour {
     public void ClearDungeonData() {
         PlayerPrefs.DeleteKey("PlayerBigMapData");
         PlayerPrefs.DeleteKey("InteractionObjectEnd");
-        PlayerPrefs.DeleteKey("AvailableDialogues");
+        PlayerPrefs.DeleteKey("InteractionObjectsAvailable");
         PlayerPrefs.DeleteKey("DungeonHeroHealth");
     }
 
-    public void SaveInteractionObject(string objName) {
-        if (!this.AvailableDialogues.Contains(objName)) {
-            this.AvailableDialogues.Add(objName);
+    public void SetInteractionObjectEnd(string objName) {
+        if (!this.InteractionObjectsEnds.Contains(objName)) {
+            this.InteractionObjectsEnds.Add(objName);
         }
     }
 
-    public bool LoadInteractionObject(string objName) {
+    public bool LoadInteractionObjectEnd(string objName) {
         return this.InteractionObjectsEnds.Contains(objName);
     }
 
-    public bool DialoguesAvailable(string dialogueName) {
-        return this.AvailableDialogues.Contains(dialogueName);
+    public bool LoadInteractionObjectAvailable(string dialogueName) {
+        return this.InteractionObjectsAvailable.Contains(dialogueName);
     }
 
-    public void SaveAvailableDialogue(string dialogueName) {
-        if (!this.AvailableDialogues.Contains(dialogueName)) {
-            this.AvailableDialogues.Add(dialogueName);
+    public void SetInteractionObjectAvailable(string dialogueName) {
+        if (!this.InteractionObjectsAvailable.Contains(dialogueName)) {
+            this.InteractionObjectsAvailable.Add(dialogueName);
         }
     }
 
