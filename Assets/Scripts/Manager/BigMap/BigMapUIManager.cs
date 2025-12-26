@@ -30,9 +30,8 @@ public class BigMapUIManager : MonoBehaviour{
         this.LoadingDungeonUI.Transition(true);
         GameManager.Instance.LoadDungeonSubScene((progress) => {
             this.LoadingDungeonUI.UpdateLoadingProgress(progress);
-            if (progress >= 1.0f) {
-                this.LoadingDungeonUI.Transition(false);
-            }
+        }, () => {
+            this.LoadingDungeonUI.Transition(false);
         });
     }
 

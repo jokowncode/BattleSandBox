@@ -62,19 +62,20 @@ public class GameManager : MonoBehaviour{
     }
 
 
-    public void LoadDungeonSubScene(Action<float> progressCallback = null) {
-        StartCoroutine(LoadDungeonSubSceneCoroutine(progressCallback));
+    public void LoadDungeonSubScene(Action<float> progressCallback = null, Action completeCallback = null) {
+        StartCoroutine(LoadDungeonSubSceneCoroutine(progressCallback, completeCallback));
     }
 
-    private IEnumerator LoadDungeonSubSceneCoroutine(Action<float> progressCallback = null) {
+    private IEnumerator LoadDungeonSubSceneCoroutine(Action<float> progressCallback, Action completeCallback) {
         AsyncOperation ao = SceneManager.LoadSceneAsync((int)this.GoToDungeon, LoadSceneMode.Additive);
         if (ao == null) yield break;
         if (progressCallback == null) yield break;
 
-        while (ao.progress <= 1.0f) {
+        while (!ao.isDone) {
             progressCallback?.Invoke(ao.progress);
             yield return null;
         }
+        completeCallback?.Invoke();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode){
@@ -97,6 +98,7 @@ public class GameManager : MonoBehaviour{
 
     public void StartGame(){
         // TODO: TEMP -> Link Camp UI
+        PlayerPrefs.DeleteAll();
         this.GoToDungeon = this.TestDungeon;
         if (!PlayerPrefs.HasKey("CurrentDungeon") 
             || PlayerPrefs.GetString("CurrentDungeon") != this.GoToDungeon.ToString()) {
