@@ -54,7 +54,7 @@ public class DialogManager : MonoBehaviour {
     public Action OnDialogEnded;
 
     private CanvasGroup BackgroundImageCanvasGroup;
-    public bool IsInDialog => this.DialogCanvasGroup.alpha >= 0.9f;
+    public bool IsInDialog => this.DialogCanvasGroup.alpha >= 0.1f;
 
     private bool CurrentDialogIsFinished =>
         this.HasSound ? AudioManager.Instance.DialogIsFinished : this.DialogText.IsDelayEnd;
