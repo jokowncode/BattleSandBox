@@ -61,8 +61,20 @@ public class GameManager : MonoBehaviour{
         Cursor.SetCursor(this.MouseCursor, Vector2.zero, CursorMode.Auto);
     }
 
-    public void LoadDungeonSubScene() {
-        SceneManager.LoadSceneAsync((int)this.GoToDungeon, LoadSceneMode.Additive);
+
+    public void LoadDungeonSubScene(Action<float> progressCallback = null) {
+        StartCoroutine(LoadDungeonSubSceneCoroutine(progressCallback));
+    }
+
+    private IEnumerator LoadDungeonSubSceneCoroutine(Action<float> progressCallback = null) {
+        AsyncOperation ao = SceneManager.LoadSceneAsync((int)this.GoToDungeon, LoadSceneMode.Additive);
+        if (ao == null) yield break;
+        if (progressCallback == null) yield break;
+
+        while (ao.progress <= 1.0f) {
+            progressCallback?.Invoke(ao.progress);
+            yield return null;
+        }
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode){
@@ -84,11 +96,6 @@ public class GameManager : MonoBehaviour{
     }
 
     public void StartGame(){
-        // GoToMap(false, false);    
-        GoToLoading();
-    }
-
-    private void GoToLoading(){
         // TODO: TEMP -> Link Camp UI
         this.GoToDungeon = this.TestDungeon;
         if (!PlayerPrefs.HasKey("CurrentDungeon") 
@@ -97,7 +104,7 @@ public class GameManager : MonoBehaviour{
             this.ClearDungeonData();
         }
         SaveMapManager.Instance.LoadData();
-        SceneChangeManager.Instance.GoToScene(SceneType.Loading);
+        this.GoToMap(false, false);    
     }
 
     private void ClearDungeonData() {
@@ -111,7 +118,7 @@ public class GameManager : MonoBehaviour{
     public void GoToMap(bool isBattleEnd, bool isBattleVictory){
         this.IsBattleEnd = isBattleEnd;
         this.IsBattleVictory = isBattleVictory;
-        SceneChangeManager.Instance.GoToScene(SceneType.BigMap);
+        SceneChangeManager.Instance.GoToScene(SceneType.BigMap, true);
     }
 
     public void GoToMainMenu(){

@@ -3,28 +3,28 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LoadingUI : MonoBehaviour{
+public class LoadingUI : MonoBehaviour {
+
+    [SerializeField] private Image LoadingImage;
     
-
     private Material LoadingMaterial;
-
-    [SerializeField] private float Duration = 1.0f;
-
-    private float time = 0.0f;
+    private CanvasGroup LoadingCanvasGroup;
     
     private void Awake(){
-        Image img = this.GetComponent<Image>();
-        Material mat = img.material;
+        Material mat = this.LoadingImage.material;
         this.LoadingMaterial = new Material(mat);
-        img.material = this.LoadingMaterial;
+        this.LoadingImage.material = this.LoadingMaterial;
+        
+        this.LoadingCanvasGroup = this.GetComponent<CanvasGroup>();
     }
 
-    private void Update(){
-        this.LoadingMaterial.SetFloat(MaterialProperty.LoadingPoint, this.time / this.Duration);
-        time += Time.deltaTime;
-        if (this.time >= this.Duration){
-            GameManager.Instance.GoToMap(false, false);
-        }
+    public void Transition(bool show) {
+        float alpha = show ? 1.0f : 0.0f;
+        this.LoadingCanvasGroup.alpha = alpha;
+    }
+
+    public void UpdateLoadingProgress(float progress) {
+        this.LoadingMaterial.SetFloat(MaterialProperty.LoadingPoint, progress);
     }
 }
 

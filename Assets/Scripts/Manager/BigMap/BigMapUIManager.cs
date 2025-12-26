@@ -8,6 +8,7 @@ public class BigMapUIManager : MonoBehaviour{
 
     [SerializeField] private CanvasGroup HUDCanvasGroup;
     [SerializeField] private BattleStartUI BattleStartBannar;
+    [SerializeField] private LoadingUI LoadingDungeonUI;
 
     [SerializeField] private TextMeshProUGUI MoneyText;
     
@@ -26,7 +27,13 @@ public class BigMapUIManager : MonoBehaviour{
     }
 
     private void Start() {
-        GameManager.Instance.LoadDungeonSubScene();
+        this.LoadingDungeonUI.Transition(true);
+        GameManager.Instance.LoadDungeonSubScene((progress) => {
+            this.LoadingDungeonUI.UpdateLoadingProgress(progress);
+            if (progress >= 1.0f) {
+                this.LoadingDungeonUI.Transition(false);
+            }
+        });
     }
 
     public void SetMoneyText(float money) {
