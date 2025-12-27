@@ -33,16 +33,22 @@ public class HeroWarehouseUI : MonoBehaviour {
     
     public void AddItem(string heroRef){
         HeroPanelUI go;
-        FighterType tempType = HeroWarehouseManager.Instance.GetHeroType(heroRef);
-        if(tempType == FighterType.Warrior)
+        Hero hero = HeroWarehouseManager.Instance.GetHeroByRef(heroRef);
+        if(hero.Type == FighterType.Warrior)
             go = Instantiate(heroWarehouseWarriorUIPrefab, heroWarehouseContent);
-        else if (tempType == FighterType.Mage)
+        else if (hero.Type == FighterType.Mage)
             go = Instantiate(heroWarehouseMageUIPrefab, heroWarehouseContent);
         else
             go = Instantiate(heroWarehousePriestUIPrefab, heroWarehouseContent);
+        
+        go.SetPortrait(hero.WarehouseHeroPortrait, false);
+        float health = SaveMapManager.Instance.GetHeroHealth(hero.Name);
+        if (health == 0.0f) {
+            go.HeroDead();
+            return;
+        }
 
         DraggableUI draggableUI = go.AddComponent<DraggableUI>();
         draggableUI.prefabReference = heroRef;
-        go.SetPortrait(HeroWarehouseManager.Instance.GetHeroByRef(heroRef).WarehouseHeroPortrait, false);
     }
 }

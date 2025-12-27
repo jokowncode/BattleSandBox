@@ -7,7 +7,6 @@ public class TaskManager : MonoBehaviour {
     public static TaskManager Instance;
 
     [SerializeField] private TaskData[] GameTasks;
-    [SerializeField] private TaskUI Task;
 
     private int CurrentTaskIndex = 0;
     
@@ -17,13 +16,16 @@ public class TaskManager : MonoBehaviour {
             return;
         }
         Instance = this;
-        SaveMapManager.Instance.OnLoadMap += OnLoadMap;
+        // SaveMapManager.Instance.OnLoadMap += OnLoadMap;
     }
-    
-    private void OnLoadMap() {
-        SaveMapManager.Instance.OnLoadMap -= OnLoadMap;
+
+    private void Start() {
         this.CurrentTaskIndex = SaveMapManager.Instance.CurrentTaskIndex;
         this.SetTask();
+    }
+
+    private void OnLoadMap() {
+        // SaveMapManager.Instance.OnLoadMap -= OnLoadMap;
     }
 
     public void NextTask() {
@@ -34,9 +36,16 @@ public class TaskManager : MonoBehaviour {
 
     private void SetTask() {
         if (this.CurrentTaskIndex < this.GameTasks.Length) {
-            Task.SetTask(this.GameTasks[this.CurrentTaskIndex]);
+            BigMapUIManager.Instance.TaskUI.SetTask(this.GameTasks[this.CurrentTaskIndex]);
+
+            InteractionObject[] waitingActivate = this.GameTasks[this.CurrentTaskIndex].ActivateInteractionObjects;
+            if (waitingActivate != null && waitingActivate.Length != 0) {
+                foreach (InteractionObject obj in waitingActivate) {
+                    obj.Activate();
+                }
+            }
         } else {
-            Task.gameObject.SetActive(false);
+            BigMapUIManager.Instance.TaskUI.gameObject.SetActive(false);
         }
     }
 }

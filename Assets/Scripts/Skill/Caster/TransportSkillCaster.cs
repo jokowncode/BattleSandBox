@@ -20,6 +20,7 @@ public class TransportSkillCaster : SkillCaster {
         Vector3 rotVector = Quaternion.AngleAxis(angle, Vector3.up) * Vector3.right;
         Vector3 summonPos = centerPos + rotVector * OwnedFighter.AttackRadius;
         Fighter summon = Instantiate(OwnedFighter, summonPos, Quaternion.identity);
+        summon.SetCurrentData(OwnedFighter.CurrentData);
         summon.FighterSkillCaster.SetSkillCastCount(this.CurrentSkillCastCount);
         summon.BattleStart(true);
         if (summon is Hero hero) {

@@ -47,6 +47,12 @@ public class Hero : Fighter{
                 (int)PassiveEntrySort.General | (int)PassiveEntrySort.Talent | (int)this.FighterSkillCaster.Sort;
         }
     }
+    
+    private void OnDestroy() {
+        if (!IsSummon) {
+            SaveMapManager.Instance.SetHeroHealth(this.Name, Mathf.Max(this.InBattleHealth, 0.0f));
+        }
+    }
 
     public void ShareDamage(Hero hero) {
         this.ShareDamageHero = hero;

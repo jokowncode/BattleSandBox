@@ -1,5 +1,7 @@
 ﻿
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +9,9 @@ public class GameManager : MonoBehaviour{
 
     [SerializeField] private AudioClip GoToBattleSfx;
     [SerializeField] private Texture2D MouseCursor;
+    
+    [Header("Debug")] 
+    [SerializeField] private SceneType TestDungeon = SceneType.Dungeons_Level1;
     
     public static GameManager Instance;
 
@@ -16,6 +21,8 @@ public class GameManager : MonoBehaviour{
     
     public bool IsBattleEnd{ get; private set; }
     public bool IsBattleVictory{ get; private set; }
+
+    private List<SceneType> CompleteDungeons;
 
     private void Awake(){
         if (Instance != null){
@@ -35,6 +42,12 @@ public class GameManager : MonoBehaviour{
             SetMoney(0.0f);
         }
         
+        if (PlayerPrefs.HasKey("CompleteDungeons")) {
+            this.CompleteDungeons = JsonUtility.FromJson<Serialization<SceneType>>(PlayerPrefs.GetString("CompleteDungeons")).ToList();
+        } else {
+            this.CompleteDungeons = new List<SceneType>();
+        }
+        
         // TODO: TEMP -> For Debug
         SetMoney(200.0f);
     }
@@ -49,6 +62,9 @@ public class GameManager : MonoBehaviour{
     private void OnDestroy() {
         // TODO: TEMP -> For Debug
         // PlayerPrefs.SetFloat("PlayerMoney", this.Money);
+        
+        /*string dungeonsJson = JsonUtility.ToJson(new Serialization<SceneType>(this.CompleteDungeons));
+        PlayerPrefs.SetString("CompleteDungeons", dungeonsJson);*/
     }
 
     private void Update(){
@@ -74,18 +90,14 @@ public class GameManager : MonoBehaviour{
     }
 
     public void StartGame(){
-        // GoToMap(false, false);    
-        GoToLoading();
-    }
-
-    private void GoToLoading(){
-        SceneChangeManager.Instance.GoToScene(SceneType.Loading);
+        this.ResetBattleFlag();
+        SceneChangeManager.Instance.GoToDungeon(this.TestDungeon);
     }
 
     public void GoToMap(bool isBattleEnd, bool isBattleVictory){
         this.IsBattleEnd = isBattleEnd;
         this.IsBattleVictory = isBattleVictory;
-        SceneChangeManager.Instance.GoToScene(SceneType.BigMap);
+        SceneChangeManager.Instance.GoToScene(SceneType.BigMap, true);
     }
 
     public void GoToMainMenu(){

@@ -2,46 +2,74 @@
 using System;
 using UnityEngine;
 
-public abstract class InteractionObject : MonoBehaviour{
-
+public abstract class InteractionObject : MonoBehaviour {
+    
+    [Header("Available")]
+    [SerializeField] protected bool IsActiveWhenAwake = true;
+    
     protected Player InAreaPlayer;
     protected bool IsEnd = false;
+    protected bool IsActive = false;
 
-    public Action OnInteractionEnded;
-
-    protected abstract string GetName();
+    protected bool IsEndCanEnableInteraction = false;
     
-    protected virtual void Awake(){
-        SaveMapManager.Instance.OnLoadMap += OnLoadMap;
+    public Action OnInteractionEnded;
+    
+    protected abstract string GetName();
+
+    protected virtual void Awake() {
+        this.IsActive = this.IsActiveWhenAwake;
+    }
+
+    private void Start() {
+        this.IsEnd = SaveMapManager.Instance.LoadInteractionObjectEnd(this.GetName());
+        if (!this.IsActiveWhenAwake) {
+            this.IsActive = SaveMapManager.Instance.LoadInteractionObjectAvailable(this.GetName());
+        }
+        
+        this.LoadBigMapData();
         this.enabled = false;
     }
 
+    public virtual void Activate() {
+        this.IsActive = true;
+        SaveMapManager.Instance.SetInteractionObjectAvailable(this.GetName());
+    }
+
     private void OnLoadMap() {
-        SaveMapManager.Instance.OnLoadMap -= OnLoadMap;
-        this.IsEnd = SaveMapManager.Instance.LoadInteractionObject(this.GetName());
-        this.LoadBigMapData();
+        // SaveMapManager.Instance.OnLoadMap -= OnLoadMap;
     }
 
     protected virtual void LoadBigMapData() { }
 
     protected void EndInteraction() {
         this.IsEnd = true;
-        SaveMapManager.Instance.SaveInteractionObject(this.GetName(), this.IsEnd);
+        SaveMapManager.Instance.SetInteractionObjectEnd(this.GetName());
         this.OnInteractionEnded?.Invoke();
     }
 
-    protected virtual void OnTriggerEnter(Collider other){
-        if (!other.TryGetComponent(out Player player)) return;
-        player.TransitionInteractionTip(true);
-        this.InAreaPlayer = player;
-        this.enabled = true;
+    protected void EnableInteraction(bool enable) {
+        if (!this.InAreaPlayer) return; 
+        this.InAreaPlayer.TransitionInteractionTip(enable);
+        this.enabled = enable;
     }
 
-    protected virtual void OnTriggerExit(Collider other){
+    private void OnTriggerEnter(Collider other) {
+        if (!this.IsActive) return;
         if (!other.TryGetComponent(out Player player)) return;
-        player.TransitionInteractionTip(false);
+        this.InAreaPlayer = player;
+        if (!this.IsEnd || this.IsEndCanEnableInteraction) {
+            this.EnableInteraction(true);
+        }
+        this.PlayerEnter();
+    }
+
+    protected virtual void PlayerEnter() { }
+
+    protected virtual void OnTriggerExit(Collider other){
+        if (!other.TryGetComponent(out Player _)) return;
+        this.EnableInteraction(false);
         this.InAreaPlayer = null;
-        this.enabled = false;
     }
 
     protected abstract void Interaction();

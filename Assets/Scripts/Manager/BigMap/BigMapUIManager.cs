@@ -10,7 +10,8 @@ public class BigMapUIManager : MonoBehaviour{
     [SerializeField] private BattleStartUI BattleStartBannar;
 
     [SerializeField] private TextMeshProUGUI MoneyText;
-    
+    [field: SerializeField] public TaskUI TaskUI { get; private set; }
+
     public static BigMapUIManager Instance;
 
     private Store CurrentShowStore;
