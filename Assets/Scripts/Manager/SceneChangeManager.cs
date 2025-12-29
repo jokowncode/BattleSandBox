@@ -23,7 +23,7 @@ public class SceneChangeManager : MonoBehaviour{
 
     public Action<SceneType, SceneType> OnSceneChange;
 
-    private SceneType DungeonScene;
+    public SceneType DungeonScene { get; private set; }
     private bool IsLoadDungeon = false;
 
     public string CurrentDungeonName => this.DungeonScene.ToString();

@@ -19,12 +19,16 @@ public class Store : InteractionObject {
     }
 
     protected override void LoadBigMapData() {
-        // TODO: TEMP -> IN DEMO, Store Goods Are Fixed -> Not Reset When Restart Dungeon
-        /*if (!this.IsEnd) {
-            if(PlayerPrefs.HasKey(GetName())) PlayerPrefs.DeleteKey(GetName());
-            this.EndInteraction();
-        }*/
-
+        if (this.Goods == null || this.Goods.Count == 0) {
+            // Random Store
+            if (!this.IsEnd) {
+                if(PlayerPrefs.HasKey(GetName())) PlayerPrefs.DeleteKey(GetName());
+                this.EndInteraction();
+                
+                // TODO: Random Store Goods
+            }
+        }
+        
         if (PlayerPrefs.HasKey(GetName())) {
             string json = PlayerPrefs.GetString(GetName());
             this.Goods = JsonUtility.FromJson<Serialization<string>>(json).ToList();

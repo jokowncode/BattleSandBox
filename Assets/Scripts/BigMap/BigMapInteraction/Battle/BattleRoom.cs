@@ -56,18 +56,17 @@ public class BattleRoom : InteractionObject {
     protected override void PlayerEnter() {
         if (GameManager.Instance.IsBattleEnd){
             if (GameManager.Instance.IsBattleVictory) {
+                this.EnableInteraction(false);
+                if(this.Enemies) Destroy(this.Enemies.gameObject);
+                OnVictory?.Invoke();
                 if (!this.IsEnd) {
                     // this.IsEnd = true;
                     this.EndInteraction();
                 }
-                this.EnableInteraction(false);
-                if(this.Enemies) Destroy(this.Enemies.gameObject);
-                OnVictory?.Invoke();
             } else {
                 OnDefeat?.Invoke();
                 if (IsDefeatGameOver) {
-                    PlayerPrefs.DeleteKey("CurrentDungeon");
-                    // TODO: Game Over -> Go Back To ???   
+                    GameManager.Instance.DungeonEnd(false);
                 }
             }
         }
