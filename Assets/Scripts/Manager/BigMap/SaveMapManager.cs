@@ -25,7 +25,9 @@ public class SaveMapManager : MonoBehaviour {
             return;
         }
         Instance = this;
-        // this.LoadData();
+        
+        // TODO: TEMP -> CONVENIENT BATTLE TEST
+        this.LoadData();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
