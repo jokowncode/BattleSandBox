@@ -24,7 +24,8 @@ public class Obstacle : InteractionObject {
 
     protected override string GetName() {
         Vector3 pos = this.transform.position;
-        return $"Obstacle_{pos.x}_{pos.y}_{pos.z}";
+        string dungeonName = SceneChangeManager.Instance.CurrentDungeonName;
+        return $"{dungeonName}_Obstacle_{pos.x}_{pos.y}_{pos.z}";
     }
 
     protected override void Interaction() { }

@@ -14,7 +14,8 @@ public class Dialogue : InteractionObject {
 
     protected override string GetName() {
         Vector3 pos = this.transform.position;
-        return $"Dialogue_{pos.x}_{pos.y}_{pos.z}";
+        string dungeonName = SceneChangeManager.Instance.CurrentDungeonName;
+        return $"{dungeonName}_Dialogue_{pos.x}_{pos.y}_{pos.z}";
     }
 
     protected override void PlayerEnter() {

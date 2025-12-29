@@ -14,14 +14,16 @@ public class Store : InteractionObject {
 
     protected override string GetName() {
         Vector3 pos = this.transform.position;
-        return $"Store_{pos.x}_{pos.y}_{pos.z}";
+        string dungeonName = SceneChangeManager.Instance.CurrentDungeonName;
+        return $"{dungeonName}_Store_{pos.x}_{pos.y}_{pos.z}";
     }
 
     protected override void LoadBigMapData() {
-        if (!this.IsEnd) {
+        // TODO: TEMP -> IN DEMO, Store Goods Are Fixed -> Not Reset When Restart Dungeon
+        /*if (!this.IsEnd) {
             if(PlayerPrefs.HasKey(GetName())) PlayerPrefs.DeleteKey(GetName());
             this.EndInteraction();
-        }
+        }*/
 
         if (PlayerPrefs.HasKey(GetName())) {
             string json = PlayerPrefs.GetString(GetName());

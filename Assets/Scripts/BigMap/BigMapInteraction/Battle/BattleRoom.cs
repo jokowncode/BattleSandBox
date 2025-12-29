@@ -15,8 +15,9 @@ public class BattleRoom : InteractionObject {
     private BoxCollider Collider;
 
     protected override string GetName() {
-        if (!this.Data) return "UnknownBattleRoom";
-        return this.Data.BattleName;
+        Vector3 pos = this.transform.position;
+        string dungeonName = SceneChangeManager.Instance.CurrentDungeonName;
+        return $"{dungeonName}_Battle_{pos.x}_{pos.y}_{pos.z}";
     }
 
     protected override void Awake(){

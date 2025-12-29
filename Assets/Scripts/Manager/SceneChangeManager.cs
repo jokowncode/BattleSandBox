@@ -26,6 +26,8 @@ public class SceneChangeManager : MonoBehaviour{
     private SceneType DungeonScene;
     private bool IsLoadDungeon = false;
 
+    public string CurrentDungeonName => this.DungeonScene.ToString();
+
     private void Awake(){
         if (Instance != null){
             Destroy(this.gameObject);
