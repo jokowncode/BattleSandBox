@@ -1,8 +1,14 @@
 ﻿
 using UnityEngine;
 
+public enum ObstacleType {
+    Inside,
+    Outside
+}
+
 public class Obstacle : InteractionObject {
 
+    [SerializeField] private ObstacleType Type = ObstacleType.Outside;
     [SerializeField] private InteractionObject CancelObstacleObj;
     
     private BoxCollider ObstacleCollider;
@@ -24,18 +30,29 @@ public class Obstacle : InteractionObject {
 
     protected override string GetName() {
         Vector3 pos = this.transform.position;
-        return $"Obstacle_{pos.x}_{pos.y}_{pos.z}";
+        string dungeonName = SceneChangeManager.Instance.CurrentDungeonName;
+        return $"{dungeonName}_Obstacle_{pos.x}_{pos.y}_{pos.z}";
     }
 
     protected override void Interaction() { }
 
+    protected override void Update() {
+        if (!this.IsEnd && Type == ObstacleType.Inside 
+        && this.ObstacleCollider.bounds.Contains(this.InAreaPlayer.transform.position)){
+            this.InAreaPlayer.SetCollider(this.ObstacleCollider, PlayerInAreaColliderDir.Both);
+        } 
+    }
+
     protected override void PlayerEnter() {
-        this.EnableInteraction(false);
+        this.InAreaPlayer.TransitionInteractionTip(false);
+        this.enabled = this.Type == ObstacleType.Inside;
         if (!this.IsEnd) {
-            if (this.InAreaPlayer.transform.position.x < this.transform.position.x) {
-                this.InAreaPlayer.SetCollider(this.ObstacleCollider, PlayerInAreaColliderDir.Left);
-            } else {
-                this.InAreaPlayer.SetCollider(this.ObstacleCollider, PlayerInAreaColliderDir.Right);
+            if (Type == ObstacleType.Outside) {
+                if (this.InAreaPlayer.transform.position.x < this.transform.position.x) {
+                    this.InAreaPlayer.SetCollider(this.ObstacleCollider, PlayerInAreaColliderDir.Left);
+                } else {
+                    this.InAreaPlayer.SetCollider(this.ObstacleCollider, PlayerInAreaColliderDir.Right);
+                }    
             }
         }
     }
@@ -44,6 +61,7 @@ public class Obstacle : InteractionObject {
         if (!other.TryGetComponent(out Player _)) return;
         this.InAreaPlayer.SetCollider(null);
         this.InAreaPlayer = null;
+        this.enabled = false;
     }
 }
 

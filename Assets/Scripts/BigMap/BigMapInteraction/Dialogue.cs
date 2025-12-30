@@ -9,12 +9,20 @@ public class Dialogue : InteractionObject {
     [SerializeField] private bool CanRepeat = true;
     [SerializeField] private bool IsForce = false;
     [SerializeField] private bool IsFullScreen = true;
+    [SerializeField] private bool NotReset = false;
     
     private bool IsCurrentConversation;
 
     protected override string GetName() {
         Vector3 pos = this.transform.position;
-        return $"Dialogue_{pos.x}_{pos.y}_{pos.z}";
+        string dungeonName = SceneChangeManager.Instance.CurrentDungeonName;
+        return $"{dungeonName}_Dialogue_{pos.x}_{pos.y}_{pos.z}";
+    }
+
+    protected override void LoadBigMapData() {
+        if (NotReset && GameManager.Instance.HasDungeonComplete(SceneChangeManager.Instance.DungeonScene)) {
+            this.EndInteraction();
+        }
     }
 
     protected override void PlayerEnter() {

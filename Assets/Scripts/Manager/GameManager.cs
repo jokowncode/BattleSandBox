@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour{
 
     [SerializeField] private AudioClip GoToBattleSfx;
     [SerializeField] private Texture2D MouseCursor;
+
+    [Header("Player Initial Data")] 
+    [SerializeField] private float InitialMoney = 200.0f;
     
     [Header("Debug")] 
     [SerializeField] private SceneType TestDungeon = SceneType.Dungeons_Level1;
@@ -39,7 +42,7 @@ public class GameManager : MonoBehaviour{
         if (PlayerPrefs.HasKey("PlayerMoney")) {
             SetMoney(PlayerPrefs.GetFloat("PlayerMoney"));
         } else {
-            SetMoney(0.0f);
+            SetMoney(this.InitialMoney);
         }
         
         if (PlayerPrefs.HasKey("CompleteDungeons")) {
@@ -47,9 +50,10 @@ public class GameManager : MonoBehaviour{
         } else {
             this.CompleteDungeons = new List<SceneType>();
         }
-        
-        // TODO: TEMP -> For Debug
-        SetMoney(200.0f);
+    }
+
+    public bool HasDungeonComplete(SceneType dungeon) {
+        return this.CompleteDungeons.Contains(dungeon);
     }
 
     public void SetMoney(float money) {
@@ -81,6 +85,16 @@ public class GameManager : MonoBehaviour{
         }
     }
 
+    public void DungeonEnd(bool isVictory) {
+        PlayerPrefs.DeleteKey("CurrentDungeon");
+        if (isVictory) {
+            this.CompleteDungeons.Add(SceneChangeManager.Instance.DungeonScene);
+        }
+
+        // TODO: Dungeon End Should Go To Camp
+        this.GoToMainMenu();
+    }
+
     public void GoToBattle(BattleData battleData){
         this.NextBattleData = battleData;
         if(GoToBattleSfx)
@@ -91,7 +105,15 @@ public class GameManager : MonoBehaviour{
 
     public void StartGame(){
         this.ResetBattleFlag();
-        SceneChangeManager.Instance.GoToDungeon(this.TestDungeon);
+
+        if (PlayerPrefs.HasKey("CurrentDungeon")
+            && Enum.TryParse(PlayerPrefs.GetString("CurrentDungeon"), out SceneType dungeon)) {
+            SceneChangeManager.Instance.GoToDungeon(dungeon);
+        } else {
+            // TODO: If Not Play Newbie Dungeon -> Go to Newbie Dungeon
+            // TODO: Else GO TO CAMP   
+            SceneChangeManager.Instance.GoToDungeon(this.TestDungeon);
+        }
     }
 
     public void GoToMap(bool isBattleEnd, bool isBattleVictory){

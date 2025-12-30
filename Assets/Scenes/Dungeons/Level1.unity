@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 116210000}
   - component: {fileID: 116209999}
   m_Layer: 0
-  m_Name: Aisle (1)
+  m_Name: Aisle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -507,6 +507,7 @@ MonoBehaviour:
   CanRepeat: 1
   IsForce: 1
   IsFullScreen: 1
+  NotReset: 0
 --- !u!65 &751676002
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -591,6 +592,7 @@ MonoBehaviour:
   CanRepeat: 0
   IsForce: 1
   IsFullScreen: 1
+  NotReset: 0
 --- !u!65 &773218821
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -695,6 +697,7 @@ MonoBehaviour:
   CanRepeat: 0
   IsForce: 1
   IsFullScreen: 0
+  NotReset: 1
 --- !u!1 &907375877
 GameObject:
   m_ObjectHideFlags: 0
@@ -895,6 +898,10 @@ PrefabInstance:
         type: 3}
       insertIndex: 6
       addedObject: {fileID: 1076732575}
+    - targetCorrespondingSourceObject: {fileID: 8196178263073170791, guid: 6d7dc8d941f056047b27c60f3acb1e9e,
+        type: 3}
+      insertIndex: 7
+      addedObject: {fileID: 1076732576}
     - targetCorrespondingSourceObject: {fileID: 7390146843602114182, guid: 6d7dc8d941f056047b27c60f3acb1e9e,
         type: 3}
       insertIndex: -1
@@ -954,6 +961,18 @@ MonoBehaviour:
   Data: {fileID: 11400000, guid: ff8484900cff56f4cbe951f1ba658736, type: 2}
   Enemies: {fileID: 1076732570}
   IsDefeatGameOver: 1
+--- !u!114 &1076732576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1076732572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d00cb73f4f941059cecb04f18552b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1140434592
 GameObject:
   m_ObjectHideFlags: 0
@@ -1736,6 +1755,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsActiveWhenAwake: 1
+  Type: 1
   CancelObstacleObj: {fileID: 773218820}
 --- !u!1001 &2011903851
 PrefabInstance:

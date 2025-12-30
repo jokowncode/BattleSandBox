@@ -19,15 +19,17 @@ public class BattleDialogRoom : BattleRoom {
     
     private void OnDialogEnded() {
         DialogManager.Instance.OnDialogEnded -= OnDialogEnded;
-        if (CurrentState == State.PreBattle) {
+        if (this.CurrentState == State.PreBattle) {
             GameManager.Instance.GoToBattle(this.Data);
+        } else {
+            base.PlayerEnter();
         }
     }
 
     protected override void PlayerEnter() {
-        base.PlayerEnter();
         this.CurrentState = State.PreBattle;
         if (GameManager.Instance.IsBattleEnd) {
+            if (GameManager.Instance.IsBattleVictory) this.EnableInteraction(false);
             if (GameManager.Instance.IsBattleVictory && this.BattleVictoryDialog) {
                 this.CurrentState = State.Victory;
                 DialogManager.Instance.OnDialogEnded += OnDialogEnded;
@@ -36,6 +38,8 @@ public class BattleDialogRoom : BattleRoom {
                 this.CurrentState = State.Lose;
                 DialogManager.Instance.OnDialogEnded += OnDialogEnded;
                 DialogManager.Instance.PlayNewDialog(this.BattleLoseDialog);
+            } else {
+                base.PlayerEnter();
             }
         }
     }
