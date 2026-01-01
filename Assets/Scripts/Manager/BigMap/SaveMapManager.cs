@@ -104,8 +104,8 @@ public class SaveMapManager : MonoBehaviour {
     
     public void ClearDungeonData() {
         PlayerPrefs.DeleteKey("PlayerBigMapData");
-        PlayerPrefs.DeleteKey("InteractionObjectEnd");
-        PlayerPrefs.DeleteKey("InteractionObjectsAvailable");
+        // PlayerPrefs.DeleteKey("InteractionObjectEnd");
+        // PlayerPrefs.DeleteKey("InteractionObjectsAvailable");
         PlayerPrefs.DeleteKey("DungeonHeroHealth");
     }
 
@@ -141,11 +141,6 @@ public class SaveMapManager : MonoBehaviour {
 
     public void RecoverAllHeroHealth() {
         this.DungeonHeroHealth.Clear();
-    }
-
-    public int CurrentTaskIndex {
-        get => this.BigMapPlayerData.CurrentTaskIndex;
-        set => this.BigMapPlayerData.CurrentTaskIndex = value;
     }
 }
 

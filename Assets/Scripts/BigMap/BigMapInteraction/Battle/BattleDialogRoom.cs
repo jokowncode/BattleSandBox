@@ -29,13 +29,12 @@ public class BattleDialogRoom : BattleRoom {
     protected override void PlayerEnter() {
         this.CurrentState = State.PreBattle;
         if (GameManager.Instance.IsBattleEnd) {
+            this.CurrentState = GameManager.Instance.IsBattleVictory ? State.Victory : State.Lose;
             if (GameManager.Instance.IsBattleVictory) this.EnableInteraction(false);
             if (GameManager.Instance.IsBattleVictory && this.BattleVictoryDialog) {
-                this.CurrentState = State.Victory;
                 DialogManager.Instance.OnDialogEnded += OnDialogEnded;
                 DialogManager.Instance.PlayNewDialog(this.BattleVictoryDialog);
             }else if (!GameManager.Instance.IsBattleVictory && this.BattleLoseDialog) {
-                this.CurrentState = State.Lose;
                 DialogManager.Instance.OnDialogEnded += OnDialogEnded;
                 DialogManager.Instance.PlayNewDialog(this.BattleLoseDialog);
             } else {

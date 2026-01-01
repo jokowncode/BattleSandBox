@@ -34,6 +34,14 @@ public class StoreUI : MonoBehaviour {
         }
     }
 
+    public List<string> RandomGoodsSimple() {
+        List<string> result = new List<string>();
+        foreach (StoreGoodsData data in AllStoreGoods) {
+            result.Add(data.GoodsName);
+        }
+        return result;
+    }
+
     public void HideStoreUI() {
         if (this.IsInstructionMode) return;
         this.CurrentStore = null;

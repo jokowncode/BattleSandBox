@@ -25,8 +25,6 @@ public class GameManager : MonoBehaviour{
     public bool IsBattleEnd{ get; private set; }
     public bool IsBattleVictory{ get; private set; }
 
-    private List<SceneType> CompleteDungeons;
-
     private void Awake(){
         if (Instance != null){
             Destroy(this.gameObject);
@@ -44,16 +42,6 @@ public class GameManager : MonoBehaviour{
         } else {
             SetMoney(this.InitialMoney);
         }
-        
-        if (PlayerPrefs.HasKey("CompleteDungeons")) {
-            this.CompleteDungeons = JsonUtility.FromJson<Serialization<SceneType>>(PlayerPrefs.GetString("CompleteDungeons")).ToList();
-        } else {
-            this.CompleteDungeons = new List<SceneType>();
-        }
-    }
-
-    public bool HasDungeonComplete(SceneType dungeon) {
-        return this.CompleteDungeons.Contains(dungeon);
     }
 
     public void SetMoney(float money) {
@@ -66,9 +54,6 @@ public class GameManager : MonoBehaviour{
     private void OnDestroy() {
         // TODO: TEMP -> For Debug
         // PlayerPrefs.SetFloat("PlayerMoney", this.Money);
-        
-        /*string dungeonsJson = JsonUtility.ToJson(new Serialization<SceneType>(this.CompleteDungeons));
-        PlayerPrefs.SetString("CompleteDungeons", dungeonsJson);*/
     }
 
     private void Update(){
@@ -85,14 +70,8 @@ public class GameManager : MonoBehaviour{
         }
     }
 
-    public void DungeonEnd(bool isVictory) {
-        PlayerPrefs.DeleteKey("CurrentDungeon");
-        if (isVictory) {
-            this.CompleteDungeons.Add(SceneChangeManager.Instance.DungeonScene);
-        }
-
-        // TODO: Dungeon End Should Go To Camp
-        this.GoToMainMenu();
+    public void DungeonFail() {
+        // TODO: Load Newest Save
     }
 
     public void GoToBattle(BattleData battleData){

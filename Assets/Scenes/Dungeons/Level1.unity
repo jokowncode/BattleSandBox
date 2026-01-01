@@ -448,6 +448,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 751676000}
+    - targetCorrespondingSourceObject: {fileID: 6296159894140288114, guid: 597514f1595e6314d840977ece84ff4c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1689040812}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 597514f1595e6314d840977ece84ff4c, type: 3}
 --- !u!4 &739972509 stripped
@@ -468,6 +472,7 @@ GameObject:
   - component: {fileID: 751676002}
   - component: {fileID: 751676001}
   - component: {fileID: 751676003}
+  - component: {fileID: 751676004}
   m_Layer: 0
   m_Name: TestDialogue2
   m_TagString: Untagged
@@ -502,12 +507,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab6e184bf2c348f29ed8ad99ba189130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsActiveWhenAwake: 0
+  <OwnedTaskName>k__BackingField: "\u4EFB\u52A12"
+  <IsBindTask>k__BackingField: 1
+  IsActiveWhenAwake: 1
   Dialogs: {fileID: 11400000, guid: 50991878b64500f4988c00a533e278ed, type: 2}
   CanRepeat: 1
   IsForce: 1
   IsFullScreen: 1
-  NotReset: 0
 --- !u!65 &751676002
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -541,6 +547,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81087027099a4656a9cae7a9fb0feb2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &751676004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 751675999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 478b4f0905cf4c999fc8dbce9e9ec423, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActivateInteractionObjects:
+  - {fileID: 1076732575}
 --- !u!1 &773218818
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,12 +607,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab6e184bf2c348f29ed8ad99ba189130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <OwnedTaskName>k__BackingField: "\u4EFB\u52A11"
+  <IsBindTask>k__BackingField: 1
   IsActiveWhenAwake: 0
   Dialogs: {fileID: 11400000, guid: 54baf14c4537c4b4bb020987d25a60a8, type: 2}
   CanRepeat: 0
   IsForce: 1
   IsFullScreen: 1
-  NotReset: 0
 --- !u!65 &773218821
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -692,12 +713,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab6e184bf2c348f29ed8ad99ba189130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <OwnedTaskName>k__BackingField: "\u4EFB\u52A11"
+  <IsBindTask>k__BackingField: 1
   IsActiveWhenAwake: 1
   Dialogs: {fileID: 11400000, guid: 8723df50b1f316f458686bdcbd378c07, type: 2}
   CanRepeat: 0
   IsForce: 1
   IsFullScreen: 0
-  NotReset: 1
 --- !u!1 &907375877
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,7 +923,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8196178263073170791, guid: 6d7dc8d941f056047b27c60f3acb1e9e,
         type: 3}
       insertIndex: 7
-      addedObject: {fileID: 1076732576}
+      addedObject: {fileID: 1076732577}
     - targetCorrespondingSourceObject: {fileID: 7390146843602114182, guid: 6d7dc8d941f056047b27c60f3acb1e9e,
         type: 3}
       insertIndex: -1
@@ -957,11 +979,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2e632f496d548518e1506a6a7dfbac6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <OwnedTaskName>k__BackingField: "\u4EFB\u52A12"
+  <IsBindTask>k__BackingField: 1
   IsActiveWhenAwake: 0
   Data: {fileID: 11400000, guid: ff8484900cff56f4cbe951f1ba658736, type: 2}
   Enemies: {fileID: 1076732570}
   IsDefeatGameOver: 1
---- !u!114 &1076732576
+--- !u!114 &1076732577
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -970,7 +994,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1076732572}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d00cb73f4f941059cecb04f18552b4a, type: 3}
+  m_Script: {fileID: 11500000, guid: 81087027099a4656a9cae7a9fb0feb2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1140434592
@@ -1331,6 +1355,10 @@ PrefabInstance:
         type: 3}
       insertIndex: 8
       addedObject: {fileID: 1648549090}
+    - targetCorrespondingSourceObject: {fileID: 8196178263073170791, guid: 6d7dc8d941f056047b27c60f3acb1e9e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1648549092}
     - targetCorrespondingSourceObject: {fileID: 7390146843602114182, guid: 6d7dc8d941f056047b27c60f3acb1e9e,
         type: 3}
       insertIndex: -1
@@ -1366,6 +1394,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0af32c461984c5588b9e9b352127047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <OwnedTaskName>k__BackingField: "\u4EFB\u52A11"
+  <IsBindTask>k__BackingField: 1
   IsActiveWhenAwake: 1
   Data: {fileID: 11400000, guid: ff8484900cff56f4cbe951f1ba658736, type: 2}
   Enemies: {fileID: 1648549087}
@@ -1398,6 +1428,120 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f0e5f1a0b354ad78502668b59b4baa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1648549092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1648549088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 478b4f0905cf4c999fc8dbce9e9ec423, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActivateInteractionObjects:
+  - {fileID: 773218820}
+--- !u!1 &1689040811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1689040812}
+  - component: {fileID: 1689040815}
+  - component: {fileID: 1689040814}
+  - component: {fileID: 1689040813}
+  - component: {fileID: 1689040816}
+  m_Layer: 0
+  m_Name: TestDialogue3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1689040812
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1689040811}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.23000002, y: -2.48, z: 0.75}
+  m_LocalScale: {x: 3.1307, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 739972509}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1689040813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1689040811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81087027099a4656a9cae7a9fb0feb2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1689040814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1689040811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab6e184bf2c348f29ed8ad99ba189130, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <OwnedTaskName>k__BackingField: None
+  <IsBindTask>k__BackingField: 0
+  IsActiveWhenAwake: 1
+  Dialogs: {fileID: 11400000, guid: 54baf14c4537c4b4bb020987d25a60a8, type: 2}
+  CanRepeat: 0
+  IsForce: 1
+  IsFullScreen: 1
+--- !u!65 &1689040815
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1689040811}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1689040816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1689040811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2378c14e1fbb4a769078a255b8b0e0d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TaskName: "\u4EFB\u52A12"
 --- !u!1 &1809127676
 GameObject:
   m_ObjectHideFlags: 0
@@ -1447,11 +1591,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 290533fc3b8942538e3eb98b3b0fead7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <OwnedTaskName>k__BackingField: None
+  <IsBindTask>k__BackingField: 0
   IsActiveWhenAwake: 1
-  <Goods>k__BackingField:
-  - 100EXP
-  - Bullock
-  - "\u5206\u88C2"
+  <Goods>k__BackingField: []
 --- !u!65 &1809127679
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1583,7 +1726,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1965659049}
-  - component: {fileID: 1965659050}
   m_Layer: 0
   m_Name: SubScene
   m_TagString: Untagged
@@ -1608,34 +1750,6 @@ Transform:
   - {fileID: 1535630966}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1965659050
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1965659048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97c9331eb22e46ac9c1547ff237f7b30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GameTasks:
-  - TaskDescription: "\u6218\u6597"
-    TaskPosition: {fileID: 1648549086}
-    ActivateInteractionObjects: []
-  - TaskDescription: "\u5BF9\u8BDD"
-    TaskPosition: {fileID: 773218819}
-    ActivateInteractionObjects:
-    - {fileID: 773218820}
-  - TaskDescription: "\u5BF9\u8BDD"
-    TaskPosition: {fileID: 751676000}
-    ActivateInteractionObjects:
-    - {fileID: 751676001}
-  - TaskDescription: "\u6218\u6597"
-    TaskPosition: {fileID: 1076732569}
-    ActivateInteractionObjects:
-    - {fileID: 1076732575}
 --- !u!1 &1975617183
 GameObject:
   m_ObjectHideFlags: 0
@@ -1754,9 +1868,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdd9d15813c483991e62306729a97b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <OwnedTaskName>k__BackingField: "\u4EFB\u52A12"
+  <IsBindTask>k__BackingField: 1
   IsActiveWhenAwake: 1
   Type: 1
-  CancelObstacleObj: {fileID: 773218820}
+  CancelObstacleObj: {fileID: 751676001}
 --- !u!1001 &2011903851
 PrefabInstance:
   m_ObjectHideFlags: 0

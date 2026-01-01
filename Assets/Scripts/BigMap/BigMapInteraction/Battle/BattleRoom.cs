@@ -14,10 +14,8 @@ public class BattleRoom : InteractionObject {
     
     private BoxCollider Collider;
 
-    protected override string GetName() {
-        Vector3 pos = this.transform.position;
-        string dungeonName = SceneChangeManager.Instance.CurrentDungeonName;
-        return $"{dungeonName}_Battle_{pos.x}_{pos.y}_{pos.z}";
+    protected override InteractionObjType GetInteractionObjType() {
+        return InteractionObjType.Battle;
     }
 
     protected override void Awake(){
@@ -66,7 +64,7 @@ public class BattleRoom : InteractionObject {
             } else {
                 OnDefeat?.Invoke();
                 if (IsDefeatGameOver) {
-                    GameManager.Instance.DungeonEnd(false);
+                    GameManager.Instance.DungeonFail();
                 }
             }
         }

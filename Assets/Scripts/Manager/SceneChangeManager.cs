@@ -28,6 +28,8 @@ public class SceneChangeManager : MonoBehaviour{
 
     public string CurrentDungeonName => this.DungeonScene.ToString();
 
+    public bool IsNewDungeon { get; private set; } = false;
+
     private void Awake(){
         if (Instance != null){
             Destroy(this.gameObject);
@@ -49,6 +51,7 @@ public class SceneChangeManager : MonoBehaviour{
         if (this.CurrentScene == SceneType.BigMap && !this.IsLoadDungeon){
             this.IsLoadDungeon = true;
             AudioManager.Instance.SetMainMusic(this.BigMapBGM);
+            BigMapUIManager.Instance.TaskList.UpdateTaskUI();
             StartCoroutine(AsyncLoadSceneCallback(this.DungeonScene));
         }
 
@@ -76,8 +79,10 @@ public class SceneChangeManager : MonoBehaviour{
 
     public void GoToDungeon(SceneType dungeonType) {
         this.DungeonScene = dungeonType;
-        if (!PlayerPrefs.HasKey("CurrentDungeon") 
-            || PlayerPrefs.GetString("CurrentDungeon") != this.DungeonScene.ToString()) {
+
+        this.IsNewDungeon = !PlayerPrefs.HasKey("CurrentDungeon") ||
+                            PlayerPrefs.GetString("CurrentDungeon") != this.DungeonScene.ToString();
+        if (IsNewDungeon) {
             PlayerPrefs.SetString("CurrentDungeon", this.DungeonScene.ToString());
             SaveMapManager.Instance.ClearDungeonData();
         }
@@ -88,6 +93,10 @@ public class SceneChangeManager : MonoBehaviour{
     public void GoToScene(SceneType type, bool isBlackScreen = false) {
         if (type == SceneType.BigMap) {
             this.IsLoadDungeon = false;
+        }
+
+        if (this.CurrentScene == SceneType.Battle && type == SceneType.BigMap) {
+            this.IsNewDungeon = false;
         }
 
         this.OnSceneChange?.Invoke(this.CurrentScene, type);

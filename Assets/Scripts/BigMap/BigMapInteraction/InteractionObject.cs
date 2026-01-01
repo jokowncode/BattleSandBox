@@ -3,27 +3,45 @@ using System;
 using UnityEngine;
 
 public abstract class InteractionObject : MonoBehaviour {
+
+    protected enum InteractionObjType {
+        Store,
+        Battle,
+        Dialog,
+        Obstacle
+    }
     
+    [field: SerializeField] public string OwnedTaskName { get; protected set; } = "None";
+    [field: SerializeField] public bool IsBindTask { get; protected set; } = true;
+
     [Header("Available")]
     [SerializeField] protected bool IsActiveWhenAwake = true;
     
     protected Player InAreaPlayer;
     protected bool IsEnd = false;
     protected bool IsActive = false;
-
-    protected bool IsEndCanEnableInteraction = false;
     
     public Action OnInteractionEnded;
-    
-    protected abstract string GetName();
+
+    protected string GetName() {
+        Vector3 pos = this.transform.position;
+        string dungeonName = SceneChangeManager.Instance.CurrentDungeonName;
+        return $"{dungeonName}_{OwnedTaskName}_{GetInteractionObjType().ToString()}_{pos.x}_{pos.y}_{pos.z}";
+    }
+
+    protected abstract InteractionObjType GetInteractionObjType();
 
     protected virtual void Awake() {
-        this.IsActive = this.IsActiveWhenAwake;
+        if (!this.IsBindTask) {
+            this.IsActive = this.IsActiveWhenAwake;
+        } else {
+            this.IsActive = TaskManager.Instance.HasTask(this.OwnedTaskName) && this.IsActiveWhenAwake;
+        }
     }
 
     private void Start() {
         this.IsEnd = SaveMapManager.Instance.LoadInteractionObjectEnd(this.GetName());
-        if (!this.IsActiveWhenAwake) {
+        if (!this.IsActive) {
             this.IsActive = SaveMapManager.Instance.LoadInteractionObjectAvailable(this.GetName());
         }
         
@@ -34,10 +52,6 @@ public abstract class InteractionObject : MonoBehaviour {
     public virtual void Activate() {
         this.IsActive = true;
         SaveMapManager.Instance.SetInteractionObjectAvailable(this.GetName());
-    }
-
-    private void OnLoadMap() {
-        // SaveMapManager.Instance.OnLoadMap -= OnLoadMap;
     }
 
     protected virtual void LoadBigMapData() { }
@@ -55,10 +69,14 @@ public abstract class InteractionObject : MonoBehaviour {
     }
 
     private void OnTriggerEnter(Collider other) {
+        if (!this.IsActive && this.IsBindTask) {
+            this.IsActive = TaskManager.Instance.HasTask(this.OwnedTaskName) && this.IsActiveWhenAwake;
+        }
+        
         if (!this.IsActive) return;
         if (!other.TryGetComponent(out Player player)) return;
         this.InAreaPlayer = player;
-        if (!this.IsEnd || this.IsEndCanEnableInteraction) {
+        if (!this.IsEnd) {
             this.EnableInteraction(true);
         }
         this.PlayerEnter();

@@ -1559,6 +1559,7 @@ GameObject:
   - component: {fileID: 937031790}
   - component: {fileID: 937031791}
   - component: {fileID: 937031792}
+  - component: {fileID: 937031793}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1595,6 +1596,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GoToBattleSfx: {fileID: 8300000, guid: b11e83ed102f3a54083a7c1b61369e92, type: 3}
   MouseCursor: {fileID: 2800000, guid: 9b60d62c3f8f33342b9157bc5dbe4189, type: 3}
+  InitialMoney: 200
   TestDungeon: 5
 --- !u!114 &937031792
 MonoBehaviour:
@@ -1608,6 +1610,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 790ace3f850240eb82cb2467253eed18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &937031793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 937031789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c9331eb22e46ac9c1547ff237f7b30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameTasks:
+  - {fileID: 11400000, guid: ee3835d1ecf805b4c885ec31c3c6e148, type: 2}
+  - {fileID: 11400000, guid: 0802f9a4aa58687418bea83c2feb4b38, type: 2}
+  DebugExistTasks:
+  - "\u4EFB\u52A11"
 --- !u!1 &1033740177
 GameObject:
   m_ObjectHideFlags: 0
