@@ -83,8 +83,8 @@ public class SceneChangeManager : MonoBehaviour{
         this.IsNewDungeon = !PlayerPrefs.HasKey("CurrentDungeon") ||
                             PlayerPrefs.GetString("CurrentDungeon") != this.DungeonScene.ToString();
         if (IsNewDungeon) {
-            PlayerPrefs.SetString("CurrentDungeon", this.DungeonScene.ToString());
             SaveMapManager.Instance.ClearDungeonData();
+            PlayerPrefs.SetString("CurrentDungeon", this.DungeonScene.ToString());
         }
         SaveMapManager.Instance.LoadData();
         this.GoToScene(SceneType.BigMap, true);

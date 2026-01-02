@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour{
     public bool IsBattleEnd{ get; private set; }
     public bool IsBattleVictory{ get; private set; }
 
+    public bool IsBattleDefeat => IsBattleEnd && !IsBattleVictory;
+
     private void Awake(){
         if (Instance != null){
             Destroy(this.gameObject);
@@ -37,11 +39,17 @@ public class GameManager : MonoBehaviour{
     }
 
     private void Start() {
-        if (PlayerPrefs.HasKey("PlayerMoney")) {
-            SetMoney(PlayerPrefs.GetFloat("PlayerMoney"));
-        } else {
-            SetMoney(this.InitialMoney);
-        }
+        SaveMapManager.Instance.OnLoadData += () => {
+            if (PlayerPrefs.HasKey("PlayerMoney")) {
+                SetMoney(PlayerPrefs.GetFloat("PlayerMoney"));
+            } else {
+                SetMoney(this.InitialMoney);
+            }
+        };
+
+        SaveMapManager.Instance.OnSaveData += () => {
+            PlayerPrefs.SetFloat("PlayerMoney", this.Money);
+        };
     }
 
     public void SetMoney(float money) {
@@ -49,11 +57,6 @@ public class GameManager : MonoBehaviour{
         if (BigMapUIManager.Instance) {
             BigMapUIManager.Instance.SetMoneyText(this.Money);
         }
-    }
-
-    private void OnDestroy() {
-        // TODO: TEMP -> For Debug
-        // PlayerPrefs.SetFloat("PlayerMoney", this.Money);
     }
 
     private void Update(){
@@ -71,7 +74,16 @@ public class GameManager : MonoBehaviour{
     }
 
     public void DungeonFail() {
-        // TODO: Load Newest Save
+        ResetBattleFlag();
+        SceneChangeManager.Instance.GoToDungeon(SceneChangeManager.Instance.DungeonScene);
+    }
+
+    public void GoBackToCamp(bool isSaveRoom) {
+        if (!isSaveRoom) {
+            PlayerPrefs.DeleteKey("CurrentDungeon");
+        }
+        // TODO: GO TO CAMP
+        this.GoToMainMenu();
     }
 
     public void GoToBattle(BattleData battleData){

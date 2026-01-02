@@ -31,23 +31,26 @@ public class TaskManager : MonoBehaviour {
     }
 
     private void Start() {
-        if (PlayerPrefs.HasKey("CurrentTaskIndexMap")) {
-            this.CurrentTaskIndexMap = JsonUtility.FromJson<Serialization<string, int>>(PlayerPrefs.GetString("CurrentTaskIndexMap"))
-                .ToDictionary();
-        } else {
-            this.CurrentTaskIndexMap = new Dictionary<string, int>();
-        }
-        
-        // TODO: TEMP -> FOR DEBUG
-        foreach (string taskName in this.DebugExistTasks) {
-            this.AddTask(taskName);
-        }
-    }
+        SaveMapManager.Instance.OnSaveData += () => {
+            string taskIndex = JsonUtility.ToJson(new Serialization<string, int>(this.CurrentTaskIndexMap));
+            PlayerPrefs.SetString("CurrentTaskIndexMap", taskIndex);
+        };
 
-    private void OnDestroy() {
-        // TODO: TEMP -> FOR DEBUG
-        /*string taskIndex = JsonUtility.ToJson(new Serialization<string, int>(this.CurrentTaskIndexMap));
-        PlayerPrefs.SetString("CurrentTaskIndexMap", taskIndex);*/
+        SaveMapManager.Instance.OnLoadData += () => {
+            if (PlayerPrefs.HasKey("CurrentTaskIndexMap")) {
+                this.CurrentTaskIndexMap = JsonUtility.FromJson<Serialization<string, int>>(PlayerPrefs.GetString("CurrentTaskIndexMap"))
+                    .ToDictionary();
+            } else {
+                this.CurrentTaskIndexMap = new Dictionary<string, int>();
+            }
+        
+            // TODO: TEMP -> FOR DEBUG
+            if (this.CurrentTaskIndexMap.Count == 0) {
+                foreach (string taskName in this.DebugExistTasks) {
+                    this.AddTask(taskName);
+                }    
+            }
+        };
     }
     
     public TaskData GetTask(string taskName) {

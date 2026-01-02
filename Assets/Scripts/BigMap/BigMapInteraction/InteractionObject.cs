@@ -8,7 +8,9 @@ public abstract class InteractionObject : MonoBehaviour {
         Store,
         Battle,
         Dialog,
-        Obstacle
+        Obstacle,
+        SaveData,
+        GoBackToCamp
     }
     
     [field: SerializeField] public string OwnedTaskName { get; protected set; } = "None";
@@ -21,7 +23,10 @@ public abstract class InteractionObject : MonoBehaviour {
     protected bool IsEnd = false;
     protected bool IsActive = false;
     
+    protected bool IsEndCanInteract = false;
+    
     public Action OnInteractionEnded;
+    public Action OnInteractionPre;
 
     protected string GetName() {
         Vector3 pos = this.transform.position;
@@ -76,7 +81,7 @@ public abstract class InteractionObject : MonoBehaviour {
         if (!this.IsActive) return;
         if (!other.TryGetComponent(out Player player)) return;
         this.InAreaPlayer = player;
-        if (!this.IsEnd) {
+        if (!this.IsEnd || this.IsEndCanInteract) {
             this.EnableInteraction(true);
         }
         this.PlayerEnter();
@@ -93,7 +98,8 @@ public abstract class InteractionObject : MonoBehaviour {
     protected abstract void Interaction();
     
     protected virtual void Update(){
-        if (Input.GetKeyDown(KeyCode.E)){
+        if (Input.GetKeyDown(KeyCode.E)) {
+            OnInteractionPre?.Invoke();
             Interaction();
         }
     }

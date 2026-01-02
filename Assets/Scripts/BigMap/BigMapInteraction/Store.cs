@@ -11,7 +11,17 @@ public class Store : InteractionObject {
         return InteractionObjType.Store;
     }
 
+    protected override void Awake() {
+        base.Awake();
+        this.IsEndCanInteract = true;
+    }
+
     protected override void LoadBigMapData() {
+        if (!this.IsEnd) {
+            if(PlayerPrefs.HasKey(GetName())) PlayerPrefs.DeleteKey(GetName());
+        }
+        
+        // TODO: Random Store Refresh
         if (this.Goods == null || this.Goods.Count == 0) {
             // Random Store
             if (SceneChangeManager.Instance.IsNewDungeon) {
@@ -42,7 +52,10 @@ public class Store : InteractionObject {
     }
 
     public void RemoveGoods(string goodsName) {
-        if(this.Goods.Contains(goodsName)) this.Goods.Remove(goodsName);
+        if (this.Goods.Contains(goodsName)) {
+            this.Goods.Remove(goodsName);
+            this.EndInteraction();
+        }
     }
 }
 

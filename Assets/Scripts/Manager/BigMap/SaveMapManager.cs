@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,12 +13,15 @@ public class SaveMapManager : MonoBehaviour {
     
     public Player PlayerInBigMap { get; private set; }
 
-    private PlayerBigMapSaveData BigMapPlayerData;
+    private Dictionary<SceneType, Vector3> PlayerPos;
     private List<string> InteractionObjectsEnds;
     private List<string> InteractionObjectsAvailable;
     private Dictionary<string, float> DungeonHeroHealth;
 
-    private bool IsEnterBigMap = false;
+    public Action OnSaveData;
+    public Action OnLoadData;
+
+    private Vector3 TempPlayerPos = Vector3.zero;
     
     private void Awake() {
         if (Instance != null) {
@@ -27,16 +31,51 @@ public class SaveMapManager : MonoBehaviour {
         Instance = this;
         
         // TODO: TEMP -> CONVENIENT BATTLE TEST
-        this.LoadData();
+        this.DungeonHeroHealth = new Dictionary<string, float>();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    private void Start() {
+        SceneChangeManager.Instance.OnSceneChange += OnSceneChange;
+    }
+
+    private void OnSceneChange(SceneType oldScene, SceneType newScene) {
+        if (oldScene == SceneType.BigMap && newScene == SceneType.Battle) {
+            if(this.PlayerInBigMap) this.TempPlayerPos = this.PlayerInBigMap.transform.position;
+        }
+    }
+
+    public void SaveData() {
+        if (this.PlayerInBigMap) {
+            SceneType currentDungeon = SceneChangeManager.Instance.DungeonScene;
+            this.PlayerPos[currentDungeon] = this.PlayerInBigMap.transform.position;
+        }
+        
+        string dataJson = JsonUtility.ToJson(new Serialization<SceneType, Vector3>(this.PlayerPos));
+        PlayerPrefs.SetString("PlayerPos", dataJson);
+        
+        string interactionJson = JsonUtility.ToJson(new Serialization<string>(this.InteractionObjectsEnds));
+        PlayerPrefs.SetString("InteractionObjectEnd", interactionJson);
+        
+        string dialoguesJson = JsonUtility.ToJson(new Serialization<string>(this.InteractionObjectsAvailable));
+        PlayerPrefs.SetString("InteractionObjectsAvailable", dialoguesJson);
+        
+        string dungeonHeroHealthJson = JsonUtility.ToJson(new Serialization<string, float>(this.DungeonHeroHealth));
+        PlayerPrefs.SetString("DungeonHeroHealth", dungeonHeroHealthJson);
+        this.OnSaveData?.Invoke();
+    }
+
     public void LoadData() {
-        if (PlayerPrefs.HasKey("PlayerBigMapData")) {
-            this.BigMapPlayerData = JsonUtility.FromJson<PlayerBigMapSaveData>(PlayerPrefs.GetString("PlayerBigMapData"));
+        if (PlayerPrefs.HasKey("PlayerPos")) {
+            this.PlayerPos = JsonUtility.FromJson<Serialization<SceneType, Vector3>>(PlayerPrefs.GetString("PlayerPos"))
+                .ToDictionary();
         } else {
-            this.BigMapPlayerData = new PlayerBigMapSaveData();
+            this.PlayerPos = new Dictionary<SceneType, Vector3>();
+        }
+
+        if (SceneChangeManager.Instance.IsNewDungeon) {
+            this.RemovePlayerPos(SceneChangeManager.Instance.DungeonScene);
         }
 
         if (PlayerPrefs.HasKey("InteractionObjectEnd")) {
@@ -58,54 +97,29 @@ public class SaveMapManager : MonoBehaviour {
         } else {
             this.DungeonHeroHealth = new Dictionary<string, float>();
         }
-    }
-
-    private void Start() {
-        SceneChangeManager.Instance.OnSceneChange += OnSceneChange;
-    }
-
-    private void OnSceneChange(SceneType oldScene, SceneType newScene) {
-        if (oldScene == SceneType.BigMap) {
-            this.BigMapPlayerData.PlayerPosition = this.PlayerInBigMap.transform.position;
-            if (newScene != SceneType.Battle) {
-                this.OnDisable();
-            }
-        }
+        this.OnLoadData?.Invoke();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         if (SceneChangeManager.Instance.CurrentScene == SceneType.BigMap) {
             this.PlayerInBigMap = FindAnyObjectByType<Player>();
-            // this.OnLoadMap?.Invoke();
-            if (this.BigMapPlayerData.PlayerPosition != Vector3.zero) {
-                this.PlayerInBigMap.transform.position = this.BigMapPlayerData.PlayerPosition;
+            
+            SceneType currentDungeon = SceneChangeManager.Instance.DungeonScene;
+            if (this.PlayerPos.ContainsKey(currentDungeon)) {
+                this.PlayerInBigMap.transform.position = this.PlayerPos[currentDungeon];
+            }else if (GameManager.Instance.IsBattleEnd) {
+                this.PlayerInBigMap.transform.position = this.TempPlayerPos;
             }
-            IsEnterBigMap = true;
+        }
+    }
+    
+    private void RemovePlayerPos(SceneType dungeon) {
+        if (this.PlayerPos.ContainsKey(dungeon)) {
+            this.PlayerPos.Remove(dungeon);
         }
     }
 
-    private void OnDisable() {
-        if (!IsEnterBigMap) return;
-        if (this.PlayerInBigMap) {
-            this.BigMapPlayerData.PlayerPosition = this.PlayerInBigMap.transform.position;
-        }
-        string dataJson = JsonUtility.ToJson(this.BigMapPlayerData);
-        PlayerPrefs.SetString("PlayerBigMapData", dataJson);
-        
-        string interactionJson = JsonUtility.ToJson(new Serialization<string>(this.InteractionObjectsEnds));
-        PlayerPrefs.SetString("InteractionObjectEnd", interactionJson);
-        
-        string dialoguesJson = JsonUtility.ToJson(new Serialization<string>(this.InteractionObjectsAvailable));
-        PlayerPrefs.SetString("InteractionObjectsAvailable", dialoguesJson);
-        
-        string dungeonHeroHealthJson = JsonUtility.ToJson(new Serialization<string, float>(this.DungeonHeroHealth));
-        PlayerPrefs.SetString("DungeonHeroHealth", dungeonHeroHealthJson);
-    }
-    
     public void ClearDungeonData() {
-        PlayerPrefs.DeleteKey("PlayerBigMapData");
-        // PlayerPrefs.DeleteKey("InteractionObjectEnd");
-        // PlayerPrefs.DeleteKey("InteractionObjectsAvailable");
         PlayerPrefs.DeleteKey("DungeonHeroHealth");
     }
 
