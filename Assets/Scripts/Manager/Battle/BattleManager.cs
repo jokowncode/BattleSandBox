@@ -95,6 +95,12 @@ public class BattleManager : StateMachineController{
     }
 
     private void Start(){
+        
+        // TODO: TEMP -> FOR BATTLE
+        HeroWarehouseManager.Instance.TEMPFORBATTLE();
+        PassiveEntryWarehouseManager.Instance.TEMPFORBATTLE();
+        EntanglementManager.Instance.TEMPFORBATTLE();
+        
         ChangeState(Prepare);
         this.BattleNameText.text = this.Data.BattleName;
         this.BattleMessageText.text = this.Data.BattleMessage;

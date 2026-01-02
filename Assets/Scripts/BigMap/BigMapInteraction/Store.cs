@@ -7,25 +7,27 @@ public class Store : InteractionObject {
 
     [field: SerializeField] public List<string> Goods { get; private set; }
 
-    protected override void Awake() {
-        base.Awake();
-        this.IsEndCanEnableInteraction = true;
+    protected override InteractionObjType GetInteractionObjType() {
+        return InteractionObjType.Store;
     }
 
-    protected override string GetName() {
-        Vector3 pos = this.transform.position;
-        string dungeonName = SceneChangeManager.Instance.CurrentDungeonName;
-        return $"{dungeonName}_Store_{pos.x}_{pos.y}_{pos.z}";
+    protected override void Awake() {
+        base.Awake();
+        this.IsEndCanInteract = true;
     }
 
     protected override void LoadBigMapData() {
+        if (!this.IsEnd) {
+            if(PlayerPrefs.HasKey(GetName())) PlayerPrefs.DeleteKey(GetName());
+        }
+        
+        // TODO: Random Store Refresh
         if (this.Goods == null || this.Goods.Count == 0) {
             // Random Store
-            if (!this.IsEnd) {
+            if (SceneChangeManager.Instance.IsNewDungeon) {
                 if(PlayerPrefs.HasKey(GetName())) PlayerPrefs.DeleteKey(GetName());
-                this.EndInteraction();
-                
                 // TODO: Random Store Goods
+                this.Goods = StoreUI.Instance.RandomGoodsSimple();
             }
         }
         
@@ -50,7 +52,10 @@ public class Store : InteractionObject {
     }
 
     public void RemoveGoods(string goodsName) {
-        if(this.Goods.Contains(goodsName)) this.Goods.Remove(goodsName);
+        if (this.Goods.Contains(goodsName)) {
+            this.Goods.Remove(goodsName);
+            this.EndInteraction();
+        }
     }
 }
 

@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour{
     public bool IsBattleEnd{ get; private set; }
     public bool IsBattleVictory{ get; private set; }
 
-    private List<SceneType> CompleteDungeons;
+    public bool IsBattleDefeat => IsBattleEnd && !IsBattleVictory;
 
     private void Awake(){
         if (Instance != null){
@@ -39,21 +39,17 @@ public class GameManager : MonoBehaviour{
     }
 
     private void Start() {
-        if (PlayerPrefs.HasKey("PlayerMoney")) {
-            SetMoney(PlayerPrefs.GetFloat("PlayerMoney"));
-        } else {
-            SetMoney(this.InitialMoney);
-        }
-        
-        if (PlayerPrefs.HasKey("CompleteDungeons")) {
-            this.CompleteDungeons = JsonUtility.FromJson<Serialization<SceneType>>(PlayerPrefs.GetString("CompleteDungeons")).ToList();
-        } else {
-            this.CompleteDungeons = new List<SceneType>();
-        }
-    }
+        SaveMapManager.Instance.OnLoadData += () => {
+            if (PlayerPrefs.HasKey("PlayerMoney")) {
+                SetMoney(PlayerPrefs.GetFloat("PlayerMoney"));
+            } else {
+                SetMoney(this.InitialMoney);
+            }
+        };
 
-    public bool HasDungeonComplete(SceneType dungeon) {
-        return this.CompleteDungeons.Contains(dungeon);
+        SaveMapManager.Instance.OnSaveData += () => {
+            PlayerPrefs.SetFloat("PlayerMoney", this.Money);
+        };
     }
 
     public void SetMoney(float money) {
@@ -61,14 +57,6 @@ public class GameManager : MonoBehaviour{
         if (BigMapUIManager.Instance) {
             BigMapUIManager.Instance.SetMoneyText(this.Money);
         }
-    }
-
-    private void OnDestroy() {
-        // TODO: TEMP -> For Debug
-        // PlayerPrefs.SetFloat("PlayerMoney", this.Money);
-        
-        /*string dungeonsJson = JsonUtility.ToJson(new Serialization<SceneType>(this.CompleteDungeons));
-        PlayerPrefs.SetString("CompleteDungeons", dungeonsJson);*/
     }
 
     private void Update(){
@@ -85,13 +73,16 @@ public class GameManager : MonoBehaviour{
         }
     }
 
-    public void DungeonEnd(bool isVictory) {
-        PlayerPrefs.DeleteKey("CurrentDungeon");
-        if (isVictory) {
-            this.CompleteDungeons.Add(SceneChangeManager.Instance.DungeonScene);
-        }
+    public void DungeonFail() {
+        ResetBattleFlag();
+        SceneChangeManager.Instance.GoToDungeon(SceneChangeManager.Instance.DungeonScene);
+    }
 
-        // TODO: Dungeon End Should Go To Camp
+    public void GoBackToCamp(bool isSaveRoom) {
+        if (!isSaveRoom) {
+            PlayerPrefs.DeleteKey("CurrentDungeon");
+        }
+        // TODO: GO TO CAMP
         this.GoToMainMenu();
     }
 

@@ -77,31 +77,34 @@ public class EntanglementManager : MonoBehaviour {
         int index = GetHeroEntanglementIndex(index1, index2);
         this.HeroEntanglementValues[index] = this.EntanglementValue;
 
-        BattleTacticType maxCastTactic = GetEntangleHeroCanCastMaxBattleTactic(this.EntanglementHero1, this.EntanglementHero2);
+        /*BattleTacticType maxCastTactic = GetEntangleHeroCanCastMaxBattleTactic(this.EntanglementHero1, this.EntanglementHero2);
         for (int i = 0; i <= (int)maxCastTactic; i++) {
             Debug.Log(this.AllBattleTacticDescs[i]);
+        }*/
+    }
+
+    public void TEMPFORBATTLE() {
+        int index1 = HeroWarehouseManager.Instance.GetHeroIndex(this.EntanglementHero1);
+        int index2 = HeroWarehouseManager.Instance.GetHeroIndex(this.EntanglementHero2);
+        int index = GetHeroEntanglementIndex(index1, index2);
+        if (this.HeroEntanglementValues == null || this.HeroEntanglementValues[index] == 0.0f) {
+            this.LoadHeroEntanglement();
         }
     }
 
-    private void SaveHeroEntanglement() {
-        string json = JsonUtility.ToJson(new Serialization<float>(this.HeroEntanglementValues));
-        PlayerPrefs.SetString("HeroEntanglementValues", json);
-    }
+    private void Start() {
+        SaveMapManager.Instance.OnSaveData += () => {
+            string json = JsonUtility.ToJson(new Serialization<float>(this.HeroEntanglementValues));
+            PlayerPrefs.SetString("HeroEntanglementValues", json);
+        };
 
-    private void OnDestroy() {
-        // TODO: TEMP
-        // this.SaveHeroEntanglement();
+        SaveMapManager.Instance.OnLoadData += LoadHeroEntanglement;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         if (scene.buildIndex == (int)SceneType.Battle) {
             BattleManager.Instance.OnHeroEnterTheField += OnHeroEnterTheField;
             BattleManager.Instance.OnHeroExitTheField += OnHeroExitTheField;
-
-            BattleUIManager.Instance.OnUpdateWarehouse += () => {
-                this.LoadHeroEntanglement();
-                BattleManager.Instance.LoadHeroDeploy();
-            };
         }
     }
 

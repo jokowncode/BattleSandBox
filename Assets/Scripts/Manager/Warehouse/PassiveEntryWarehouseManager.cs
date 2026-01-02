@@ -9,7 +9,7 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
     
     // private List<string> OwnedPassiveEntries = new List<string>();
     
-    private Dictionary<string, int> OwnedPassiveEntries = new Dictionary<string, int>();
+    private Dictionary<string, int> OwnedPassiveEntries;
     
     public static PassiveEntryWarehouseManager Instance;
 
@@ -27,26 +27,38 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         foreach (PassiveEntry entry in AllPassiveEntries) {
             this.AllPassiveEntryMap.Add(entry.Data.Name, entry);
         }
-        
-        // TODO: TEMP Debug Battle
-        foreach (PassiveEntry entry in AllPassiveEntries) {
-            this.OwnedPassiveEntries.Add(entry.Data.Name, 3);
-        }
     }
 
     private void Start() {
-        // TODO: TEMP Debug Battle
-        /*if (PlayerPrefs.HasKey("OwnedPassiveEntryWarehouse")) {
-            string json = PlayerPrefs.GetString("OwnedPassiveEntryWarehouse");
-            this.OwnedPassiveEntries = JsonUtility.FromJson<Serialization<string, int>>(json)
-                .ToDictionary();
-        }*/
+        SaveMapManager.Instance.OnSaveData += () => {
+            string json = JsonUtility.ToJson(new Serialization<string, int>(this.OwnedPassiveEntries));
+            PlayerPrefs.SetString("OwnedPassiveEntryWarehouse", json);
+        };
+
+        SaveMapManager.Instance.OnLoadData += () => {
+            if (PlayerPrefs.HasKey("OwnedPassiveEntryWarehouse")) {
+                string json = PlayerPrefs.GetString("OwnedPassiveEntryWarehouse");
+                this.OwnedPassiveEntries = JsonUtility.FromJson<Serialization<string, int>>(json)
+                    .ToDictionary();
+            } else {
+                this.OwnedPassiveEntries = new Dictionary<string, int>();
+            }
+            // TODO: TEMP Debug Battle
+            if (this.OwnedPassiveEntries.Count == 0) {
+                foreach (PassiveEntry entry in AllPassiveEntries) {
+                    this.OwnedPassiveEntries.Add(entry.Data.Name, 3);
+                }    
+            }
+        };
     }
 
-    private void OnDestroy() {
-        // TODO: TEMP Debug Battle
-        /*string json = JsonUtility.ToJson(new Serialization<string, int>(this.OwnedPassiveEntries));
-        PlayerPrefs.SetString("OwnedPassiveEntryWarehouse", json);*/
+    public void TEMPFORBATTLE() {
+        if (this.OwnedPassiveEntries == null || this.OwnedPassiveEntries.Count == 0) {
+            this.OwnedPassiveEntries = new Dictionary<string, int>();
+            foreach (PassiveEntry entry in AllPassiveEntries) {
+                this.OwnedPassiveEntries.Add(entry.Data.Name, 3);
+            }    
+        }
     }
 
     public Dictionary<PassiveEntry, int> GetPassiveEntryFilterBySort(int sortCode) {

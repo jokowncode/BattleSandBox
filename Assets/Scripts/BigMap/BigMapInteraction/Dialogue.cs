@@ -2,6 +2,7 @@
 using System;
 using DialogueEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Dialogue : InteractionObject {
 
@@ -9,19 +10,16 @@ public class Dialogue : InteractionObject {
     [SerializeField] private bool CanRepeat = true;
     [SerializeField] private bool IsForce = false;
     [SerializeField] private bool IsFullScreen = true;
-    [SerializeField] private bool NotReset = false;
     
     private bool IsCurrentConversation;
 
-    protected override string GetName() {
-        Vector3 pos = this.transform.position;
-        string dungeonName = SceneChangeManager.Instance.CurrentDungeonName;
-        return $"{dungeonName}_Dialogue_{pos.x}_{pos.y}_{pos.z}";
+    protected override InteractionObjType GetInteractionObjType() {
+        return InteractionObjType.Dialog;
     }
 
     protected override void LoadBigMapData() {
-        if (NotReset && GameManager.Instance.HasDungeonComplete(SceneChangeManager.Instance.DungeonScene)) {
-            this.EndInteraction();
+        if (this.IsEnd) {
+            this.IsForce = false;
         }
     }
 

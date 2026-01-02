@@ -30,11 +30,6 @@ public class HeroWarehouseManager : MonoBehaviour {
             this.AllHeroMap.Add(hero.Name, hero);
             this.HeroIndexMap.Add(hero.Name, i);
         }
-        
-        // TODO: TEMP Debug Battle
-        foreach (Hero hero in AllHeroes) {
-            this.OwnedHeroes.Add(hero.Name);
-        }
     }
 
     public int GetHeroIndex(string heroName) {
@@ -42,19 +37,34 @@ public class HeroWarehouseManager : MonoBehaviour {
     }
 
     private void Start() {
-        // TODO: TEMP Debug Battle
-        /*if (PlayerPrefs.HasKey("OwnedHeroWarehouse")) {
-            string json = PlayerPrefs.GetString("OwnedHeroWarehouse");
-            this.OwnedHeroes = JsonUtility.FromJson<Serialization<string>>(json).ToList();
-        } else {
-            this.OwnedHeroes.Add(this.AllHeroes[0].Name);
-        }*/
+        SaveMapManager.Instance.OnSaveData += () => {
+            string json = JsonUtility.ToJson(new Serialization<string>(this.OwnedHeroes));
+            PlayerPrefs.SetString("OwnedHeroWarehouse", json);
+        };
+
+        SaveMapManager.Instance.OnLoadData += () => {
+            this.OwnedHeroes.Clear();
+            // TODO: TEMP Debug Battle
+            /*if (PlayerPrefs.HasKey("OwnedHeroWarehouse")) {
+                string json = PlayerPrefs.GetString("OwnedHeroWarehouse");
+                this.OwnedHeroes = JsonUtility.FromJson<Serialization<string>>(json).ToList();
+            } else {
+                this.OwnedHeroes.Add(this.AllHeroes[0].Name);
+            }*/
+            
+            // TODO: TEMP Debug Battle
+            foreach (Hero hero in AllHeroes) {
+                this.OwnedHeroes.Add(hero.Name);
+            }    
+        };
     }
 
-    private void OnDestroy() {
-        // TODO: TEMP Debug Battle
-        /*string json = JsonUtility.ToJson(new Serialization<string>(this.OwnedHeroes));
-        PlayerPrefs.SetString("OwnedHeroWarehouse", json);*/
+    public void TEMPFORBATTLE() {
+        if (this.OwnedHeroes.Count == 0) {
+            foreach (Hero hero in AllHeroes) {
+                this.OwnedHeroes.Add(hero.Name);
+            }
+        }
     }
 
     public void AddHero(string heroName) {

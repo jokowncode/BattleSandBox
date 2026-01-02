@@ -8,14 +8,14 @@ public class TaskTransition : MonoBehaviour {
     
     private void Awake() {
         this.Interaction = GetComponent<InteractionObject>();
-        if (this.Interaction) {
+        if (this.Interaction && this.Interaction.IsBindTask) {
             this.Interaction.OnInteractionEnded += OnInteractionEnded;
         }
     }
 
     private void OnInteractionEnded() {
         this.Interaction.OnInteractionEnded -= OnInteractionEnded;
-        TaskManager.Instance.NextTask();
+        TaskManager.Instance.NextTask(this.Interaction.OwnedTaskName);
     }
 }
 

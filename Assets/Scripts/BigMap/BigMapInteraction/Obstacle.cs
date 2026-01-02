@@ -13,6 +13,10 @@ public class Obstacle : InteractionObject {
     
     private BoxCollider ObstacleCollider;
 
+    protected override InteractionObjType GetInteractionObjType() {
+        return InteractionObjType.Obstacle;
+    }
+
     protected override void Awake() {
         base.Awake();
         ObstacleCollider = this.GetComponent<BoxCollider>();
@@ -26,12 +30,6 @@ public class Obstacle : InteractionObject {
         }
         
         // TODO: Obstacle Look Change
-    }
-
-    protected override string GetName() {
-        Vector3 pos = this.transform.position;
-        string dungeonName = SceneChangeManager.Instance.CurrentDungeonName;
-        return $"{dungeonName}_Obstacle_{pos.x}_{pos.y}_{pos.z}";
     }
 
     protected override void Interaction() { }
@@ -59,9 +57,11 @@ public class Obstacle : InteractionObject {
 
     protected override void OnTriggerExit(Collider other) {
         if (!other.TryGetComponent(out Player _)) return;
-        this.InAreaPlayer.SetCollider(null);
-        this.InAreaPlayer = null;
-        this.enabled = false;
+        if (this.InAreaPlayer) {
+            this.InAreaPlayer.SetCollider(null);
+            this.InAreaPlayer = null;
+            this.enabled = false;
+        }
     }
 }
 
