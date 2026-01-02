@@ -59,14 +59,6 @@ public class HeroWarehouseManager : MonoBehaviour {
         };
     }
 
-    public void TEMPFORBATTLE() {
-        if (this.OwnedHeroes.Count == 0) {
-            foreach (Hero hero in AllHeroes) {
-                this.OwnedHeroes.Add(hero.Name);
-            }
-        }
-    }
-
     public void AddHero(string heroName) {
         this.OwnedHeroes.Add(heroName);
     }
