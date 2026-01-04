@@ -13,16 +13,17 @@ public class TaskUI : MonoBehaviour {
     private Vector3 TaskPos;
     public string TaskName { get; private set; }
 
-    public void SetTask(string desc, string taskName) {
+    public void SetTask(string desc, string taskName, Vector3 position) {
         this.Description.text = desc;
         this.TaskNameTextUI.text = taskName + ":";
         this.TaskName = taskName;
-        // this.TaskPos = task.TaskPosition ? task.TaskPosition.position : Vector3.zero;
+        this.TaskPos = position;
+        
+        this.TaskDirImg.gameObject.SetActive(this.TaskPos != Vector3.zero);
     }
 
     private void Update() {
-        // TODO: Task Position
-        /*if (SaveMapManager.Instance.PlayerInBigMap) {
+        if (SaveMapManager.Instance.PlayerInBigMap && this.TaskPos != Vector3.zero) {
             Vector3 playerPos = SaveMapManager.Instance.PlayerInBigMap.transform.position;
             Vector3 dir = this.TaskPos - playerPos;
             dir.z = 0.0f;
@@ -30,7 +31,7 @@ public class TaskUI : MonoBehaviour {
             
             Quaternion rot = Quaternion.FromToRotation(Vector3.right, dir);
             TaskDirImg.transform.rotation = rot;
-        }*/
+        }
     }
 }
 

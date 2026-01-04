@@ -3,6 +3,8 @@ using System;
 using UnityEngine;
 
 public class TaskTransition : MonoBehaviour {
+
+    [SerializeField] private Transform NextTaskLocation;
     
     private InteractionObject Interaction;
     
@@ -15,7 +17,7 @@ public class TaskTransition : MonoBehaviour {
 
     private void OnInteractionEnded() {
         this.Interaction.OnInteractionEnded -= OnInteractionEnded;
-        TaskManager.Instance.NextTask(this.Interaction.OwnedTaskName);
+        TaskManager.Instance.NextTask(this.Interaction.OwnedTaskName, this.NextTaskLocation);
     }
 }
 

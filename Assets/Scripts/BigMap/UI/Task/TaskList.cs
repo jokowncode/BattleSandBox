@@ -8,7 +8,7 @@ public class TaskList : MonoBehaviour {
     
     public void UpdateTaskUI() {
         int index = 0;
-        foreach (var taskIndexMap in TaskManager.Instance.CurrentTaskIndexMap) {
+        foreach (var taskIndexMap in TaskManager.Instance.CurrentTaskDataMap) {
             TaskUI taskUI = null;
             if (this.TaskContainer.childCount - 1 < index) {
                 taskUI = Instantiate(this.TaskUIPrefab, this.TaskContainer);
@@ -19,26 +19,26 @@ public class TaskList : MonoBehaviour {
             if (taskUI) {
                 TaskData data = TaskManager.Instance.GetTask(taskIndexMap.Key);
                 if (data) {
-                    taskUI.SetTask(data.TaskDescs[taskIndexMap.Value], taskIndexMap.Key);
+                    taskUI.SetTask(data.TaskDescs[taskIndexMap.Value.Index], taskIndexMap.Key, taskIndexMap.Value.Position);
                 }
             }
             index += 1;
         }
     }
 
-    public void UpdateTask(string taskName, string desc) {
+    public void UpdateTask(string taskName, string desc, Transform position) {
         foreach (Transform child in TaskContainer) {
             if (child.TryGetComponent(out TaskUI taskUI) && taskUI.TaskName == taskName) {
-                taskUI.SetTask(desc, taskName);
+                taskUI.SetTask(desc, taskName, position ? position.position : Vector3.zero);
                 return;
             }
         }
     }
 
-    public void AddTask(string taskName) {
+    public void AddTask(string taskName, Vector3 position) {
         TaskUI taskUI = Instantiate(this.TaskUIPrefab, this.TaskContainer);
         TaskData data = TaskManager.Instance.GetTask(taskName);
-        taskUI.SetTask(data.TaskDescs[0], taskName);
+        taskUI.SetTask(data.TaskDescs[0], taskName, position);
     }
 
     public void RemoveTask(string taskName) {

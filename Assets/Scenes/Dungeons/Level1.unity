@@ -653,6 +653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81087027099a4656a9cae7a9fb0feb2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NextTaskLocation: {fileID: 1076732569}
 --- !u!114 &751676004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -753,6 +754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81087027099a4656a9cae7a9fb0feb2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NextTaskLocation: {fileID: 0}
 --- !u!1 &774177247
 GameObject:
   m_ObjectHideFlags: 0
@@ -1076,6 +1078,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81087027099a4656a9cae7a9fb0feb2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NextTaskLocation: {fileID: 0}
 --- !u!114 &1076732578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1483,6 +1486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81087027099a4656a9cae7a9fb0feb2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NextTaskLocation: {fileID: 773218819}
 --- !u!114 &1648549091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1520,7 +1524,6 @@ GameObject:
   - component: {fileID: 1689040812}
   - component: {fileID: 1689040815}
   - component: {fileID: 1689040814}
-  - component: {fileID: 1689040813}
   - component: {fileID: 1689040816}
   m_Layer: 0
   m_Name: TestDialogue3
@@ -1544,18 +1547,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 739972509}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1689040813
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1689040811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81087027099a4656a9cae7a9fb0feb2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1689040814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1609,6 +1600,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TaskName: "\u4EFB\u52A12"
+  TaskPosition: {fileID: 751676000}
 --- !u!1 &1809127676
 GameObject:
   m_ObjectHideFlags: 0
@@ -2293,14 +2285,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2011903856}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d6545c38f134ee1bf3ca61ffb7b499f, type: 3}
+  m_Script: {fileID: 11500000, guid: cfc6457ff479494ba7f6c474fff9adb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <OwnedTaskName>k__BackingField: None
   <IsBindTask>k__BackingField: 0
   IsActiveWhenAwake: 1
-  CanReviveHero: 0
-  RestoreHealthPercentage: 0.2
+  IsSaveRoom: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
