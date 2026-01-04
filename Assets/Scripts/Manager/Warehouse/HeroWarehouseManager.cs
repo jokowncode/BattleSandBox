@@ -67,8 +67,12 @@ public class HeroWarehouseManager : MonoBehaviour {
         }
     }
 
-    public void AddHero(string heroName) {
-        this.OwnedHeroes.Add(heroName);
+    public bool AddHero(string heroName) {
+        if (!this.OwnedHeroes.Contains(heroName)) {
+            this.OwnedHeroes.Add(heroName);
+            return true;
+        }
+        return false;
     }
 
     ////////////////////////////////////Utils//////////////////////////////////////

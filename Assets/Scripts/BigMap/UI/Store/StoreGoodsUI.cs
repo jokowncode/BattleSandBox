@@ -29,11 +29,12 @@ public class StoreGoodsUI : MonoBehaviour {
             if (currentMoney < data.Money) {
                 return;
             }
-            GameManager.Instance.SetMoney(currentMoney - data.Money);
-
+            
             switch (data.Type) {
                 case GoodsType.Hero:
-                    HeroWarehouseManager.Instance.AddHero(data.GoodsName);
+                    if (!HeroWarehouseManager.Instance.AddHero(data.GoodsName)) {
+                        return;
+                    }
                     break;
                 case GoodsType.PassiveEntry:
                     PassiveEntryWarehouseManager.Instance.AddPassiveEntry(data.GoodsName, 1);
@@ -43,6 +44,7 @@ public class StoreGoodsUI : MonoBehaviour {
                     break;
             }
             
+            GameManager.Instance.SetMoney(currentMoney - data.Money);
             // Destroy Goods If Purchase Success
             StoreUI.Instance.RemoveGoods(data);
             OnPurchase?.Invoke();
