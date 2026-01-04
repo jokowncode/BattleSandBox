@@ -29,6 +29,7 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         }
     }
 
+#if TEST_BATTLE
     public void TEMPFORBATTLE() {
         if (this.OwnedPassiveEntries == null || this.OwnedPassiveEntries.Count == 0) {
             this.OwnedPassiveEntries = new Dictionary<string, int>();
@@ -37,6 +38,7 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
             }    
         }
     }
+#endif
     
     private void Start() {
         SaveMapManager.Instance.OnSaveData += () => {

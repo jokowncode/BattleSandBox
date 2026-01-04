@@ -91,7 +91,8 @@ public class EntanglementManager : MonoBehaviour {
 
         SaveMapManager.Instance.OnLoadData += LoadHeroEntanglement;
     }
-    
+
+#if TEST_BATTLE
     public void TEMPFORBATTLE() {
         int index1 = HeroWarehouseManager.Instance.GetHeroIndex(this.EntanglementHero1);
         int index2 = HeroWarehouseManager.Instance.GetHeroIndex(this.EntanglementHero2);
@@ -100,7 +101,8 @@ public class EntanglementManager : MonoBehaviour {
             this.LoadHeroEntanglement();
         }
     }
-
+#endif
+    
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         if (scene.buildIndex == (int)SceneType.Battle) {
             BattleManager.Instance.OnHeroEnterTheField += OnHeroEnterTheField;
