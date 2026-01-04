@@ -52,15 +52,6 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         };
     }
 
-    public void TEMPFORBATTLE() {
-        if (this.OwnedPassiveEntries == null || this.OwnedPassiveEntries.Count == 0) {
-            this.OwnedPassiveEntries = new Dictionary<string, int>();
-            foreach (PassiveEntry entry in AllPassiveEntries) {
-                this.OwnedPassiveEntries.Add(entry.Data.Name, 3);
-            }    
-        }
-    }
-
     public Dictionary<PassiveEntry, int> GetPassiveEntryFilterBySort(int sortCode) {
         Dictionary<PassiveEntry, int> result = new Dictionary<PassiveEntry, int>();
         foreach (var passiveEntryPair in this.OwnedPassiveEntries) {
