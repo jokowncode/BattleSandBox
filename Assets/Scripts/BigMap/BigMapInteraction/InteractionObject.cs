@@ -10,7 +10,8 @@ public abstract class InteractionObject : MonoBehaviour {
         Dialog,
         Obstacle,
         SaveData,
-        GoBackToCamp
+        GoBackToCamp,
+        RestoreHealth
     }
     
     [field: SerializeField] public string OwnedTaskName { get; protected set; } = "None";

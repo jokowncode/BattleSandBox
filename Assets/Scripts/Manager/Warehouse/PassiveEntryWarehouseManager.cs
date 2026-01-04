@@ -29,6 +29,17 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         }
     }
 
+#if TEST_BATTLE
+    public void TEMPFORBATTLE() {
+        if (this.OwnedPassiveEntries == null || this.OwnedPassiveEntries.Count == 0) {
+            this.OwnedPassiveEntries = new Dictionary<string, int>();
+            foreach (PassiveEntry entry in AllPassiveEntries) {
+                this.OwnedPassiveEntries.Add(entry.Data.Name, 3);
+            }    
+        }
+    }
+#endif
+    
     private void Start() {
         SaveMapManager.Instance.OnSaveData += () => {
             string json = JsonUtility.ToJson(new Serialization<string, int>(this.OwnedPassiveEntries));
@@ -50,15 +61,6 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
                 }    
             }
         };
-    }
-
-    public void TEMPFORBATTLE() {
-        if (this.OwnedPassiveEntries == null || this.OwnedPassiveEntries.Count == 0) {
-            this.OwnedPassiveEntries = new Dictionary<string, int>();
-            foreach (PassiveEntry entry in AllPassiveEntries) {
-                this.OwnedPassiveEntries.Add(entry.Data.Name, 3);
-            }    
-        }
     }
 
     public Dictionary<PassiveEntry, int> GetPassiveEntryFilterBySort(int sortCode) {

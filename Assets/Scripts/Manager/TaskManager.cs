@@ -4,6 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[Serializable]
+public class TaskCurrentData {
+    public int Index;
+    public Vector3 Position;
+}
+
 public class TaskManager : MonoBehaviour {
 
     public static TaskManager Instance;
@@ -14,7 +20,7 @@ public class TaskManager : MonoBehaviour {
     [Header("Debug")] 
     [SerializeField] private List<string> DebugExistTasks;
     
-    public Dictionary<string, int> CurrentTaskIndexMap { get; private set; }
+    public Dictionary<string, TaskCurrentData> CurrentTaskDataMap { get; private set; }
 
     private void Awake() {
         if (Instance != null) {
@@ -32,22 +38,22 @@ public class TaskManager : MonoBehaviour {
 
     private void Start() {
         SaveMapManager.Instance.OnSaveData += () => {
-            string taskIndex = JsonUtility.ToJson(new Serialization<string, int>(this.CurrentTaskIndexMap));
-            PlayerPrefs.SetString("CurrentTaskIndexMap", taskIndex);
+            string taskIndex = JsonUtility.ToJson(new Serialization<string, TaskCurrentData>(this.CurrentTaskDataMap));
+            PlayerPrefs.SetString("CurrentTaskDataMap", taskIndex);
         };
 
         SaveMapManager.Instance.OnLoadData += () => {
-            if (PlayerPrefs.HasKey("CurrentTaskIndexMap")) {
-                this.CurrentTaskIndexMap = JsonUtility.FromJson<Serialization<string, int>>(PlayerPrefs.GetString("CurrentTaskIndexMap"))
+            if (PlayerPrefs.HasKey("CurrentTaskDataMap")) {
+                this.CurrentTaskDataMap = JsonUtility.FromJson<Serialization<string, TaskCurrentData>>(PlayerPrefs.GetString("CurrentTaskDataMap"))
                     .ToDictionary();
             } else {
-                this.CurrentTaskIndexMap = new Dictionary<string, int>();
+                this.CurrentTaskDataMap = new Dictionary<string, TaskCurrentData>();
             }
         
             // TODO: TEMP -> FOR DEBUG
-            if (this.CurrentTaskIndexMap.Count == 0) {
+            if (this.CurrentTaskDataMap.Count == 0) {
                 foreach (string taskName in this.DebugExistTasks) {
-                    this.AddTask(taskName);
+                    this.AddTask(taskName, Vector3.zero);
                 }    
             }
         };
@@ -60,28 +66,33 @@ public class TaskManager : MonoBehaviour {
         return null;
     }
 
-    public void NextTask(string taskName) {
-        if (this.CurrentTaskIndexMap.ContainsKey(taskName)) {
-            this.CurrentTaskIndexMap[taskName]++;
-            int newIndex = this.CurrentTaskIndexMap[taskName];
+    public void NextTask(string taskName, Transform nextPosition) {
+        if (this.CurrentTaskDataMap.ContainsKey(taskName)) {
+            this.CurrentTaskDataMap[taskName].Index += 1;
+            int newIndex = this.CurrentTaskDataMap[taskName].Index;
             if (newIndex >= this.GameTaskMap[taskName].TaskDescs.Length) {
-                this.CurrentTaskIndexMap.Remove(taskName);
+                this.CurrentTaskDataMap.Remove(taskName);
                 BigMapUIManager.Instance.TaskList.RemoveTask(taskName);
             } else {
-                BigMapUIManager.Instance.TaskList.UpdateTask(taskName, this.GameTaskMap[taskName].TaskDescs[newIndex]);
+                this.CurrentTaskDataMap[taskName].Position = nextPosition ? nextPosition.position : Vector3.zero;
+                BigMapUIManager.Instance.TaskList.UpdateTask(taskName, 
+                    this.GameTaskMap[taskName].TaskDescs[newIndex], nextPosition);
             }
         }
     }
 
-    public void AddTask(string taskName) {
+    public void AddTask(string taskName, Vector3 position) {
         if (!this.GameTaskMap.ContainsKey(taskName)) return;
-        if (this.CurrentTaskIndexMap.TryAdd(taskName, 0)) {
-            if(BigMapUIManager.Instance) BigMapUIManager.Instance.TaskList.AddTask(taskName);
+        if (this.CurrentTaskDataMap.TryAdd(taskName, new TaskCurrentData() {
+                Index = 0,
+                Position = position
+            })) {
+            if(BigMapUIManager.Instance) BigMapUIManager.Instance.TaskList.AddTask(taskName, position);
         }
     }
 
     public bool HasTask(string taskName) {
-        return this.CurrentTaskIndexMap.ContainsKey(taskName);
+        return this.CurrentTaskDataMap.ContainsKey(taskName);
     }
 }
 
