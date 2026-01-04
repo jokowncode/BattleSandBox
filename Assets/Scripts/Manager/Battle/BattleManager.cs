@@ -50,7 +50,9 @@ public class BattleManager : StateMachineController{
 
     public bool IsBattleStart { get; private set; }
     
-    public BattleData Data{ get; private set; }
+    [field: SerializeField] public BattleData Data { get; private set; }
+    // TODO: Link Scene
+    // public BattleData Data{ get; private set; }
 
     public Action OnEnemyBeClear;
 
@@ -93,6 +95,12 @@ public class BattleManager : StateMachineController{
     }
 
     private void Start(){
+        
+        // TODO: TEMP -> FOR BATTLE
+        HeroWarehouseManager.Instance.TEMPFORBATTLE();
+        PassiveEntryWarehouseManager.Instance.TEMPFORBATTLE();
+        EntanglementManager.Instance.TEMPFORBATTLE();
+        
         ChangeState(Prepare);
         this.BattleNameText.text = this.Data.BattleName;
         this.BattleMessageText.text = this.Data.BattleMessage;
@@ -102,6 +110,9 @@ public class BattleManager : StateMachineController{
         
         // TODO: Optimize Framerate
         Application.targetFrameRate = 120;
+        
+        // TODO: Link Scene
+        SetBattleData(this.Data);
     }
 
     public void SetBattleData(BattleData data){
