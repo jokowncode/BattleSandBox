@@ -78,6 +78,10 @@ public class SceneChangeManager : MonoBehaviour{
     }
 
     public void GoToDungeon(SceneType dungeonType, bool reloadData = false) {
+        if (!SceneTools.IsDungeonScene(dungeonType)) {
+            return;
+        }
+
         this.DungeonScene = dungeonType;
 
         this.IsNewDungeon = !PlayerPrefs.HasKey("CurrentDungeon") ||
@@ -94,7 +98,7 @@ public class SceneChangeManager : MonoBehaviour{
             this.IsLoadDungeon = false;
         }
 
-        if (this.CurrentScene == SceneType.Battle && type == SceneType.BigMap) {
+        if (SceneTools.IsBattleScene(this.CurrentScene) && type == SceneType.BigMap) {
             this.IsNewDungeon = false;
         }
 

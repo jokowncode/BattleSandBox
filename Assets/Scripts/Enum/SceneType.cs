@@ -5,7 +5,8 @@ public enum SceneType{
     AboutUs,
     Camp,
     BigMap,
-    Battle,
+    Battle_Normal,
+    Battle_无限长廊,
     Dungeons_Level1
 }
 

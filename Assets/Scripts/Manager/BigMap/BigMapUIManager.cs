@@ -30,8 +30,8 @@ public class BigMapUIManager : MonoBehaviour{
         this.MoneyText.text = money.ToString();
     }
 
-    public void ShowBattleStartUI(Sprite background, Sprite battleImage, string battleText){
-        this.BattleStartBannar.ShowBattleStartUI(background, battleImage, battleText);
+    public void ShowBattleStartUI(SceneType battleScene, Sprite background, Sprite battleImage, string battleText){
+        this.BattleStartBannar.ShowBattleStartUI(battleScene, background, battleImage, battleText);
     }
 }
 

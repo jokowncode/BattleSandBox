@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour{
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode){
-        if (SceneChangeManager.Instance.CurrentScene == SceneType.Battle){
+        if (SceneTools.IsBattleScene(SceneChangeManager.Instance.CurrentScene)){
             BattleManager.Instance.SetBattleData(this.NextBattleData);
         }
 
@@ -86,8 +86,7 @@ public class GameManager : MonoBehaviour{
         this.NextBattleData = battleData;
         if(GoToBattleSfx)
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.GoToBattleSfx);
-        BigMapUIManager.Instance.ShowBattleStartUI(battleData.BattleBannarBackground, battleData.BattleImage, battleData.BattleText);
-        // SceneChangeManager.Instance.GoToScene(SceneType.Battle);
+        BigMapUIManager.Instance.ShowBattleStartUI(battleData.BattleScene, battleData.BattleBannarBackground, battleData.BattleImage, battleData.BattleText);
     }
 
     public void StartGame(){

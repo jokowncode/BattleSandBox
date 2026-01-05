@@ -104,7 +104,7 @@ public class EntanglementManager : MonoBehaviour {
 #endif
     
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        if (scene.buildIndex == (int)SceneType.Battle) {
+        if (SceneTools.IsBattleScene((SceneType)scene.buildIndex)) {
             BattleManager.Instance.OnHeroEnterTheField += OnHeroEnterTheField;
             BattleManager.Instance.OnHeroExitTheField += OnHeroExitTheField;
         }

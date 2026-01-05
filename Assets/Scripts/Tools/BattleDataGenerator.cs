@@ -4,8 +4,9 @@ using UnityEditor;
 using UnityEngine;
 
 #if UNITY_EDITOR
-public class BattleDataGenerator : MonoBehaviour{
+public class BattleDataGenerator : MonoBehaviour {
 
+    [SerializeField] private SceneType BattleScene;
     [SerializeField] private Transform EnemyParent;
     [SerializeField] private string AssetName;
     [SerializeField] private string BattleMessage;
@@ -30,6 +31,7 @@ public class BattleDataGenerator : MonoBehaviour{
             }
         }
         data.EnemiesInBattle = enemyDepartmentDatas;
+        data.BattleScene = this.BattleScene;
         string path = $"Assets/ScriptableObjects/BattleData/{AssetName}.asset";
         AssetDatabase.CreateAsset(data, path);
         AssetDatabase.SaveAssets();
