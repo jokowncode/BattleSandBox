@@ -78,8 +78,12 @@ public class Fighter : StateMachineController{
     }
 
     private void InitHealth() {
-        float health = SaveMapManager.Instance.GetHeroHealth(this.Name);
-        this.InBattleHealth = health < 0.0f ? this.CurrentData.Health : Mathf.Min(health, this.CurrentData.Health);
+        if (this is not Hero || IsSummon) {
+            this.InBattleHealth = this.CurrentData.Health;
+        } else {
+            float health = SaveMapManager.Instance.GetHeroHealth(this.Name);
+            this.InBattleHealth = health < 0.0f ? this.CurrentData.Health : Mathf.Min(health, this.CurrentData.Health);
+        }
         UpdateBloodBar();
     }
 
