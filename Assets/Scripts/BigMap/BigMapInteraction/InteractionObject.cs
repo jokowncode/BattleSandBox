@@ -11,7 +11,8 @@ public abstract class InteractionObject : MonoBehaviour {
         Obstacle,
         SaveData,
         GoBackToCamp,
-        RestoreHealth
+        RestoreHealth,
+        GoToDungeon
     }
     
     [field: SerializeField] public string OwnedTaskName { get; protected set; } = "None";
@@ -45,7 +46,7 @@ public abstract class InteractionObject : MonoBehaviour {
         }
     }
 
-    private void Start() {
+    protected virtual void Start() {
         this.IsEnd = SaveMapManager.Instance.LoadInteractionObjectEnd(this.GetName());
         if (!this.IsActive) {
             this.IsActive = SaveMapManager.Instance.LoadInteractionObjectAvailable(this.GetName());

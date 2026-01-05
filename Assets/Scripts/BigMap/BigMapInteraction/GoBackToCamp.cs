@@ -16,6 +16,8 @@ public class GoBackToCamp : InteractionObject {
     }
 
     protected override void Interaction() {
+        // TODO: Multi Save Data -> Auto Save
+        SaveMapManager.Instance.SaveData();
         GameManager.Instance.GoBackToCamp(this.IsSaveRoom);
     }
 }

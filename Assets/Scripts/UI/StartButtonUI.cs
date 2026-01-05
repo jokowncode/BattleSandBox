@@ -8,11 +8,11 @@ public class StartButtonUI : MonoBehaviour {
     }
 
     public void Tutorial(){
-        GameManager.Instance.GoToTutorial();
+        GameManager.Instance.GoToScene(SceneType.Tutorial);
     }
 
     public void AboutUs(){
-        GameManager.Instance.GoToAboutUs();
+        GameManager.Instance.GoToScene(SceneType.AboutUs);
     }
 
     public void Quit(){

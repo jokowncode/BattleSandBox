@@ -13,9 +13,6 @@ public class GameManager : MonoBehaviour{
     [Header("Player Initial Data")] 
     [SerializeField] private float InitialMoney = 200.0f;
     
-    [Header("Debug")] 
-    [SerializeField] private SceneType TestDungeon = SceneType.Dungeons_Level1;
-    
     public static GameManager Instance;
 
     public float Money { get; private set; } = 0.0f;
@@ -75,15 +72,14 @@ public class GameManager : MonoBehaviour{
 
     public void DungeonFail() {
         ResetBattleFlag();
-        SceneChangeManager.Instance.GoToDungeon(SceneChangeManager.Instance.DungeonScene);
+        SceneChangeManager.Instance.GoToDungeon(SceneChangeManager.Instance.DungeonScene, true);
     }
 
     public void GoBackToCamp(bool isSaveRoom) {
         if (!isSaveRoom) {
             PlayerPrefs.DeleteKey("CurrentDungeon");
         }
-        // TODO: GO TO CAMP
-        this.GoToMainMenu();
+        this.GoToScene(SceneType.Camp);
     }
 
     public void GoToBattle(BattleData battleData){
@@ -97,13 +93,18 @@ public class GameManager : MonoBehaviour{
     public void StartGame(){
         this.ResetBattleFlag();
 
+        if (!PlayerPrefs.HasKey("CurrentDungeon")) {
+            SaveMapManager.Instance.ClearDungeonData();
+        }
+        SaveMapManager.Instance.LoadData();
+
         if (PlayerPrefs.HasKey("CurrentDungeon")
             && Enum.TryParse(PlayerPrefs.GetString("CurrentDungeon"), out SceneType dungeon)) {
             SceneChangeManager.Instance.GoToDungeon(dungeon);
         } else {
             // TODO: If Not Play Newbie Dungeon -> Go to Newbie Dungeon
             // TODO: Else GO TO CAMP   
-            SceneChangeManager.Instance.GoToDungeon(this.TestDungeon);
+            SceneChangeManager.Instance.GoToScene(SceneType.Camp);
         }
     }
 
@@ -113,16 +114,8 @@ public class GameManager : MonoBehaviour{
         SceneChangeManager.Instance.GoToScene(SceneType.BigMap, true);
     }
 
-    public void GoToMainMenu(){
-        SceneChangeManager.Instance.GoToScene(SceneType.Main);
-    }
-
-    public void GoToTutorial(){
-        SceneChangeManager.Instance.GoToScene(SceneType.Tutorial);
-    }
-
-    public void GoToAboutUs(){
-        SceneChangeManager.Instance.GoToScene(SceneType.AboutUs);
+    public void GoToScene(SceneType scene) {
+        SceneChangeManager.Instance.GoToScene(scene);
     }
 
     public void ResetBattleFlag(){

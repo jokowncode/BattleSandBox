@@ -77,16 +77,15 @@ public class SceneChangeManager : MonoBehaviour{
         this.Loading.Transition(false);
     }
 
-    public void GoToDungeon(SceneType dungeonType) {
+    public void GoToDungeon(SceneType dungeonType, bool reloadData = false) {
         this.DungeonScene = dungeonType;
 
         this.IsNewDungeon = !PlayerPrefs.HasKey("CurrentDungeon") ||
                             PlayerPrefs.GetString("CurrentDungeon") != this.DungeonScene.ToString();
         if (IsNewDungeon) {
-            SaveMapManager.Instance.ClearDungeonData();
             PlayerPrefs.SetString("CurrentDungeon", this.DungeonScene.ToString());
         }
-        SaveMapManager.Instance.LoadData();
+        if (reloadData) SaveMapManager.Instance.LoadData();
         this.GoToScene(SceneType.BigMap, true);
     }
 

@@ -30,7 +30,7 @@ public class PlayerMove : MonoBehaviour{
     }
 
     private void Update() {
-        if (DialogManager.Instance.IsInDialog) {
+        if (DialogManager.Instance && DialogManager.Instance.IsInDialog) {
             PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
             return;
         }
@@ -39,7 +39,7 @@ public class PlayerMove : MonoBehaviour{
         float z = Input.GetAxisRaw("Vertical");
         Vector3 velocity = new Vector3(x, 0.0f, z).normalized;
 
-        if (Physics.BoxCast(this.transform.position + Vector3.up * 0.5f, Vector3.one * 0.05f, velocity, 
+        if (Physics.BoxCast(this.transform.position + transform.up * 0.5f, Vector3.one * 0.05f, velocity, 
                 Quaternion.identity, 0.1f, 1 << LayerMask.NameToLayer("Wall"))) {
             PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
             return;
