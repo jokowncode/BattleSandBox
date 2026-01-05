@@ -8,7 +8,7 @@ public class Store : InteractionObject {
     [field: SerializeField] public List<string> Goods { get; private set; }
 
     protected override InteractionObjType GetInteractionObjType() {
-        return InteractionObjType.Store;
+        return InteractionObjType.商店;
     }
 
     protected override void Awake() {

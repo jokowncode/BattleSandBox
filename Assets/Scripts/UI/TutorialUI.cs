@@ -16,7 +16,7 @@ public class TutorialUI : MonoBehaviour{
     }
 
     public void GoBack(){
-        GameManager.Instance.GoToMainMenu();
+        GameManager.Instance.GoToScene(SceneType.Main);
     }
 
     public void NextPage(){
