@@ -14,7 +14,7 @@ public class Obstacle : InteractionObject {
     private BoxCollider ObstacleCollider;
 
     protected override InteractionObjType GetInteractionObjType() {
-        return InteractionObjType.Obstacle;
+        return InteractionObjType.障碍;
     }
 
     protected override void Awake() {
@@ -42,7 +42,7 @@ public class Obstacle : InteractionObject {
     }
 
     protected override void PlayerEnter() {
-        this.InAreaPlayer.TransitionInteractionTip(false);
+        this.EnableInteraction(false);
         this.enabled = this.Type == ObstacleType.Inside;
         if (!this.IsEnd) {
             if (Type == ObstacleType.Outside) {

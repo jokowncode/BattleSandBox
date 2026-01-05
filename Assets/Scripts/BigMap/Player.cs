@@ -1,5 +1,6 @@
 ﻿
 using System;
+using TMPro;
 using UnityEngine;
 
 public enum PlayerInAreaColliderDir {
@@ -10,7 +11,7 @@ public enum PlayerInAreaColliderDir {
 
 public class Player : MonoBehaviour{
 
-    [SerializeField] private GameObject InteractionTip;
+    [SerializeField] private TextMeshProUGUI InteractionTip;
 
     private PlayerMove Move;
 
@@ -18,8 +19,9 @@ public class Player : MonoBehaviour{
         Move = GetComponent<PlayerMove>();
     }
 
-    public void TransitionInteractionTip(bool show){
-        InteractionTip.SetActive(show);
+    public void TransitionInteractionTip(bool show, string interactionObjName){
+        InteractionTip.transform.parent.gameObject.SetActive(show);
+        InteractionTip.text = $"E {interactionObjName}";
     }
 
     public void SetCollider(BoxCollider inAreaCollider, PlayerInAreaColliderDir dir = PlayerInAreaColliderDir.Both){

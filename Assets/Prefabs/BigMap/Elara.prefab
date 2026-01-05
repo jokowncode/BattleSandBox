@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: E
+  m_text: "E \u6218\u6597"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3bd21f304e77db54eb98a1f35f6a2680, type: 2}
   m_sharedMaterial: {fileID: -3509209986637506031, guid: 3bd21f304e77db54eb98a1f35f6a2680,
@@ -318,9 +318,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 971913a9f02b42078fcba8b06efdcf07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
+  FootstepCycle: 4
+  HorizontalSpeed: 5
+  VerticalSpeed: 2
   RendererTransform: {fileID: 278028778424408438}
-  FootstepSfx: {fileID: 0}
 --- !u!114 &372805152577009043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,7 +334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76553f0dd3ce49959e6043656397d43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InteractionTip: {fileID: 3431956680821160443}
+  InteractionTip: {fileID: 196389992554031537}
 --- !u!1 &2933417343188036437
 GameObject:
   m_ObjectHideFlags: 0
@@ -667,7 +668,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 1.5799866}
-  m_SizeDelta: {x: 0.3, y: 0.3}
+  m_SizeDelta: {x: 1, y: 0.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &405543061413803626
 CanvasRenderer:

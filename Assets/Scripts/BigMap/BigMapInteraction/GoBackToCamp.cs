@@ -12,7 +12,7 @@ public class GoBackToCamp : InteractionObject {
     }
 
     protected override InteractionObjType GetInteractionObjType() {
-        return InteractionObjType.GoBackToCamp;
+        return InteractionObjType.营地;
     }
 
     protected override void Interaction() {

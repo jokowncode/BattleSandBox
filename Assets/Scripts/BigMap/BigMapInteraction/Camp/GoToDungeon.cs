@@ -12,7 +12,7 @@ public class GoToDungeon : InteractionObject {
     }
 
     protected override InteractionObjType GetInteractionObjType() {
-        return InteractionObjType.GoToDungeon;
+        return InteractionObjType.副本;
     }
 
     protected override void Interaction() {
