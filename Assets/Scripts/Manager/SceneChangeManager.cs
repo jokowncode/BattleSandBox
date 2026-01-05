@@ -77,16 +77,19 @@ public class SceneChangeManager : MonoBehaviour{
         this.Loading.Transition(false);
     }
 
-    public void GoToDungeon(SceneType dungeonType) {
+    public void GoToDungeon(SceneType dungeonType, bool reloadData = false) {
+        if (!SceneTools.IsDungeonScene(dungeonType)) {
+            return;
+        }
+
         this.DungeonScene = dungeonType;
 
         this.IsNewDungeon = !PlayerPrefs.HasKey("CurrentDungeon") ||
                             PlayerPrefs.GetString("CurrentDungeon") != this.DungeonScene.ToString();
         if (IsNewDungeon) {
-            SaveMapManager.Instance.ClearDungeonData();
             PlayerPrefs.SetString("CurrentDungeon", this.DungeonScene.ToString());
         }
-        SaveMapManager.Instance.LoadData();
+        if (reloadData) SaveMapManager.Instance.LoadData();
         this.GoToScene(SceneType.BigMap, true);
     }
 
@@ -95,7 +98,7 @@ public class SceneChangeManager : MonoBehaviour{
             this.IsLoadDungeon = false;
         }
 
-        if (this.CurrentScene == SceneType.Battle && type == SceneType.BigMap) {
+        if (SceneTools.IsBattleScene(this.CurrentScene) && type == SceneType.BigMap) {
             this.IsNewDungeon = false;
         }
 

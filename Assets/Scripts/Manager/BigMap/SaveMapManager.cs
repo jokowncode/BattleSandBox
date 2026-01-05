@@ -41,7 +41,7 @@ public class SaveMapManager : MonoBehaviour {
     }
 
     private void OnSceneChange(SceneType oldScene, SceneType newScene) {
-        if (oldScene == SceneType.BigMap && newScene == SceneType.Battle) {
+        if (oldScene == SceneType.BigMap && SceneTools.IsBattleScene(newScene)) {
             if(this.PlayerInBigMap) this.TempPlayerPos = this.PlayerInBigMap.transform.position;
         }
     }

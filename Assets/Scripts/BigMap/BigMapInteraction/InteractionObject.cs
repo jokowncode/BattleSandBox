@@ -5,13 +5,14 @@ using UnityEngine;
 public abstract class InteractionObject : MonoBehaviour {
 
     protected enum InteractionObjType {
-        Store,
-        Battle,
-        Dialog,
-        Obstacle,
-        SaveData,
-        GoBackToCamp,
-        RestoreHealth
+        商店,
+        战斗,
+        对话,
+        障碍,
+        存档,
+        营地,
+        回血,
+        副本
     }
     
     [field: SerializeField] public string OwnedTaskName { get; protected set; } = "None";
@@ -45,7 +46,7 @@ public abstract class InteractionObject : MonoBehaviour {
         }
     }
 
-    private void Start() {
+    protected virtual void Start() {
         this.IsEnd = SaveMapManager.Instance.LoadInteractionObjectEnd(this.GetName());
         if (!this.IsActive) {
             this.IsActive = SaveMapManager.Instance.LoadInteractionObjectAvailable(this.GetName());
@@ -70,7 +71,7 @@ public abstract class InteractionObject : MonoBehaviour {
 
     protected void EnableInteraction(bool enable) {
         if (!this.InAreaPlayer) return; 
-        this.InAreaPlayer.TransitionInteractionTip(enable);
+        this.InAreaPlayer.TransitionInteractionTip(enable, this.GetInteractionObjType().ToString());
         this.enabled = enable;
     }
 

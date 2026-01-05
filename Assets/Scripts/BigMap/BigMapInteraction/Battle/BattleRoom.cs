@@ -15,7 +15,7 @@ public class BattleRoom : InteractionObject {
     private BoxCollider Collider;
 
     protected override InteractionObjType GetInteractionObjType() {
-        return InteractionObjType.Battle;
+        return InteractionObjType.战斗;
     }
 
     protected override void Awake(){

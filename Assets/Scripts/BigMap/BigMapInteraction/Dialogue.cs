@@ -14,7 +14,7 @@ public class Dialogue : InteractionObject {
     private bool IsCurrentConversation;
 
     protected override InteractionObjType GetInteractionObjType() {
-        return InteractionObjType.Dialog;
+        return InteractionObjType.对话;
     }
 
     protected override void LoadBigMapData() {

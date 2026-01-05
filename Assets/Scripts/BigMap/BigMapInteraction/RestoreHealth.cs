@@ -14,7 +14,7 @@ public class RestoreHealth : InteractionObject {
     }
 
     protected override InteractionObjType GetInteractionObjType() {
-        return InteractionObjType.RestoreHealth;
+        return InteractionObjType.回血;
     }
 
     protected override void Interaction() {

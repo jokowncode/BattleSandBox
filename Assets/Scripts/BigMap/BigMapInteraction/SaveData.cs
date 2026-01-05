@@ -8,10 +8,11 @@ public class SaveData : InteractionObject {
     }
 
     protected override InteractionObjType GetInteractionObjType() {
-        return InteractionObjType.SaveData;
+        return InteractionObjType.存档;
     }
 
     protected override void Interaction() {
+        // TODO: Multi Save Data -> Mutual Save
         SaveMapManager.Instance.SaveData();
     }
 }
