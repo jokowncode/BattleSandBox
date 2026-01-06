@@ -7,6 +7,15 @@ public class BattleButtonUI : MonoBehaviour {
         BattleManager.Instance.AllHeroRecall();
         GameManager.Instance.GoToMap(true, false);
     }
-    
+
+    public void WinGame() {
+        BattleManager.Instance.AllHeroRecall();
+        GameManager.Instance.GoToMap(true, true);
+    }
+
+    public void RewindBattle() {
+        BattleManager.Instance.RewindBattle();
+    }
+
 }
 

@@ -22,6 +22,8 @@ public class SaveMapManager : MonoBehaviour {
     public Action OnLoadData;
 
     private Vector3 TempPlayerPos = Vector3.zero;
+
+    private Dictionary<string, float> DupDungeonHealth = new Dictionary<string, float>();
     
     private void Awake() {
         if (Instance != null) {
@@ -43,6 +45,13 @@ public class SaveMapManager : MonoBehaviour {
     private void OnSceneChange(SceneType oldScene, SceneType newScene) {
         if (oldScene == SceneType.BigMap && SceneTools.IsBattleScene(newScene)) {
             if(this.PlayerInBigMap) this.TempPlayerPos = this.PlayerInBigMap.transform.position;
+        }
+    }
+
+    public void DungeonHealthDup() {
+        this.DupDungeonHealth.Clear();
+        foreach (var pair in this.DungeonHeroHealth) {
+            this.DupDungeonHealth.Add(pair.Key, pair.Value);
         }
     }
 
@@ -110,6 +119,13 @@ public class SaveMapManager : MonoBehaviour {
             }else if (GameManager.Instance.IsBattleEnd) {
                 this.PlayerInBigMap.transform.position = this.TempPlayerPos;
             }
+        }
+
+        if (SceneTools.IsBattleScene(SceneChangeManager.Instance.CurrentScene)) {
+            this.DungeonHealthDup();
+            BattleManager.Instance.OnRewindBattle += () => {
+                this.DungeonHeroHealth = this.DupDungeonHealth;
+            };
         }
     }
     

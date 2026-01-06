@@ -13,7 +13,7 @@ public class Player : MonoBehaviour{
 
     [SerializeField] private TextMeshProUGUI InteractionTip;
 
-    private PlayerMove Move;
+    public PlayerMove Move { get; private set; }
 
     private void Awake(){
         Move = GetComponent<PlayerMove>();

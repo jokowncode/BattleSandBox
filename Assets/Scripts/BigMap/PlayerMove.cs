@@ -16,6 +16,8 @@ public class PlayerMove : MonoBehaviour{
     
     private float LastPlayFootstepTime = -1.0f;
 
+    public Vector3 HorizontalDir { get; private set; }
+
     private void Awake(){
         PlayerAnimator = GetComponentInChildren<Animator>();
     }
@@ -38,6 +40,7 @@ public class PlayerMove : MonoBehaviour{
         float x = Input.GetAxisRaw("Horizontal");
         float z = Input.GetAxisRaw("Vertical");
         Vector3 velocity = new Vector3(x, 0.0f, z).normalized;
+        this.HorizontalDir = new Vector3(Mathf.Sign(x), 0.0f, 0.0f);
 
         if (Physics.BoxCast(this.transform.position + transform.up * 0.5f, Vector3.one * 0.1f, velocity, 
                 Quaternion.identity, 0.1f, 1 << LayerMask.NameToLayer("Wall"))) {
