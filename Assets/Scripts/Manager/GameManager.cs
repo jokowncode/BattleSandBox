@@ -82,11 +82,15 @@ public class GameManager : MonoBehaviour{
         this.GoToScene(SceneType.Camp);
     }
 
-    public void GoToBattle(BattleData battleData){
+    public void GoToBattle(BattleData battleData, bool showStartUI = true){
         this.NextBattleData = battleData;
-        if(GoToBattleSfx)
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.GoToBattleSfx);
-        BigMapUIManager.Instance.ShowBattleStartUI(battleData.BattleScene, battleData.BattleBannarBackground, battleData.BattleImage, battleData.BattleText);
+        if (showStartUI) {
+            if(GoToBattleSfx)
+                AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.GoToBattleSfx);
+            BigMapUIManager.Instance.ShowBattleStartUI(battleData.BattleScene, battleData.BattleBannarBackground, battleData.BattleImage, battleData.BattleText);
+        } else {
+            SceneChangeManager.Instance.GoToScene(battleData.BattleScene);   
+        }
     }
 
     public void StartGame(){
