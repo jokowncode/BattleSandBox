@@ -13,5 +13,9 @@ public class BattleButtonUI : MonoBehaviour {
         GameManager.Instance.GoToMap(true, true);
     }
 
+    public void RewindBattle() {
+        BattleManager.Instance.RewindBattle();
+    }
+
 }
 

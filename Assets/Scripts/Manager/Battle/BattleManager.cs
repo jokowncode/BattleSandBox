@@ -57,6 +57,7 @@ public class BattleManager : StateMachineController{
 #endif
 
     public Action OnEnemyBeClear;
+    public Action OnRewindBattle;
 
 #if DEBUG_MODE
     public float BattleStartTime {get; private set;}
@@ -122,6 +123,12 @@ public class BattleManager : StateMachineController{
     public void SetBattleData(BattleData data){
         this.Data = data;
         DeployEnemy();
+    }
+
+    public void RewindBattle() {
+        if (!this.IsBattleStart) return;
+        OnRewindBattle?.Invoke();
+        GameManager.Instance.GoToBattle(this.Data, false);
     }
 
     public void PlayErrorSfx(){
