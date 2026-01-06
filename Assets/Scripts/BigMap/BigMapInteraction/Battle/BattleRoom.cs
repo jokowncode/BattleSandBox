@@ -12,7 +12,7 @@ public class BattleRoom : InteractionObject {
     public Action OnVictory;
     public Action OnDefeat;
     
-    private BoxCollider Collider;
+    protected BoxCollider Collider;
 
     protected override InteractionObjType GetInteractionObjType() {
         return InteractionObjType.战斗;
@@ -24,7 +24,7 @@ public class BattleRoom : InteractionObject {
     }
 
     protected override void Interaction(){
-        if (this.IsEnd){
+        if (this.IsEnd && !this.IsEndCanInteract){
             return;
         }
         GameManager.Instance.GoToBattle(this.Data);

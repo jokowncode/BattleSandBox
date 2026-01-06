@@ -64,6 +64,7 @@ public abstract class InteractionObject : MonoBehaviour {
     protected virtual void LoadBigMapData() { }
 
     protected void EndInteraction() {
+        if (this.IsEnd) return;
         this.IsEnd = true;
         SaveMapManager.Instance.SetInteractionObjectEnd(this.GetName());
         this.OnInteractionEnded?.Invoke();
