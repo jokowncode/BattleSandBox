@@ -23,8 +23,8 @@ public class TaskUI : MonoBehaviour {
     }
 
     private void Update() {
-        if (SaveMapManager.Instance.PlayerInBigMap && this.TaskPos != Vector3.zero) {
-            Vector3 playerPos = SaveMapManager.Instance.PlayerInBigMap.transform.position;
+        if (SaveDataManager.Instance.PlayerInBigMap && this.TaskPos != Vector3.zero) {
+            Vector3 playerPos = SaveDataManager.Instance.PlayerInBigMap.transform.position;
             Vector3 dir = this.TaskPos - playerPos;
             dir.z = 0.0f;
             dir = dir.normalized;

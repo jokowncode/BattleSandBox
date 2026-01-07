@@ -9,7 +9,7 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
     
     // private List<string> OwnedPassiveEntries = new List<string>();
     
-    private Dictionary<string, int> OwnedPassiveEntries;
+    private SerializableDictionary<string, int> OwnedPassiveEntries;
     
     public static PassiveEntryWarehouseManager Instance;
 
@@ -41,20 +41,9 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
 #endif
     
     private void Start() {
-        SaveMapManager.Instance.OnSaveData += () => {
-            string json = JsonUtility.ToJson(new Serialization<string, int>(this.OwnedPassiveEntries));
-            PlayerPrefs.SetString("OwnedPassiveEntryWarehouse", json);
-        };
-
-        SaveMapManager.Instance.OnLoadData += () => {
-            if (PlayerPrefs.HasKey("OwnedPassiveEntryWarehouse")) {
-                string json = PlayerPrefs.GetString("OwnedPassiveEntryWarehouse");
-                this.OwnedPassiveEntries = JsonUtility.FromJson<Serialization<string, int>>(json)
-                    .ToDictionary();
-            } else {
-                this.OwnedPassiveEntries = new Dictionary<string, int>();
-            }
+        SaveDataManager.Instance.OnLoadData += () => {
             // TODO: TEMP Debug Battle
+            this.OwnedPassiveEntries = SaveDataManager.Instance.PlayerData.OwnedPassiveEntries;
             if (this.OwnedPassiveEntries.Count == 0) {
                 foreach (PassiveEntry entry in AllPassiveEntries) {
                     this.OwnedPassiveEntries.Add(entry.Data.Name, 3);
@@ -65,7 +54,7 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
 
     public Dictionary<PassiveEntry, int> GetPassiveEntryFilterBySort(int sortCode) {
         Dictionary<PassiveEntry, int> result = new Dictionary<PassiveEntry, int>();
-        foreach (var passiveEntryPair in this.OwnedPassiveEntries) {
+        foreach (KeyValuePair<string, int> passiveEntryPair in this.OwnedPassiveEntries) {
             if (this.AllPassiveEntryMap.TryGetValue(passiveEntryPair.Key, out PassiveEntry entry)) {
                 if ((entry.GetSortCode() & sortCode) == 0) continue;
                 result.Add(entry, passiveEntryPair.Value);    

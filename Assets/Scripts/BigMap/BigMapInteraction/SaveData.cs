@@ -12,8 +12,8 @@ public class SaveData : InteractionObject {
     }
 
     protected override void Interaction() {
-        // TODO: Multi Save Data -> Mutual Save
-        SaveMapManager.Instance.SaveData();
+        // TODO: Mutual Save UI
+        SaveDataManager.Instance.MutualSaveData(0);
     }
 }
 

@@ -36,21 +36,13 @@ public class GameManager : MonoBehaviour{
     }
 
     private void Start() {
-        SaveMapManager.Instance.OnLoadData += () => {
-            if (PlayerPrefs.HasKey("PlayerMoney")) {
-                SetMoney(PlayerPrefs.GetFloat("PlayerMoney"));
-            } else {
-                SetMoney(this.InitialMoney);
-            }
-        };
-
-        SaveMapManager.Instance.OnSaveData += () => {
-            PlayerPrefs.SetFloat("PlayerMoney", this.Money);
+        SaveDataManager.Instance.OnLoadData += () => {
+            SetMoney(SaveDataManager.Instance.PlayerData.PlayerMoney);
         };
     }
 
     public void SetMoney(float money) {
-        this.Money = money;
+        this.Money = money < 0.0f ? this.InitialMoney : money;
         if (BigMapUIManager.Instance) {
             BigMapUIManager.Instance.SetMoneyText(this.Money);
         }
@@ -77,7 +69,7 @@ public class GameManager : MonoBehaviour{
 
     public void GoBackToCamp(bool isSaveRoom) {
         if (!isSaveRoom) {
-            PlayerPrefs.DeleteKey("CurrentDungeon");
+            SaveDataManager.Instance.ClearCurrentDungeon();
         }
         this.GoToScene(SceneType.Camp);
     }
@@ -95,15 +87,14 @@ public class GameManager : MonoBehaviour{
 
     public void StartGame(){
         this.ResetBattleFlag();
-
-        if (!PlayerPrefs.HasKey("CurrentDungeon")) {
-            SaveMapManager.Instance.ClearDungeonData();
+        
+        SaveDataManager.Instance.LoadAutoSaveData();
+        if (SaveDataManager.Instance.PlayerData.CurrentDungeon == SceneType.None) {
+            SaveDataManager.Instance.ClearDungeonData();
         }
-        SaveMapManager.Instance.LoadData();
 
-        if (PlayerPrefs.HasKey("CurrentDungeon")
-            && Enum.TryParse(PlayerPrefs.GetString("CurrentDungeon"), out SceneType dungeon)) {
-            SceneChangeManager.Instance.GoToDungeon(dungeon);
+        if (SceneTools.IsDungeonScene(SaveDataManager.Instance.PlayerData.CurrentDungeon)) {
+            SceneChangeManager.Instance.GoToDungeon(SaveDataManager.Instance.PlayerData.CurrentDungeon);
         } else {
             // TODO: If Not Play Newbie Dungeon -> Go to Newbie Dungeon
             // TODO: Else GO TO CAMP   

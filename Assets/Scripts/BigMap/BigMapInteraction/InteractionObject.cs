@@ -47,9 +47,9 @@ public abstract class InteractionObject : MonoBehaviour {
     }
 
     protected virtual void Start() {
-        this.IsEnd = SaveMapManager.Instance.LoadInteractionObjectEnd(this.GetName());
+        this.IsEnd = SaveDataManager.Instance.LoadInteractionObjectEnd(this.GetName());
         if (!this.IsActive) {
-            this.IsActive = SaveMapManager.Instance.LoadInteractionObjectAvailable(this.GetName());
+            this.IsActive = SaveDataManager.Instance.LoadInteractionObjectAvailable(this.GetName());
         }
         
         this.LoadBigMapData();
@@ -58,7 +58,7 @@ public abstract class InteractionObject : MonoBehaviour {
 
     public virtual void Activate() {
         this.IsActive = true;
-        SaveMapManager.Instance.SetInteractionObjectAvailable(this.GetName());
+        SaveDataManager.Instance.SetInteractionObjectAvailable(this.GetName());
     }
 
     protected virtual void LoadBigMapData() { }
@@ -66,7 +66,7 @@ public abstract class InteractionObject : MonoBehaviour {
     protected void EndInteraction() {
         if (this.IsEnd) return;
         this.IsEnd = true;
-        SaveMapManager.Instance.SetInteractionObjectEnd(this.GetName());
+        SaveDataManager.Instance.SetInteractionObjectEnd(this.GetName());
         this.OnInteractionEnded?.Invoke();
     }
 

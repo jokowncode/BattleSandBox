@@ -30,6 +30,8 @@ public class SceneChangeManager : MonoBehaviour{
 
     public bool IsNewDungeon { get; private set; } = false;
 
+    private bool IsLoadScene = false;
+
     private void Awake(){
         if (Instance != null){
             Destroy(this.gameObject);
@@ -38,12 +40,10 @@ public class SceneChangeManager : MonoBehaviour{
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
-        
-        // TODO: TEMP -> FOR DEBUG
-        PlayerPrefs.DeleteAll();
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode){
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        this.IsLoadScene = false;
         if (this.CurrentScene is SceneType.Main or SceneType.Tutorial){
             AudioManager.Instance.SetMainMusic(this.MainMenuBGM);
         }
@@ -84,16 +84,19 @@ public class SceneChangeManager : MonoBehaviour{
 
         this.DungeonScene = dungeonType;
 
-        this.IsNewDungeon = !PlayerPrefs.HasKey("CurrentDungeon") ||
-                            PlayerPrefs.GetString("CurrentDungeon") != this.DungeonScene.ToString();
+        SceneType dungeon = SaveDataManager.Instance.PlayerData.CurrentDungeon;
+        this.IsNewDungeon = dungeon == SceneType.None || dungeon != this.DungeonScene;
         if (IsNewDungeon) {
-            PlayerPrefs.SetString("CurrentDungeon", this.DungeonScene.ToString());
+            SaveDataManager.Instance.PlayerData.CurrentDungeon = this.DungeonScene;
         }
-        if (reloadData) SaveMapManager.Instance.LoadData();
+        if (reloadData) SaveDataManager.Instance.LoadAutoSaveData();
         this.GoToScene(SceneType.BigMap, true);
     }
 
     public void GoToScene(SceneType type, bool isBlackScreen = false) {
+        if (this.IsLoadScene) return;
+        this.IsLoadScene = true;
+        
         if (type == SceneType.BigMap) {
             this.IsLoadDungeon = false;
         }
