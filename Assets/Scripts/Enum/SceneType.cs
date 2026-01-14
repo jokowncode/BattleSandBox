@@ -1,5 +1,6 @@
 ﻿
 public enum SceneType{
+    None = -1,
     Main,
     Tutorial,
     AboutUs,

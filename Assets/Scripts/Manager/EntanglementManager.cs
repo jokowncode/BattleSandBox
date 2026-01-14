@@ -61,10 +61,8 @@ public class EntanglementManager : MonoBehaviour {
     }
 
     private void LoadHeroEntanglement() {
-        if (PlayerPrefs.HasKey("HeroEntanglementValues")) {
-            this.HeroEntanglementValues = JsonUtility
-                .FromJson<Serialization<float>>(PlayerPrefs.GetString("HeroEntanglementValues")).ToList();
-        } else {
+        this.HeroEntanglementValues = SaveDataManager.Instance.PlayerData.HeroEntanglementValues;
+        if (this.HeroEntanglementValues.Count == 0) {
             this.HeroEntanglementValues = new List<float>();
             int count = HeroWarehouseManager.Instance.TotalHeroCount;
             count = count * (count - 1) / 2;
@@ -84,12 +82,7 @@ public class EntanglementManager : MonoBehaviour {
     }
 
     private void Start() {
-        SaveMapManager.Instance.OnSaveData += () => {
-            string json = JsonUtility.ToJson(new Serialization<float>(this.HeroEntanglementValues));
-            PlayerPrefs.SetString("HeroEntanglementValues", json);
-        };
-
-        SaveMapManager.Instance.OnLoadData += LoadHeroEntanglement;
+        SaveDataManager.Instance.OnLoadData += LoadHeroEntanglement;
     }
 
 #if TEST_BATTLE

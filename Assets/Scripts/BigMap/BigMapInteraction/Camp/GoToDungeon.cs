@@ -16,8 +16,7 @@ public class GoToDungeon : InteractionObject {
     }
 
     protected override void Interaction() {
-        // TODO: Multi Save Data -> Auto Save
-        SaveMapManager.Instance.SaveData();
+        SaveDataManager.Instance.AutoSaveData();
         SceneChangeManager.Instance.GoToDungeon(this.Dungeon);
     }
 }
