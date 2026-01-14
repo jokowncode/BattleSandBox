@@ -12,8 +12,7 @@ public class SaveData : InteractionObject {
     }
 
     protected override void Interaction() {
-        // TODO: Mutual Save UI
-        SaveDataManager.Instance.MutualSaveData(0);
+        SaveDataManager.Instance.ShowSaveLoadDataUI(true);
     }
 }
 

@@ -24,6 +24,7 @@ public class PlayerSaveData {
 public class SaveDataManager : MonoBehaviour {
 
     [SerializeField] private int MaxSaveDataCount = 3;
+    [SerializeField] private SaveLoadDataUI SaveLoadDataUI;
     
     public static SaveDataManager Instance;
     
@@ -36,9 +37,13 @@ public class SaveDataManager : MonoBehaviour {
     private Vector3 TempPlayerPos = Vector3.zero;
 
     private SerializableDictionary<string, float> DupDungeonHealth = new();
-    
-    private int CurrentAutoSaveDataSlot = 0;
-    public List<string> MutualSaveDataPaths { get; private set; } = new();
+
+    public Queue<string> AutoSaveDataPaths { get; private set; } = new();
+
+    public Dictionary<int, string> MutualSaveDataPathMap { get; private set; } = new();
+
+    private long AlreadyPlayTime = 0;
+    private long LoadTimeStamp = 0;
 
     private void Awake() {
         if (Instance != null) {
@@ -46,6 +51,7 @@ public class SaveDataManager : MonoBehaviour {
             return;
         }
         Instance = this;
+        DontDestroyOnLoad(this.gameObject);
         
         // TODO: TEMP -> CONVENIENT BATTLE TEST
         this.PlayerData = new PlayerSaveData();
@@ -55,11 +61,18 @@ public class SaveDataManager : MonoBehaviour {
         Debug.Log($"Save Data Path : {Application.persistentDataPath}");
         DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath);
         FileInfo[] autoSaveDatas = di.GetFiles("AutoSave_*.save");
-        this.CurrentAutoSaveDataSlot = autoSaveDatas.Length % this.MaxSaveDataCount;
+        foreach (FileInfo info in autoSaveDatas) {
+            this.AutoSaveDataPaths.Enqueue(info.Name);
+        }
         
         FileInfo[] mutualSaveDatas = di.GetFiles("Save_*.save");
         foreach (FileInfo info in mutualSaveDatas) {
-            this.MutualSaveDataPaths.Add(info.Name);
+            string fileName = info.Name;
+            int start = fileName.LastIndexOf("_") + 1;
+            int end = fileName.LastIndexOf(".");
+            int length = end - start;
+            int slot = int.Parse(fileName.Substring(start, length));
+            this.MutualSaveDataPathMap.Add(slot, info.Name);
         }
     }
 
@@ -91,27 +104,60 @@ public class SaveDataManager : MonoBehaviour {
         File.WriteAllText(savePath, dataJson);
     }
 
-    public void AutoSaveData() {
-        string path = Path.Combine(Application.persistentDataPath, $"AutoSave_{this.CurrentAutoSaveDataSlot}.save");
-        if (File.Exists(path)) {
-            File.Delete(path);
+    private string GetSaveDataFileName(bool isAutoSave, int slot = 0) {
+        string result = isAutoSave ? "AutoSave" : "Save";
+        long currentTimeStamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        result += "_" + currentTimeStamp;
+        long diff = (currentTimeStamp - this.LoadTimeStamp) / 1000 + this.AlreadyPlayTime;
+        result += "_" + diff;
+        
+        string dungeonName = SceneChangeManager.Instance.DungeonScene.ToString();
+        if (SceneTools.IsDungeonScene(SceneChangeManager.Instance.DungeonScene)) {
+            dungeonName = dungeonName.Split("_")[1];
+        } else {
+            dungeonName = "Camp";
         }
+        result += "_" + dungeonName;
+        result += $"_{slot}";
+        return result + ".save";
+    }
 
-        this.CurrentAutoSaveDataSlot = (this.CurrentAutoSaveDataSlot + 1) % this.MaxSaveDataCount;
+    public void AutoSaveData() {
+        if (this.AutoSaveDataPaths.Count >= this.MaxSaveDataCount) {
+            string deleteFileName = this.AutoSaveDataPaths.Dequeue();
+            string deletePath = Path.Combine(Application.persistentDataPath, deleteFileName);
+            if (File.Exists(deletePath)) {
+                File.Delete(deletePath);
+            }
+        }
+        
+        string fileName = GetSaveDataFileName(true);
+        string path = Path.Combine(Application.persistentDataPath, fileName);
+        this.AutoSaveDataPaths.Enqueue(fileName);
         this.SaveData(path);
     }
 
-    public void MutualSaveData(int slot) {
-        string fileName = $"Save_{slot}.save";
-        if(!this.MutualSaveDataPaths.Contains(fileName)) this.MutualSaveDataPaths.Add(fileName);
+    public string MutualSaveData(int slot) {
+        string fileName = GetSaveDataFileName(false, slot);
+        if (this.MutualSaveDataPathMap.ContainsKey(slot)) {
+            string deletePath = Path.Combine(Application.persistentDataPath, this.MutualSaveDataPathMap[slot]);
+            if (File.Exists(deletePath)) {
+                File.Delete(deletePath);
+            }
+        }
+        this.MutualSaveDataPathMap[slot] = fileName;
         string path = Path.Combine(Application.persistentDataPath, fileName);
         this.SaveData(path);
+        return fileName;
     }
 
-    private void LoadData(string loadPath) {
+    public void LoadData(string loadPath) {
+        this.LoadTimeStamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         if (!File.Exists(loadPath)) {
+            this.AlreadyPlayTime = 0;
             this.PlayerData = new PlayerSaveData();
         } else {
+            this.AlreadyPlayTime = long.Parse(loadPath.Split("_")[2]);
             string json = File.ReadAllText(loadPath);
             this.PlayerData = JsonUtility.FromJson<PlayerSaveData>(json);
         }
@@ -122,15 +168,10 @@ public class SaveDataManager : MonoBehaviour {
         this.OnLoadData?.Invoke();
     }
 
-    public void LoadAutoSaveData() {
-        int loadSlot = this.CurrentAutoSaveDataSlot == 0 ? this.MaxSaveDataCount - 1 : this.CurrentAutoSaveDataSlot - 1;
-        string loadPath = Path.Combine(Application.persistentDataPath, $"AutoSave_{loadSlot}.save");
-        this.LoadData(loadPath);
-    }
-
-    public void LoadMutualSaveData(int slot) {
-        // TODO: Load Mutual Save UI
-        string loadPath = Path.Combine(Application.persistentDataPath, $"Save_{slot}.save");
+    public void LoadLastAutoSaveData() {
+        string fileName = this.AutoSaveDataPaths.LastOrDefault();
+        fileName ??= "";
+        string loadPath = Path.Combine(Application.persistentDataPath, fileName);
         this.LoadData(loadPath);
     }
 
@@ -152,6 +193,10 @@ public class SaveDataManager : MonoBehaviour {
                 this.PlayerData.DungeonHeroHealth = this.DupDungeonHealth;
             };
         }
+    }
+    
+    public void ShowSaveLoadDataUI(bool isSaveData) {
+        this.SaveLoadDataUI.TransitionShow(true, isSaveData);
     }
     
     private void RemovePlayerPos(SceneType dungeon) {

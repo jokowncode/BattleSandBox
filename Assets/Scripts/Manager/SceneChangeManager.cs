@@ -89,7 +89,7 @@ public class SceneChangeManager : MonoBehaviour{
         if (IsNewDungeon) {
             SaveDataManager.Instance.PlayerData.CurrentDungeon = this.DungeonScene;
         }
-        if (reloadData) SaveDataManager.Instance.LoadAutoSaveData();
+        if (reloadData) SaveDataManager.Instance.LoadLastAutoSaveData();
         this.GoToScene(SceneType.BigMap, true);
     }
 

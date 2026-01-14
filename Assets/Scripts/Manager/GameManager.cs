@@ -86,13 +86,19 @@ public class GameManager : MonoBehaviour{
     }
 
     public void StartGame(){
+        if (SaveDataManager.Instance.MutualSaveDataPathMap.Count != 0) {
+            SaveDataManager.Instance.ShowSaveLoadDataUI(false);
+        } else {
+            SaveDataManager.Instance.LoadLastAutoSaveData();
+            this.EnterGame();   
+        }
+    }
+
+    public void EnterGame() {
         this.ResetBattleFlag();
-        
-        SaveDataManager.Instance.LoadAutoSaveData();
         if (SaveDataManager.Instance.PlayerData.CurrentDungeon == SceneType.None) {
             SaveDataManager.Instance.ClearDungeonData();
         }
-
         if (SceneTools.IsDungeonScene(SaveDataManager.Instance.PlayerData.CurrentDungeon)) {
             SceneChangeManager.Instance.GoToDungeon(SaveDataManager.Instance.PlayerData.CurrentDungeon);
         } else {
