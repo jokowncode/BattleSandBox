@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TaskList : MonoBehaviour {
@@ -8,7 +9,7 @@ public class TaskList : MonoBehaviour {
     
     public void UpdateTaskUI() {
         int index = 0;
-        foreach (var taskIndexMap in TaskManager.Instance.CurrentTaskDataMap) {
+        foreach (KeyValuePair<string, TaskCurrentData> taskIndexMap in TaskManager.Instance.CurrentTaskDataMap) {
             TaskUI taskUI = null;
             if (this.TaskContainer.childCount - 1 < index) {
                 taskUI = Instantiate(this.TaskUIPrefab, this.TaskContainer);

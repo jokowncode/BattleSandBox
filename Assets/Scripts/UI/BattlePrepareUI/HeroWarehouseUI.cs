@@ -42,7 +42,7 @@ public class HeroWarehouseUI : MonoBehaviour {
             go = Instantiate(heroWarehousePriestUIPrefab, heroWarehouseContent);
         
         go.SetPortrait(hero.WarehouseHeroPortrait, false);
-        float health = SaveMapManager.Instance.GetHeroHealth(hero.Name);
+        float health = SaveDataManager.Instance.GetHeroHealth(hero.Name);
         if (health == 0.0f) {
             go.HeroDead();
             return;

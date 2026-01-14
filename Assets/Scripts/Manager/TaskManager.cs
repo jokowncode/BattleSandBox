@@ -20,7 +20,7 @@ public class TaskManager : MonoBehaviour {
     [Header("Debug")] 
     [SerializeField] private List<string> DebugExistTasks;
     
-    public Dictionary<string, TaskCurrentData> CurrentTaskDataMap { get; private set; }
+    public SerializableDictionary<string, TaskCurrentData> CurrentTaskDataMap { get; private set; }
 
     private void Awake() {
         if (Instance != null) {
@@ -37,19 +37,8 @@ public class TaskManager : MonoBehaviour {
     }
 
     private void Start() {
-        SaveMapManager.Instance.OnSaveData += () => {
-            string taskIndex = JsonUtility.ToJson(new Serialization<string, TaskCurrentData>(this.CurrentTaskDataMap));
-            PlayerPrefs.SetString("CurrentTaskDataMap", taskIndex);
-        };
-
-        SaveMapManager.Instance.OnLoadData += () => {
-            if (PlayerPrefs.HasKey("CurrentTaskDataMap")) {
-                this.CurrentTaskDataMap = JsonUtility.FromJson<Serialization<string, TaskCurrentData>>(PlayerPrefs.GetString("CurrentTaskDataMap"))
-                    .ToDictionary();
-            } else {
-                this.CurrentTaskDataMap = new Dictionary<string, TaskCurrentData>();
-            }
-        
+        SaveDataManager.Instance.OnLoadData += () => {
+            this.CurrentTaskDataMap = SaveDataManager.Instance.PlayerData.CurrentTaskDataMap;
             // TODO: TEMP -> FOR DEBUG
             if (this.CurrentTaskDataMap.Count == 0) {
                 foreach (string taskName in this.DebugExistTasks) {

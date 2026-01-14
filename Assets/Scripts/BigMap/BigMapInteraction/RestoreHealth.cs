@@ -20,13 +20,13 @@ public class RestoreHealth : InteractionObject {
     protected override void Interaction() {
         List<string> heroes = HeroWarehouseManager.Instance.GetOwnedHeroesRef();
         foreach (string heroName in heroes) {
-            float currentHealth = SaveMapManager.Instance.GetHeroHealth(heroName);
+            float currentHealth = SaveDataManager.Instance.GetHeroHealth(heroName);
             if (currentHealth < 0.0f) continue;
             if(!CanReviveHero && currentHealth == 0.0f) continue;
             Hero hero = HeroWarehouseManager.Instance.GetHeroByRef(heroName);
             if (hero) {
                 currentHealth += hero.InitialHealth * this.RestoreHealthPercentage;
-                SaveMapManager.Instance.SetHeroHealth(heroName, currentHealth);
+                SaveDataManager.Instance.SetHeroHealth(heroName, currentHealth);
             }
         }
     }

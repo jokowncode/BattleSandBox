@@ -50,7 +50,7 @@ public class Hero : Fighter{
     
     private void OnDestroy() {
         if (!IsSummon) {
-            SaveMapManager.Instance.SetHeroHealth(this.Name, Mathf.Max(this.InBattleHealth, 0.0f));
+            SaveDataManager.Instance.SetHeroHealth(this.Name, Mathf.Max(this.InBattleHealth, 0.0f));
         }
     }
 
