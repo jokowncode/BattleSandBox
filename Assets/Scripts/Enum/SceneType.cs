@@ -8,6 +8,7 @@ public enum SceneType{
     BigMap,
     Battle_Normal,
     Battle_无限长廊,
+    Dungeons_Newbie,
     Dungeons_Level1
 }
 

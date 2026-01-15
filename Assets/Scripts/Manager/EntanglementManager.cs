@@ -8,11 +8,6 @@ using UnityEngine.Serialization;
 public class EntanglementManager : MonoBehaviour {
 
     [SerializeField] private List<EntanglementData> EntanglementLevelDatas;
-
-    [Header("Debug")]  // TODO: TEMP -> FOR DEBUG
-    [SerializeField] private string EntanglementHero1 = "Elara";
-    [SerializeField] private string EntanglementHero2 = "Bullock";
-    [SerializeField] private float EntanglementValue = 30.0f;
     
     public static EntanglementManager Instance;
 
@@ -68,17 +63,6 @@ public class EntanglementManager : MonoBehaviour {
             count = count * (count - 1) / 2;
             for (int i = 0; i < count; i++) { this.HeroEntanglementValues.Add(0); }
         }
-
-        // TODO: TEMP -> FOR DEBUG
-        int index1 = HeroWarehouseManager.Instance.GetHeroIndex(this.EntanglementHero1);
-        int index2 = HeroWarehouseManager.Instance.GetHeroIndex(this.EntanglementHero2);
-        int index = GetHeroEntanglementIndex(index1, index2);
-        this.HeroEntanglementValues[index] = this.EntanglementValue;
-
-        /*BattleTacticType maxCastTactic = GetEntangleHeroCanCastMaxBattleTactic(this.EntanglementHero1, this.EntanglementHero2);
-        for (int i = 0; i <= (int)maxCastTactic; i++) {
-            Debug.Log(this.AllBattleTacticDescs[i]);
-        }*/
     }
 
     private void Start() {

@@ -10,6 +10,7 @@ public class Obstacle : InteractionObject {
 
     [SerializeField] private ObstacleType Type = ObstacleType.Outside;
     [SerializeField] private InteractionObject CancelObstacleObj;
+    [SerializeField] private bool ShowTip = false;
     
     private BoxCollider ObstacleCollider;
 
@@ -42,7 +43,7 @@ public class Obstacle : InteractionObject {
     }
 
     protected override void PlayerEnter() {
-        this.EnableInteraction(false);
+        this.InAreaPlayer.TransitionInteractionTip(this.ShowTip && !this.IsEnd, this.InteractionObjShowName, false);
         this.enabled = this.Type == ObstacleType.Inside;
         if (!this.IsEnd) {
             if (Type == ObstacleType.Outside) {
@@ -58,6 +59,7 @@ public class Obstacle : InteractionObject {
     protected override void OnTriggerExit(Collider other) {
         if (!other.TryGetComponent(out Player _)) return;
         if (this.InAreaPlayer) {
+            this.InAreaPlayer.TransitionInteractionTip(false, this.InteractionObjShowName, false);
             this.InAreaPlayer.SetCollider(null);
             this.InAreaPlayer = null;
             this.enabled = false;

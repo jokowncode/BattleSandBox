@@ -16,9 +16,7 @@ public class TaskManager : MonoBehaviour {
 
     [SerializeField] private List<TaskData> GameTasks;
     private Dictionary<string, TaskData> GameTaskMap;
-
-    [Header("Debug")] 
-    [SerializeField] private List<string> DebugExistTasks;
+    private Dictionary<SceneType, string> DungeonTaskMap;
     
     public SerializableDictionary<string, TaskCurrentData> CurrentTaskDataMap { get; private set; }
 
@@ -31,20 +29,18 @@ public class TaskManager : MonoBehaviour {
         DontDestroyOnLoad(this.gameObject);
         
         this.GameTaskMap = new Dictionary<string, TaskData>();
+        this.DungeonTaskMap = new Dictionary<SceneType, string>();
         foreach (TaskData taskData in this.GameTasks) {
             this.GameTaskMap.Add(taskData.TaskName, taskData);
+            if (taskData.BindDungeon != SceneType.None) {
+                this.DungeonTaskMap.TryAdd(taskData.BindDungeon, taskData.TaskName);
+            }
         }
     }
 
     private void Start() {
         SaveDataManager.Instance.OnLoadData += () => {
             this.CurrentTaskDataMap = SaveDataManager.Instance.PlayerData.CurrentTaskDataMap;
-            // TODO: TEMP -> FOR DEBUG
-            if (this.CurrentTaskDataMap.Count == 0) {
-                foreach (string taskName in this.DebugExistTasks) {
-                    this.AddTask(taskName, Vector3.zero);
-                }    
-            }
         };
     }
     
@@ -70,6 +66,14 @@ public class TaskManager : MonoBehaviour {
         }
     }
 
+    public void RemoveDungeonBindTask(SceneType dungeon) {
+        if (!DungeonTaskMap.ContainsKey(dungeon)) return;
+        string taskName = DungeonTaskMap[dungeon];
+        if (!CurrentTaskDataMap.ContainsKey(taskName)) return;
+        this.CurrentTaskDataMap.Remove(taskName);
+        if(BigMapUIManager.Instance) BigMapUIManager.Instance.TaskList.RemoveTask(taskName);
+    }
+
     public void AddTask(string taskName, Vector3 position) {
         if (!this.GameTaskMap.ContainsKey(taskName)) return;
         if (this.CurrentTaskDataMap.TryAdd(taskName, new TaskCurrentData() {
@@ -78,6 +82,11 @@ public class TaskManager : MonoBehaviour {
             })) {
             if(BigMapUIManager.Instance) BigMapUIManager.Instance.TaskList.AddTask(taskName, position);
         }
+    }
+
+    public void AddDungeonBindTask(SceneType dungeon) {
+        if (!this.DungeonTaskMap.ContainsKey(dungeon)) return;
+        this.AddTask(this.DungeonTaskMap[dungeon], Vector3.zero);
     }
 
     public bool HasTask(string taskName) {

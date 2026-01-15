@@ -8,6 +8,7 @@ public class BattleRoom : InteractionObject {
     [SerializeField] private Transform Enemies;
     
     [SerializeField] private bool IsDefeatGameOver = true;
+    [SerializeField] private bool IsForce = false;
 
     public Action OnVictory;
     public Action OnDefeat;
@@ -67,6 +68,10 @@ public class BattleRoom : InteractionObject {
                     GameManager.Instance.DungeonFail();
                 }
             }
+        }
+
+        if (!this.IsEnd && this.IsForce) {
+            this.Interaction();
         }
     }
 

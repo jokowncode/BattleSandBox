@@ -10,6 +10,8 @@ public class Dialogue : InteractionObject {
     [SerializeField] private bool CanRepeat = true;
     [SerializeField] private bool IsForce = false;
     [SerializeField] private bool IsFullScreen = true;
+    [SerializeField] private bool IsDisappearAfterDialog = false;
+    [SerializeField] private bool IsShowIfNotActive = true;
     
     private bool IsCurrentConversation;
 
@@ -20,6 +22,14 @@ public class Dialogue : InteractionObject {
     protected override void LoadBigMapData() {
         if (this.IsEnd) {
             this.IsForce = false;
+        }
+
+        if (!this.IsActive && !this.IsShowIfNotActive) {
+            this.gameObject.SetActive(false);
+        }
+        
+        if (this.IsEnd && !CanRepeat && IsDisappearAfterDialog) {
+            this.gameObject.SetActive(false);
         }
     }
 
@@ -45,6 +55,9 @@ public class Dialogue : InteractionObject {
         if (!this.IsEnd) {
             this.IsForce = false;
             this.EndInteraction();
+            if (!CanRepeat && IsDisappearAfterDialog) {
+                this.gameObject.SetActive(false);
+            }
         }
     }
 

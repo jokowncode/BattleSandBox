@@ -44,11 +44,11 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         SaveDataManager.Instance.OnLoadData += () => {
             // TODO: TEMP Debug Battle
             this.OwnedPassiveEntries = SaveDataManager.Instance.PlayerData.OwnedPassiveEntries;
-            if (this.OwnedPassiveEntries.Count == 0) {
+            /*if (this.OwnedPassiveEntries.Count == 0) {
                 foreach (PassiveEntry entry in AllPassiveEntries) {
                     this.OwnedPassiveEntries.Add(entry.Data.Name, 3);
                 }    
-            }
+            }*/
         };
     }
 

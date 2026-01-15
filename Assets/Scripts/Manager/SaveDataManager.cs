@@ -18,6 +18,7 @@ public class PlayerSaveData {
     public SerializableDictionary<string, int> OwnedPassiveEntries = new();
     [SerializeReference] public List<string> OwnedHeroes = new();
     [SerializeReference] public List<float> HeroEntanglementValues = new();
+    [SerializeReference] public List<SceneType> CompleteDungeons = new();
 }
 
 
@@ -111,8 +112,8 @@ public class SaveDataManager : MonoBehaviour {
         long diff = (currentTimeStamp - this.LoadTimeStamp) / 1000 + this.AlreadyPlayTime;
         result += "_" + diff;
         
-        string dungeonName = SceneChangeManager.Instance.DungeonScene.ToString();
-        if (SceneTools.IsDungeonScene(SceneChangeManager.Instance.DungeonScene)) {
+        string dungeonName = PlayerData.CurrentDungeon.ToString();
+        if (SceneTools.IsDungeonScene(PlayerData.CurrentDungeon)) {
             dungeonName = dungeonName.Split("_")[1];
         } else {
             dungeonName = "Camp";
@@ -209,8 +210,16 @@ public class SaveDataManager : MonoBehaviour {
         this.PlayerData.DungeonHeroHealth.Clear();
     }
 
-    public void ClearCurrentDungeon() {
+    public void CurrentDungeonComplete() {
+        if (!this.PlayerData.CompleteDungeons.Contains(this.PlayerData.CurrentDungeon)) {
+            this.PlayerData.CompleteDungeons.Add(this.PlayerData.CurrentDungeon);
+            TaskManager.Instance.RemoveDungeonBindTask(this.PlayerData.CurrentDungeon);
+        }
         this.PlayerData.CurrentDungeon = SceneType.None;
+    }
+
+    public bool DungeonIsComplete(SceneType dungeon) {
+        return this.PlayerData.CompleteDungeons.Contains(dungeon);
     }
 
     public void SetInteractionObjectEnd(string objName) {

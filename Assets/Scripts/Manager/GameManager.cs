@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour{
 
     public void GoBackToCamp(bool isSaveRoom) {
         if (!isSaveRoom) {
-            SaveDataManager.Instance.ClearCurrentDungeon();
+            SaveDataManager.Instance.CurrentDungeonComplete();
         }
         this.GoToScene(SceneType.Camp);
     }
@@ -102,9 +102,11 @@ public class GameManager : MonoBehaviour{
         if (SceneTools.IsDungeonScene(SaveDataManager.Instance.PlayerData.CurrentDungeon)) {
             SceneChangeManager.Instance.GoToDungeon(SaveDataManager.Instance.PlayerData.CurrentDungeon);
         } else {
-            // TODO: If Not Play Newbie Dungeon -> Go to Newbie Dungeon
-            // TODO: Else GO TO CAMP   
-            SceneChangeManager.Instance.GoToScene(SceneType.Camp);
+            if (!SaveDataManager.Instance.DungeonIsComplete(SceneType.Dungeons_Newbie)) {
+                SceneChangeManager.Instance.GoToDungeon(SceneType.Dungeons_Newbie);      
+            } else {
+                SceneChangeManager.Instance.GoToScene(SceneType.Camp);
+            }
         }
     }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GetTaskAfterInteraction : MonoBehaviour {
 
+    [ScriptableObjectNameProp(typeof(TaskData), "TaskName")]
     [SerializeField] private string TaskName;
     [SerializeField] private Transform TaskPosition;
 

@@ -14,8 +14,11 @@ public abstract class InteractionObject : MonoBehaviour {
         回血,
         副本
     }
+
+    [SerializeField] protected string InteractionObjShowName = null;
     
-    [field: SerializeField] public string OwnedTaskName { get; protected set; } = "None";
+    [ScriptableObjectNameProp(typeof(TaskData), "TaskName")]
+    [SerializeField] protected string OwnedTaskName = "None";
     [field: SerializeField] public bool IsBindTask { get; protected set; } = true;
 
     [Header("Available")]
@@ -29,6 +32,8 @@ public abstract class InteractionObject : MonoBehaviour {
     
     public Action OnInteractionEnded;
     public Action OnInteractionPre;
+
+    public string TaskName => this.OwnedTaskName;
 
     protected string GetName() {
         Vector3 pos = this.transform.position;
@@ -46,18 +51,23 @@ public abstract class InteractionObject : MonoBehaviour {
         }
     }
 
-    protected virtual void Start() {
+    private void Start() {
         this.IsEnd = SaveDataManager.Instance.LoadInteractionObjectEnd(this.GetName());
         if (!this.IsActive) {
             this.IsActive = SaveDataManager.Instance.LoadInteractionObjectAvailable(this.GetName());
         }
         
         this.LoadBigMapData();
+        if (string.IsNullOrEmpty(this.InteractionObjShowName)) {
+            this.InteractionObjShowName = this.GetInteractionObjType().ToString();
+        }
         this.enabled = false;
     }
 
     public virtual void Activate() {
+        if (this.IsActive) return;
         this.IsActive = true;
+        this.gameObject.SetActive(true);
         SaveDataManager.Instance.SetInteractionObjectAvailable(this.GetName());
     }
 
@@ -71,8 +81,8 @@ public abstract class InteractionObject : MonoBehaviour {
     }
 
     protected void EnableInteraction(bool enable) {
-        if (!this.InAreaPlayer) return; 
-        this.InAreaPlayer.TransitionInteractionTip(enable, this.GetInteractionObjType().ToString());
+        if (!this.InAreaPlayer) return;
+        this.InAreaPlayer.TransitionInteractionTip(enable, this.InteractionObjShowName);
         this.enabled = enable;
     }
 

@@ -19,9 +19,10 @@ public class Player : MonoBehaviour{
         Move = GetComponent<PlayerMove>();
     }
 
-    public void TransitionInteractionTip(bool show, string interactionObjName){
+    public void TransitionInteractionTip(bool show, string interactionObjName, bool showE = true){
         InteractionTip.transform.parent.gameObject.SetActive(show);
-        InteractionTip.text = $"E {interactionObjName}";
+        string text = showE ? $"E {interactionObjName}" : interactionObjName;
+        InteractionTip.text = text;
     }
 
     public void SetCollider(BoxCollider inAreaCollider, PlayerInAreaColliderDir dir = PlayerInAreaColliderDir.Both){

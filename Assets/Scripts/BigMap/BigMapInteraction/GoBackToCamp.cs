@@ -7,7 +7,6 @@ public class GoBackToCamp : InteractionObject {
     
     protected override void Awake() {
         this.IsBindTask = false;
-        this.IsActiveWhenAwake = true;
         base.Awake();
     }
 

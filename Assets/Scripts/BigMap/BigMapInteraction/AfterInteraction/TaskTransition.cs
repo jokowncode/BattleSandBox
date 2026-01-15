@@ -17,7 +17,7 @@ public class TaskTransition : MonoBehaviour {
 
     private void OnInteractionEnded() {
         this.Interaction.OnInteractionEnded -= OnInteractionEnded;
-        TaskManager.Instance.NextTask(this.Interaction.OwnedTaskName, this.NextTaskLocation);
+        TaskManager.Instance.NextTask(this.Interaction.TaskName, this.NextTaskLocation);
     }
 }
 
