@@ -106,6 +106,10 @@ public class DialogManager : MonoBehaviour {
         DialogEventManager.Instance.AddEvent("TurnRed", () => {
             this.DialogAnimator.SetTrigger(AnimationParams.Red);
         });
+        
+        DialogEventManager.Instance.AddEvent("GameOver", () => {
+            GameManager.Instance.DungeonFail();
+        });
     }
 
     private IEnumerator Transition(bool show, bool quick) {

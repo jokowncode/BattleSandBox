@@ -39,6 +39,7 @@ public class Dialogue : InteractionObject {
         }
 
         if (this.IsForce){
+            OnInteractionPre?.Invoke();
             this.Interaction();
         }
     }

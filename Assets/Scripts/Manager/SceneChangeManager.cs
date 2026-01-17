@@ -113,13 +113,23 @@ public class SceneChangeManager : MonoBehaviour{
         StartCoroutine(SceneChangeCoroutine(type, isBlackScreen));
     }
 
+    public IEnumerator CompleteBlackScreenCoroutine(float start, float end) {
+        yield return BlackScreenCoroutine(start, end);
+        yield return BlackScreenCoroutine(end, start);
+    }
+    
+    private IEnumerator BlackScreenCoroutine(float start, float end) {
+        this.BlackCanvasGroup.alpha = start;
+        for (float t = 0.0f; t <= this.Duration; t += Time.deltaTime) {
+            this.BlackCanvasGroup.alpha = Mathf.Lerp(start, end, t / this.Duration);
+            yield return null;
+        }
+        this.BlackCanvasGroup.alpha = end;
+    }
+
     private IEnumerator SceneChangeCoroutine(SceneType type, bool isBlackScreen = false) {
         if (isBlackScreen) {
-            for (float t = 0.0f; t <= this.Duration; t += Time.deltaTime) {
-                this.BlackCanvasGroup.alpha = Mathf.Lerp(0.0f, 1.0f, t / this.Duration);
-                yield return null;
-            }
-            this.BlackCanvasGroup.alpha = 1.0f;
+            yield return BlackScreenCoroutine(0.0f, 1.0f);
         }
         SceneManager.LoadScene((int)type);
     }

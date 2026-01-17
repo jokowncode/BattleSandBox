@@ -9,6 +9,7 @@ public class BattleRoom : InteractionObject {
     
     [SerializeField] private bool IsDefeatGameOver = true;
     [SerializeField] private bool IsForce = false;
+    [SerializeField] private bool IsDisappearAfterBattle = false;
 
     public Action OnVictory;
     public Action OnDefeat;
@@ -36,6 +37,10 @@ public class BattleRoom : InteractionObject {
         if (!this.IsActive && this.Enemies) {
             this.Enemies.gameObject.SetActive(false);
         }
+
+        if (this.IsEnd && this.IsDisappearAfterBattle) {
+            this.gameObject.SetActive(false);
+        }
     }
 
     public override void Activate() {
@@ -61,6 +66,9 @@ public class BattleRoom : InteractionObject {
                 if (!this.IsEnd) {
                     // this.IsEnd = true;
                     this.EndInteraction();
+                    if (this.IsDisappearAfterBattle) {
+                        this.gameObject.SetActive(false);
+                    }
                 }
             } else {
                 OnDefeat?.Invoke();
@@ -71,6 +79,7 @@ public class BattleRoom : InteractionObject {
         }
 
         if (!this.IsEnd && this.IsForce) {
+            OnInteractionPre?.Invoke();
             this.Interaction();
         }
     }

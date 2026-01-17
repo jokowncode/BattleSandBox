@@ -12,7 +12,8 @@ public abstract class InteractionObject : MonoBehaviour {
         存档,
         营地,
         回血,
-        副本
+        副本,
+        电梯
     }
 
     [SerializeField] protected string InteractionObjShowName = null;
