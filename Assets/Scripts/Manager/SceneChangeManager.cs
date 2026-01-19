@@ -81,9 +81,9 @@ public class SceneChangeManager : MonoBehaviour{
         if (!SceneTools.IsDungeonScene(dungeonType)) {
             return;
         }
-
         this.DungeonScene = dungeonType;
-
+        if (reloadData) SaveDataManager.Instance.LoadLastAutoSaveData();
+        
         SceneType dungeon = SaveDataManager.Instance.PlayerData.CurrentDungeon;
         this.IsNewDungeon = dungeon == SceneType.None || dungeon != this.DungeonScene;
         if (IsNewDungeon) {
@@ -92,7 +92,6 @@ public class SceneChangeManager : MonoBehaviour{
                 TaskManager.Instance.AddDungeonBindTask(this.DungeonScene);
             }
         }
-        if (reloadData) SaveDataManager.Instance.LoadLastAutoSaveData();
         this.GoToScene(SceneType.BigMap, true);
     }
 

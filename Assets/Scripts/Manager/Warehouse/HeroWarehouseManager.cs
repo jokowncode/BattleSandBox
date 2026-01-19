@@ -67,6 +67,11 @@ public class HeroWarehouseManager : MonoBehaviour {
         return false;
     }
 
+    public void RemoveHero(string heroName) {
+        if (!this.OwnedHeroes.Contains(heroName)) return;
+        this.OwnedHeroes.Remove(heroName);
+    }
+
     ////////////////////////////////////Utils//////////////////////////////////////
     /// <summary>
     /// 获取当前所有英雄 GameObject

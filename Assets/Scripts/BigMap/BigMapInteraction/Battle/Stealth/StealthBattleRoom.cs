@@ -1,11 +1,12 @@
 ﻿
+using System.Collections;
 using UnityEngine;
 
 public class StealthBattleRoom : BattleRoom {
 
+    [SerializeField] private Transform StartPoint;
     [SerializeField] private Transform SuccessPoint;
     [SerializeField] private StealthDetection[] Detectors;
-    [SerializeField] private Vector3 EnterDir = Vector3.left;
 
     protected override void Awake() {
         base.Awake();
@@ -15,6 +16,15 @@ public class StealthBattleRoom : BattleRoom {
                 OnInteractionPre?.Invoke();
                 base.Interaction();
             };
+        }
+
+        this.OnDefeat += GoToStartPoint;
+        this.OnVictory += GoToStartPoint;
+    }
+
+    private void GoToStartPoint() {
+        if (this.InAreaPlayer) {
+            this.InAreaPlayer.transform.position = this.StartPoint.position;
         }
     }
 
@@ -34,11 +44,9 @@ public class StealthBattleRoom : BattleRoom {
     protected override void PlayerEnter() {
         base.PlayerEnter();
         this.EnableInteraction(false);
-        if (this.InAreaPlayer.Move.HorizontalDir == this.EnterDir) {
-            this.enabled = true;
-            foreach (StealthDetection detector in this.Detectors) {
-                detector.Activate();
-            }
+        this.enabled = true;
+        foreach (StealthDetection detector in this.Detectors) {
+            detector.Activate();
         }
     }
 

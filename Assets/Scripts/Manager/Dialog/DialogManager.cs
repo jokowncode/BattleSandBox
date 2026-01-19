@@ -18,11 +18,14 @@ public class DialogManager : MonoBehaviour {
     
     [SerializeField] private Image CharacterPortrait;
     [SerializeField] private TextMeshProUGUI CharacterName;
-    [SerializeField] private GameObject CharacterNameShadow;
+    // [SerializeField] private GameObject CharacterNameShadow;
     
     [SerializeField] private CanvasGroup DialogContentCanvasGroup;
     [SerializeField] private TypeWriter DialogText;
     [SerializeField] private StoryReviewUI StoryReview;
+
+    [SerializeField] private Button SkipButton;
+    [SerializeField] private DialogTip Tip;
     
 	[Header("AutoPlay")]
 	[SerializeField] private Sprite AutoPlaySprite;
@@ -158,6 +161,7 @@ public class DialogManager : MonoBehaviour {
         if (!dialog) return;
         StartNode startNode = FindStartNode(dialog);
         if (!startNode) return;
+        this.SkipButton.gameObject.SetActive(startNode.CanSkip);
 
         NodePort startPort = startNode.GetOutputPort("NextDialog").Connection;
         if (startPort == null || startPort.node is not DialogNode dialogNode) return;
@@ -306,7 +310,7 @@ public class DialogManager : MonoBehaviour {
         this.CharacterPortrait.color = new Color(1, 1, 1, data.CharacterPortrait ? 1.0f : 0.0f); 
         this.CharacterPortrait.sprite = data.CharacterPortrait;
         this.CharacterName.text = data.CharacterName;
-        this.CharacterNameShadow.SetActive(this.CharacterName.text != "");
+        // this.CharacterNameShadow.SetActive(this.CharacterName.text != "");
 
         this.HasSound = data.DialogAudio;
         bool notDialog = data.DialogText == "" || (data.HasProgressBar && data.DialogAudio);
@@ -314,7 +318,11 @@ public class DialogManager : MonoBehaviour {
         
         DialogContentCanvasGroup.alpha = notDialog ? 0.0f : 1.0f;
         this.DialogText.Play(data.DialogText, data.DialogTypeWriterDuration, data.IsConstantVelocity, data.AutoPlayIfNotContent);
-        
+
+        if (!string.IsNullOrWhiteSpace(data.DialogTipText)) {
+            this.Tip.Show(data.DialogTipText);
+        }
+
         if (data.DialogBGM) {
             if (data.IsDialogBGMFade) {
                 AudioManager.Instance.FadeMainMusic(data.DialogBGM, data.DialogBGMFadeTime, data.BGMVolume);

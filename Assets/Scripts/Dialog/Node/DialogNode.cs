@@ -13,6 +13,7 @@ public class DialogNode : Node {
     public bool BackgroundIsFadeIn;
     public bool BackgroundIsFadeOut = false;
     public DialogUISlot SlotPrefab;
+    public string DialogTipText;
     
     public AudioClip DialogAudio;
     public AudioClip DialogBGM;
