@@ -29,8 +29,6 @@ public class Obstacle : InteractionObject {
                 if(!this.IsEnd) this.EndInteraction();
             };
         }
-        
-        // TODO: Obstacle Look Change
     }
 
     protected override void Interaction() { }

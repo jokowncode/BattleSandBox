@@ -41,10 +41,6 @@ public class HeroWarehouseManager : MonoBehaviour {
             this.OwnedHeroes = SaveDataManager.Instance.PlayerData.OwnedHeroes;
             if (this.OwnedHeroes.Count == 0) {
                 this.OwnedHeroes.Add(AllHeroes[0].Name);
-                // TODO: TEMP Debug Battle
-                /*foreach (Hero hero in AllHeroes) {
-                    this.OwnedHeroes.Add(hero.Name);
-                }  */  
             }
         };
     }

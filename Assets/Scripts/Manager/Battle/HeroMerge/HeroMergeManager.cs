@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class HeroMergeManager : MonoBehaviour {
 
-    // TODO: Passive Entry
     // [SerializeField] private List<PassiveEntry> HeroMergePassiveEntries;
     
     [Header("General")]

@@ -42,13 +42,7 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
     
     private void Start() {
         SaveDataManager.Instance.OnLoadData += () => {
-            // TODO: TEMP Debug Battle
             this.OwnedPassiveEntries = SaveDataManager.Instance.PlayerData.OwnedPassiveEntries;
-            /*if (this.OwnedPassiveEntries.Count == 0) {
-                foreach (PassiveEntry entry in AllPassiveEntries) {
-                    this.OwnedPassiveEntries.Add(entry.Data.Name, 3);
-                }    
-            }*/
         };
     }
 

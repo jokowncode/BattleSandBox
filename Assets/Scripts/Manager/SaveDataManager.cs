@@ -57,9 +57,10 @@ public class SaveDataManager : MonoBehaviour {
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
         
-        // TODO: TEMP -> CONVENIENT BATTLE TEST
+#if TEST_BATTLE
         this.PlayerData = new PlayerSaveData();
-
+#endif
+        
         SceneManager.sceneLoaded += OnSceneLoaded;
         
         Debug.Log($"Save Data Path : {Application.persistentDataPath}");
