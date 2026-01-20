@@ -10,12 +10,12 @@ public class SplitSkillEnd : SkillEnd{
     private void CastNewSkill(Fighter influenceFighter, SkillEffect effect, EffectData effectData, float angle) {
         if (!effect.InPoolGO) return;
 
-        // GameObject skill = Instantiate(effect.gameObject, effect.transform.position + Vector3.right, Quaternion.identity);
-        // if (!skill.TryGetComponent(out SkillDelivery delivery)) return;
+        GameObject skill = Instantiate(effect.gameObject, effect.transform.position + Vector3.right, Quaternion.identity);
+        if (!skill.TryGetComponent(out SkillDelivery delivery)) return;
         
-        PoolGO go = PoolManager.Instance.GetGameObject(effect.InPoolGO, null);
-        if (!go.TryGetComponent(out SkillDelivery delivery)) return;
-        delivery.transform.position = effect.transform.position + Vector3.right;
+        // PoolGO go = PoolManager.Instance.GetGameObject(effect.InPoolGO, null);
+        // if (!go.TryGetComponent(out SkillDelivery delivery)) return;
+        // delivery.transform.position = effect.transform.position + Vector3.right;
         
         effectData.Value *= 1.0f / SplitCount;
         delivery.transform.rotation = effect.Delivery.transform.rotation * Quaternion.AngleAxis(angle, Vector3.up);

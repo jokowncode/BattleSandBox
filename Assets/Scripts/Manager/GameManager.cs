@@ -86,11 +86,13 @@ public class GameManager : MonoBehaviour{
     }
 
     public void StartGame(){
-        if (SaveDataManager.Instance.MutualSaveDataPathMap.Count != 0) {
+        SaveDataManager.Instance.LoadLastAutoSaveData();
+        this.EnterGame();
+    }
+
+    public void ContinueGame() {
+        if (SaveDataManager.Instance.HasSaveData) {
             SaveDataManager.Instance.ShowSaveLoadDataUI(false);
-        } else {
-            SaveDataManager.Instance.LoadLastAutoSaveData();
-            this.EnterGame();   
         }
     }
 

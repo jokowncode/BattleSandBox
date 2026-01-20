@@ -4,7 +4,8 @@ using UnityEngine;
 public enum GoodsType {
     Hero,
     EXP,
-    PassiveEntry
+    PassiveEntry,
+    BloodBottle
 }
 
 

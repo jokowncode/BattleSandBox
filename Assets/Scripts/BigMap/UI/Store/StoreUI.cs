@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class StoreUI : MonoBehaviour {
 
-    [SerializeField] private List<StoreGoodsData> AllStoreGoods;
     [SerializeField] private Transform GoodsContainer;
     [SerializeField] private StoreGoodsUI StoreGoodsPrefab;
 
@@ -17,8 +16,6 @@ public class StoreUI : MonoBehaviour {
     private Store CurrentStore;
     private bool IsInstructionMode = false;
     
-    private Dictionary<string, StoreGoodsData> AllStoreGoodsMap;
-    
     private void Awake() {
         if (Instance != null) {
             Destroy(this.gameObject);
@@ -27,16 +24,11 @@ public class StoreUI : MonoBehaviour {
         Instance = this;
 
         this.StoreCanvasGroup = this.GetComponent<CanvasGroup>();
-
-        this.AllStoreGoodsMap = new Dictionary<string, StoreGoodsData>();
-        foreach (StoreGoodsData storeGoodsData in AllStoreGoods) {
-            this.AllStoreGoodsMap.Add(storeGoodsData.GoodsName, storeGoodsData);
-        }
     }
 
     public List<string> RandomGoodsSimple() {
         List<string> result = new List<string>();
-        foreach (StoreGoodsData data in AllStoreGoods) {
+        foreach (StoreGoodsData data in GoodsWarehouseManager.Instance.AllGoodsData) {
             result.Add(data.GoodsName);
         }
         return result;
@@ -68,9 +60,10 @@ public class StoreUI : MonoBehaviour {
         this.CurrentGoods.Clear();
         // Add Current Goods
         foreach (string goodsName in goods) {
-            if (!this.AllStoreGoodsMap.ContainsKey(goodsName)) continue;
+            StoreGoodsData data = GoodsWarehouseManager.Instance.GetGoodsData(goodsName);
+            if (!data) continue;
             StoreGoodsUI currentGoods = Instantiate(this.StoreGoodsPrefab, this.GoodsContainer);
-            currentGoods.SetData(this.AllStoreGoodsMap[goodsName]);
+            currentGoods.SetData(data);
             this.CurrentGoods.Add(currentGoods);
         }
     }

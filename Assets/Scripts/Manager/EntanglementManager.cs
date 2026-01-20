@@ -136,6 +136,15 @@ public class EntanglementManager : MonoBehaviour {
         return maxCanCastBattleTactic;
     }
 
+    public void AddEntanglementValue(string hero1, string hero2, float value) {
+        int index1 = HeroWarehouseManager.Instance.GetHeroIndex(hero1);
+        if (index1 < 0) return;
+        int index2 = HeroWarehouseManager.Instance.GetHeroIndex(hero2);
+        if (index2 < 0) return;
+        int index = GetHeroEntanglementIndex(index1, index2);
+        this.HeroEntanglementValues[index] += value;
+    }
+
 }
 
 

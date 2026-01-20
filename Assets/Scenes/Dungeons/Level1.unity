@@ -664,6 +664,7 @@ GameObject:
   - component: {fileID: 149053310}
   - component: {fileID: 149053309}
   - component: {fileID: 149053311}
+  - component: {fileID: 149053312}
   m_Layer: 12
   m_Name: Dr.Entro 1-4
   m_TagString: Player
@@ -744,6 +745,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TriggerType: 1
   NextTaskLocation: {fileID: 859019642}
+--- !u!114 &149053312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149053307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c71b6abd5c70475ca65714ad02c8f330, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerType: 1
+  GetGoodsNames:
+  - {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
+  - {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
+  - {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
 --- !u!1 &222018710
 GameObject:
   m_ObjectHideFlags: 0
@@ -6493,15 +6511,19 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7562433190259243751, guid: 69cc39f4d28c60c4e8d1fe5475a60c8c,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2125514133}
-    - targetCorrespondingSourceObject: {fileID: 7562433190259243751, guid: 69cc39f4d28c60c4e8d1fe5475a60c8c,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2125514135}
     - targetCorrespondingSourceObject: {fileID: 7562433190259243751, guid: 69cc39f4d28c60c4e8d1fe5475a60c8c,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2125514136}
+    - targetCorrespondingSourceObject: {fileID: 7562433190259243751, guid: 69cc39f4d28c60c4e8d1fe5475a60c8c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2125514137}
+    - targetCorrespondingSourceObject: {fileID: 7562433190259243751, guid: 69cc39f4d28c60c4e8d1fe5475a60c8c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2125514138}
   m_SourcePrefab: {fileID: 100100000, guid: 69cc39f4d28c60c4e8d1fe5475a60c8c, type: 3}
 --- !u!4 &2125514130 stripped
 Transform:
@@ -6540,20 +6562,6 @@ MonoBehaviour:
   BattleLoseDialog: {fileID: 0}
   BattleVictoryDialog: {fileID: 11400000, guid: b164658b124ec9746acdd619a916690f,
     type: 2}
---- !u!114 &2125514133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2125514131}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef5a77cc069b4baeac11fcd9d014469c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GetHeroNames:
-  - Holt
 --- !u!114 &2125514135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6583,6 +6591,38 @@ MonoBehaviour:
   TriggerType: 1
   CanReviveHero: 0
   RestoreHealthPercentage: 1
+--- !u!114 &2125514137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125514131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f64262b4c044793b04cd7c704d52ee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerType: 1
+  GetHeroNames:
+  - Holt
+--- !u!114 &2125514138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125514131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c71b6abd5c70475ca65714ad02c8f330, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerType: 1
+  GetGoodsNames:
+  - {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
+  - {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
+  - {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
 --- !u!1001 &4158005395624025449
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -29,21 +29,8 @@ public class StoreGoodsUI : MonoBehaviour {
             if (currentMoney < data.Money) {
                 return;
             }
-            
-            switch (data.Type) {
-                case GoodsType.Hero:
-                    if (!HeroWarehouseManager.Instance.AddHero(data.GoodsName)) {
-                        return;
-                    }
-                    break;
-                case GoodsType.PassiveEntry:
-                    PassiveEntryWarehouseManager.Instance.AddPassiveEntry(data.GoodsName, 1);
-                    break;
-                case GoodsType.EXP:
-                    // Debug.Log("Buy EXP");
-                    break;
-            }
-            
+
+            if (!GoodsWarehouseManager.Instance.AddGoods(data)) return;
             GameManager.Instance.SetMoney(currentMoney - data.Money);
             // Destroy Goods If Purchase Success
             StoreUI.Instance.RemoveGoods(data);

@@ -19,6 +19,7 @@ public class PlayerSaveData {
     [SerializeReference] public List<string> OwnedHeroes = new();
     [SerializeReference] public List<float> HeroEntanglementValues = new();
     [SerializeReference] public List<SceneType> CompleteDungeons = new();
+    public SerializableDictionary<string, int> OwnedConsumedGoods = new();
 }
 
 
@@ -45,6 +46,8 @@ public class SaveDataManager : MonoBehaviour {
 
     private long AlreadyPlayTime = 0;
     private long LoadTimeStamp = 0;
+    
+    public bool HasSaveData => AutoSaveDataPaths.Count != 0 || MutualSaveDataPathMap.Count != 0;
 
     private void Awake() {
         if (Instance != null) {
@@ -256,6 +259,12 @@ public class SaveDataManager : MonoBehaviour {
         } else {
             this.PlayerData.DungeonHeroHealth.Add(heroName, health);
         }
+    }
+
+    public void RecoverHeroHealth(string heroName, float value, bool revive = false) {
+        if (!this.PlayerData.DungeonHeroHealth.ContainsKey(heroName)) return;
+        if (this.PlayerData.DungeonHeroHealth[heroName] == 0.0f && !revive) return;
+        this.PlayerData.DungeonHeroHealth[heroName] += value;
     }
 
     public void RecoverAllHeroHealth() {
