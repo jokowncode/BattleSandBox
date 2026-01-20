@@ -17,18 +17,17 @@ public class Store : InteractionObject {
     }
 
     protected override void LoadBigMapData() {
-        if (!this.IsEnd) {
-            if(PlayerPrefs.HasKey(GetName())) PlayerPrefs.DeleteKey(GetName());
-        }
-        
-        // TODO: Random Store Refresh
-        if (this.Goods == null || this.Goods.Count == 0) {
+        if ((this.Goods == null || this.Goods.Count == 0) && !this.IsEnd) {
             // Random Store
             if (SceneChangeManager.Instance.IsNewDungeon) {
                 if(PlayerPrefs.HasKey(GetName())) PlayerPrefs.DeleteKey(GetName());
                 // TODO: Random Store Goods
                 this.Goods = StoreUI.Instance.RandomGoodsSimple();
             }
+        }
+        
+        if (!this.IsEnd) {
+            if(PlayerPrefs.HasKey(GetName())) PlayerPrefs.DeleteKey(GetName());
         }
         
         if (PlayerPrefs.HasKey(GetName())) {
