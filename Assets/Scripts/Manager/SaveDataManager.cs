@@ -20,6 +20,7 @@ public class PlayerSaveData {
     [SerializeReference] public List<float> HeroEntanglementValues = new();
     [SerializeReference] public List<SceneType> CompleteDungeons = new();
     public SerializableDictionary<string, int> OwnedConsumedGoods = new();
+    [SerializeReference] public List<string> OwnedClues = new();
 }
 
 

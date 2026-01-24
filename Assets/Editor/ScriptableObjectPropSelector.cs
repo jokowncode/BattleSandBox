@@ -15,8 +15,13 @@ public class ScriptableObjectPropSelector : PropertyDrawer {
         }
         
         string[] guids = AssetDatabase.FindAssets($"t:{attr.SoType.Name}");
-        string[] options = new string[guids.Length];
-        
+
+        int length = attr.HasNull ? guids.Length + 1 : guids.Length;
+        string[] options = new string[length];
+        if (attr.HasNull) {
+            options[0] = "NULL";
+        }
+
         int selectedIndex = 0;
         
         for (int i = 0; i < guids.Length; i++) {
@@ -28,10 +33,11 @@ public class ScriptableObjectPropSelector : PropertyDrawer {
                 var field = obj.GetType().GetField(attr.FieldName);
                 if (field != null) {
                     string value = field.GetValue(obj)?.ToString() ?? $"Object_{i}";
-                    options[i] = value;
+                    int index = attr.HasNull ? i + 1 : i;
+                    options[index] = value;
                     
                     if (value == property.stringValue) {
-                        selectedIndex = i;
+                        selectedIndex = index;
                     }
                 }
             }

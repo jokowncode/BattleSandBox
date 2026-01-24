@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class Store : InteractionObject {
 
-    [field: SerializeField] public List<string> Goods { get; private set; }
+    [ScriptableObjectNameProp(typeof(StoreGoodsData), "GoodsName")] 
+    [SerializeField] private List<string> Goods;
 
+    public List<string> CurrentGoods => this.Goods;
+    
     protected override InteractionObjType GetInteractionObjType() {
         return InteractionObjType.商店;
     }

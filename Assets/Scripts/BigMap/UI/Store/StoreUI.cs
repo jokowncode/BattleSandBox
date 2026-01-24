@@ -48,7 +48,7 @@ public class StoreUI : MonoBehaviour {
         StoreCanvasGroup.alpha = 1.0f;
         StoreCanvasGroup.interactable = true;
         StoreCanvasGroup.blocksRaycasts = true;
-        UpdateStoreUI(store.Goods);
+        UpdateStoreUI(store.CurrentGoods);
     }
 
     private void UpdateStoreUI(List<string> goods) {
@@ -71,7 +71,7 @@ public class StoreUI : MonoBehaviour {
     public void RemoveGoods(StoreGoodsData data) {
         if (!this.CurrentStore) return;
         this.CurrentStore.RemoveGoods(data.GoodsName);
-        UpdateStoreUI(this.CurrentStore.Goods);
+        UpdateStoreUI(this.CurrentStore.CurrentGoods);
     }
 
     public void StartInstructionMode() {
