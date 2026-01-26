@@ -215,7 +215,7 @@ public class DialogManager : MonoBehaviour {
         if(this.PreBGM) AudioManager.Instance.SetMainMusic(this.PreBGM);
         
         if (this.IsFullScreen) {
-            CameraManager.Instance.MainCamera.cullingMask = ~0;
+            CameraManager.Instance.MainCamera.cullingMask = ~LayerMask.GetMask("UI", "Map");
         }
 
         if (this.ProgressBar) {

@@ -41,7 +41,7 @@ public class ScaleImage : DialogUISlot {
 
         if (this.IsDrag) {
             Vector3 pos = Input.mousePosition;
-            Vector3 delta = pos - this.CurrentMousePosition;
+            Vector3 delta = (pos - this.CurrentMousePosition).normalized;
 
             Vector3 transPos = this.Trans.position;
             transPos += this.MoveSpeed * delta;
