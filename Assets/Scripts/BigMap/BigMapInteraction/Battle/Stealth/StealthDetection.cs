@@ -12,6 +12,14 @@ public class StealthDetection : MonoBehaviour {
     public Action OnDetection;
 
     private bool IsActivate = false;
+    private bool IsStart = false;
+    private int NextIndex = 0;
+
+    private Vector3 StartPosition;
+
+    private void Awake() {
+        this.StartPosition = this.transform.position;
+    }
 
     private void OnTriggerEnter(Collider other) {
         if (!this.IsActivate) return;
@@ -22,40 +30,43 @@ public class StealthDetection : MonoBehaviour {
 
     public void Activate() {
         this.IsActivate = true;
-        if (this.CanMove) {
+        if (this.CanMove && !this.IsStart) {
+            this.IsStart = true;
             StartCoroutine(MoveCoroutine());
         }
     }
 
     public void Deactivate() {
         this.IsActivate = false;
+        this.IsStart = false;
         StopAllCoroutines();
     }
 
+    private Vector3 GetChildPosition(int index) {
+        return index < 0 ? this.StartPosition : this.MovePointsContainer.GetChild(index).position;
+    }
+
     private IEnumerator MoveCoroutine() {
-        if (this.MovePointsContainer.childCount < 2) yield break;
+        if (this.MovePointsContainer.childCount == 0) yield break;
         this.MovePointsContainer.parent = null;
-        int startIndex = 0;
-        int endIndex = 1;
         bool isRight = true;
         while (this.IsActivate) {
-            Vector3 startPos = this.MovePointsContainer.GetChild(startIndex).position;
-            Vector3 endPos = this.MovePointsContainer.GetChild(endIndex).position;
-            this.transform.position = startPos;
+            Vector3 startPos = this.transform.position;
+            Vector3 endPos = GetChildPosition(this.NextIndex);
             for (float t = 0.0f; t <= this.MoveDuration; t += Time.deltaTime) {
                 this.transform.position = Vector3.Lerp(startPos, endPos, t / MoveDuration);    
                 yield return null;
             }
             this.transform.position = endPos;
-            startIndex = endIndex;
-            endIndex = isRight ? startIndex + 1 : startIndex - 1;
-            if (endIndex >= this.MovePointsContainer.childCount) {
-                endIndex = startIndex - 1;
+
+            NextIndex = isRight ? NextIndex + 1 : NextIndex - 1;
+            if (NextIndex >= this.MovePointsContainer.childCount) {
+                NextIndex -= 2;
                 isRight = false;
             }
 
-            if (endIndex < 0) {
-                endIndex = startIndex + 1;
+            if (NextIndex < -1) {
+                NextIndex += 2;
                 isRight = true;
             }
         }
