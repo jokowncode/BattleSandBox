@@ -13,7 +13,8 @@ public abstract class InteractionObject : MonoBehaviour {
         营地,
         回血,
         副本,
-        电梯
+        电梯,
+        MiniMap
     }
 
     [SerializeField] protected string InteractionObjShowName = null;
@@ -81,7 +82,7 @@ public abstract class InteractionObject : MonoBehaviour {
         this.OnInteractionEnded?.Invoke();
     }
 
-    protected void EnableInteraction(bool enable) {
+    protected virtual void EnableInteraction(bool enable) {
         if (!this.InAreaPlayer) return;
         this.InAreaPlayer.TransitionInteractionTip(enable, this.InteractionObjShowName);
         this.enabled = enable;

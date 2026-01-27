@@ -55,6 +55,9 @@ public class BattleRoom : InteractionObject {
         if (!this.IsEnd && this.Collider.bounds.Contains(this.InAreaPlayer.transform.position)){
             this.InAreaPlayer.SetCollider(this.Collider);
         } 
+        
+        // TODO: MYSTERIOUS BUG
+        this.EnableInteraction(true);
     }
 
     protected override void PlayerEnter() {
@@ -76,16 +79,10 @@ public class BattleRoom : InteractionObject {
                     GameManager.Instance.DungeonFail();
                 }
             }
-        }
-
-        if (!this.IsEnd && this.IsForce) {
+        }else if (this.IsForce) {
             OnInteractionPre?.Invoke();
             this.Interaction();
         }
-    }
-
-    protected override void OnTriggerExit(Collider other){
-        base.OnTriggerExit(other);
         GameManager.Instance.ResetBattleFlag();
     }
 }

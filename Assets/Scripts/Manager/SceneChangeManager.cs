@@ -112,8 +112,9 @@ public class SceneChangeManager : MonoBehaviour{
         StartCoroutine(SceneChangeCoroutine(type, isBlackScreen));
     }
 
-    public IEnumerator CompleteBlackScreenCoroutine(float start, float end) {
+    public IEnumerator CompleteBlackScreenCoroutine(float start, float end, Action dosomething = null) {
         yield return BlackScreenCoroutine(start, end);
+        dosomething?.Invoke();
         yield return BlackScreenCoroutine(end, start);
     }
     

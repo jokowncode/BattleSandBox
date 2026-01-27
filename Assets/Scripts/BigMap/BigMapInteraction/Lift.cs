@@ -23,8 +23,9 @@ public class Lift : InteractionObject {
     }
 
     private IEnumerator LiftCoroutine() {
-        yield return SceneChangeManager.Instance.CompleteBlackScreenCoroutine(0.0f, 1.0f);
-        this.InAreaPlayer.transform.position = this.TargetPosition.position;
+        yield return SceneChangeManager.Instance.CompleteBlackScreenCoroutine(0.0f, 1.0f, () => {
+            this.InAreaPlayer.transform.position = this.TargetPosition.position;
+        });
     }
 }
 
