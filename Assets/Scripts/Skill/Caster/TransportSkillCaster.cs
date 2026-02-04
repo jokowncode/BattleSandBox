@@ -23,9 +23,7 @@ public class TransportSkillCaster : SkillCaster {
         summon.SetCurrentData(OwnedFighter.CurrentData);
         summon.FighterSkillCaster.SetSkillCastCount(this.CurrentSkillCastCount);
         summon.BattleStart(true);
-        if (summon is Hero hero) {
-            hero.TransitionShow(true);
-        }
+        summon.TransitionShow(true);
 
         // Outer
         SpriteRenderer targetSpriteRenderer = summon.transform.GetComponentInChildren<SpriteRenderer>();
@@ -49,21 +47,18 @@ public class TransportSkillCaster : SkillCaster {
             ps.Play();
             Destroy(ps.gameObject, ps.main.duration + ps.main.startLifetime.constantMax);
         }
-        
-        Fighter fighter = BattleManager.Instance.FindFurthestEnemyTarget(OwnedFighter.transform.position);
-        
-        /*if(SkillTrailPrefab!=null) {
-            // wow
-            GameObject projectile = Instantiate(SkillTrailPrefab, OwnedFighter.Center.position, Quaternion.identity);
-            projectile.GetComponent<SimpleProjectile>().SetFlightParameters(OwnedFighter.Center.position, fighter.Center.position + Vector3.right * OwnedFighter.AttackRadius);
-        }*/
-        //Fighter fighter = BattleManager.Instance.FindFurthestEnemyTarget(OwnedFighter.transform.position);
-        // OwnedFighter.transform.position = fighter.transform.position + Vector3.right * OwnedFighter.AttackRadius;
-        Vector3 targetPos = fighter.transform.position + Vector3.right * OwnedFighter.AttackRadius;
-        if (OwnedFighter is Hero hero) {
-            hero.ChangePositionWithTrail(targetPos);
-        }
 
+        Fighter fighter = null;
+        if (OwnedFighter.AttackTargetType == TargetType.Enemy) {
+            fighter = BattleManager.Instance.FindFurthestEnemyTarget(OwnedFighter.transform.position);
+        } else {
+            fighter = BattleManager.Instance.FindFurthestHeroTarget(OwnedFighter.transform.position);
+        }
+        
+        Vector3 dir = OwnedFighter.AttackTargetType == TargetType.Enemy ? Vector3.right : Vector3.left;
+        Vector3 targetPos = fighter.transform.position + dir * OwnedFighter.AttackRadius;
+        OwnedFighter.ChangePositionWithTrail(targetPos);
+        
         if (SummonCount != 0) {
             for (int i = 0; i < SummonCount / 2; i++) {
                 Summon(targetPos, -(i + 1) * SummonAngle);

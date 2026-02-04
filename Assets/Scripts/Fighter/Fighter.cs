@@ -21,6 +21,10 @@ public class Fighter : StateMachineController{
     [field: SerializeField] public Transform AttackCaster { get; private set; }
     [SerializeField] private AudioClip BeDamagedSfx;
 
+    [Header("Trail")]
+    [SerializeField] private SimpleProjectile SkillTrailPrefab;
+    [SerializeField] private GameObject Shadow;
+    
     public FighterData CurrentData { get; protected set; }
     public Fighter AttackTarget { get; private set; }
     public SkillCaster OriginFighterSkillCaster { get; protected set; }
@@ -37,7 +41,7 @@ public class Fighter : StateMachineController{
     public float ShieldMultiplier{ get; protected set; } = 1.0f;
 
     private TargetType CurrentFighterType;
-    private FighterRenderer Renderer;
+    public FighterRenderer Renderer { get; private set; }
     public bool IsDead{ get; private set; }
 
     public Action<Fighter> OnDead;
@@ -243,6 +247,30 @@ public class Fighter : StateMachineController{
         
         this.InBattleHealth = Mathf.Min(this.CurrentData.Health, this.InBattleHealth + effectData.Value);
         UpdateBloodBar();
+    }
+    
+    public void ChangePositionWithTrail(Vector3 targetPosition) {
+        if (SkillTrailPrefab) {
+            SimpleProjectile projectile = Instantiate(SkillTrailPrefab, this.Center.position, Quaternion.identity);
+            projectile.SetFlightParameters(this.Center.position, targetPosition, this);
+        } else {
+            this.transform.position = targetPosition; 
+        }
+    }
+    
+    public void TransitionShow(bool show) {
+        this.IsDisappear = !show;
+        string layerName = show ? (this is Hero ? "Hero" : "Enemy") : "HideLayer";
+        string uiLayerName = show ? "UI" : "HideLayer";
+        
+        this.gameObject.layer = LayerMask.NameToLayer(layerName);
+        this.Renderer.gameObject.layer = LayerMask.NameToLayer(layerName);
+        this.Shadow.layer = LayerMask.NameToLayer(layerName);
+        this.FighterCanvas.gameObject.layer = LayerMask.NameToLayer(uiLayerName);
+
+        foreach (Transform child in this.Center) {
+            child.gameObject.SetActive(show);
+        }
     }
 
     private void UpdateBloodBar() {

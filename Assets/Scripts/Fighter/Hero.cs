@@ -11,10 +11,6 @@ public class Hero : Fighter{
     [SerializeField] private AudioClip DeployHeroSfx;
     [SerializeField] private PassiveEntry[] HeroSelfPassiveEntries;
     [field: SerializeField] public SkillCaster HeroUpdateSkillCaster { get; private set; }
-    [SerializeField] private GameObject Shadow;
-    
-    [Header("Trail")]
-    [SerializeField] private SimpleProjectile SkillTrailPrefab;
 
     [Header("Revenge")] 
     [SerializeField] private BuffData RevengeBuff;
@@ -22,7 +18,7 @@ public class Hero : Fighter{
     private List<PassiveEntry> EquipPassiveEntries;
     private List<PassiveEntry> SelfPassiveEntries;
     
-    public SpriteRenderer HeroRenderer{ get; private set; }
+    // public SpriteRenderer HeroRenderer{ get; private set; }
     public int HeroAvailablePassiveEntrySortCode { get; private set; }
     public int DeployAreaIndex { get; private set; }
     public Vector3 StartPosition { get; private set; }
@@ -40,7 +36,7 @@ public class Hero : Fighter{
         base.Awake();
         EquipPassiveEntries = new List<PassiveEntry>();
         SelfPassiveEntries = new List<PassiveEntry>();
-        HeroRenderer = GetComponentInChildren<SpriteRenderer>();
+        // HeroRenderer = GetComponentInChildren<SpriteRenderer>();
 
         if (this.FighterSkillCaster) {
             this.HeroAvailablePassiveEntrySortCode =
@@ -83,15 +79,6 @@ public class Hero : Fighter{
         newSkillCaster.transform.position = this.FighterSkillCaster.transform.position;
         this.FighterSkillCaster = newSkillCaster;
     }
-    
-    public void ChangePositionWithTrail(Vector3 targetPosition) {
-        if (SkillTrailPrefab) {
-            SimpleProjectile projectile = Instantiate(SkillTrailPrefab, this.Center.position, Quaternion.identity);
-            projectile.SetFlightParameters(this.Center.position, targetPosition, this);
-        } else {
-            this.transform.position = targetPosition; 
-        }
-    }
 
     public void SkillChange(bool isUpdate) {
         SkillCaster newSkill = isUpdate ? this.HeroUpdateSkillCaster : this.OriginFighterSkillCaster;
@@ -102,21 +89,6 @@ public class Hero : Fighter{
         if(this.FighterSkillCaster) newSkill.transform.position = this.FighterSkillCaster.transform.position;
         this.FighterSkillCaster = newSkill;
         if(this.FighterSkillCaster) this.SkillNameText.SetSkillName(this.FighterSkillCaster.Data.Name);
-    }
-
-    public void TransitionShow(bool show) {
-        this.IsDisappear = !show;
-        string layerName = show ? "Hero" : "HideLayer";
-        string uiLayerName = show ? "UI" : "HideLayer";
-        
-        this.gameObject.layer = LayerMask.NameToLayer(layerName);
-        this.HeroRenderer.gameObject.layer = LayerMask.NameToLayer(layerName);
-        this.Shadow.layer = LayerMask.NameToLayer(layerName);
-        this.FighterCanvas.gameObject.layer = LayerMask.NameToLayer(uiLayerName);
-
-        foreach (Transform child in this.Center) {
-            child.gameObject.SetActive(show);
-        }
     }
 
     public List<PassiveEntry> GetHeroPassiveEntries() {
