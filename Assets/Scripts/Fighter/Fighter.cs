@@ -410,6 +410,7 @@ public class Fighter : StateMachineController{
     public float Speed => InitialData.Speed;
     public Sprite DetailPortrait => InitialData.DetailPortrait;
     public Sprite WarehouseHeroPortrait => InitialData.WarehouseHeroPortrait;
+    public Sprite SkillPortrait => InitialData.SkillPortrait;
     
     #endregion
 }

@@ -20,9 +20,9 @@ public class BattleUIManager : MonoBehaviour {
     [field: SerializeField] public HeroPortraitUI heroPortraitUI { get; private set; }
 
     [Header("Skill UI")] public Sprite warriorSkillIcon;
-    public Sprite mageSkillIcon;
-    public Sprite priestSkillIcon;
-    public Sprite passiveSkillIcon;
+    // public Sprite mageSkillIcon;
+    // public Sprite priestSkillIcon;
+    // public Sprite passiveSkillIcon;
 
     [SerializeField] private GameObject skillImageUI;
     [SerializeField] private GameObject skill1UI;
@@ -127,12 +127,16 @@ public class BattleUIManager : MonoBehaviour {
     }
 
     private void UpdateSelectedHeroSkillUI(Hero hero){
-        if(hero.Type == FighterType.Mage)
-            SkillBackgroundImage.sprite = mageSkillIcon;
-        else if(hero.Type == FighterType.Priest)
-            SkillBackgroundImage.sprite = priestSkillIcon;
-        else
-            SkillBackgroundImage.sprite = warriorSkillIcon;
+        // if(hero.Type == FighterType.Mage)
+        //     SkillBackgroundImage.sprite = mageSkillIcon;
+        // else if(hero.Type == FighterType.Priest)
+        //     SkillBackgroundImage.sprite = priestSkillIcon;
+        // else
+        //     SkillBackgroundImage.sprite = warriorSkillIcon;
+        if (hero.SkillPortrait != null) {
+            Debug.Log("ChangeSkillPortrait");
+            SkillBackgroundImage.sprite = hero.SkillPortrait;
+        }
         if (hero.FighterSkillCaster) {
             SkillDescription.text = hero.FighterSkillCaster.Data.Description;
         }

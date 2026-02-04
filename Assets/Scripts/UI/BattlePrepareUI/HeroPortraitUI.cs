@@ -36,6 +36,10 @@ public class HeroPortraitUI : MonoBehaviour {
                 go=Instantiate(heroPriestPortraitUIPrefab, heroPortraitContent);
             
             go.SetPortrait(hero.WarehouseHeroPortrait, true);
+            if(!go.TryGetComponent(out UISelectableShaker uiNode))
+            {
+                go.AddComponent<UISelectableShaker>();
+            }
             heroPortraitUIDict.Add(hero,go);
         }
         heroPortraitContent.GetComponent<UILayoutManual>().LayoutChildren();
@@ -43,7 +47,9 @@ public class HeroPortraitUI : MonoBehaviour {
 
     public void SetHeroPortraitsGray(Hero hero){
         if (!heroPortraitUIDict.ContainsKey(hero)) return;
-        if (heroPortraitUIDict[hero].TryGetComponent(out UIShaker shaker)){
+        if (heroPortraitUIDict[hero].TryGetComponent(out UISelectableShaker shaker))
+        {
+            shaker.SetDead();
             shaker.Shake();
         }
         heroPortraitUIDict[hero].HeroDead();
