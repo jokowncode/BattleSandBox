@@ -33,7 +33,7 @@ public class BattleManager : StateMachineController{
     private Dictionary<Hero, PassiveEntry> Skills2InBattle;
 
     public List<Hero> HeroesInBattle{ get; private set; }
-    public List<Enemy> EnemiesInBattle{ get; private set; }
+    public List<Enemy> EnemiesInBattle { get; private set; } = new();
 
     public Action<Hero> OnHeroEnterTheField;
     public Action<Hero> OnHeroExitTheField;
@@ -95,6 +95,16 @@ public class BattleManager : StateMachineController{
                 }
             }
         }
+
+#if TEST_BATTLE
+        if (this.EnemyParent.childCount != 0) {
+            foreach (Transform child in this.EnemyParent.transform) {
+                if (child.TryGetComponent(out Enemy enemy)) {
+                    this.EnemiesInBattle.Add(enemy);
+                }
+            }
+        }
+#endif
     }
 
     private void Start(){
@@ -106,8 +116,12 @@ public class BattleManager : StateMachineController{
 #endif
         
         ChangeState(Prepare);
-        this.BattleNameText.text = this.Data.BattleName;
-        this.BattleMessageText.text = this.Data.BattleMessage;
+
+        if (this.Data) {
+            this.BattleNameText.text = this.Data.BattleName;
+            this.BattleMessageText.text = this.Data.BattleMessage;
+        }
+
         BattleUIManager.Instance.SetHeroWarehouseActive(true);
         BattleUIManager.Instance.SetHeroPanelActive(false);
         BattleUIManager.Instance.SetHeroPortraitActive(false);
@@ -136,7 +150,6 @@ public class BattleManager : StateMachineController{
     }
 
     private void DeployEnemy(){
-        this.EnemiesInBattle = new List<Enemy>();
         if (!this.Data) return;
         List<EnemyDepartmentData> departmentAreaData = this.Data.EnemiesInBattle;
         foreach (EnemyDepartmentData data in departmentAreaData){
@@ -205,6 +218,7 @@ public class BattleManager : StateMachineController{
     }
 
     public void LoadHeroDeploy() {
+        if (!this.Data) return;
         if (!PlayerPrefs.HasKey(this.Data.BattleName)) return;
         HeroDeploySaveData saveData = JsonUtility.FromJson<HeroDeploySaveData>(PlayerPrefs.GetString(this.Data.BattleName));
         foreach (HeroDeployData data in saveData.Datas) {
@@ -474,6 +488,19 @@ public class BattleManager : StateMachineController{
             if (distance > maxDistance) {
                 maxDistance = distance;
                 result = enemy;
+            }
+        }
+        return result;
+    }
+
+    public Fighter FindFurthestHeroTarget(Vector3 position) {
+        float maxDistance = -1.0f;
+        Fighter result = null;
+        foreach (Hero hero in HeroesInBattle) {
+            float distance = (position - hero.transform.position).sqrMagnitude;
+            if (distance > maxDistance) {
+                maxDistance = distance;
+                result = hero;
             }
         }
         return result;

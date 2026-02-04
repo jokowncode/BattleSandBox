@@ -179,7 +179,7 @@ public class HeroMergeManager : MonoBehaviour {
         data.Shield = 0;
         mergeHero.SetMergeData(data);
 
-        GameObject otherHeroRenderer = Instantiate(secondHero.HeroRenderer.gameObject, mergeHero.HeroRenderer.gameObject.transform);
+        GameObject otherHeroRenderer = Instantiate(secondHero.Renderer.gameObject, mergeHero.Renderer.gameObject.transform);
         otherHeroRenderer.transform.localPosition = new Vector3(-3.0f, 0.0f, 0.0f);
         mergeHero.SetMergeSkill(secondHero.HeroUpdateSkillCaster);
         // All Property Increase 200%

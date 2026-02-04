@@ -32,7 +32,7 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
 #if TEST_BATTLE
     public void TEMPFORBATTLE() {
         if (this.OwnedPassiveEntries == null || this.OwnedPassiveEntries.Count == 0) {
-            this.OwnedPassiveEntries = new Dictionary<string, int>();
+            this.OwnedPassiveEntries = new SerializableDictionary<string, int>();
             foreach (PassiveEntry entry in AllPassiveEntries) {
                 this.OwnedPassiveEntries.Add(entry.Data.Name, 3);
             }    
