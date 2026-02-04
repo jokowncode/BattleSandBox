@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(menuName = "PhantomSpirit/SkillData", fileName = "SkillData")]
+[CreateAssetMenu(menuName = "DeckBreakers/SkillData", fileName = "SkillData")]
 public class SkillData : ScriptableObject{
     public string Name;
     public string Description;

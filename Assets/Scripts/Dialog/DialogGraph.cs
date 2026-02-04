@@ -2,7 +2,7 @@
 using UnityEngine;
 using XNode;
 
-[CreateAssetMenu(menuName = "PhantomSpirit/DialogueGraph", fileName = "DialogueGraph")]
+[CreateAssetMenu(menuName = "DeckBreakers/DialogueGraph", fileName = "DialogueGraph")]
 public class DialogGraph : NodeGraph { }
 
 

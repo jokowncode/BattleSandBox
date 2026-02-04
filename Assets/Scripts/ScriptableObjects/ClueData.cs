@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "PhantomSpirit/ClueData", fileName = "ClueData")]
+[CreateAssetMenu(menuName = "DeckBreakers/ClueData", fileName = "ClueData")]
 public class ClueData : ScriptableObject {
     public string ClueName;
     public ClueType Type;

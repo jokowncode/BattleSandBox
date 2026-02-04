@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "PhantomSpirit/PassiveEntryData", fileName = "PassiveEntryData")]
+[CreateAssetMenu(menuName = "DeckBreakers/PassiveEntryData", fileName = "PassiveEntryData")]
 public class PassiveEntryData : ScriptableObject{
 
     public string Name;

@@ -3,7 +3,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "PhantomSpirit/EntanglementData", fileName = "EntanglementData")]
+[CreateAssetMenu(menuName = "DeckBreakers/EntanglementData", fileName = "EntanglementData")]
 public class EntanglementData : ScriptableObject {
     public float Value;
     public bool PropertyChange;

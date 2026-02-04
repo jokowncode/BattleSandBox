@@ -9,7 +9,7 @@ public enum GoodsType {
 }
 
 
-[CreateAssetMenu(menuName = "PhantomSpirit/StoreGoods", fileName = "StoreGoodsData")]
+[CreateAssetMenu(menuName = "DeckBreakers/StoreGoods", fileName = "StoreGoodsData")]
 public class StoreGoodsData : ScriptableObject {
     public string GoodsName;
     public GoodsType Type;

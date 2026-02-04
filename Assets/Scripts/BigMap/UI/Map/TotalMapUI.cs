@@ -10,8 +10,8 @@ public class TotalMapUI : MonoBehaviour {
     [SerializeField] private float MaxScale = 30.0f;
     [SerializeField] private float InitialScale = 15.0f;
     [SerializeField] private float ScrollSpeed = 2.0f;
-    [SerializeField] private float MoveSpeed = 2.0f;
-
+    [SerializeField] private AnimationCurve MoveSpeedAdaptCurve;
+    
     private bool IsDrag = false;
     private Vector3 CurrentMousePosition;
     private float MapCameraOriginSize;
@@ -57,7 +57,7 @@ public class TotalMapUI : MonoBehaviour {
             Vector3 delta = -(pos - this.CurrentMousePosition).normalized;
 
             Vector3 transPos = this.MapCamera.transform.position;
-            transPos += this.MoveSpeed * delta;
+            transPos += this.MoveSpeedAdaptCurve.Evaluate(this.MapCamera.orthographicSize) * delta;
             this.MapCamera.transform.position = transPos;
             
             this.CurrentMousePosition = pos;

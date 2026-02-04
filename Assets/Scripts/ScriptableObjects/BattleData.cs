@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "PhantomSpirit/BattleData", fileName = "BattleData")]
+[CreateAssetMenu(menuName = "DeckBreakers/BattleData", fileName = "BattleData")]
 public class BattleData : ScriptableObject {
     public SceneType BattleScene = SceneType.Battle_Normal;
     public int MaxHeroCount = 6;

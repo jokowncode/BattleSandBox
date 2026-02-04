@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "PhantomSpirit/TaskData", fileName = "TaskData")]
+[CreateAssetMenu(menuName = "DeckBreakers/TaskData", fileName = "TaskData")]
 public class TaskData : ScriptableObject {
     public string TaskName;
     public string[] TaskDescs;
