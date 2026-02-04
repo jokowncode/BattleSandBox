@@ -27,7 +27,7 @@ public abstract class InteractionObject : MonoBehaviour {
     [SerializeField] protected bool IsActiveWhenAwake = true;
     
     protected Player InAreaPlayer;
-    protected bool IsEnd = false;
+    public bool IsEnd { get; private set; } = false;
     protected bool IsActive = false;
     
     protected bool IsEndCanInteract = false;

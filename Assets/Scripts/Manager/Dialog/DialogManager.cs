@@ -224,7 +224,10 @@ public class DialogManager : MonoBehaviour {
         
         this.UnloadSlot();
         this.TipContainer.EndTip();
-        this.OnDialogEnded?.Invoke();
+
+        if (this.CurrentDialogNode.AfterDialogInvokeAction != "GameOver") {
+            this.OnDialogEnded?.Invoke();
+        }
     }
 
     private void UnloadSlot() {

@@ -42,6 +42,12 @@ public class Obstacle : InteractionObject {
     }
 
     protected override void PlayerEnter() {
+        if (!this.IsEnd && this.CancelObstacleObj && this.CancelObstacleObj.IsEnd) {
+            this.EnableInteraction(false);
+            this.EndInteraction();
+            return;
+        }
+
         this.HasShowTip = this.ShowTip && !this.IsEnd;
         this.InAreaPlayer.TransitionInteractionTip(this.HasShowTip, this.InteractionObjShowName, false);
         this.enabled = this.Type == ObstacleType.Inside;
