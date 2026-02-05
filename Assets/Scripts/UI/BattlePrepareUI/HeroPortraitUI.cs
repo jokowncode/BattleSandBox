@@ -13,11 +13,7 @@ public class HeroPortraitUI : MonoBehaviour {
     public HeroPanelUI heroMagePortraitUIPrefab;
     public Transform heroPortraitContent;
     
-    private Dictionary<string,HeroPanelUI> heroPortraitUIDict;
-    
-    private void Awake() {
-        heroPortraitUIDict = new Dictionary<string,HeroPanelUI>();
-    }
+    private Dictionary<string,HeroPanelUI> heroPortraitUIDict = new();
 
     public void CreateUIProtraits(List<Hero> heroes){
         foreach (Transform child in heroPortraitContent.transform){
@@ -87,5 +83,10 @@ public class HeroPortraitUI : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public void SetHeroBlood(string heroName, float value) {
+        if (!heroPortraitUIDict.ContainsKey(heroName)) return;
+        heroPortraitUIDict[heroName].SetHeroBlood(value);
     }
 }

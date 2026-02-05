@@ -188,12 +188,12 @@ public class BattleManager : StateMachineController{
             area.DeployArea.gameObject.SetActive(false);    
         }
         
-        ChangeState(InBattle);
 #if DEBUG_MODE
         this.BattleStartTime = Time.time;
 #endif
         BattleUIManager.Instance.SetHeroPortraitActive(true);
         BattleUIManager.Instance.heroPortraitUI.CreateUIProtraits(HeroesInBattle);
+        ChangeState(InBattle);
         OnBattleStart?.Invoke();
         SaveHeroDeploy();
         SaveHeroPassiveEntry();

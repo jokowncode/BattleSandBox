@@ -9,6 +9,7 @@ public class HeroPanelUI : MonoBehaviour{
 
     [SerializeField] private GameObject EnergyBar;
     [SerializeField] private Image EnergyProgress;
+    [SerializeField] private Image BloodProgress;
 
     public bool EnergyIsFull => Mathf.Approximately(this.EnergyProgress.fillAmount, 1.0f);
     
@@ -26,6 +27,10 @@ public class HeroPanelUI : MonoBehaviour{
 
     public void SetHeroEnergy(float value) {
         this.EnergyProgress.fillAmount = value;
+    }
+
+    public void SetHeroBlood(float value) {
+        this.BloodProgress.fillAmount = value;
     }
 }
 

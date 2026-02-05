@@ -123,6 +123,7 @@ public class Fighter : StateMachineController{
         if(FighterPatrol) FighterPatrol.OnFindAttackTarget += OnFindAttackTarget;
         if (SkillNameText) SkillNameText.Hide(true);
         
+        UpdatePortraitBloodBar();
         if (!IsBattleStart || this.IsSummon) {
             IsBattleStart = true;
             this.InBattleShield = this.CurrentData.Shield;
@@ -276,6 +277,12 @@ public class Fighter : StateMachineController{
     private void UpdateBloodBar() {
         this.BloodBarImage.fillAmount = this.CurrentData.Health == 0.0f ? 0.0f : this.InBattleHealth / this.CurrentData.Health;
         this.BloodBarImage.color = Color.Lerp(this.InitialColor, this.FinalColor, 1.0f - this.BloodBarImage.fillAmount);
+        UpdatePortraitBloodBar();
+    }
+
+    private void UpdatePortraitBloodBar() {
+        if(BattleManager.Instance.IsBattleStart) 
+            BattleUIManager.Instance.heroPortraitUI.SetHeroBlood(this.Name, this.BloodBarImage.fillAmount);
     }
 
     private void UpdateShieldBar() {
