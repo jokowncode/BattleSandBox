@@ -36,15 +36,14 @@ public class UISelectionManager : MonoBehaviour
         if (!BattleUIManager.Instance.heroPortraitUI.HeroEnergyIsFull(ui.CurrentHero.Name)) return false;
         if (!ui.HasTactic && selectedList.Count != 0) return false; 
         
-        if (!selectedList.Contains(ui))
-            selectedList.Add(ui);
-
+        selectedList.Add(ui);
         if (selectedList.Count == 1) {
             // Select One Hero
             BattleUIManager.Instance.heroPortraitUI.SelectOneHero(ui.CurrentHero.Name);
         } else {
             // Select Two Hero
             BulletTime(true);
+            BattleUIManager.Instance.heroPortraitUI.ShowHeroLinkTip(selectedList[0].CurrentHero.Name, selectedList[1].CurrentHero.Name);
             BattleUIManager.Instance.heroPortraitUI.DownAllPanel(true);
         }
 
@@ -79,6 +78,7 @@ public class UISelectionManager : MonoBehaviour
         }
 
         if (selectedList.Count != 2) {
+            BattleUIManager.Instance.heroLinkTipUI.Hide();
             BulletTime(false);
         }
         UpdateThirdUI();
@@ -89,6 +89,7 @@ public class UISelectionManager : MonoBehaviour
         selectedList.Clear();
         UpdateThirdUI();
         BulletTime(false);
+        BattleUIManager.Instance.heroLinkTipUI.Hide();
     }
 
     /// <summary>

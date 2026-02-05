@@ -41,7 +41,7 @@ public class HeroWarehouseUI : MonoBehaviour {
         else
             go = Instantiate(heroWarehousePriestUIPrefab, heroWarehouseContent);
         
-        go.SetPortrait(hero.WarehouseHeroPortrait, false);
+        go.SetPortrait(hero.WarehouseHeroPortrait, false, false);
         float health = SaveDataManager.Instance.GetHeroHealth(hero.Name);
         if (health == 0.0f) {
             go.HeroDead();

@@ -31,7 +31,7 @@ public class HeroPortraitUI : MonoBehaviour {
             else
                 go=Instantiate(heroPriestPortraitUIPrefab, heroPortraitContent);
             
-            go.SetPortrait(hero.WarehouseHeroPortrait, true);
+            go.SetPortrait(hero.WarehouseHeroPortrait, true, true);
             if(!go.TryGetComponent(out UISelectableShaker uiNode)) {
                 uiNode = go.AddComponent<UISelectableShaker>();
             }
@@ -88,5 +88,13 @@ public class HeroPortraitUI : MonoBehaviour {
     public void SetHeroBlood(string heroName, float value) {
         if (!heroPortraitUIDict.ContainsKey(heroName)) return;
         heroPortraitUIDict[heroName].SetHeroBlood(value);
+    }
+
+    public void ShowHeroLinkTip(string hero1, string hero2) {
+        if(!heroPortraitUIDict.ContainsKey(hero1) || !heroPortraitUIDict.ContainsKey(hero2)) return;
+        float lCenter = heroPortraitUIDict[hero1].Rect.position.x;
+        float rCenter = heroPortraitUIDict[hero2].Rect.position.x;
+        float y = heroPortraitUIDict[hero1].Rect.position.y;
+        BattleUIManager.Instance.heroLinkTipUI.Show(lCenter, rCenter, y);
     }
 }

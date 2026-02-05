@@ -18,7 +18,8 @@ public class BattleUIManager : MonoBehaviour {
     [field: SerializeField] public PassiveEntryWarehouseUI PassiveEntryWarehouseUI { get; private set; }
     [field: SerializeField] public HeroDetailUI heroDetailUI { get; private set; }
     [field: SerializeField] public HeroPortraitUI heroPortraitUI { get; private set; }
-
+    [field: SerializeField] public HeroLinkTipUI heroLinkTipUI { get; private set; } 
+    
     [Header("Skill UI")] public Sprite warriorSkillIcon;
     // public Sprite mageSkillIcon;
     // public Sprite priestSkillIcon;

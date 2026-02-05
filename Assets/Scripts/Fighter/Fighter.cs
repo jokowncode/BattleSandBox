@@ -281,6 +281,7 @@ public class Fighter : StateMachineController{
     }
 
     private void UpdatePortraitBloodBar() {
+        if (this is Enemy || this.IsSummon || this is Hero { IsOriginExist: true }) return;
         if(BattleManager.Instance.IsBattleStart) 
             BattleUIManager.Instance.heroPortraitUI.SetHeroBlood(this.Name, this.BloodBarImage.fillAmount);
     }

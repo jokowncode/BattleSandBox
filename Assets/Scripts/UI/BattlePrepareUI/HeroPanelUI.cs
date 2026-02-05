@@ -8,14 +8,22 @@ public class HeroPanelUI : MonoBehaviour{
     [SerializeField] private Image HeroPortraitImage;
 
     [SerializeField] private GameObject EnergyBar;
+    [SerializeField] private GameObject BloodBar;
     [SerializeField] private Image EnergyProgress;
     [SerializeField] private Image BloodProgress;
 
     public bool EnergyIsFull => Mathf.Approximately(this.EnergyProgress.fillAmount, 1.0f);
-    
-    public void SetPortrait(Sprite heroPortrait, bool hasEnergy) {
+
+    public RectTransform Rect;
+
+    private void Awake() {
+        this.Rect = this.GetComponent<RectTransform>();
+    }
+
+    public void SetPortrait(Sprite heroPortrait, bool hasEnergy, bool hasBlood) {
         HeroPortraitImage.sprite = heroPortrait;
         this.EnergyBar.SetActive(hasEnergy);
+        this.BloodBar.SetActive(hasBlood);
     }
 
     public void HeroDead(){

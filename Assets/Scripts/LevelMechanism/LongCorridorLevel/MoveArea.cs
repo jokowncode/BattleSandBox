@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MoveArea : MonoBehaviour {
 
@@ -9,9 +10,11 @@ public class MoveArea : MonoBehaviour {
 
     private void Awake() {
         HeroLocalPositions = new Dictionary<string, Vector3>();
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void Start() {
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
         BattleManager.Instance.OnHeroEnterTheField += OnHeroEnterTheField;
         BattleManager.Instance.OnHeroExitTheField += OnHeroExitTheField;
     }

@@ -52,12 +52,12 @@ public class NextCorridorArea : MonoBehaviour {
             return;
         }
         
-        if (this.MoveWay == NextCorridorMoveWay.HeroMove) {
+        if (this.MoveWay != NextCorridorMoveWay.Disappear) {
             if (MoveCam) {
                 MoveCam.MoveToInXDir(this.Offset.x);
                 MoveCam.OnArrive += OnCameraArrive;
             }
-        }else if (this.MoveWay == NextCorridorMoveWay.Disappear) {
+        }else{
             StartCoroutine(DisappearAreaCoroutine());
         }
     }
