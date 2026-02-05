@@ -18,5 +18,6 @@ public class FighterData : ScriptableObject{
     public FighterType Type;
     public Sprite WarehouseHeroPortrait;
     public Sprite DetailPortrait;
+    public Sprite SkillPortrait;
 }
 

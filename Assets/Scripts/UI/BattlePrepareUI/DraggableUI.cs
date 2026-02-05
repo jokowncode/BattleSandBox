@@ -70,7 +70,7 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
     }
 
     private void SetAlpha(float alpha){
-        image.color = new Color(image.color.r,image.color.g,image.color.b, alpha);
+        // image.color = new Color(image.color.r,image.color.g,image.color.b, alpha);
     }
 
     private void GetNavMeshPosition(Vector3 currentPos, float maxDistance, out Vector3 navMeshPos){

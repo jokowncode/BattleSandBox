@@ -40,11 +40,11 @@ public class UILayoutManual : MonoBehaviour
             child.anchoredPosition = new Vector2(x, y);
             
             // 自动添加 UIShake 脚本
-            UIShaker shaker = child.GetComponent<UIShaker>();
-            if (shaker == null)
-            {
-                shaker = child.gameObject.AddComponent<UIShaker>();
-            }
+            // UIShaker shaker = child.GetComponent<UIShaker>();
+            // if (shaker == null)
+            // {
+            //     shaker = child.gameObject.AddComponent<UIShaker>();
+            // }
         }
     }
 }
