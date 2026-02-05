@@ -12,8 +12,10 @@ public class EntanglementManager : MonoBehaviour {
     public static EntanglementManager Instance;
 
     private List<float> HeroEntanglementValues;
-    private List<string> AllBattleTacticDescs = new List<string>();
+    public List<string> AllBattleTacticDescs { get; private set; } = new List<string>();
 
+    private float MinHasTacticEntangleValue = float.MaxValue;
+    
     private void Awake() {
         if (Instance != null) {
             Destroy(this.gameObject);
@@ -30,6 +32,12 @@ public class EntanglementManager : MonoBehaviour {
             if ((int)tactic < 0) continue;
             BattleTacticType current = (BattleTacticType) tactic;
             this.AllBattleTacticDescs.Add(BattleTacticFactory.GetBattleTacticDescription(current));
+        }
+
+        foreach (EntanglementData data in EntanglementLevelDatas) {
+            if (data.CanUseMaxBattleTactic != BattleTacticType.None && data.Value < this.MinHasTacticEntangleValue) {
+                this.MinHasTacticEntangleValue = data.Value;
+            }
         }
     }
 
@@ -63,6 +71,13 @@ public class EntanglementManager : MonoBehaviour {
             count = count * (count - 1) / 2;
             for (int i = 0; i < count; i++) { this.HeroEntanglementValues.Add(0); }
         }
+        
+        /*int index1 = HeroWarehouseManager.Instance.GetHeroIndex("Elara");
+        int index2 = HeroWarehouseManager.Instance.GetHeroIndex("Bullock");
+        int index = GetHeroEntanglementIndex(index1, index2);
+        if (this.HeroEntanglementValues == null || this.HeroEntanglementValues[index] == 0.0f) {
+            this.HeroEntanglementValues[index] = 35.0f;
+        }*/
     }
 
     private void Start() {
@@ -143,6 +158,25 @@ public class EntanglementManager : MonoBehaviour {
         if (index2 < 0) return;
         int index = GetHeroEntanglementIndex(index1, index2);
         this.HeroEntanglementValues[index] += value;
+    }
+
+    public List<string> GetHasTacticHeroNames(string heroName) {
+        List<string> result = new List<string>();
+        int index1 = HeroWarehouseManager.Instance.GetHeroIndex(heroName);
+        if (index1 < 0) return result;
+
+        List<string> currentHeroes = HeroWarehouseManager.Instance.GetOwnedHeroesRef();
+        foreach (string otherHeroName in currentHeroes) {
+            int index2 = HeroWarehouseManager.Instance.GetHeroIndex(otherHeroName);
+            if (index2 < 0) continue;
+            if (index1 == index2) continue;
+
+            float value = GetHeroEntanglementValue(index1, index2);
+            if (value >= this.MinHasTacticEntangleValue) {
+                result.Add(otherHeroName);
+            }
+        }
+        return result;
     }
 
 }

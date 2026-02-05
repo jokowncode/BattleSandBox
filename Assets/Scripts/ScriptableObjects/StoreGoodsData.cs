@@ -5,7 +5,8 @@ public enum GoodsType {
     Hero,
     EXP,
     PassiveEntry,
-    BloodBottle
+    BloodBottle,
+    Tactic
 }
 
 

@@ -15,8 +15,8 @@ public class HeroMergeManager : MonoBehaviour {
     [SerializeField] private BuffData HeroMergeBuff;
     [SerializeField] private float HeroMergeDuration = 5.0f;
 
-    [Header("Tactic Version")] 
-    [SerializeField] private BattleTacticType UseTacticType;
+    /*[Header("Tactic Version")] 
+    [SerializeField] private BattleTacticType UseTacticType;*/
     
     public static HeroMergeManager Instance;
     // private HeroMergeGroupData[] HeroMergeGroup;
@@ -105,15 +105,7 @@ public class HeroMergeManager : MonoBehaviour {
         BattleUIManager.Instance.heroPortraitUI.SetHeroEnergy(hero, value);
     }
 
-    private void Update() {
-        // TODO: Link UI
-        if (Input.GetKeyDown(KeyCode.M)) {
-            if (BattleManager.Instance.HeroesInBattle.Count < 2) return;
-            MergeHeroTacticVersion(BattleManager.Instance.HeroesInBattle[0], BattleManager.Instance.HeroesInBattle[1]);
-        }
-    }
-
-    private void MergeHeroTacticVersion(Hero hero1, Hero hero2) {
+    public void MergeHeroTacticVersion(Hero hero1, Hero hero2, BattleTacticType tactic) {
         if (!hero1 || !hero2) return;
         if (hero1.IsMerge || hero2.IsMerge) return;
 
@@ -122,7 +114,7 @@ public class HeroMergeManager : MonoBehaviour {
             hero1E < this.MergeEnergy ||
             hero2E < this.MergeEnergy) return;
 
-        StartCoroutine(MergeHeroTacticVersionCoroutine(hero1, hero2, this.UseTacticType));
+        StartCoroutine(MergeHeroTacticVersionCoroutine(hero1, hero2, tactic));
     }
 
     private IEnumerator MergeHeroTacticVersionCoroutine(Hero hero1, Hero hero2, BattleTacticType tacticType) {

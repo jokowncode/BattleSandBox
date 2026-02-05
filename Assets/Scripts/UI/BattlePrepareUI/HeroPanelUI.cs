@@ -10,6 +10,8 @@ public class HeroPanelUI : MonoBehaviour{
     [SerializeField] private GameObject EnergyBar;
     [SerializeField] private Image EnergyProgress;
 
+    public bool EnergyIsFull => Mathf.Approximately(this.EnergyProgress.fillAmount, 1.0f);
+    
     public void SetPortrait(Sprite heroPortrait, bool hasEnergy) {
         HeroPortraitImage.sprite = heroPortrait;
         this.EnergyBar.SetActive(hasEnergy);

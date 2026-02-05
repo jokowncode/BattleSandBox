@@ -38,6 +38,10 @@ public class GoodsWarehouseManager : MonoBehaviour {
         return this.AllStoreGoodsMap.GetValueOrDefault(goodsName);
     }
 
+    public int GetGoodsCount(string goodsName) {
+        return this.OwnedConsumedGoods.ContainsKey(goodsName) ? this.OwnedConsumedGoods[goodsName] : 0;
+    }
+
     private void AddConsumeGoods(string goodsName) {
         if (!this.AllStoreGoodsMap.ContainsKey(goodsName)) return;
         if (!this.OwnedConsumedGoods.ContainsKey(goodsName)) {
@@ -47,20 +51,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
         }
     }
 
-    private void Update() {
-        // TODO: TEMP -> TEST USE GOODS
-        if (Input.GetKeyDown(KeyCode.U)) {
-            this.UseConsumedGoods("100BloodBottle", "Bullock");
-        }
-
-        if (Input.GetKeyDown(KeyCode.I)) {
-            foreach (KeyValuePair<string, int> goodsPair in this.OwnedConsumedGoods) {
-                Debug.Log($"{goodsPair.Key}: {goodsPair.Value}");
-            }
-        }
-    }
-
-    private void UseConsumedGoods(string goodsName, params Object[] args) {
+    public void UseConsumedGoods(string goodsName, params Object[] args) {
         if (!this.OwnedConsumedGoods.ContainsKey(goodsName)) return;
         if (!this.AllStoreGoodsMap.ContainsKey(goodsName)) return;
 
@@ -79,6 +70,10 @@ public class GoodsWarehouseManager : MonoBehaviour {
                 if (args.Length < 1) return;
                 SaveDataManager.Instance.RecoverHeroHealth(args[0].ToString(), goodsData.Value, false);
                 break;
+            case GoodsType.Tactic:
+                if (args.Length < 1) return;
+                UISelectionManager.Instance.UseTactic((BattleTacticType)args[0]);
+                break;
         }
     }
 
@@ -89,6 +84,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
             case GoodsType.PassiveEntry:
                 PassiveEntryWarehouseManager.Instance.AddPassiveEntry(data.GoodsName, 1);
                 break;
+            case GoodsType.Tactic:
             case GoodsType.EXP:
             case GoodsType.BloodBottle:
                 this.AddConsumeGoods(data.GoodsName);

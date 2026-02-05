@@ -53,6 +53,8 @@ public class BattleUIManager : MonoBehaviour {
     public void GameEnd(Sprite bannarSprite) {
         this.GameEndBannarImage.sprite = bannarSprite;
         this.GameEndObject.SetActive(true);
+        this.heroPortraitUI.DownAllPanel(false);
+        UISelectionManager.Instance.UnSelectAll();
     }
 
     private void Start() {
@@ -130,8 +132,7 @@ public class BattleUIManager : MonoBehaviour {
         //     SkillBackgroundImage.sprite = priestSkillIcon;
         // else
         //     SkillBackgroundImage.sprite = warriorSkillIcon;
-        if (hero.SkillPortrait != null) {
-            Debug.Log("ChangeSkillPortrait");
+        if (hero.SkillPortrait) {
             SkillBackgroundImage.sprite = hero.SkillPortrait;
         }
         if (hero.FighterSkillCaster) {

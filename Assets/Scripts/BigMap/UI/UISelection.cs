@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(RectTransform))]
 public class UISelectableShaker : MonoBehaviour,
@@ -11,7 +12,6 @@ public class UISelectableShaker : MonoBehaviour,
     [Header("Selection")]
     public float hoverOffsetY = 40f;
     public float moveSpeed = 12f;
-    public float value = 1f;
 
     [Header("Shake")]
     public float shakeDuration = 0.2f;
@@ -31,6 +31,10 @@ public class UISelectableShaker : MonoBehaviour,
     // 死亡状态
     private bool isAlive = true;
 
+    public bool HasTactic { get; private set; } = false;
+    
+    [HideInInspector] public Hero CurrentHero;
+
     void Awake()
     {
         rect = GetComponent<RectTransform>();
@@ -46,38 +50,54 @@ public class UISelectableShaker : MonoBehaviour,
     }
 
     // ===== Selection =====
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if (!isAlive || value != 1 || isSelected) return;
+    public void OnPointerEnter(PointerEventData eventData) {
+        if (!isAlive || isSelected) return;
+        if (!BattleUIManager.Instance.heroPortraitUI.HeroEnergyIsFull(this.CurrentHero.Name)) return;
+        if (!HasTactic && UISelectionManager.Instance.SelectedSize != 0) return;
         targetSelectOffset = hoverOffsetY;
     }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        if (isSelected) return;
-        targetSelectOffset = 0f;
+    public void HasEntanglement() {
+        this.HasTactic = true;
+        targetSelectOffset = hoverOffsetY / 2.0f;
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (!isAlive || value != 1) return;
+    public void GoDown(bool cancelHasTactic) {
+        if (cancelHasTactic) {
+            this.HasTactic = false;
+        }
+        this.isSelected = false;
+        if (this.HasTactic) {
+            HasEntanglement();
+        } else {
+            targetSelectOffset = 0.0f;
+        }
+    }
 
-        if (!isSelected)
-        {
+    public void OnPointerExit(PointerEventData eventData) {
+        if (isSelected) return;
+        GoDown(false);
+    }
+
+    public void BeSelected() {
+        if (!isAlive) return;
+
+        if (!isSelected) {
             // 尝试选中
-            if (UISelectionManager.Instance.TrySelect(this))
-            {
+            if (UISelectionManager.Instance.TrySelect(this)) {
                 isSelected = true;
+                HasTactic = false;
                 targetSelectOffset = hoverOffsetY;
             }
-        }
-        else
-        {
+        } else {
             // 取消选中
             UISelectionManager.Instance.Unselect(this);
-            isSelected = false;
-            targetSelectOffset = 0f;
+            GoDown(false);
         }
+    }
+
+    public void OnPointerClick(PointerEventData eventData) {
+        BeSelected();
     }
 
     // ===== Shake =====
@@ -120,11 +140,10 @@ public class UISelectableShaker : MonoBehaviour,
 
         // 可以加灰化效果或者不可点击提示
         // 例如：
-        var img = GetComponent<UnityEngine.UI.Image>();
-        if (img != null)
+        if (TryGetComponent(out Image img))
             img.color = Color.gray;
 
-        targetSelectOffset = 0f; // 不再上移
+        GoDown(true); // 不再上移
     }
 
     public bool IsSelected => isSelected;
