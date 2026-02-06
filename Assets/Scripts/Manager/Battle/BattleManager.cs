@@ -221,6 +221,7 @@ public class BattleManager : StateMachineController{
         if (!PlayerPrefs.HasKey(this.Data.BattleName)) return;
         HeroDeploySaveData saveData = JsonUtility.FromJson<HeroDeploySaveData>(PlayerPrefs.GetString(this.Data.BattleName));
         foreach (HeroDeployData data in saveData.Datas) {
+            if (IsFullHero) break;
             foreach (Transform child in HeroWarehouseParent) {
                 if (child.TryGetComponent(out DraggableUI draggable)
                     && draggable.prefabReference == data.HeroName) {
