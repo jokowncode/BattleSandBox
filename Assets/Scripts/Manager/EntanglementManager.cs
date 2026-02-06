@@ -23,7 +23,6 @@ public class EntanglementManager : MonoBehaviour {
         }
 
         Instance = this;
-        DontDestroyOnLoad(this.gameObject);
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 

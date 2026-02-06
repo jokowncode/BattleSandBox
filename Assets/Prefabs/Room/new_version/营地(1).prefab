@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 5407960126603014562}
   - component: {fileID: 841033508726169366}
   m_Layer: 12
-  m_Name: PassiveEntry
+  m_Name: PassiveEntrySynth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -225,7 +225,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ea5c8fbe315447eb5dabf69cd62b4c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <OwnedTaskName>k__BackingField: None
+  InteractionObjShowName: 
+  OwnedTaskName: Level1
   <IsBindTask>k__BackingField: 0
   IsActiveWhenAwake: 1
   Dungeon: 8
@@ -239,8 +240,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4667579695943823569}
   - component: {fileID: 6587132194871884470}
+  - component: {fileID: 8359062153227191411}
   m_Layer: 12
-  m_Name: Character
+  m_Name: HeroWarehouse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -282,6 +284,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.1488762, y: 2.0358005, z: 5.4714036}
   m_Center: {x: 0.28528023, y: 0.5179007, z: 0.7577316}
+--- !u!114 &8359062153227191411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7010372380780170515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5112a66a04dc4243b59ab939e40cfa4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InteractionObjShowName: 
+  OwnedTaskName: Level1
+  <IsBindTask>k__BackingField: 0
+  IsActiveWhenAwake: 1
 --- !u!1 &7725474258349759120
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,7 +348,7 @@ GameObject:
   - component: {fileID: 944579233251493515}
   - component: {fileID: 156005334191861076}
   m_Layer: 12
-  m_Name: Other
+  m_Name: GoodsWarehouse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -4,9 +4,17 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public enum HeroWarehouseCategory {
+    All = -1,
+    Warrior,
+    Mage,
+    Priest
+}
+
 public class HeroWarehouseManager : MonoBehaviour {
     
     [SerializeField] private List<Hero> AllHeroes;
+    [SerializeField] private ModeHeroWarehouseUI ModeHeroWarehousePanel;
     
     private List<string> OwnedHeroes = new List<string>();
     
@@ -16,6 +24,9 @@ public class HeroWarehouseManager : MonoBehaviour {
     private Dictionary<string, int> HeroIndexMap = new Dictionary<string, int>();
 
     public int TotalHeroCount => this.AllHeroes.Count;
+    public int OwnedHeroesCount => this.OwnedHeroes.Count;
+    
+    private CanvasGroup HeroWarehouseCanvasGroup;
 
     private void Awake() {
         if (Instance != null) {
@@ -30,6 +41,20 @@ public class HeroWarehouseManager : MonoBehaviour {
             this.AllHeroMap.Add(hero.Name, hero);
             this.HeroIndexMap.Add(hero.Name, i);
         }
+
+        this.HeroWarehouseCanvasGroup = this.GetComponent<CanvasGroup>();
+        TransitionHeroWarehouseCanvas(false);
+    }
+
+    public void TransitionHeroWarehouseCanvas(bool show) {
+        if (show && this.HeroWarehouseCanvasGroup.alpha > 0.9f) return;
+        if (show && SceneChangeManager.Instance.CurrentScene != SceneType.Camp &&
+            SceneChangeManager.Instance.CurrentScene != SceneType.BigMap) return;
+
+        this.HeroWarehouseCanvasGroup.alpha = show ? 1.0f : 0.0f;
+        this.HeroWarehouseCanvasGroup.blocksRaycasts = show;
+        this.HeroWarehouseCanvasGroup.interactable = show;
+        if(show) this.ModeHeroWarehousePanel.Show();
     }
 
     public int GetHeroIndex(string heroName) {
@@ -40,7 +65,7 @@ public class HeroWarehouseManager : MonoBehaviour {
         SaveDataManager.Instance.OnLoadData += () => {
             this.OwnedHeroes = SaveDataManager.Instance.PlayerData.OwnedHeroes;
             if (this.OwnedHeroes.Count == 0) {
-                this.OwnedHeroes.Add(AllHeroes[0].Name);
+                this.AddHero(AllHeroes[0].Name);
             }
         };
     }
@@ -56,6 +81,7 @@ public class HeroWarehouseManager : MonoBehaviour {
 #endif
     
     public bool AddHero(string heroName) {
+        if (!this.AllHeroMap.ContainsKey(heroName)) return false;
         if (!this.OwnedHeroes.Contains(heroName)) {
             this.OwnedHeroes.Add(heroName);
             return true;
@@ -74,6 +100,17 @@ public class HeroWarehouseManager : MonoBehaviour {
     /// </summary>
     public List<string> GetOwnedHeroesRef(){
         return OwnedHeroes;
+    }
+
+    public List<Hero> GetHeroesByType(HeroWarehouseCategory category = HeroWarehouseCategory.All) {
+        List<Hero> result = new List<Hero>();
+        foreach (string heroName in this.OwnedHeroes) {
+            FighterType type = this.AllHeroMap[heroName].Type;
+            if (category == HeroWarehouseCategory.All || (int)type == (int)category) {
+                result.Add(this.AllHeroMap[heroName]);
+            }
+        }
+        return result;
     }
 
     public Sprite GetHeroSpriteByRef(string heroRef){

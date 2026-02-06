@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RemoveHero : InteractionTrigger {
     
+    [ScriptableObjectNameProp(typeof(FighterData), "Name")]
     [SerializeField] private List<string> GetHeroNames;
     
     protected override void TriggerAction() {

@@ -22,6 +22,7 @@ public abstract class SkillCaster : MonoBehaviour{
     private float LastCastTime;
 
     public SkillData Data{ get; private set; }
+    public string SkillDesc => this.InitialData.Description;
 
     public Action<Fighter> OnCastSkill;
 

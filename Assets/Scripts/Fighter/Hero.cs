@@ -6,8 +6,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using Object = System.Object;
 
-public class Hero : Fighter{
+public class Hero : Fighter {
 
+    [field: SerializeField] public HeroWarehouseData WarehouseData { get; private set; }
     [SerializeField] private AudioClip DeployHeroSfx;
     [SerializeField] private PassiveEntry[] HeroSelfPassiveEntries;
     [field: SerializeField] public SkillCaster HeroUpdateSkillCaster { get; private set; }

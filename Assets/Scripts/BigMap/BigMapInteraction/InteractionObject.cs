@@ -14,7 +14,8 @@ public abstract class InteractionObject : MonoBehaviour {
         回血,
         副本,
         电梯,
-        MiniMap
+        MiniMap,
+        角色仓库
     }
 
     [SerializeField] protected string InteractionObjShowName = null;
