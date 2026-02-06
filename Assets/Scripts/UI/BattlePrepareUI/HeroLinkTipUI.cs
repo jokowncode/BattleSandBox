@@ -12,6 +12,8 @@ public class HeroLinkTipUI : MonoBehaviour {
     [SerializeField] private RectTransform LeftVerticalLine;
     [SerializeField] private RectTransform RightVerticalLine;
 
+    [SerializeField] private float LineHeight = 40.0f;
+
     private RectTransform Rect;
     
     private void Awake() {
@@ -23,7 +25,7 @@ public class HeroLinkTipUI : MonoBehaviour {
         this.gameObject.SetActive(false);
     }
 
-    public void Show(float lCenter, float rCenter, float y) {
+    public void Show(float lCenter, float rCenter, float y, float height) {
         foreach (Transform child in LeftContainer) {
             Destroy(child.gameObject);
         }
@@ -37,12 +39,12 @@ public class HeroLinkTipUI : MonoBehaviour {
         }
 
         float middle = (lCenter + rCenter) / 2f;
-        this.Rect.position = new Vector2(middle, y + 115.0f);
+        this.Rect.localPosition = new Vector2(middle, y + height / 2.0f + this.LineHeight);
         
-        // TODO: ACCURATE CALC (MAYBE REASON: Screen Point diff UI Point)
-        float distance = 4 * this.LineMargin * (rCenter - lCenter) / 154.0f;
+        float distance = Mathf.Abs(middle - lCenter) - Mathf.Abs(this.LeftContainer.localPosition.x);
         float halfW = this.LinkLinePrefab.sizeDelta.x / 2f;
-        for (float l = 0.0f; l * this.LineMargin + halfW <= distance; l+=1.0f) {
+        float l = 0.0f;
+        for (; l * this.LineMargin + halfW <= distance; l+=1.0f) {
             RectTransform leftTrans = Instantiate(LinkLinePrefab, LeftContainer);
             leftTrans.localPosition = new Vector3(-(l+1)*this.LineMargin, 0.0f, 0.0f);
             
@@ -50,8 +52,10 @@ public class HeroLinkTipUI : MonoBehaviour {
             rightTrans.localPosition = new Vector3((l+1)*this.LineMargin, 0.0f, 0.0f);
         }
 
-        LeftVerticalLine.position = new Vector3(lCenter, y + 90.0f, 0.0f);
-        RightVerticalLine.position = new Vector3(rCenter, y + 90.0f, 0.0f);
+        float lineX = l * this.LineMargin + halfW + Mathf.Abs(this.LeftContainer.localPosition.x);
+        float lineY = this.LineHeight - this.LineMargin;
+        LeftVerticalLine.localPosition = new Vector3(-lineX, -lineY, 0.0f);
+        RightVerticalLine.localPosition = new Vector3(lineX, -lineY, 0.0f);
         this.gameObject.SetActive(true);
     }
 }
