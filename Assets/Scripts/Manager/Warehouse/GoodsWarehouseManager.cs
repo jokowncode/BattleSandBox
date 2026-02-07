@@ -4,6 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Object = System.Object;
 
+public struct GoodsData {
+    public StoreGoodsData Data;
+    public int GoodsCount;
+    public bool IsConsumeGoods;
+}
+
 public class GoodsWarehouseManager : MonoBehaviour {
 
     public static GoodsWarehouseManager Instance;
@@ -54,7 +60,6 @@ public class GoodsWarehouseManager : MonoBehaviour {
     public void UseConsumedGoods(string goodsName, params Object[] args) {
         if (!this.OwnedConsumedGoods.ContainsKey(goodsName)) return;
         if (!this.AllStoreGoodsMap.ContainsKey(goodsName)) return;
-
         this.OwnedConsumedGoods[goodsName] -= 1;
         if (this.OwnedConsumedGoods[goodsName] <= 0) {
             this.OwnedConsumedGoods.Remove(goodsName);
@@ -91,6 +96,27 @@ public class GoodsWarehouseManager : MonoBehaviour {
                 break;
         }
         return true;
+    }
+
+    private bool IsConsumeGoods(GoodsType type) {
+        return type != GoodsType.Hero && type != GoodsType.PassiveEntry;
+    }
+
+    public List<GoodsData> GetGoodsByType(GoodsType type) {
+        List<GoodsData> result = new();
+        if (IsConsumeGoods(type)) {
+            foreach (KeyValuePair<string, int> goodsPair in this.OwnedConsumedGoods) {
+                StoreGoodsData data = GetGoodsData(goodsPair.Key);
+                if (!data || data.Type != type) continue;
+                result.Add(new GoodsData() {
+                    Data = data,
+                    GoodsCount = goodsPair.Value,
+                    IsConsumeGoods = true
+                });
+            }
+        }
+        // TODO : NOT CONSUME GOODS
+        return result;
     }
 }
 

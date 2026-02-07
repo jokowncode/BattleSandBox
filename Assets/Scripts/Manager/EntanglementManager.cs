@@ -5,6 +5,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
+public struct BondData {
+    public int BondLevel;
+    public float CurrentValue;
+    public float CurrentLevelValue;
+    public float NextLevelValue;
+}
+
 public class EntanglementManager : MonoBehaviour {
 
     [SerializeField] private List<EntanglementData> EntanglementLevelDatas;
@@ -71,15 +78,16 @@ public class EntanglementManager : MonoBehaviour {
             for (int i = 0; i < count; i++) { this.HeroEntanglementValues.Add(0); }
         }
         
-        /*int index1 = HeroWarehouseManager.Instance.GetHeroIndex("Elara");
+        // TODO: TEMP
+        int index1 = HeroWarehouseManager.Instance.GetHeroIndex("Elara");
         int index2 = HeroWarehouseManager.Instance.GetHeroIndex("Bullock");
         int index3 = HeroWarehouseManager.Instance.GetHeroIndex("Dr.Entro");
         int index = GetHeroEntanglementIndex(index1, index2);
         int indexo = GetHeroEntanglementIndex(index2, index3);
         if (this.HeroEntanglementValues == null || this.HeroEntanglementValues[index] == 0.0f) {
             this.HeroEntanglementValues[index] = 35.0f;
-            this.HeroEntanglementValues[indexo] = 35.0f;
-        }*/
+            this.HeroEntanglementValues[indexo] = 25.0f;
+        }
     }
 
     private void Start() {
@@ -178,6 +186,25 @@ public class EntanglementManager : MonoBehaviour {
                 result.Add(otherHeroName);
             }
         }
+        return result;
+    }
+
+    public BondData GetBondData(string hero1, string hero2) {
+        BondData result = new BondData();
+        int index1 = HeroWarehouseManager.Instance.GetHeroIndex(hero1);
+        if (index1 < 0) return result;
+        int index2 = HeroWarehouseManager.Instance.GetHeroIndex(hero2);
+        if (index2 < 0) return result;
+        result.CurrentValue = GetHeroEntanglementValue(index1, index2);
+        int index = 0;
+        while (index < this.EntanglementLevelDatas.Count 
+               && result.CurrentValue >= this.EntanglementLevelDatas[index].Value) {
+            index += 1;
+        }
+
+        result.BondLevel = index;
+        result.NextLevelValue = index == this.EntanglementLevelDatas.Count ? result.CurrentValue : this.EntanglementLevelDatas[index].Value;
+        result.CurrentLevelValue = index == 0 ? 0.0f : this.EntanglementLevelDatas[index - 1].Value;
         return result;
     }
 

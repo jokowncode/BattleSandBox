@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class HeroDisplayPanelUI : MonoBehaviour {
+public class HeroDisplayPanelUI : HeroWarehousePanelWithGoods {
 
     private enum ChildPanelType {
         None,
@@ -22,6 +22,8 @@ public class HeroDisplayPanelUI : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI MiddleHeroNameText;
     [SerializeField] private TextMeshProUGUI HeroEnglishNameText;
     [SerializeField] private TextMeshProUGUI HeroChineseNameText;
+    [SerializeField] private HeroAudioDialog AudioDialog;
+    [SerializeField] private Image BloodProgressBar;
     
     [Header("角色展示子面板")]
     [SerializeField] private HeroDisplayBattlePanel BattlePanel;
@@ -32,8 +34,9 @@ public class HeroDisplayPanelUI : MonoBehaviour {
     private WaitForSeconds MiddleHeroAnimsTimer;
     
     private ChildPanelType CurrentPanelType = ChildPanelType.None;
-    
-    private void Awake() {
+
+    protected override void Awake() {
+        base.Awake();
         this.MiddleHeroAnimsTimer = new WaitForSeconds(this.TimeMargin);
     }
 
@@ -49,7 +52,31 @@ public class HeroDisplayPanelUI : MonoBehaviour {
         this.MiddleHeroNameText.text = this.CurrentDisplayHero.WarehouseData.HeroEnglishName;
         this.HeroEnglishNameText.text = this.CurrentDisplayHero.WarehouseData.HeroEnglishName;
         this.HeroChineseNameText.text = this.CurrentDisplayHero.WarehouseData.HeroChineseName;
-        OpenBattlePanel();
+        
+        UpdateBloodBar();
+        OpenBattlePanel(true);
+        // ShowAudioDialog(this.CurrentDisplayHero.WarehouseData.GetHeroAudio(HeroAudioType.展示));
+    }
+
+    public void AddBloodBottle() {
+        if (!this.CurrentDisplayHero) return;
+        this.TransitionGoodsWarehouse();
+    }
+
+    public void UseBloodBottle(string goodsName) {
+        if (!this.CurrentDisplayHero) return;
+        GoodsWarehouseManager.Instance.UseConsumedGoods(goodsName, this.CurrentDisplayHero.Name);
+        UpdateBloodBar();
+    }
+
+    private void UpdateBloodBar() {
+        float health = SaveDataManager.Instance.GetHeroHealth(this.CurrentDisplayHero.Name);
+        health = Mathf.Min(health, this.CurrentDisplayHero.InitialData.Health);
+        this.BloodProgressBar.fillAmount = health < 0.0f ? 1.0f : health / this.CurrentDisplayHero.InitialData.Health;
+    }
+
+    public void ShowAudioDialog(HeroAudioData data) {
+        this.AudioDialog.Show(data);
     }
 
     private IEnumerator MiddleHeroAnimsCoroutine(Sprite[] anims) {
@@ -65,11 +92,16 @@ public class HeroDisplayPanelUI : MonoBehaviour {
     public void Hide() {
         this.CurrentPanelType = ChildPanelType.None;
         StopAllCoroutines();
+        this.HideAudioDialog();
         this.gameObject.SetActive(false);
     }
-    
-    public void OpenBattlePanel() {
-        OpenChildPanel(ChildPanelType.Battle);
+
+    public void HideAudioDialog() {
+        this.AudioDialog.Hide();
+    }
+
+    public void OpenBattlePanel(bool isForce) {
+        OpenChildPanel(ChildPanelType.Battle, isForce);
     }
 
     public void OpenVoicePanel() {
@@ -80,9 +112,10 @@ public class HeroDisplayPanelUI : MonoBehaviour {
         OpenChildPanel(ChildPanelType.Story);
     }
 
-    private void OpenChildPanel(ChildPanelType panelType) {
-        if (this.CurrentPanelType == panelType) return;
+    private void OpenChildPanel(ChildPanelType panelType, bool isForce = false) {
+        if (this.CurrentPanelType == panelType && !isForce) return;
         this.CurrentPanelType = panelType;
+        this.HideAudioDialog();
         SetAllSubPanelsActive();
         HeroDisplayChildPanel childPanel = panelType switch {
             ChildPanelType.Battle => this.BattlePanel,

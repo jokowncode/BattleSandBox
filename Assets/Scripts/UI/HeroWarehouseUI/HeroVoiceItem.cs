@@ -8,10 +8,10 @@ public class HeroVoiceItem : MonoBehaviour {
     [SerializeField] private Button PlayAudioButton;
     [SerializeField] private TextMeshProUGUI AudioNameText;
 
-    public void SetAudio(AudioClip clip) {
-        this.AudioNameText.text = clip.name;
+    public void SetAudio(HeroAudioData data, HeroDisplayPanelUI parentPanel) {
+        this.AudioNameText.text = data.Audio.name;
         this.PlayAudioButton.onClick.AddListener(() => {
-            AudioManager.Instance.SetDialog(clip, 1.0f);
+            if(parentPanel) parentPanel.ShowAudioDialog(data);
         });
     }
 }

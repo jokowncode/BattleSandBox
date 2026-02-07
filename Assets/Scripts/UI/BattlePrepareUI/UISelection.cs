@@ -35,18 +35,19 @@ public class UISelectableShaker : MonoBehaviour,
     
     [HideInInspector] public Hero CurrentHero;
 
-    void Awake()
-    {
+    private Vector2 InitialAnchorPosition;
+    
+    void Awake() {
         rect = GetComponent<RectTransform>();
     }
 
-    void LateUpdate()
-    {
-        Vector2 layoutBase = rect.anchoredPosition - Vector2.up * currentSelectOffset - shakeOffset;
-        
+    public void SetInitialAnchorPosition() {
+        this.InitialAnchorPosition = rect.anchoredPosition;
+    }
+
+    void LateUpdate() {
         currentSelectOffset = Mathf.Lerp(currentSelectOffset, targetSelectOffset, Time.deltaTime * moveSpeed);
-        
-        rect.anchoredPosition = layoutBase + Vector2.up * currentSelectOffset + shakeOffset;
+        rect.anchoredPosition = this.InitialAnchorPosition + Vector2.up * currentSelectOffset + shakeOffset;
     }
 
     // ===== Selection =====
@@ -101,20 +102,17 @@ public class UISelectableShaker : MonoBehaviour,
     }
 
     // ===== Shake =====
-    public void Shake()
-    {
+    public void Shake() {
         if (!isShaking)
             StartCoroutine(ShakeCoroutine());
     }
 
-    IEnumerator ShakeCoroutine()
-    {
+    IEnumerator ShakeCoroutine() {
         isShaking = true;
         float t = 0f;
 
-        while (t < shakeDuration)
-        {
-            shakeOffset = Random.insideUnitCircle * shakeMagnitude;
+        while (t < shakeDuration) {
+            shakeOffset = Random.Range(-1f, 1f) * shakeMagnitude * Vector2.right;
             t += Time.deltaTime;
             yield return null;
         }

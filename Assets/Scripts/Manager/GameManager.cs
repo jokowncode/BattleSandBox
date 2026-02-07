@@ -98,9 +98,6 @@ public class GameManager : MonoBehaviour{
 
     public void EnterGame() {
         this.ResetBattleFlag();
-        if (SaveDataManager.Instance.PlayerData.CurrentDungeon == SceneType.None) {
-            SaveDataManager.Instance.ClearDungeonData();
-        }
         if (SceneTools.IsDungeonScene(SaveDataManager.Instance.PlayerData.CurrentDungeon)) {
             SceneChangeManager.Instance.GoToDungeon(SaveDataManager.Instance.PlayerData.CurrentDungeon);
         } else {

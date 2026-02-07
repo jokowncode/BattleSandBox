@@ -6,7 +6,7 @@ public class UISelectionManager : MonoBehaviour
     public static UISelectionManager Instance;
 
     [Header("UI Settings")]
-    public BattleTacticUI thirdUI; // 提示 UI，当选中两个时显示
+    public TacticPanelUI thirdUI; // 提示 UI，当选中两个时显示
 
     private List<UISelectableShaker> selectedList = new List<UISelectableShaker>();
     public int SelectedSize => selectedList.Count;
@@ -102,7 +102,7 @@ public class UISelectionManager : MonoBehaviour
             thirdUI.Hide();
             return;
         }
-        thirdUI.Show(selectedList[0].CurrentHero.Name, selectedList[1].CurrentHero.Name);
+        thirdUI.Show(selectedList[0].CurrentHero.Name, selectedList[1].CurrentHero.Name, true);
     }
 
     public void UseTactic(BattleTacticType type) {

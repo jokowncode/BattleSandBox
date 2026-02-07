@@ -38,7 +38,10 @@ public class UILayoutManual : MonoBehaviour
             float y = bottomOffset;
 
             child.anchoredPosition = new Vector2(x, y);
-            
+            if(child.TryGetComponent(out UISelectableShaker shaker)) {
+                shaker.SetInitialAnchorPosition();
+            }
+
             // 自动添加 UIShake 脚本
             // UIShaker shaker = child.GetComponent<UIShaker>();
             // if (shaker == null)

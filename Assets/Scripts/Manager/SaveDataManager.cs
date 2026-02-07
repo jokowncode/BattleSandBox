@@ -211,7 +211,7 @@ public class SaveDataManager : MonoBehaviour {
         }
     }
 
-    public void ClearDungeonData() {
+    private void ClearDungeonData() {
         this.PlayerData.DungeonHeroHealth.Clear();
     }
 
@@ -221,6 +221,7 @@ public class SaveDataManager : MonoBehaviour {
             TaskManager.Instance.RemoveDungeonBindTask(this.PlayerData.CurrentDungeon);
         }
         this.PlayerData.CurrentDungeon = SceneType.None;
+        ClearDungeonData();
     }
 
     public bool DungeonIsComplete(SceneType dungeon) {

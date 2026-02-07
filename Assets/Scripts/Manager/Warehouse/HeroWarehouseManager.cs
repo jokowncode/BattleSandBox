@@ -43,7 +43,6 @@ public class HeroWarehouseManager : MonoBehaviour {
         }
 
         this.HeroWarehouseCanvasGroup = this.GetComponent<CanvasGroup>();
-        TransitionHeroWarehouseCanvas(false);
     }
 
     public void TransitionHeroWarehouseCanvas(bool show) {
@@ -54,7 +53,8 @@ public class HeroWarehouseManager : MonoBehaviour {
         this.HeroWarehouseCanvasGroup.alpha = show ? 1.0f : 0.0f;
         this.HeroWarehouseCanvasGroup.blocksRaycasts = show;
         this.HeroWarehouseCanvasGroup.interactable = show;
-        if(show) this.ModeHeroWarehousePanel.Show();
+        if (show) this.ModeHeroWarehousePanel.Show();
+        else this.ModeHeroWarehousePanel.Hide();
     }
 
     public int GetHeroIndex(string heroName) {

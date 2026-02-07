@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,12 +10,25 @@ public class HeroWarehouseListUI : MonoBehaviour {
     [SerializeField] private Sprite MageBorderSprite;
     [SerializeField] private Sprite PriestBorderSprite;
     [SerializeField] private Sprite EmptyBorderSprite;
-    
+
     [Header("Hero List")] 
+    [SerializeField] private bool ClickFirst = true;
     [SerializeField] private Transform HeroListContainer;
 
     private HeroWarehouseCategory CurrentCategory = HeroWarehouseCategory.All;
-    
+
+    public Action<string> OnHeroClicked;
+
+    private void Awake() {
+        foreach (Transform child in this.HeroListContainer) {
+            if (child.TryGetComponent(out HeroListSingle single)) {
+                single.OnClicked += heroName => {
+                    this.OnHeroClicked?.Invoke(heroName);
+                };
+            }
+        }
+    }
+
     public void WarriorCategory() {
         this.UpdateHeroList(HeroWarehouseCategory.Warrior);
     }
@@ -45,7 +59,7 @@ public class HeroWarehouseListUI : MonoBehaviour {
                         _ => PriestBorderSprite
                     };
                     single.SetContent(ownedHeroList[i], borderSprite, ownedHeroList[i].WarehouseData.AvatarSprite);
-                    if (isFirst && i == 0) {
+                    if (isFirst && i == 0 && this.ClickFirst) {
                         single.ClickButton();
                     }
                 } else {

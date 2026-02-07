@@ -2,6 +2,7 @@
 using UnityEngine;
 
 public enum GoodsType {
+    None = -1,
     Hero,
     EXP,
     PassiveEntry,
@@ -17,6 +18,7 @@ public class StoreGoodsData : ScriptableObject {
     public float Value;
     public float Money;
     public Sprite GoodsSprite;
+    public Sprite GoodsBackgroundSprite;
     public Color GoodsColor;
 }
 
