@@ -9,7 +9,6 @@ using Object = System.Object;
 public class Hero : Fighter {
 
     [field: SerializeField] public HeroWarehouseData WarehouseData { get; private set; }
-    [SerializeField] private AudioClip DeployHeroSfx;
     [SerializeField] private PassiveEntry[] HeroSelfPassiveEntries;
     [field: SerializeField] public SkillCaster HeroUpdateSkillCaster { get; private set; }
 
@@ -109,8 +108,11 @@ public class Hero : Fighter {
         this.SetStartPosition();
         this.DeployAreaIndex = deployAreaIndex;
         this.Move.Agent.enabled = true;
-        if(DeployHeroSfx)
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, DeployHeroSfx);
+        
+        HeroAudioData data = this.WarehouseData.GetHeroAudio(HeroAudioType.上阵);
+        if (data != null) {
+            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, data.Audio);
+        }
 
         BattleManager.Instance.AddHero(this);
         if (HeroSelfPassiveEntries.Length != 0){

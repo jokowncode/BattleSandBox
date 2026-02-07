@@ -3,13 +3,20 @@ using UnityEngine;
 
 public class VictoryState : BattleState{
 
-    [SerializeField] private AudioClip[] VictoryMusics;
     [SerializeField] private Sprite GameVictoryBannarSprite;
 
-    public override void Construct(){
-        if (VictoryMusics.Length != 0) AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.VictoryMusics[Random.Range(0, this.VictoryMusics.Length)]);
+    public override void Construct() {
+        int count = Controller.HeroesInBattle.Count;
+        int randomIndex = Random.Range(0, count);
+        Hero hero = Controller.HeroesInBattle[randomIndex];
+        HeroAudioData data = hero.WarehouseData.GetHeroAudio(HeroAudioType.胜利);
+        if (data != null) {
+            AudioManager.Instance.SetDialog(data.Audio);
+        }
+
         BattleUIManager.Instance.GameEnd(this.GameVictoryBannarSprite);
         Controller.ReturnButton.onClick.AddListener(() => {
+            AudioManager.Instance.StopDialog();
             this.Controller.AllHeroRecall();
             GameManager.Instance.GoToMap(true, true);
         });

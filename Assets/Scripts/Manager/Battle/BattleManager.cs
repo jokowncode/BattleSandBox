@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering.UI;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class BattleManager : StateMachineController{
 
@@ -49,7 +50,8 @@ public class BattleManager : StateMachineController{
     private InBattleState InBattle;
 
     public bool IsBattleStart { get; private set; }
-    
+    public AudioClip DefeatHeroAudio { get; private set; }
+
 #if TEST_BATTLE
     [field: SerializeField] public BattleData Data { get; private set; }
 #else
@@ -187,7 +189,13 @@ public class BattleManager : StateMachineController{
         foreach (HeroDeployAreaData area in this.HeroDeployPlaceArea) {
             area.DeployArea.gameObject.SetActive(false);    
         }
-        
+
+        int randomIndex = Random.Range(0, this.HeroesInBattle.Count);
+        HeroAudioData data = this.HeroesInBattle[randomIndex].WarehouseData.GetHeroAudio(HeroAudioType.失败);
+        if (data != null) {
+            this.DefeatHeroAudio = data.Audio;
+        }
+
 #if DEBUG_MODE
         this.BattleStartTime = Time.time;
 #endif
