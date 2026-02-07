@@ -43,9 +43,6 @@ public class GameManager : MonoBehaviour{
 
     public void SetMoney(float money) {
         this.Money = money < 0.0f ? this.InitialMoney : money;
-        if (BigMapUIManager.Instance) {
-            BigMapUIManager.Instance.SetMoneyText(this.Money);
-        }
     }
 
     private void Update(){
