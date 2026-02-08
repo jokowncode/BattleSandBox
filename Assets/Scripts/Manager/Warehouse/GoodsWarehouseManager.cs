@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Object = System.Object;
 
 public struct GoodsData {
@@ -19,8 +20,10 @@ public class GoodsWarehouseManager : MonoBehaviour {
     
     private Dictionary<string, StoreGoodsData> AllStoreGoodsMap;
 
+    private Dictionary<string, int> InBattleModifyGoods = new();
     private SerializableDictionary<string, int> OwnedConsumedGoods;
-
+    private bool IsInBattle = false;
+    
     private void Awake() {
         if (Instance != null) {
             Destroy(this.gameObject);
@@ -33,8 +36,29 @@ public class GoodsWarehouseManager : MonoBehaviour {
         foreach (StoreGoodsData storeGoodsData in AllGoodsData) {
             this.AllStoreGoodsMap.Add(storeGoodsData.GoodsName, storeGoodsData);
         }
+
+        SceneManager.sceneLoaded += (arg0, mode) => {
+            if (SceneTools.IsBattleScene(SceneChangeManager.Instance.CurrentScene)) {
+                this.IsInBattle = true;
+                this.InBattleModifyGoods.Clear();
+                BattleManager.Instance.OnRewindBattle += OnRewindBattle;
+            } else {
+                this.IsInBattle = false;
+            }
+        };
     }
-    
+
+    private void OnRewindBattle() {
+        foreach (var pair in this.InBattleModifyGoods) {
+            if (this.OwnedConsumedGoods.ContainsKey(pair.Key)) {
+                this.OwnedConsumedGoods[pair.Key] += pair.Value;
+            } else {
+                this.OwnedConsumedGoods.Add(pair.Key, pair.Value);
+            }
+        }
+        this.InBattleModifyGoods.Clear();
+    }
+
     private void Start() {
         SaveDataManager.Instance.OnLoadData += () => {
             this.OwnedConsumedGoods = SaveDataManager.Instance.PlayerData.OwnedConsumedGoods;
@@ -88,6 +112,11 @@ public class GoodsWarehouseManager : MonoBehaviour {
         }
 
         this.OwnedConsumedGoods[goodsName] -= 1;
+        if (this.IsInBattle) {
+            this.InBattleModifyGoods.TryAdd(goodsName, 0);
+            this.InBattleModifyGoods[goodsName] += 1;
+        }
+
         if (this.OwnedConsumedGoods[goodsName] <= 0) {
             this.OwnedConsumedGoods.Remove(goodsName);
         }

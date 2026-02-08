@@ -13,16 +13,16 @@ public static class BattleTacticFactory {
         
         BattleTactic tactic = null;
         switch (type) {
-            case BattleTacticType.ChangePosition:
+            case BattleTacticType.移形换位:
                 tactic = new ChangePositionBattleTactic();
                 break;
-            case BattleTacticType.ForceConcentration:
+            case BattleTacticType.集中火力:
                 tactic = new ForceConcentrationBattleTactic();
                 break;
-            case  BattleTacticType.DamageShare:
+            case  BattleTacticType.伤害共享:
                 tactic = new DamageShareBattleTactic();
                 break;
-            case BattleTacticType.RevengeVow:
+            case BattleTacticType.复仇誓言:
                 tactic = new RevengeVowBattleTactic();
                 break;
         }

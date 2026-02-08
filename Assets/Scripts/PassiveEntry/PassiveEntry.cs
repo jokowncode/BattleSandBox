@@ -6,19 +6,17 @@ public abstract class PassiveEntry : MonoBehaviour{
 
     [field: SerializeField] public PassiveEntryData Data{ get; private set; }
     [field: SerializeField] public PassiveEntry UpgradePassiveEntry { get; private set; }
-
-    private int PassiveEntrySortCode = -1;
     
     public int GetSortCode() {
-        if (PassiveEntrySortCode != -1) return this.PassiveEntrySortCode;
+        // TODO: MYSTERIOUS BUG
         if (!this.Data) return -1; 
         PassiveEntrySort[] sorts = this.Data.Sorts;
         if (sorts is not { Length: > 0 }) return -1;
-        this.PassiveEntrySortCode = 0;
+        int code = 0;
         foreach (PassiveEntrySort sort in sorts) {
-            this.PassiveEntrySortCode |= (int)sort;
+            code |= (int)sort;
         }
-        return this.PassiveEntrySortCode;
+        return code;
     }
 
     public abstract void Construct(Hero hero);

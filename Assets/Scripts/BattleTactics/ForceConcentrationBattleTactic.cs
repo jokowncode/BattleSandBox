@@ -10,7 +10,7 @@ public class ForceConcentrationBattleTactic : BattleTactic {
 
     public void StopTactic(Hero hero1, Hero hero2) { }
     public string GetDescription() {
-        return "集中火力";
+        return "两个英雄共同作战";
     }
 }
 

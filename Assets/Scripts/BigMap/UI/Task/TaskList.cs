@@ -20,16 +20,14 @@ public class TaskList : MonoBehaviour {
         }
         
         Vector2 dir = this.CurrentInstructTask.GetTaskRotation();
-        if (dir.x > 0.0f) {
-            this.MapTaskDirContainer.GetChild(3).gameObject.SetActive(true);
-        }else if (dir.x < 0.0f) {
-            this.MapTaskDirContainer.GetChild(2).gameObject.SetActive(true);
-        }
-        
         if (dir.y > 0.0f) {
             this.MapTaskDirContainer.GetChild(0).gameObject.SetActive(true);
         }else if (dir.y < 0.0f) {
             this.MapTaskDirContainer.GetChild(1).gameObject.SetActive(true);
+        }else if (dir.x > 0.0f) {
+            this.MapTaskDirContainer.GetChild(3).gameObject.SetActive(true);
+        }else if (dir.x < 0.0f) {
+            this.MapTaskDirContainer.GetChild(2).gameObject.SetActive(true);
         }
     }
 

@@ -28,8 +28,8 @@ public class TaskUI : MonoBehaviour {
         dir.z = 0.0f;
         dir = dir.normalized;
 
-        float x = Mathf.Abs(dir.x) <= 0.5f ? 0.0f : Mathf.Sign(dir.x);
-        float y = Mathf.Abs(dir.y) <= 0.5f ? 0.0f : Mathf.Sign(dir.y);
+        float x = Mathf.Abs(dir.x) <= 0.6 ? 0.0f : Mathf.Sign(dir.x);
+        float y = Mathf.Abs(dir.y) <= 0.6 ? 0.0f : Mathf.Sign(dir.y);
         return new Vector2(x, y);
     }
 }

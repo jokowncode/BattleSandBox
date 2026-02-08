@@ -16,8 +16,13 @@ public class FlashPoint : MonoBehaviour{
     }
 
     public void OnDisable(){
-        if (FlashManager.HasInstance)
-            FlashManager.Instance.UnregisterPoint(this);
+        if (!Application.isPlaying)
+            return;
+        
+        if (this.gameObject.scene.isLoaded) {
+            if (FlashManager.HasInstance)
+                FlashManager.Instance.UnregisterPoint(this);
+        }
     }
     
 }

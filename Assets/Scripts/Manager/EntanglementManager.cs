@@ -19,7 +19,6 @@ public class EntanglementManager : MonoBehaviour {
     public static EntanglementManager Instance;
 
     private List<float> HeroEntanglementValues;
-    public List<string> AllBattleTacticDescs { get; private set; } = new List<string>();
 
     private float MinHasTacticEntangleValue = float.MaxValue;
     public int MaxLevel { get; private set; }
@@ -33,14 +32,6 @@ public class EntanglementManager : MonoBehaviour {
         Instance = this;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
-
-        Array battleTacticArray = Enum.GetValues(typeof(BattleTacticType));
-        foreach (object tactic in battleTacticArray) {
-            if ((int)tactic < 0) continue;
-            BattleTacticType current = (BattleTacticType) tactic;
-            this.AllBattleTacticDescs.Add(BattleTacticFactory.GetBattleTacticDescription(current));
-        }
-
         foreach (EntanglementData data in EntanglementLevelDatas) {
             if (data.CanUseMaxBattleTactic != BattleTacticType.None && data.Value < this.MinHasTacticEntangleValue) {
                 this.MinHasTacticEntangleValue = data.Value;

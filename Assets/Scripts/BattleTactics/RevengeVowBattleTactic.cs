@@ -11,7 +11,7 @@ public class RevengeVowBattleTactic : BattleTactic {
     }
 
     public string GetDescription() {
-        return "复仇誓言";
+        return "若在一定时间内英雄死去，另一英雄获得复仇加成";
     }
 }
 

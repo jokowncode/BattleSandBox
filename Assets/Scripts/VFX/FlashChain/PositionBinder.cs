@@ -26,6 +26,10 @@ public class PositionBinder : MonoBehaviour{
 
     private void Update(){
         if (this.EndPoints.Length != 2) return;
+        if (!this.EndPoints[0] || !this.EndPoints[1]) {
+            Destroy(this.gameObject);
+            return;
+        }
         vfx.SetVector3("StartPos", this.EndPoints[0].transform.position);
         vfx.SetVector3("EndPos", this.EndPoints[1].transform.position);
         FlashCollider.center = (this.EndPoints[0].transform.position + this.EndPoints[1].transform.position) / 2.0f;

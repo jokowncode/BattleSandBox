@@ -10,7 +10,7 @@ public class DamageShareBattleTactic : BattleTactic {
     }
 
     public string GetDescription() {
-        return "伤害共享";
+        return "两个英雄平分在一定时间内所受的伤害";
     }
 }
 

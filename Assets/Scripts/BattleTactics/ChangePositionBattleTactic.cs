@@ -13,7 +13,7 @@ public class ChangePositionBattleTactic : BattleTactic {
 
     public void StopTactic(Hero hero1, Hero hero2) { }
     public string GetDescription() {
-        return "移形换位";
+        return "交换两个英雄的位置";
     }
 }
 

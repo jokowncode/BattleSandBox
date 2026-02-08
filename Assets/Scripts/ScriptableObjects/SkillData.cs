@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(menuName = "DeckBreakers/SkillData", fileName = "SkillData")]
 public class SkillData : ScriptableObject{
     public string Name;
-    public string Description;
+    [TextArea] public string Description;
     public TargetType TargetType;
 
     public float Cooldown;

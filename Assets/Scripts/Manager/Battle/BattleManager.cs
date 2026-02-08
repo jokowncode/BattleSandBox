@@ -143,6 +143,7 @@ public class BattleManager : StateMachineController{
     public void RewindBattle() {
         if (!this.IsBattleStart) return;
         OnRewindBattle?.Invoke();
+        this.AllHeroRecall();
         GameManager.Instance.GoToBattle(this.Data, false);
     }
 

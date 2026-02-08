@@ -53,7 +53,7 @@ public class FlashManager : MonoBehaviour {
     private void RefreshConnections(){
         // 清除现有连接
         foreach (var obj in vfxConnections){
-            Destroy(obj.gameObject);
+            if(obj) Destroy(obj.gameObject);
         }
         vfxConnections.Clear();
 

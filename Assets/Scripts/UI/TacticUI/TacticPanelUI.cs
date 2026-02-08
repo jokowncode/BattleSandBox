@@ -18,7 +18,7 @@ public class TacticPanelUI : MonoBehaviour {
         BattleTacticType maxTactic = EntanglementManager.Instance.GetEntangleHeroCanCastMaxBattleTactic(hero1, hero2);
         for (int i = 0; i <= (int) maxTactic; i++) {
             HeroTacticUI tactic = Instantiate(this.BattleTacticButtonPrefab, this.Container);
-            tactic.SetContent(EntanglementManager.Instance.AllBattleTacticDescs[i], (BattleTacticType)i, canUseTactic);
+            tactic.SetContent((BattleTacticType)i, canUseTactic);
         }
     }
 

@@ -43,6 +43,12 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
     private void Start() {
         SaveDataManager.Instance.OnLoadData += () => {
             this.OwnedPassiveEntries = SaveDataManager.Instance.PlayerData.OwnedPassiveEntries;
+            if (this.OwnedPassiveEntries == null || this.OwnedPassiveEntries.Count == 0) {
+                this.OwnedPassiveEntries = new SerializableDictionary<string, int>();
+                foreach (PassiveEntry entry in AllPassiveEntries) {
+                    this.OwnedPassiveEntries.Add(entry.Data.Name, 3);
+                }    
+            }
         };
     }
 
