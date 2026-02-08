@@ -98,8 +98,8 @@ public class GoodsWarehouseManager : MonoBehaviour {
                 result = SaveDataManager.Instance.RecoverHeroHealth(args[0].ToString(), goodsData.Value, false);
                 break;
             case GoodsType.Tactic:
-                if (args.Length < 1) return;
-                result = UISelectionManager.Instance.UseTactic((BattleTacticType)args[0]);
+                if (!Enum.TryParse(goodsName, true, out BattleTacticType type)) return;
+                result = UISelectionManager.Instance.UseTactic(type);
                 break;
             default: return;
         }

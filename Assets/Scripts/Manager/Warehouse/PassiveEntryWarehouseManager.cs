@@ -43,6 +43,8 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
     private void Start() {
         SaveDataManager.Instance.OnLoadData += () => {
             this.OwnedPassiveEntries = SaveDataManager.Instance.PlayerData.OwnedPassiveEntries;
+            
+            // TODO: TEMP
             if (this.OwnedPassiveEntries == null || this.OwnedPassiveEntries.Count == 0) {
                 this.OwnedPassiveEntries = new SerializableDictionary<string, int>();
                 foreach (PassiveEntry entry in AllPassiveEntries) {
@@ -57,6 +59,17 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         foreach (KeyValuePair<string, int> passiveEntryPair in this.OwnedPassiveEntries) {
             if (this.AllPassiveEntryMap.TryGetValue(passiveEntryPair.Key, out PassiveEntry entry)) {
                 if ((entry.GetSortCode() & sortCode) == 0) continue;
+                result.Add(entry, passiveEntryPair.Value);    
+            }
+        }
+        return result;
+    }
+    
+    public Dictionary<PassiveEntry, int> GetPassiveEntryByStar(int star) {
+        Dictionary<PassiveEntry, int> result = new Dictionary<PassiveEntry, int>();
+        foreach (KeyValuePair<string, int> passiveEntryPair in this.OwnedPassiveEntries) {
+            if (this.AllPassiveEntryMap.TryGetValue(passiveEntryPair.Key, out PassiveEntry entry)) {
+                if (entry.Data.Star != star) continue;
                 result.Add(entry, passiveEntryPair.Value);    
             }
         }

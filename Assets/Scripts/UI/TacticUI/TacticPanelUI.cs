@@ -4,7 +4,7 @@ using UnityEngine;
 public class TacticPanelUI : MonoBehaviour {
 
     [SerializeField] private Transform Container;
-    [SerializeField] private HeroTacticUI BattleTacticButtonPrefab;
+    [SerializeField] private DetailButton BattleTacticButtonPrefab;
 
     public void ClearTactic() {
         foreach (Transform child in Container) {
@@ -17,8 +17,15 @@ public class TacticPanelUI : MonoBehaviour {
         this.ClearTactic();
         BattleTacticType maxTactic = EntanglementManager.Instance.GetEntangleHeroCanCastMaxBattleTactic(hero1, hero2);
         for (int i = 0; i <= (int) maxTactic; i++) {
-            HeroTacticUI tactic = Instantiate(this.BattleTacticButtonPrefab, this.Container);
-            tactic.SetContent((BattleTacticType)i, canUseTactic);
+            DetailButton button = Instantiate(this.BattleTacticButtonPrefab, this.Container);
+            BattleTacticType type = (BattleTacticType) i;
+            string tacticName = type.ToString();
+            int count = GoodsWarehouseManager.Instance.GetGoodsCount(tacticName);
+            string desc = BattleTacticFactory.GetBattleTacticDescription(type);
+            button.SetData(desc, tacticName, count, canUseTactic);
+            button.OnButtonClicked += showName => {
+                GoodsWarehouseManager.Instance.UseConsumedGoods(showName);
+            };
         }
     }
 
