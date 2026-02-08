@@ -7,6 +7,10 @@ public class BigMapHUDButtonUI : MonoBehaviour {
         HeroWarehouseManager.Instance.TransitionHeroWarehouseCanvas(true);
     }
 
+    public void OpenLoadPanel() {
+        SaveDataManager.Instance.ShowSaveLoadDataUI(false);
+    }
+
 }
 
 

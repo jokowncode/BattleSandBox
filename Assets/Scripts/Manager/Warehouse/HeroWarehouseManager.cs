@@ -47,9 +47,6 @@ public class HeroWarehouseManager : MonoBehaviour {
 
     public void TransitionHeroWarehouseCanvas(bool show) {
         if (show && this.HeroWarehouseCanvasGroup.alpha > 0.9f) return;
-        if (show && SceneChangeManager.Instance.CurrentScene != SceneType.Camp &&
-            SceneChangeManager.Instance.CurrentScene != SceneType.BigMap) return;
-
         this.HeroWarehouseCanvasGroup.alpha = show ? 1.0f : 0.0f;
         this.HeroWarehouseCanvasGroup.blocksRaycasts = show;
         this.HeroWarehouseCanvasGroup.interactable = show;

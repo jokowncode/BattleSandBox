@@ -17,11 +17,11 @@ public class InputManager : MonoBehaviour {
 
     private void Update() {
         // TODO: INPUT SYSTEM ?
-        if (Input.GetKeyDown(KeyCode.Escape)) {
+        /*if (Input.GetKeyDown(KeyCode.Escape)) {
             if (SceneChangeManager.Instance.CurrentScene != SceneType.Camp &&
                 SceneChangeManager.Instance.CurrentScene != SceneType.BigMap) return;
             SaveDataManager.Instance.ShowSaveLoadDataUI(false);
-        }
+        }*/
     }
 }
 

@@ -32,14 +32,14 @@ public class SaveLoadDataSlot : MonoBehaviour {
                 this.FileName = null;
                 return;
             }
-            this.DungeonNameText.text = texts[3];
-            this.CreateTimeText.text = DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(texts[1]))
-                .LocalDateTime.ToString("G");
-            this.PlayTimeText.text = GetPlayTimeString(long.Parse(texts[2]));
+            if(this.DungeonNameText) this.DungeonNameText.text = texts[3];
+            if(this.CreateTimeText) 
+                this.CreateTimeText.text = DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(texts[1])).LocalDateTime.ToString("G");
+            if(this.PlayTimeText) this.PlayTimeText.text = GetPlayTimeString(long.Parse(texts[2]));
         } else {
-            this.DungeonNameText.text = "";
-            this.CreateTimeText.text = "";
-            this.PlayTimeText.text = "";
+            if(this.DungeonNameText) this.DungeonNameText.text = "";
+            if(this.CreateTimeText) this.CreateTimeText.text = "";
+            if(this.PlayTimeText) this.PlayTimeText.text = "";
         }
     }
 

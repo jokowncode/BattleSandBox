@@ -9,6 +9,7 @@ public abstract class HeroWarehousePanelWithGoods : MonoBehaviour {
 
     [SerializeField] private GoodsType OpenGoodsWarehouseType;
     [SerializeField] private GameObject RightPanel;
+    [SerializeField] private ModeHeroWarehouseUI ParentPanel;
     
     [Header("Button Image")]
     [SerializeField] private Image AddImage;
@@ -20,12 +21,7 @@ public abstract class HeroWarehousePanelWithGoods : MonoBehaviour {
     [SerializeField] private string NormalText;
     [SerializeField] private string ExitText;
     
-    private ModeHeroWarehouseUI ParentPanel;
     private bool IsOpenGoodsWarehouse = false;
-    
-    protected virtual void Awake() {
-        this.ParentPanel = this.GetComponentInParent<ModeHeroWarehouseUI>();
-    }
 
     protected void TransitionGoodsWarehouse() {
         if (!this.IsOpenGoodsWarehouse) {

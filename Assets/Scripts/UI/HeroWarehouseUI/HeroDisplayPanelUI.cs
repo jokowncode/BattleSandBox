@@ -35,8 +35,7 @@ public class HeroDisplayPanelUI : HeroWarehousePanelWithGoods {
     
     private ChildPanelType CurrentPanelType = ChildPanelType.None;
 
-    protected override void Awake() {
-        base.Awake();
+    private void Awake() {
         this.MiddleHeroAnimsTimer = new WaitForSeconds(this.TimeMargin);
     }
 
