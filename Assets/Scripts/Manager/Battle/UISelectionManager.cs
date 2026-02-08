@@ -105,12 +105,13 @@ public class UISelectionManager : MonoBehaviour
         thirdUI.Show(selectedList[0].CurrentHero.Name, selectedList[1].CurrentHero.Name, true);
     }
 
-    public void UseTactic(BattleTacticType type) {
-        if (selectedList.Count < 2) return;
+    public bool UseTactic(BattleTacticType type) {
+        if (selectedList.Count < 2) return false;
         HeroMergeManager.Instance.MergeHeroTacticVersion(selectedList[0].CurrentHero, selectedList[1].CurrentHero, type);
         selectedList[0].GoDown(true);
         selectedList[1].GoDown(true);
         UnSelectAll();
+        return true;
     }
 
     /// <summary>

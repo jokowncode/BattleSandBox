@@ -96,8 +96,13 @@ public class HeroDisplayPanelUI : HeroWarehousePanelWithGoods {
         this.gameObject.SetActive(false);
     }
 
-    public void HideAudioDialog() {
+    private void HideAudioDialog() {
         this.AudioDialog.Hide();
+    }
+
+    public override void GoBackToNormal() {
+        base.GoBackToNormal();
+        this.HideAudioDialog();
     }
 
     public void OpenBattlePanel(bool isForce) {

@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,12 +44,11 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
                 if (this.CurrentHeroes[i].Name == heroName) return;
                 continue;
             }
-            if (!TrySelectHero(i, heroName)) continue;
-            if (i == this.CurrentHeroes.Length - 1) {
-                this.UpdateBondData();
-            }
-            return;
+            if (TrySelectHero(i, heroName)) break;
         }
+
+        if (CurrentHeroes.Any(hero => !hero)) return;
+        UpdateBondData();
     }
 
     public void UnSelectHero(int index) {
@@ -70,12 +70,17 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
         }
 
         BondData data = EntanglementManager.Instance.GetBondData(CurrentHeroes[0].Name, CurrentHeroes[1].Name);
-        this.BondLevelText.text = data.BondLevel.ToString();
 
-        float upgradeValue = data.NextLevelValue - data.CurrentLevelValue;
-        float current = data.CurrentValue - data.CurrentLevelValue;
-        
-        this.LevelValueProgress.fillAmount = current / upgradeValue;
+        bool isMaxLevel = data.BondLevel >= EntanglementManager.Instance.MaxLevel;
+        this.BondLevelText.text = isMaxLevel ? "MAX" : data.BondLevel.ToString();
+
+        if (isMaxLevel) {
+            this.LevelValueProgress.fillAmount = 1.0f;
+        } else {
+            float upgradeValue = data.NextLevelValue - data.CurrentLevelValue;
+            float current = data.CurrentValue - data.CurrentLevelValue;
+            this.LevelValueProgress.fillAmount = current / upgradeValue;
+        }
         this.TacticPanel.Show(CurrentHeroes[0].Name, CurrentHeroes[1].Name, false);
     }
 

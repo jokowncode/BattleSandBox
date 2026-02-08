@@ -6,13 +6,7 @@ public class HeroDisplayVoicePanel : HeroDisplayChildPanel {
 
     [SerializeField] private Transform AudioContainer;
     [SerializeField] private HeroVoiceItem VoiceItemPrefab;
-
-    private HeroDisplayPanelUI ParentPanel;
     
-    private void Awake() {
-        this.ParentPanel = this.GetComponentInParent<HeroDisplayPanelUI>();
-    }
-
     protected override void ShowData(Hero hero) {
         foreach (Transform child in AudioContainer) {
             Destroy(child.gameObject);
@@ -22,7 +16,7 @@ public class HeroDisplayVoicePanel : HeroDisplayChildPanel {
         foreach (HeroAudioData data in audios) {
             if (!data.Audio) continue;
             HeroVoiceItem voiceItem = Instantiate(this.VoiceItemPrefab, AudioContainer);
-            voiceItem.SetAudio(data, this.ParentPanel);
+            voiceItem.SetAudio(data);
         }
     }
 }

@@ -6,9 +6,11 @@ using UnityEngine;
 public class HeroAudioDialog : MonoBehaviour {
 
     [SerializeField] private TextMeshProUGUI AudioContentText;
+    [SerializeField] private TextMeshProUGUI OtherLanguageText;
 
     public void Show(HeroAudioData data) {
         this.AudioContentText.text = data.AudioContent;
+        this.OtherLanguageText.text = data.OtherLanguageContent;
         AudioManager.Instance.SetDialog(data.Audio);
         this.gameObject.SetActive(true);
     }

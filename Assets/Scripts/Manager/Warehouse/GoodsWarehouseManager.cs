@@ -15,7 +15,8 @@ public class GoodsWarehouseManager : MonoBehaviour {
     public static GoodsWarehouseManager Instance;
 
     [field: SerializeField] public List<StoreGoodsData> AllGoodsData { get; private set; }
-
+    [SerializeField] private AudioClip UseConsumeGoodsErrorSfx;
+    
     private Dictionary<string, StoreGoodsData> AllStoreGoodsMap;
 
     private SerializableDictionary<string, int> OwnedConsumedGoods;
@@ -60,25 +61,35 @@ public class GoodsWarehouseManager : MonoBehaviour {
     public void UseConsumedGoods(string goodsName, params Object[] args) {
         if (!this.OwnedConsumedGoods.ContainsKey(goodsName)) return;
         if (!this.AllStoreGoodsMap.ContainsKey(goodsName)) return;
-        this.OwnedConsumedGoods[goodsName] -= 1;
-        if (this.OwnedConsumedGoods[goodsName] <= 0) {
-            this.OwnedConsumedGoods.Remove(goodsName);
-        }
 
+        bool result = true;
         StoreGoodsData goodsData = this.AllStoreGoodsMap[goodsName];
         switch (goodsData.Type) {
             case GoodsType.EXP:
                 if (args.Length < 2) return;
-                EntanglementManager.Instance.AddEntanglementValue(args[0].ToString(), args[1].ToString(), goodsData.Value);
+                result = EntanglementManager.Instance.AddEntanglementValue(args[0].ToString(), args[1].ToString(), goodsData.Value);
                 break;
             case GoodsType.BloodBottle:
                 if (args.Length < 1) return;
-                SaveDataManager.Instance.RecoverHeroHealth(args[0].ToString(), goodsData.Value, false);
+                result = SaveDataManager.Instance.RecoverHeroHealth(args[0].ToString(), goodsData.Value, false);
                 break;
             case GoodsType.Tactic:
                 if (args.Length < 1) return;
-                UISelectionManager.Instance.UseTactic((BattleTacticType)args[0]);
+                result = UISelectionManager.Instance.UseTactic((BattleTacticType)args[0]);
                 break;
+            default: return;
+        }
+
+        if (!result) {
+            if (this.UseConsumeGoodsErrorSfx) {
+                AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.UseConsumeGoodsErrorSfx);
+            }
+            return;
+        }
+
+        this.OwnedConsumedGoods[goodsName] -= 1;
+        if (this.OwnedConsumedGoods[goodsName] <= 0) {
+            this.OwnedConsumedGoods.Remove(goodsName);
         }
     }
 

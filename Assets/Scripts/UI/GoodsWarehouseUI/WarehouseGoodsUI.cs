@@ -13,13 +13,10 @@ public class WarehouseGoodsUI : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI GoodsCountText;
 
     public Action<string> OnClicked;
-    
     private string CurrentGoodsName;
-    private int CurrentGoodsCount;
     
     public void SetContent(GoodsData data, bool canUse) {
         this.CurrentGoodsName = data.Data.GoodsName;
-        this.CurrentGoodsCount = data.GoodsCount;
         
         this.GoodsNameText.text = data.Data.GoodsName;
         this.GoodsCountText.text = $"x{data.GoodsCount}";
@@ -28,13 +25,13 @@ public class WarehouseGoodsUI : MonoBehaviour {
 
         this.IconButton.enabled = canUse;
         this.IconButton.onClick.AddListener(() => {
-            this.CurrentGoodsCount -= 1;
-            if (this.CurrentGoodsCount <= 0) {
+            OnClicked?.Invoke(this.CurrentGoodsName);
+            int currentCount = GoodsWarehouseManager.Instance.GetGoodsCount(this.CurrentGoodsName);
+            if (currentCount <= 0) {
                 Destroy(this.gameObject);
             } else {
-                this.GoodsCountText.text = $"x{this.CurrentGoodsCount}";
+                this.GoodsCountText.text = $"x{currentCount}";
             }
-            OnClicked?.Invoke(this.CurrentGoodsName);
         });
     }
 }

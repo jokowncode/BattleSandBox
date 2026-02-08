@@ -44,8 +44,8 @@ public class ModeHeroWarehouseUI : MonoBehaviour {
     }
 
     public void Hide() {
-        this.HeroDisplayPanel.HideAudioDialog();
-        this.GoodsWarehouseUI.Hide();
+        this.HeroDisplayPanel.GoBackToNormal();
+        this.HeroBondPanel.GoBackToNormal();
     }
 
     private void SwitchModeToCharacterDisplay() {

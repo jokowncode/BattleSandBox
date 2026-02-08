@@ -35,7 +35,7 @@ public abstract class HeroWarehousePanelWithGoods : MonoBehaviour {
         }
     }
 
-    protected void GoBackToNormal() {
+    public virtual void GoBackToNormal() {
         this.IsOpenGoodsWarehouse = false;
         this.RightPanel.gameObject.SetActive(true);
         this.ParentPanel.HideGoodsWarehouse();

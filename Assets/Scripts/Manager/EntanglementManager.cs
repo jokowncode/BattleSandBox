@@ -22,6 +22,7 @@ public class EntanglementManager : MonoBehaviour {
     public List<string> AllBattleTacticDescs { get; private set; } = new List<string>();
 
     private float MinHasTacticEntangleValue = float.MaxValue;
+    public int MaxLevel { get; private set; }
     
     private void Awake() {
         if (Instance != null) {
@@ -45,6 +46,7 @@ public class EntanglementManager : MonoBehaviour {
                 this.MinHasTacticEntangleValue = data.Value;
             }
         }
+        this.MaxLevel = this.EntanglementLevelDatas.Count;
     }
 
     private int GetHeroEntanglementIndex(int index1, int index2) {
@@ -72,7 +74,6 @@ public class EntanglementManager : MonoBehaviour {
     private void LoadHeroEntanglement() {
         this.HeroEntanglementValues = SaveDataManager.Instance.PlayerData.HeroEntanglementValues;
         if (this.HeroEntanglementValues.Count == 0) {
-            this.HeroEntanglementValues = new List<float>();
             int count = HeroWarehouseManager.Instance.TotalHeroCount;
             count = count * (count - 1) / 2;
             for (int i = 0; i < count; i++) { this.HeroEntanglementValues.Add(0); }
@@ -161,13 +162,15 @@ public class EntanglementManager : MonoBehaviour {
         return maxCanCastBattleTactic;
     }
 
-    public void AddEntanglementValue(string hero1, string hero2, float value) {
+    public bool AddEntanglementValue(string hero1, string hero2, float value) {
         int index1 = HeroWarehouseManager.Instance.GetHeroIndex(hero1);
-        if (index1 < 0) return;
+        if (index1 < 0) return false;
         int index2 = HeroWarehouseManager.Instance.GetHeroIndex(hero2);
-        if (index2 < 0) return;
+        if (index2 < 0) return false;
         int index = GetHeroEntanglementIndex(index1, index2);
+        if (GetCurrentLevel(this.HeroEntanglementValues[index]) >= this.MaxLevel) return false;
         this.HeroEntanglementValues[index] += value;
+        return true;
     }
 
     public List<string> GetHasTacticHeroNames(string heroName) {
@@ -189,6 +192,15 @@ public class EntanglementManager : MonoBehaviour {
         return result;
     }
 
+    private int GetCurrentLevel(float currentValue) {
+        int index = 0;
+        while (index < this.EntanglementLevelDatas.Count 
+               && currentValue >= this.EntanglementLevelDatas[index].Value) {
+            index += 1;
+        }
+        return index;
+    }
+
     public BondData GetBondData(string hero1, string hero2) {
         BondData result = new BondData();
         int index1 = HeroWarehouseManager.Instance.GetHeroIndex(hero1);
@@ -196,15 +208,11 @@ public class EntanglementManager : MonoBehaviour {
         int index2 = HeroWarehouseManager.Instance.GetHeroIndex(hero2);
         if (index2 < 0) return result;
         result.CurrentValue = GetHeroEntanglementValue(index1, index2);
-        int index = 0;
-        while (index < this.EntanglementLevelDatas.Count 
-               && result.CurrentValue >= this.EntanglementLevelDatas[index].Value) {
-            index += 1;
-        }
-
-        result.BondLevel = index;
-        result.NextLevelValue = index == this.EntanglementLevelDatas.Count ? result.CurrentValue : this.EntanglementLevelDatas[index].Value;
-        result.CurrentLevelValue = index == 0 ? 0.0f : this.EntanglementLevelDatas[index - 1].Value;
+        
+        int level = GetCurrentLevel(result.CurrentValue);
+        result.BondLevel = level;
+        result.NextLevelValue = level == this.EntanglementLevelDatas.Count ? result.CurrentValue : this.EntanglementLevelDatas[level].Value;
+        result.CurrentLevelValue = level == 0 ? 0.0f : this.EntanglementLevelDatas[level - 1].Value;
         return result;
     }
 

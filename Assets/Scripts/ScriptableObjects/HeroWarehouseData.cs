@@ -8,6 +8,7 @@ using UnityEngine;
 public class HeroAudioData {
     public AudioClip Audio = null;
     [TextArea] public string AudioContent = "暂无";
+    [TextArea] public string OtherLanguageContent = "";
 }
 
 [CreateAssetMenu(menuName = "DeckBreakers/HeroWarehouseData", fileName = "HeroWarehouseData")]

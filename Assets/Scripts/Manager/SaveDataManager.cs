@@ -264,10 +264,15 @@ public class SaveDataManager : MonoBehaviour {
         }
     }
 
-    public void RecoverHeroHealth(string heroName, float value, bool revive = false) {
-        if (!this.PlayerData.DungeonHeroHealth.ContainsKey(heroName)) return;
-        if (this.PlayerData.DungeonHeroHealth[heroName] == 0.0f && !revive) return;
+    public bool RecoverHeroHealth(string heroName, float value, bool revive = false) {
+        if (!this.PlayerData.DungeonHeroHealth.ContainsKey(heroName)) return false;
+        if (this.PlayerData.DungeonHeroHealth[heroName] == 0.0f && !revive) return false;
+        Hero hero = HeroWarehouseManager.Instance.GetHeroByRef(heroName);
+        if (hero.InitialHealth <= this.PlayerData.DungeonHeroHealth[heroName]) {
+            return false;
+        }
         this.PlayerData.DungeonHeroHealth[heroName] += value;
+        return true;
     }
 
     public void RecoverAllHeroHealth() {
