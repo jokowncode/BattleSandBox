@@ -26,7 +26,13 @@ public class HeroListSingle : MonoBehaviour {
         this.HeroAvatarImage.sprite = heroAvatarSprite;
         this.HeroAvatarImage.color = new Color(1.0f, 1.0f, 1.0f, heroAvatarSprite ? 1.0f : 0.0f);
         this.HeroAvatarButton.enabled = hero;
-        
+
+        if (hero) {
+            float health = SaveDataManager.Instance.GetHeroHealth(hero.Name);
+            if (this.HeroAvatarImage.transform.childCount != 0) {
+                this.HeroAvatarImage.transform.GetChild(0).gameObject.SetActive(health == 0.0f);
+            }    
+        }
         this.BloodBar.transform.parent.gameObject.SetActive(false);
         // this.SetHeroHealth(hero);
     }
@@ -36,9 +42,6 @@ public class HeroListSingle : MonoBehaviour {
         if (!hero) return;
         float health = SaveDataManager.Instance.GetHeroHealth(hero.Name);
         this.BloodBar.fillAmount = health < 0.0f ? 1.0f : health / hero.InitialData.Health;
-        if (this.HeroAvatarImage.transform.childCount != 0) {
-            this.HeroAvatarImage.transform.GetChild(0).gameObject.SetActive(health == 0.0f);
-        }
     }
 
     public void ClickButton() {
