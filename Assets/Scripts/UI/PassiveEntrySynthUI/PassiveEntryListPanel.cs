@@ -7,7 +7,7 @@ public class PassiveEntryListPanel : MonoBehaviour {
 
     [SerializeField] private CategoryList CategoryListUI;
     [SerializeField] private Transform Container;
-    [SerializeField] private DetailGoodsButton DetailButtonPrefab;
+    [SerializeField] private DetailButton DetailButtonPrefab;
 
     public Func<string, int, bool> OnPassiveEntryClicked;
     
@@ -22,7 +22,7 @@ public class PassiveEntryListPanel : MonoBehaviour {
 
         Dictionary<PassiveEntry, int> entries =  PassiveEntryWarehouseManager.Instance.GetPassiveEntryByStar(index+1);
         foreach (var pair in entries) {
-            DetailGoodsButton button = Instantiate(this.DetailButtonPrefab, this.Container);
+            DetailButton button = Instantiate(this.DetailButtonPrefab, this.Container);
             string desc = pair.Key.Data.Description;
             string pName = pair.Key.Data.Name;
             
@@ -37,7 +37,7 @@ public class PassiveEntryListPanel : MonoBehaviour {
         bool? result = this.OnPassiveEntryClicked?.Invoke(passiveEntryName, requiredCount);
         if (result != null && result.Value) {
             foreach (Transform child in this.Container) {
-                if (child.TryGetComponent(out DetailGoodsButton button) && button.Name == passiveEntryName) {
+                if (child.TryGetComponent(out DetailButton button) && button.Name == passiveEntryName) {
                     button.SetCount(count - requiredCount);
                 }
             }
@@ -45,14 +45,12 @@ public class PassiveEntryListPanel : MonoBehaviour {
     }
 
     public void Show() {
-        if (!this.CategoryListUI.IsSelected(0)) {
-            this.CategoryListUI.SelectCategory(0);
-        }
+        this.CategoryListUI.SelectCategory(0, true);
     }
 
     public void ReturnPassiveEntry(string pName, int pCount) {
         foreach (Transform child in this.Container) {
-            if (child.TryGetComponent(out DetailGoodsButton button) && button.Name == pName) {
+            if (child.TryGetComponent(out DetailButton button) && button.Name == pName) {
                 button.SetCount(button.GetCurrentCount() + pCount);
                 return;
             }
@@ -61,7 +59,7 @@ public class PassiveEntryListPanel : MonoBehaviour {
         PassiveEntry entry = PassiveEntryWarehouseManager.Instance.GetPassiveEntryByName(pName);
         if (!entry) return;
         
-        DetailGoodsButton newButton = Instantiate(this.DetailButtonPrefab, this.Container);
+        DetailButton newButton = Instantiate(this.DetailButtonPrefab, this.Container);
         string desc = entry.Data.Description;
         newButton.SetData(desc, pName, pCount, true, (GoodsType)((int)entry.Data.Rare));
         newButton.OnButtonClicked += OnButtonClicked;

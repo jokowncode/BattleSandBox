@@ -4,7 +4,7 @@ using UnityEngine;
 public class TacticPanelUI : MonoBehaviour {
 
     [SerializeField] private Transform Container;
-    [SerializeField] private DetailGoodsButton BattleTacticButtonPrefab;
+    [SerializeField] private DetailButton BattleTacticButtonPrefab;
 
     public void ClearTactic() {
         foreach (Transform child in Container) {
@@ -17,7 +17,7 @@ public class TacticPanelUI : MonoBehaviour {
         this.ClearTactic();
         BattleTacticType maxTactic = EntanglementManager.Instance.GetEntangleHeroCanCastMaxBattleTactic(hero1, hero2);
         for (int i = 0; i <= (int) maxTactic; i++) {
-            DetailGoodsButton button = Instantiate(this.BattleTacticButtonPrefab, this.Container);
+            DetailButton button = Instantiate(this.BattleTacticButtonPrefab, this.Container);
             BattleTacticType type = (BattleTacticType) i;
             string tacticName = type.ToString();
             int count = GoodsWarehouseManager.Instance.GetGoodsCount(tacticName);

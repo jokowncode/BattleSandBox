@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DetailGoodsButton : MonoBehaviour {
+public class DetailButton : MonoBehaviour {
 
     [SerializeField] private Sprite DefaultOuterIcon;
     [SerializeField] private Image OuterIconImage;
@@ -19,6 +19,7 @@ public class DetailGoodsButton : MonoBehaviour {
     public string Name => this.NameText.text;
 
     public int GetCurrentCount() {
+        if (!this.CountText) return 0;
         int.TryParse(this.CountText.text, out int count);
         return count;
     }
@@ -30,7 +31,7 @@ public class DetailGoodsButton : MonoBehaviour {
         });
     }
 
-    private void SetIcon(Sprite innerIcon, Sprite outerIcon) {
+    public void SetIcon(Sprite innerIcon, Sprite outerIcon) {
         if (this.InnerIconImage) {
             this.InnerIconImage.color = new Color(1.0f, 1.0f, 1.0f, innerIcon ? 1.0f : 0.0f);
             this.InnerIconImage.sprite = innerIcon;
@@ -50,8 +51,8 @@ public class DetailGoodsButton : MonoBehaviour {
     }
 
     public void SetData(string desc, string showName, int count, bool canUse, GoodsType type) {
-        this.DescText.text = desc;
-        this.CountText.text = count.ToString("D3");
+        if (this.DescText) this.DescText.text = desc;
+        if (this.CountText) this.CountText.text = count.ToString("D3");
         this.NameText.text = showName;
         
         GoodsImageData data = GoodsWarehouseManager.Instance.GetImageData(type);            

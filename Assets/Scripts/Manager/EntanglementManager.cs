@@ -129,7 +129,6 @@ public class EntanglementManager : MonoBehaviour {
     }
 
     private void OnHeroExitTheField(Hero hero) {
-        if (BattleManager.Instance.IsBattleStart) return;
         PropertyChange(hero, false);
     }
 

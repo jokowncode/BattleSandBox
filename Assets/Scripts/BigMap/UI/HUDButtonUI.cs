@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-public class BigMapHUDButtonUI : MonoBehaviour {
+public class HUDButtonUI : MonoBehaviour {
 
     public void OpenHeroWarehouse() {
         HeroWarehouseManager.Instance.TransitionHeroWarehouseCanvas(true);
@@ -9,6 +9,10 @@ public class BigMapHUDButtonUI : MonoBehaviour {
 
     public void OpenLoadPanel() {
         SaveDataManager.Instance.ShowSaveLoadDataUI(false);
+    }
+
+    public void OpenCluePanel() {
+        ClueWarehouseManager.Instance.TransitionShowUI(true);
     }
 
 }

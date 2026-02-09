@@ -18,12 +18,16 @@ public class CategoryButton : MonoBehaviour {
     private void Awake() {
         this.BackgroundImage = this.GetComponent<Image>();
         if (this.TryGetComponent(out Button button)) {
-            button.onClick.AddListener(ClickButton);
+            button.onClick.AddListener(() => ClickButton());
         }
     }
 
-    public void ClickButton() {
-        if (this.IsSelected) return;
+    public void SetCategoryName(string categoryName) {
+        this.CategoryNameText.text = categoryName;
+    }
+
+    public void ClickButton(bool isForce = false) {
+        if (this.IsSelected && !isForce) return;
         this.BackgroundImage.sprite = this.SelectedBackground;
         this.OnClicked?.Invoke(this.CategoryNameText.text);
         this.IsSelected = true;

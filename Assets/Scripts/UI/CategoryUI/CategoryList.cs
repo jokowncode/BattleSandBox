@@ -4,13 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CategoryList : MonoBehaviour {
+
+    [SerializeField] private string[] CategoryNames;
+    [SerializeField] private CategoryButton CategoryButtonPrefab;
     
     public Action<string, int> OnCategoryClicked;
     private List<CategoryButton> ChildButtons = new();
     
     private void Awake() {
-        foreach (Transform child in this.transform) {
-            if (child.TryGetComponent(out CategoryButton button)) {
+        if (this.CategoryNames != null && this.CategoryNames.Length != 0) {
+            foreach (string category in CategoryNames) {
+                CategoryButton button = Instantiate(this.CategoryButtonPrefab, this.transform);
+                button.SetCategoryName(category);
                 button.OnClicked += OnSelectedCategory;
                 this.ChildButtons.Add(button);
             }
@@ -22,9 +27,9 @@ public class CategoryList : MonoBehaviour {
         return this.ChildButtons[index].IsSelected;
     }
 
-    public void SelectCategory(int index) {
+    public void SelectCategory(int index, bool isForce = false) {
         if (index >= this.transform.childCount) return;
-        this.ChildButtons[index].ClickButton();
+        this.ChildButtons[index].ClickButton(isForce);
     }
 
     private void OnSelectedCategory(string categoryName) {

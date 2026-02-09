@@ -5,8 +5,8 @@ using UnityEngine;
 public class PassiveEntrySynthPanel : MonoBehaviour {
 
     [SerializeField] private AudioClip ErrorSfx;
-    [SerializeField] private DetailGoodsButton WaitSynthButton;
-    [SerializeField] private DetailGoodsButton AfterSynthButton;
+    [SerializeField] private DetailButton WaitSynthButton;
+    [SerializeField] private DetailButton AfterSynthButton;
 
     private PassiveEntry CurrentPassiveEntry;
 
