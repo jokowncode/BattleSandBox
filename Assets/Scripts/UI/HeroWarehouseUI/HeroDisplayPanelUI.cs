@@ -62,10 +62,11 @@ public class HeroDisplayPanelUI : HeroWarehousePanelWithGoods {
         this.TransitionGoodsWarehouse();
     }
 
-    public void UseBloodBottle(string goodsName) {
-        if (!this.CurrentDisplayHero) return;
-        GoodsWarehouseManager.Instance.UseConsumedGoods(goodsName, this.CurrentDisplayHero.Name);
-        UpdateBloodBar();
+    public bool UseBloodBottle(string goodsName) {
+        if (!this.CurrentDisplayHero) return false;
+        bool result = GoodsWarehouseManager.Instance.UseConsumedGoods(goodsName, this.CurrentDisplayHero.Name);
+        if (result) UpdateBloodBar();
+        return result;
     }
 
     private void UpdateBloodBar() {

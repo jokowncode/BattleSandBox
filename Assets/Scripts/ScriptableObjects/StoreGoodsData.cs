@@ -3,12 +3,12 @@ using UnityEngine;
 
 public enum GoodsType {
     None = -1,
-    Hero,
-    EXP,
-    NormalPassiveEntry,
-    BloodBottle,
-    Tactic,
-    SpecialPassiveEntry
+    角色,
+    经验,
+    普通词条,
+    血瓶,
+    战术,
+    特殊词条
 }
 
 

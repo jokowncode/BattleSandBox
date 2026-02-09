@@ -7,11 +7,9 @@ using UnityEngine.SceneManagement;
 using Object = System.Object;
 
 public struct GoodsData {
-    // public StoreGoodsData Data;
     public string Name;
-    public GoodsImageData ImageData;
     public int GoodsCount;
-    public bool IsConsumeGoods;
+    public GoodsType Type;
 }
 
 public class GoodsWarehouseManager : MonoBehaviour {
@@ -20,7 +18,10 @@ public class GoodsWarehouseManager : MonoBehaviour {
 
     [field: SerializeField] public List<StoreGoodsData> AllGoodsData { get; private set; }
     [SerializeField] private AudioClip UseConsumeGoodsErrorSfx;
-    [SerializeField] private List<GoodsImageData> ImageDatas; 
+    [SerializeField] private List<GoodsImageData> ImageDatas;
+
+    [Header("UI")] 
+    [SerializeField] private GoodsWarehousePanel GoodsPanel;
     
     private Dictionary<string, StoreGoodsData> AllStoreGoodsMap;
 
@@ -29,6 +30,8 @@ public class GoodsWarehouseManager : MonoBehaviour {
     private bool IsInBattle = false;
 
     private Dictionary<GoodsType, GoodsImageData> ImageDataMap = new();
+    
+    private CanvasGroup GoodsPanelCanvasGroup;
     
     private void Awake() {
         if (Instance != null) {
@@ -56,6 +59,20 @@ public class GoodsWarehouseManager : MonoBehaviour {
                 this.IsInBattle = false;
             }
         };
+        this.GoodsPanelCanvasGroup = this.GetComponent<CanvasGroup>();
+    }
+
+    public void TransitionGoodsPanel(bool show) {
+        if (show && this.GoodsPanelCanvasGroup.alpha >= 0.9f) return;
+        this.GoodsPanelCanvasGroup.alpha = show ? 1.0f : 0.0f;
+        this.GoodsPanelCanvasGroup.interactable = show;
+        this.GoodsPanelCanvasGroup.blocksRaycasts = show;
+
+        if (show) {
+            this.GoodsPanel.Show();
+        } else {
+            this.GoodsPanel.Hide();
+        }
     }
 
     private void OnRewindBattle() {
@@ -92,33 +109,33 @@ public class GoodsWarehouseManager : MonoBehaviour {
         }
     }
 
-    public void UseConsumedGoods(string goodsName, params Object[] args) {
-        if (!this.OwnedConsumedGoods.ContainsKey(goodsName)) return;
-        if (!this.AllStoreGoodsMap.ContainsKey(goodsName)) return;
+    public bool UseConsumedGoods(string goodsName, params Object[] args) {
+        if (!this.OwnedConsumedGoods.ContainsKey(goodsName)) return false;
+        if (!this.AllStoreGoodsMap.ContainsKey(goodsName)) return false;
 
         bool result = true;
         StoreGoodsData goodsData = this.AllStoreGoodsMap[goodsName];
         switch (goodsData.Type) {
-            case GoodsType.EXP:
-                if (args.Length < 2) return;
+            case GoodsType.经验:
+                if (args.Length < 2) return false;
                 result = EntanglementManager.Instance.AddEntanglementValue(args[0].ToString(), args[1].ToString(), goodsData.Value);
                 break;
-            case GoodsType.BloodBottle:
-                if (args.Length < 1) return;
+            case GoodsType.血瓶:
+                if (args.Length < 1) return false;
                 result = SaveDataManager.Instance.RecoverHeroHealth(args[0].ToString(), goodsData.Value, false);
                 break;
-            case GoodsType.Tactic:
-                if (!Enum.TryParse(goodsName, true, out BattleTacticType type)) return;
+            case GoodsType.战术:
+                if (!Enum.TryParse(goodsName, true, out BattleTacticType type)) return false;
                 result = UISelectionManager.Instance.UseTactic(type);
                 break;
-            default: return;
+            default: return false;
         }
 
         if (!result) {
             if (this.UseConsumeGoodsErrorSfx) {
                 AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.UseConsumeGoodsErrorSfx);
             }
-            return;
+            return false;
         }
 
         this.OwnedConsumedGoods[goodsName] -= 1;
@@ -130,19 +147,20 @@ public class GoodsWarehouseManager : MonoBehaviour {
         if (this.OwnedConsumedGoods[goodsName] <= 0) {
             this.OwnedConsumedGoods.Remove(goodsName);
         }
+        return true;
     }
 
     public bool AddGoods(StoreGoodsData data) {
         switch (data.Type) {
-            case GoodsType.Hero:
+            case GoodsType.角色:
                 return HeroWarehouseManager.Instance.AddHero(data.GoodsName);
-            case GoodsType.NormalPassiveEntry:
-            case GoodsType.SpecialPassiveEntry:
+            case GoodsType.普通词条:
+            case GoodsType.特殊词条:
                 PassiveEntryWarehouseManager.Instance.AddPassiveEntry(data.GoodsName, 1);
                 break;
-            case GoodsType.Tactic:
-            case GoodsType.EXP:
-            case GoodsType.BloodBottle:
+            case GoodsType.战术:
+            case GoodsType.经验:
+            case GoodsType.血瓶:
                 this.AddConsumeGoods(data.GoodsName);
                 break;
         }
@@ -150,7 +168,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
     }
 
     private bool IsConsumeGoods(GoodsType type) {
-        return type != GoodsType.Hero && type != GoodsType.NormalPassiveEntry && type != GoodsType.SpecialPassiveEntry;
+        return type != GoodsType.角色 && type != GoodsType.普通词条 && type != GoodsType.特殊词条;
     }
 
     public GoodsImageData GetImageData(GoodsType type) {
@@ -165,13 +183,33 @@ public class GoodsWarehouseManager : MonoBehaviour {
                 if (!data || data.Type != type) continue;
                 result.Add(new GoodsData() {
                     Name = data.GoodsName,
-                    ImageData = GetImageData(data.Type),
                     GoodsCount = goodsPair.Value,
-                    IsConsumeGoods = true
+                    Type = type
                 });
             }
         }
-        // TODO : NOT CONSUME GOODS
+        
+        if (type is GoodsType.普通词条 or GoodsType.特殊词条) {
+            Dictionary<PassiveEntry, int> entries = PassiveEntryWarehouseManager.Instance.GetPassiveEntryFilterBySort(0x7FFFFFFF);
+            foreach (var pair in entries) {
+                result.Add(new GoodsData() {
+                    Name = pair.Key.Data.Name,
+                    GoodsCount = pair.Value,
+                    Type = (GoodsType)(int)pair.Key.Data.Rare
+                });
+            }
+        }
+
+        if (type == GoodsType.角色) {
+            List<string> heroes = HeroWarehouseManager.Instance.GetOwnedHeroesRef();
+            foreach (string hName in heroes) {
+                result.Add(new GoodsData() {
+                    Name = hName,
+                    GoodsCount = 1,
+                    Type = type
+                });
+            }
+        }
         return result;
     }
 }

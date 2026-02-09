@@ -22,7 +22,7 @@ public class StoreGoodsUI : MonoBehaviour {
         if (data.Type == GoodsType.None) return;
         this.MoneyText.text = data.Money.ToString();
 
-        if (data.Type == GoodsType.Hero) {
+        if (data.Type == GoodsType.角色) {
             // TODO: 单独处理Hero的Image
         }
 

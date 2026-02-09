@@ -31,9 +31,7 @@ public class ClueListPanel : MonoBehaviour {
     }
 
     public void Show() {
-        if (!this.CategoryListUI.IsSelected(0)) {
-            this.CategoryListUI.SelectCategory(0);
-        }
+        this.CategoryListUI.SelectCategory(0, true);
     }
 
 }

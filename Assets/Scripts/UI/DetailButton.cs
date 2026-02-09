@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class DetailButton : MonoBehaviour {
 
     [SerializeField] private Sprite DefaultOuterIcon;
+    [SerializeField] private Image InnerIconImage;
     [SerializeField] private Image OuterIconImage;
     [SerializeField] private Button UseButton;
     [SerializeField] protected TextMeshProUGUI DescText;
@@ -14,7 +15,6 @@ public class DetailButton : MonoBehaviour {
     [SerializeField] protected TextMeshProUGUI CountText;
 
     public Action<string, int> OnButtonClicked;
-    private Image InnerIconImage;
 
     public string Name => this.NameText.text;
 
@@ -25,7 +25,6 @@ public class DetailButton : MonoBehaviour {
     }
 
     private void Awake() {
-        this.InnerIconImage = this.UseButton.GetComponent<Image>();
         this.UseButton.onClick.AddListener(() => {
             OnButtonClicked?.Invoke(this.NameText.text, GetCurrentCount());
         });
@@ -55,7 +54,7 @@ public class DetailButton : MonoBehaviour {
         if (this.CountText) this.CountText.text = count.ToString("D3");
         this.NameText.text = showName;
         
-        GoodsImageData data = GoodsWarehouseManager.Instance.GetImageData(type);            
+        GoodsImageData data = GoodsWarehouseManager.Instance.GetImageData(type);         
         this.SetIcon(data ? data.IconSprite : null, data ? data.BorderSprite : null);
         this.UseButton.enabled = canUse && count != 0;
     }

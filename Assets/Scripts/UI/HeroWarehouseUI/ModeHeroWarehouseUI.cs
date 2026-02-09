@@ -29,12 +29,13 @@ public class ModeHeroWarehouseUI : MonoBehaviour {
         this.GoodsWarehouseUI.OnClickGoods += OnClickGoods;
     }
 
-    private void OnClickGoods(string goodsName) {
+    private bool OnClickGoods(string goodsName) {
         if (this.CurrentMode == WarehouseMode.CharacterBond) {
-            this.HeroBondPanel.UseBond(goodsName);
+            return this.HeroBondPanel.UseBond(goodsName);
         }else if (this.CurrentMode == WarehouseMode.CharacterDisplay) {
-            this.HeroDisplayPanel.UseBloodBottle(goodsName);
+            return this.HeroDisplayPanel.UseBloodBottle(goodsName);
         }
+        return false;
     }
 
     public void Show() {

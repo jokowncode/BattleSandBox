@@ -15,6 +15,10 @@ public class HUDButtonUI : MonoBehaviour {
         ClueWarehouseManager.Instance.TransitionShowUI(true);
     }
 
+    public void OpenGoodsPanel() {
+        GoodsWarehouseManager.Instance.TransitionGoodsPanel(true);
+    }
+
 }
 
 

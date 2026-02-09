@@ -16,7 +16,8 @@ public abstract class InteractionObject : MonoBehaviour {
         电梯,
         MiniMap,
         角色仓库,
-        词条合成
+        词条合成,
+        道具仓库
     }
 
     [SerializeField] protected string InteractionObjShowName = null;

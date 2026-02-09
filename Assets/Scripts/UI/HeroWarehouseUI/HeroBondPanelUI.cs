@@ -97,10 +97,11 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
         this.TransitionGoodsWarehouse();
     }
 
-    public void UseBond(string goodsName) {
-        if (!CurrentHeroes[0] || !CurrentHeroes[1]) return;
-        GoodsWarehouseManager.Instance.UseConsumedGoods(goodsName, CurrentHeroes[0].Name, CurrentHeroes[1].Name);
-        UpdateBondData();
+    public bool UseBond(string goodsName) {
+        if (!CurrentHeroes[0] || !CurrentHeroes[1]) return false;
+        bool result = GoodsWarehouseManager.Instance.UseConsumedGoods(goodsName, CurrentHeroes[0].Name, CurrentHeroes[1].Name);
+        if(result) UpdateBondData();
+        return result;
     }
 }
 
