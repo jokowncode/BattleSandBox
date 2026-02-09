@@ -52,12 +52,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 5c8524fc884c87b4dbbd75ec7afb3203, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -69,6 +72,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u71B5\u535A\u58EB"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -125,12 +130,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 5cb8bee67ae5e174c9a7c1c7096c2a63, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: bb9c2218a4aafff43936ce9c9fcaac62, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -142,79 +150,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u5E03\u6D1B\u514B"
   CharacterPortrait: {fileID: 0}
-  BeforeDialogInvokeAction: 
-  AfterDialogInvokeAction: 
-  Options: []
-  NextDialog: {fileID: 0}
---- !u!114 &-5740830314924229892
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ffc0c38e31844b7976ae8323e75349c, type: 3}
-  m_Name: Dialog
-  m_EditorClassIdentifier: 
-  graph: {fileID: 11400000}
-  position: {x: 72, y: -264}
-  ports:
-    keys:
-    - PreNode
-    - Options
-    - NextDialog
-    values:
-    - _fieldName: PreNode
-      _node: {fileID: -5740830314924229892}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: NextDialog
-        node: {fileID: -143365972955131721}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: Options
-      _node: {fileID: -5740830314924229892}
-      _typeQualifiedName: System.String[], mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: NextDialog
-      _node: {fileID: -5740830314924229892}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: PreNode
-        node: {fileID: 1959577117297722974}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  PreNode: {fileID: 0}
-  Background: {fileID: 0}
-  BackgroundCharacterPortraits:
-  - {fileID: 21300000, guid: 1505c692f40311b44b718a657563ed4e, type: 3}
-  NotBackground: 0
-  BackgroundIsFadeIn: 0
-  BackgroundIsFadeOut: 0
-  DialogAudio: {fileID: 0}
-  DialogBGM: {fileID: 0}
-  IsDialogBGMFade: 1
-  DialogBGMFadeTime: 1
-  CharacterAudioVolume: 1
-  BGMVolume: 1
-  DialogText: "\u970D\u5C14\u7279\u4E5F\u4ECE\u533B\u7597\u5E8A\u4E0A\u5750\u8D77\u8EAB\uFF0C\u6C89\u9ED8\u800C\u8B66\u60D5\u5730\u6253\u91CF\u7740\u65B0\u6765\u8005\u3002"
-  IsConstantVelocity: 1
-  DialogTypeWriterDuration: 1
-  CharacterName: 
-  CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -271,12 +208,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: bbffb4de9ee7e7f40a6e75d050bdf90a, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 3012f800e7035cc409a535c9360f6d64, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -288,6 +228,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u58A8\u9E26"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -344,12 +286,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 466407354ecbbec4bab43dc8bf2ae90a, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 005c79604d817814ab6bd9060ed6fb4f, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -361,6 +306,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u5E03\u6D1B\u514B"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -417,12 +364,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 0573be9f51983694b91b4975a4d488b6, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -434,6 +384,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u71B5\u535A\u58EB"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -490,12 +442,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: dd1d077acae31e241a28558dec4690d8, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -507,6 +462,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: 
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -563,12 +520,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: dd1d077acae31e241a28558dec4690d8, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: b0f01e73d49005a41b765ec3134b60cd, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -580,6 +540,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u58A8\u9E26"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -636,12 +598,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 756e3fc93bceb9147b97358f70cf7c6d, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: e6cdac3738590ca4f8b6bf30a864b4a0, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -653,6 +618,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u6728\u536B\u4E03"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -709,12 +676,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 21300000, guid: 516d38cb159ec134bae736f2618d8f2e, type: 3}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: d978f80ed103e3746834b749f4d6f24e, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 1
   BackgroundIsFadeOut: 1
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -726,6 +696,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: 
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -743,7 +715,7 @@ MonoBehaviour:
   m_Name: Dialog
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -168, y: -264}
+  position: {x: 8, y: -264}
   ports:
     keys:
     - PreNode
@@ -775,19 +747,22 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: PreNode
-        node: {fileID: -5740830314924229892}
+        node: {fileID: 1959577117297722974}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 21300000, guid: 516d38cb159ec134bae736f2618d8f2e, type: 3}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 466407354ecbbec4bab43dc8bf2ae90a, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 8300000, guid: b5efdf42b7f5be94a86eb53549bf5b15, type: 3}
   IsDialogBGMFade: 1
@@ -799,6 +774,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: 
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -818,7 +795,6 @@ MonoBehaviour:
   nodes:
   - {fileID: 5291759762253803459}
   - {fileID: -143365972955131721}
-  - {fileID: -5740830314924229892}
   - {fileID: 1959577117297722974}
   - {fileID: 7243762208079160544}
   - {fileID: 1546203547122208446}
@@ -894,12 +870,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: d978f80ed103e3746834b749f4d6f24e, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: dedbed41f630fc545b8f18f4f53c9ffb, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -911,6 +890,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u58A8\u9E26"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -967,12 +948,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: d978f80ed103e3746834b749f4d6f24e, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -984,6 +968,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: 
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -1040,11 +1026,14 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits: []
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1056,6 +1045,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: 
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -1112,23 +1103,28 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 21300000, guid: 20441ae6c49e7c4428e92314bbddeead, type: 3}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 13e4b355d45148c4a99181ef4333a01c, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 1
   BackgroundIsFadeOut: 1
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 8300000, guid: 2d012870fb7b6004f845335022c98dfb, type: 3}
   IsDialogBGMFade: 1
   DialogBGMFadeTime: 1
   CharacterAudioVolume: 1
   BGMVolume: 0.6
-  DialogText: "\u5E03\u6D1B\u514B\u7ACB\u523B\u660E\u767D\u4E86\u535A\u58EB\u7684\u610F\u601D\uFF0C\u5174\u594B\u5730\u62C9\u7740\u58A8\u9E26\u6765\u5230\u4E86\u5E95\u5C42\u6392\u6C34\u7BA1\u9053\u5904\uFF0C\u6307\u5411\u4E00\u7FA4\u9644\u7740\u5728\u5899\u4F53\u4E0A\u50CF\u6C34\u86ED\u4E00\u6837\u7684\u53D8\u5F02\u751F\u7269\u3002"
+  DialogText: "\u5E03\u6D1B\u514B\u7ACB\u523B\u660E\u767D\u4E86\u535A\u58EB\u7684\u610F\u601D\uFF0C\u5174\u594B\u5730\u62C9\u7740\u58A8\u9E26\u6765\u5230\u4E86\u6392\u6C34\u7BA1\u9053\u5904\uFF0C\u6307\u5411\u4E00\u7FA4\u9644\u7740\u5728\u5899\u4F53\u4E0A\u50CF\u6C34\u86ED\u4E00\u6837\u7684\u53D8\u5F02\u751F\u7269\u3002"
   IsConstantVelocity: 1
   DialogTypeWriterDuration: 1
   CharacterName: 
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -1158,7 +1154,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: NextDialog
-        node: {fileID: -5740830314924229892}
+        node: {fileID: -143365972955131721}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -1185,23 +1181,28 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 3dfa669bdb4055b43ba256fcea5cf391, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
   DialogBGMFadeTime: 1
   CharacterAudioVolume: 1
   BGMVolume: 1
-  DialogText: "\u8FD8\u6CA1\u7B49\u4ED6\u4EEC\u53CD\u5E94\u8FC7\u6765\uFF0C\u71B5\u535A\u58EB\u6BEB\u4E0D\u72B9\u8C6B\u5730\u8D70\u5411\u5B9E\u9A8C\u53F0\uFF0C\u62FF\u51FA\u4E86\u4E00\u7BA1Nexod\u836F\u5242\u3002"
+  DialogText: "\u8FD8\u6CA1\u7B49\u4ED6\u53CD\u5E94\u8FC7\u6765\uFF0C\u71B5\u535A\u58EB\u6BEB\u4E0D\u72B9\u8C6B\u5730\u8D70\u5411\u5B9E\u9A8C\u53F0\uFF0C\u62FF\u51FA\u4E86\u4E00\u7BA1Nexod\u836F\u5242\u3002"
   IsConstantVelocity: 1
   DialogTypeWriterDuration: 1
   CharacterName: 
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -1258,12 +1259,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: bbffb4de9ee7e7f40a6e75d050bdf90a, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: eff1070c84a65c345b3e399684f87374, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1275,6 +1279,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u58A8\u9E26"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -1331,12 +1337,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: dd1d077acae31e241a28558dec4690d8, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 03b5cc25594121b4a94c5d4181760498, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1348,6 +1357,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u58A8\u9E26"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -1365,7 +1376,7 @@ MonoBehaviour:
   m_Name: Start
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -408, y: -104}
+  position: {x: -232, y: -104}
   ports:
     keys:
     - NextDialog
@@ -1381,6 +1392,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+  CanSkip: 1
   NextDialog: {fileID: 0}
 --- !u!114 &5560159243603898813
 MonoBehaviour:
@@ -1434,12 +1446,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 5cb8bee67ae5e174c9a7c1c7096c2a63, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 78d39212e5f7b174aa5449db7c1fa14c, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1451,6 +1466,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u5E03\u6D1B\u514B"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -1507,12 +1524,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 13e4b355d45148c4a99181ef4333a01c, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 7a5d0599a3c4ee34cb1ba92a6d58a268, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1524,6 +1544,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u5E03\u6D1B\u514B"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -1580,12 +1602,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 83210af6c9c17fe49a556169cea53630, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1597,6 +1622,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u71B5\u535A\u58EB"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -1653,12 +1680,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 30c92c948baff274d82ff9ac79e342cf, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1670,6 +1700,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u71B5\u535A\u58EB"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -1723,11 +1755,14 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits: []
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1739,6 +1774,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: 
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -1795,12 +1832,15 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: e159985f3be16fc4b98873a25c7772b9, type: 3}
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 581748118563aa2489f2c7b45893015e, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1812,6 +1852,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: "\u6728\u536B\u4E03"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
@@ -1868,11 +1910,14 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 21300000, guid: bd308837b3d11af43af3102e328f2c7c, type: 3}
   BackgroundCharacterPortraits: []
   NotBackground: 0
   BackgroundIsFadeIn: 1
   BackgroundIsFadeOut: 1
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1884,6 +1929,8 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: 
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
   Options: []
