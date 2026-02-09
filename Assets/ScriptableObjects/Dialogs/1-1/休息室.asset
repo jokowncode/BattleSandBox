@@ -1,83 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8910727553420221453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ffc0c38e31844b7976ae8323e75349c, type: 3}
-  m_Name: Dialog
-  m_EditorClassIdentifier: 
-  graph: {fileID: 11400000}
-  position: {x: 7704, y: -264}
-  ports:
-    keys:
-    - PreNode
-    - Options
-    - NextDialog
-    values:
-    - _fieldName: PreNode
-      _node: {fileID: -8910727553420221453}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: NextDialog
-        node: {fileID: -4723463382341167202}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: Options
-      _node: {fileID: -8910727553420221453}
-      _typeQualifiedName: System.String[], mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: NextDialog
-      _node: {fileID: -8910727553420221453}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: PreNode
-        node: {fileID: -6927894106724471719}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  PreNode: {fileID: 0}
-  ClueName: NULL
-  Background: {fileID: 0}
-  BackgroundCharacterPortraits:
-  - {fileID: 21300000, guid: 756e3fc93bceb9147b97358f70cf7c6d, type: 3}
-  NotBackground: 0
-  BackgroundIsFadeIn: 0
-  BackgroundIsFadeOut: 0
-  SlotPrefab: {fileID: 0}
-  DialogTipText: 
-  DialogAudio: {fileID: 0}
-  DialogBGM: {fileID: 0}
-  IsDialogBGMFade: 1
-  DialogBGMFadeTime: 1
-  CharacterAudioVolume: 1
-  BGMVolume: 1
-  DialogText: "\u6728\u536B\u4E03\u679C\u65AD\u5730\u62AC\u8D77\u5934\uFF0C\u5C06\u7ED3\u5B9E\u7684\u624B\u81C2\u653E\u5728\u535A\u58EB\u7684\u638C\u5FC3\u3002"
-  IsConstantVelocity: 1
-  DialogTypeWriterDuration: 1.7
-  CharacterName: 
-  CharacterPortrait: {fileID: 0}
-  HasProgressBar: 0
-  AutoPlayIfNotContent: 1
-  BeforeDialogInvokeAction: 
-  AfterDialogInvokeAction: 
-  Options: []
-  NextDialog: {fileID: 0}
 --- !u!114 &-7528278095357724791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,7 +52,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: e159985f3be16fc4b98873a25c7772b9, type: 3}
@@ -138,7 +60,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 7fbb9d4d0368a9548a9502f32a1c7063, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -181,7 +103,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: NextDialog
-        node: {fileID: -8910727553420221453}
+        node: {fileID: -4723463382341167202}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -208,7 +130,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 756e3fc93bceb9147b97358f70cf7c6d, type: 3}
@@ -216,7 +138,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: b598e3f4da867b64ab5fec57d54f9f29, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -286,7 +208,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
@@ -294,12 +216,12 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 0997dc52cffa7fe4eba3a47e3cbce6b4, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
   DialogBGMFadeTime: 1
-  CharacterAudioVolume: 1
+  CharacterAudioVolume: 1.5
   BGMVolume: 1
   DialogText: "\u592A\u597D\u4E86\uFF0C\u6B22\u8FCE\u52A0\u5165\u7834\u58C1\u8005\u3002\u6211\u4F1A\u7ED9\u4F60\u6CE8\u5C04\u4E00\u5B9A\u91CF\u7684Nexod\uFF0C\u4F60\u4E0D\u4EC5\u80FD\u83B7\u5F97\u514D\u75ABAbbysol\u7684\u80FD\u529B\uFF0C\u8FD8\u53EF\u4EE5\u83B7\u5F97Abbysol\u7684\u6B63\u9762\u6548\u679C\uFF0C\u4F8B\u5982\u5927\u5E45\u589E\u5F3A\u4F53\u80FD\uFF0C\u89C9\u9192\u4F60\u7684\u5F02\u4E8E\u5E38\u4EBA\u7684\u5929\u8D4B\u3002\u4F60\u51C6\u5907\u597D\u63A5\u79CD\u4E86\u5417\uFF1F"
   IsConstantVelocity: 1
@@ -364,7 +286,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 21300000, guid: 241975a437e4f394b86a44f9dbd9adc1, type: 3}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 72fc352a3eed0a146b7235c9605294fe, type: 3}
@@ -372,7 +294,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 6c18b7f0904432e418bd548836606c02, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -442,7 +364,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
@@ -450,14 +372,14 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: c77873ebd46bd23498449505f4be5e04, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
   DialogBGMFadeTime: 1
   CharacterAudioVolume: 1
   BGMVolume: 1
-  DialogText: "\u4F46\u4F60\u4E5F\u770B\u5230\u4E86\uFF0C\u602A\u7269\u51FA\u73B0\u65F6\uFF0C\u7EDF\u5FA1\u519B\u7BA1\u4E86\u5417\uFF1F\u5982\u679C\u6211\u6309\u89C4\u5219\u6240\u8BF4\uFF0C\u653E\u4EFB\u4F60\u4E0D\u7BA1\uFF0C\u4F60\u5F88\u5FEB\u4E5F\u4F1A\u88AB\u611F\u67D3\uFF0C\u518D\u88AB\u4ED6\u4EEC\u6293\u53BB\u5F53\u5B9E\u9A8C\u4F53\u2026\u2026"
+  DialogText: "\u4F46\u4F60\u4E5F\u770B\u5230\u4E86\uFF0C\u602A\u7269\u51FA\u73B0\u65F6\uFF0C\u7EDF\u5FA1\u519B\u7BA1\u4E86\u5417\uFF1F\u5982\u679C\u6211\u670D\u4ECE\u7BA1\u7406\u89C4\u5219\uFF0C\u653E\u4EFB\u4F60\u4E0D\u7BA1\uFF0C\u4F60\u5F88\u5FEB\u4E5F\u4F1A\u88AB\u611F\u67D3\uFF0C\u518D\u88AB\u4ED6\u4EEC\u6293\u53BB\u5F53\u5B9E\u9A8C\u4F53\u2026\u2026"
   IsConstantVelocity: 1
   DialogTypeWriterDuration: 4
   CharacterName: "\u71B5\u535A\u58EB"
@@ -520,7 +442,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
@@ -528,7 +450,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: bd588ce54c797a9438733f404ef797fc, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -598,7 +520,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: e159985f3be16fc4b98873a25c7772b9, type: 3}
@@ -606,7 +528,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -676,7 +598,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: e159985f3be16fc4b98873a25c7772b9, type: 3}
@@ -684,14 +606,14 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 088c2ef23fb6fc6498a39c3882fe4c52, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
   DialogBGMFadeTime: 1
-  CharacterAudioVolume: 1
+  CharacterAudioVolume: 1.5
   BGMVolume: 1
-  DialogText: "\u548CAbbysol\u7C7B\u4F3C\uFF1F\u4F1A\u6709\u4EC0\u4E48\u8D1F\u9762\u6548\u679C\u5417\uFF1F"
+  DialogText: "\u548C\u2026\u2026Abbysol\u7C7B\u4F3C\uFF1F\u4F1A\u6709\u4EC0\u4E48\u8D1F\u9762\u6548\u679C\u5417\uFF1F"
   IsConstantVelocity: 1
   DialogTypeWriterDuration: 1.5
   CharacterName: "\u6728\u536B\u4E03"
@@ -715,7 +637,7 @@ MonoBehaviour:
   m_Name: Dialog
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 7432, y: -264}
+  position: {x: 7528, y: -264}
   ports:
     keys:
     - PreNode
@@ -747,14 +669,14 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: PreNode
-        node: {fileID: -8910727553420221453}
+        node: {fileID: -6927894106724471719}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 756e3fc93bceb9147b97358f70cf7c6d, type: 3}
@@ -762,7 +684,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: b82c521f2301d57469056e511259c8a6, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -832,7 +754,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 756e3fc93bceb9147b97358f70cf7c6d, type: 3}
@@ -840,12 +762,12 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: f99a3114640fdf4478788c0adbc7fe7b, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
   DialogBGMFadeTime: 1
-  CharacterAudioVolume: 1
+  CharacterAudioVolume: 1.5
   BGMVolume: 1
   DialogText: "\u5982\u679C\u771F\u7684\u662F\u8FD9\u6837\uFF0C\u6211\u5F53\u7136\u613F\u610F\uFF01\u4F5C\u4E3A\u4E00\u540D\u519B\u4EBA\uFF0C\u4E3A\u4EBA\u6C11\u767E\u59D3\u7684\u5B89\u5168\u800C\u6218\uFF0C\u662F\u6211\u7684\u804C\u8D23\uFF01"
   IsConstantVelocity: 1
@@ -910,7 +832,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
@@ -918,7 +840,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 033b1985ea7547e4c8f8aade37006846, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -988,7 +910,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
@@ -996,14 +918,14 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 2a8e2d79c361bae45b2d222fa98612f1, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
   DialogBGMFadeTime: 1
   CharacterAudioVolume: 1
   BGMVolume: 1
-  DialogText: "\u4F60\u613F\u610F\u63A5\u79CDNexod\uFF0C\u52A0\u5165\u201C\u7834\u58C1\u8005\u201D\u53CD\u6297\u519B\u5417\uFF1FAbbysol\u628A\u4EBA\u53D8\u6210\u602A\u7269\uFF0C\u800C\u6211\u4EEC\u7684Nexod\uFF0C\u662F\u552F\u4E00\u80FD\u5BF9\u6297Abbysol\u7684\u706B\u79CD\u3002"
+  DialogText: "\u4F60\u613F\u610F\u63A5\u79CDNexod\uFF0C\u52A0\u5165\u201C\u7834\u58C1\u8005\u201D\u53CD\u6297\u519B\u5417\uFF1FAbbysol\u628A\u4EBA\u53D8\u6210\u602A\u7269\uFF0C\u800C\u6211\u4EEC\u7684Nexod\uFF0C\u662F\u552F\u4E00\u80FD\u5BF9\u6297\u4ED6\u4EEC\u7684\u706B\u79CD\u3002"
   IsConstantVelocity: 1
   DialogTypeWriterDuration: 3.4
   CharacterName: "\u71B5\u535A\u58EB"
@@ -1066,14 +988,14 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 21300000, guid: 241975a437e4f394b86a44f9dbd9adc1, type: 3}
   BackgroundCharacterPortraits: []
   NotBackground: 0
   BackgroundIsFadeIn: 1
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 8300000, guid: 1abd5d4bcdec7d84e8bb56baf1f56723, type: 3}
   IsDialogBGMFade: 1
@@ -1143,7 +1065,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
@@ -1151,7 +1073,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 4728a8bd2cc899648a0c84f35f5be1ef, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1221,7 +1143,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
@@ -1229,7 +1151,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: ea2b5b65dd3f50b4e92fbe4bea34f21e, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1299,7 +1221,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
@@ -1307,7 +1229,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: e25f03c5cfecc2642ad7a6194e873f74, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1377,21 +1299,21 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 21300000, guid: 9360957939799df43904544a0a70f4d4, type: 3}
   BackgroundCharacterPortraits: []
   NotBackground: 0
   BackgroundIsFadeIn: 1
   BackgroundIsFadeOut: 1
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 0d580fbd35471c4458e63288b1c9595e, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
   DialogBGMFadeTime: 1
   CharacterAudioVolume: 1
   BGMVolume: 1
-  DialogText: "\u4E09\u5E74\u4E86\uFF0C\u6211\u4EEC\u4E00\u76F4\u90FD\u88AB\u5C01\u95ED\u5728\u8FD9\u8258\u8239\u4E0A\u3002\u51C0\u4E16\u4F1A\u5360\u636E\u9876\u5C42\u7CAE\u4ED3\uFF0C\u7EDF\u5FA1\u519B\u5C01\u9501\u6240\u6709\u901A\u9053\uFF0C\u800C\u4E0B\u7B49\u8231\u7684\u6211\u4EEC\uFF0C\u53EA\u662F\u8017\u6750\u3002"
+  DialogText: "\u4E09\u5E74\u4E86\uFF0C\u6211\u4EEC\u4E00\u76F4\u90FD\u88AB\u5C01\u95ED\u5728\u8428\u5C14\u7EF4\u900A\u53F7\u4E0A\u3002\u51C0\u4E16\u4F1A\u9760\u6280\u672F\u5784\u65AD\uFF0C\u638C\u7BA1\u6240\u6709\u5E78\u5B58\u8005\u7684\u751F\u6B7B\uFF0C\u800C\u4E0B\u7B49\u8231\u7684\u6211\u4EEC\uFF0C\u53EA\u662F\u4ED6\u4EEC\u7684\u5B9E\u9A8C\u8017\u6750\u3002"
   IsConstantVelocity: 1
   DialogTypeWriterDuration: 4.5
   CharacterName: "\u71B5\u535A\u58EB"
@@ -1485,14 +1407,14 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 21300000, guid: a9570664c7661db41b9c2fe2eff6ed31, type: 3}
   BackgroundCharacterPortraits: []
   NotBackground: 0
   BackgroundIsFadeIn: 1
   BackgroundIsFadeOut: 1
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: af0aafa74e1e4d74693380012ce9fb66, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1559,7 +1481,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 756e3fc93bceb9147b97358f70cf7c6d, type: 3}
@@ -1567,7 +1489,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 05605e13efd08e8499346dc8a9db49b8, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1624,7 +1546,6 @@ MonoBehaviour:
   - {fileID: -5387924867628634713}
   - {fileID: -2080606415839422199}
   - {fileID: -4723463382341167202}
-  - {fileID: -8910727553420221453}
   - {fileID: -6927894106724471719}
   - {fileID: -5539163030616100466}
   - {fileID: 4596711017875525357}
@@ -1686,7 +1607,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
@@ -1694,7 +1615,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: bae53055ad8509b47b5dd3d9f8b48c6c, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1764,7 +1685,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 281eb9ab819a3ac41943b9db1dbd724a, type: 3}
@@ -1772,7 +1693,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 145df9f6b19f4814f969b997e2fd9975, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1842,7 +1763,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 72fc352a3eed0a146b7235c9605294fe, type: 3}
@@ -1850,8 +1771,8 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
-  DialogAudio: {fileID: 8300000, guid: 066afccf677b150499954da78281573e, type: 3}
+  DialogTipTexts: []
+  DialogAudio: {fileID: 8300000, guid: b53007625303852438c25a6b84230ed8, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
   DialogBGMFadeTime: 1
@@ -1920,14 +1841,14 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits: []
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -1997,7 +1918,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: e159985f3be16fc4b98873a25c7772b9, type: 3}
@@ -2005,7 +1926,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 0d59d778c99d9c84c95bfe6d01b31282, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -2075,7 +1996,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 21300000, guid: 241975a437e4f394b86a44f9dbd9adc1, type: 3}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
@@ -2083,7 +2004,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 5e5c2527570bbaf41a4aa077bed51df8, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -2153,14 +2074,14 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits: []
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -2230,7 +2151,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 3dfa669bdb4055b43ba256fcea5cf391, type: 3}
@@ -2238,7 +2159,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: e2b204f1ee6b8714684a370d5630bf18, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -2308,7 +2229,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
@@ -2316,7 +2237,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 3404f686f429fb943b1c14c626d85f28, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -2386,7 +2307,9 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames:
+  - "\u51C0\u4E16\u4F1A"
+  - "\u7834\u58C1\u8005\u7EC4\u7EC7"
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
@@ -2394,14 +2317,14 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 742962fd3f749bd4cafbe4938715dc90, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
   DialogBGMFadeTime: 1
   CharacterAudioVolume: 1
   BGMVolume: 1
-  DialogText: "\u6211\u7814\u7A76\u8FD9\u4E2A\uFF0C\u662F\u4E3A\u4E86\u80FD\u8054\u5408\u66F4\u591A\u7684\u4EBA\uFF0C\u53BB\u5BF9\u6297\u51C0\u4E16\u4F1A\u3002"
+  DialogText: "\u6211\u548C\u4E00\u90E8\u5206\u5E73\u6C11\u5728\u6697\u4E2D\u7EC4\u5EFA\u4E86\u540D\u4E3A\u201C\u7834\u58C1\u8005\u201D\u7684\u53CD\u6297\u7EC4\u7EC7\uFF0C\u662F\u4E3A\u4E86\u80FD\u8054\u5408\u66F4\u591A\u7684\u4EBA\uFF0C\u53BB\u5BF9\u6297\u51C0\u4E16\u4F1A\u3002\u7EC4\u7EC7\u8FD8\u5904\u5728\u521D\u671F\u9636\u6BB5\uFF0C\u7F3A\u5C11\u9002\u5408\u57F9\u517B\u6210\u6218\u6597\u529B\u91CF\u7684\u4EBA\uFF0C\u6240\u4EE5\u2026\u2026\u6211\u4EEC\u5F88\u9700\u8981\u4F60\u3002"
   IsConstantVelocity: 1
   DialogTypeWriterDuration: 3
   CharacterName: "\u71B5\u535A\u58EB"
@@ -2464,7 +2387,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: e159985f3be16fc4b98873a25c7772b9, type: 3}
@@ -2472,7 +2395,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -2542,7 +2465,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
@@ -2550,7 +2473,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 20b64302155a71041a234efb45e8da67, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -2620,7 +2543,9 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames:
+  - Nexod
+  - Abbysol
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 163db928e639b2942bede5f24019707a, type: 3}
@@ -2628,7 +2553,7 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 1d12807718ab03d4a88cbb2afa4263c4, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -2698,14 +2623,14 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 21300000, guid: fc696382a0689d44c9716541fd1cc1ca, type: 3}
   BackgroundCharacterPortraits: []
   NotBackground: 0
   BackgroundIsFadeIn: 1
   BackgroundIsFadeOut: 1
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: bdf0bf031ee4e8f47bbba253561b8146, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
@@ -2775,7 +2700,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueName: NULL
+  ClueNames: []
   Background: {fileID: 0}
   BackgroundCharacterPortraits:
   - {fileID: 21300000, guid: 72fc352a3eed0a146b7235c9605294fe, type: 3}
@@ -2783,14 +2708,14 @@ MonoBehaviour:
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
   SlotPrefab: {fileID: 0}
-  DialogTipText: 
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: 2de036f2541dddc46b8cf4bed9939503, type: 3}
   DialogBGM: {fileID: 0}
   IsDialogBGMFade: 1
   DialogBGMFadeTime: 1
   CharacterAudioVolume: 1
   BGMVolume: 1
-  DialogText: "\u73B0\u5728\u53EF\u4EE5\u8BF4\u4E86\u5427\uFF0C\u4F60\u5230\u5E95\u662F\u8C01\uFF1F"
+  DialogText: "\u547C\u2026\u2026\u73B0\u5728\u53EF\u4EE5\u8BF4\u4E86\u5427\uFF0C\u4F60\u5230\u5E95\u662F\u8C01\uFF1F"
   IsConstantVelocity: 1
   DialogTypeWriterDuration: 1.2
   CharacterName: "\u6728\u536B\u4E03"
