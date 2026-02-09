@@ -39,7 +39,7 @@ public class SaveDataManager : MonoBehaviour {
 
     private Vector3 TempPlayerPos = Vector3.zero;
 
-    private SerializableDictionary<string, float> DupDungeonHealth = new();
+    private Dictionary<string, float> DupDungeonHealth = new();
 
     public Queue<string> AutoSaveDataPaths { get; private set; } = new();
 
@@ -47,6 +47,8 @@ public class SaveDataManager : MonoBehaviour {
 
     private long AlreadyPlayTime = 0;
     private long LoadTimeStamp = 0;
+
+    private bool IsInBattle = false;
     
     public bool HasSaveData => AutoSaveDataPaths.Count != 0 || MutualSaveDataPathMap.Count != 0;
 
@@ -92,13 +94,6 @@ public class SaveDataManager : MonoBehaviour {
         }
     }
 
-    private void DungeonHealthDup() {
-        this.DupDungeonHealth.Clear();
-        foreach (KeyValuePair<string, float> pair in this.PlayerData.DungeonHeroHealth) {
-            this.DupDungeonHealth.Add(pair.Key, pair.Value);
-        }
-    }
-
     private void SaveData(string savePath) {
         if (this.PlayerInBigMap) {
             SceneType currentDungeon = SceneChangeManager.Instance.DungeonScene;
@@ -124,6 +119,7 @@ public class SaveDataManager : MonoBehaviour {
             dungeonName = "Camp";
         }
         result += "_" + dungeonName;
+        result += "_" + TaskManager.Instance.GetTaskDesc();
         result += $"_{slot}";
         return result + ".save";
     }
@@ -157,6 +153,15 @@ public class SaveDataManager : MonoBehaviour {
         return fileName;
     }
 
+    public void DeleteMutualSaveData(int slot) {
+        if (!this.MutualSaveDataPathMap.ContainsKey(slot)) return;
+        string deletePath = Path.Combine(Application.persistentDataPath, this.MutualSaveDataPathMap[slot]);
+        if (File.Exists(deletePath)) {
+            File.Delete(deletePath);
+        }
+        this.MutualSaveDataPathMap.Remove(slot);
+    }
+
     public void LoadData(string loadPath) {
         this.LoadTimeStamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         if (!File.Exists(loadPath)) {
@@ -166,10 +171,6 @@ public class SaveDataManager : MonoBehaviour {
             this.AlreadyPlayTime = long.Parse(loadPath.Split("_")[2]);
             string json = File.ReadAllText(loadPath);
             this.PlayerData = JsonUtility.FromJson<PlayerSaveData>(json);
-        }
-        
-        if (SceneChangeManager.Instance.IsNewDungeon) {
-            this.RemovePlayerPos(SceneChangeManager.Instance.DungeonScene);
         }
         this.OnLoadData?.Invoke();
     }
@@ -194,10 +195,20 @@ public class SaveDataManager : MonoBehaviour {
         }
 
         if (SceneTools.IsBattleScene(SceneChangeManager.Instance.CurrentScene)) {
-            this.DungeonHealthDup();
+            this.IsInBattle = true;
+            this.DupDungeonHealth.Clear();
             BattleManager.Instance.OnRewindBattle += () => {
-                this.PlayerData.DungeonHeroHealth = this.DupDungeonHealth;
+                foreach (var pair in this.DupDungeonHealth) {
+                    if (this.PlayerData.DungeonHeroHealth.ContainsKey(pair.Key)) {
+                        this.PlayerData.DungeonHeroHealth[pair.Key] = pair.Value;
+                    } else {
+                        this.PlayerData.DungeonHeroHealth.Add(pair.Key, pair.Value);
+                    }
+                }
+                this.DupDungeonHealth.Clear();
             };
+        } else {
+            this.IsInBattle = false;
         }
     }
     
@@ -211,8 +222,9 @@ public class SaveDataManager : MonoBehaviour {
         }
     }
 
-    private void ClearDungeonData() {
+    private void ClearDungeonData(SceneType dungeon) {
         this.PlayerData.DungeonHeroHealth.Clear();
+        this.RemovePlayerPos(dungeon);
     }
 
     public void CurrentDungeonComplete() {
@@ -220,8 +232,8 @@ public class SaveDataManager : MonoBehaviour {
             this.PlayerData.CompleteDungeons.Add(this.PlayerData.CurrentDungeon);
             TaskManager.Instance.RemoveDungeonBindTask(this.PlayerData.CurrentDungeon);
         }
+        ClearDungeonData(this.PlayerData.CurrentDungeon);
         this.PlayerData.CurrentDungeon = SceneType.None;
-        ClearDungeonData();
     }
 
     public bool DungeonIsComplete(SceneType dungeon) {
@@ -256,6 +268,10 @@ public class SaveDataManager : MonoBehaviour {
     }
 
     public void SetHeroHealth(string heroName, float health) {
+        if (this.IsInBattle && !this.DupDungeonHealth.ContainsKey(heroName)) {
+            float hp = Mathf.Max(0.0f, GetHeroHealth(heroName));
+            this.DupDungeonHealth.Add(heroName, hp);
+        }
 
         if (this.PlayerData.DungeonHeroHealth.ContainsKey(heroName)) {
             this.PlayerData.DungeonHeroHealth[heroName] = health;

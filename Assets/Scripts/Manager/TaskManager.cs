@@ -43,7 +43,17 @@ public class TaskManager : MonoBehaviour {
             this.CurrentTaskDataMap = SaveDataManager.Instance.PlayerData.CurrentTaskDataMap;
         };
     }
-    
+
+    public string GetTaskDesc() {
+        if (this.CurrentTaskDataMap.Count == 0) return "无任务";
+        // TODO: TEMP FOR DEMO -> GET FIRST TASK
+        foreach (KeyValuePair<string, TaskCurrentData> pair in this.CurrentTaskDataMap) {
+            if (!this.GameTaskMap.ContainsKey(pair.Key)) continue;
+            return this.GameTaskMap[pair.Key].TaskDescs[pair.Value.Index];
+        }
+        return "无任务";
+    }
+
     public TaskData GetTask(string taskName) {
         if (this.GameTaskMap.ContainsKey(taskName)) {
             return this.GameTaskMap[taskName];

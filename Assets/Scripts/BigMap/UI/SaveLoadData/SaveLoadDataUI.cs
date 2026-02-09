@@ -1,10 +1,12 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class SaveLoadDataUI : MonoBehaviour {
 
+    [SerializeField] private TextMeshProUGUI TitleText;
     [SerializeField] private int MaxMutualSaveSlots = 5;
     [SerializeField] private Transform Container;
     [SerializeField] private SaveLoadDataSlot SaveLoadDataSlotPrefab;
@@ -29,6 +31,7 @@ public class SaveLoadDataUI : MonoBehaviour {
         this.UICanvasGroup.alpha = show ? 1.0f : 0.0f;
         this.UICanvasGroup.interactable = show;
         this.UICanvasGroup.blocksRaycasts = show;
+        this.TitleText.text = isSaveData ? "系统存档" : "系统读档";
     }
 
     private void InitSaveLoadDataSlot() {

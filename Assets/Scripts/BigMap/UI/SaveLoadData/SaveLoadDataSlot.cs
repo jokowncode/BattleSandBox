@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,12 @@ public class SaveLoadDataSlot : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI DungeonNameText;
     [SerializeField] private TextMeshProUGUI CreateTimeText;
     [SerializeField] private TextMeshProUGUI PlayTimeText;
+    [SerializeField] private TextMeshProUGUI CurrentTaskText;
     [SerializeField] private Button DeleteButton;
+
+    [SerializeField] private Image[] TimeImages;
+    [SerializeField] private Sprite HasFileTimeBackgroundSprite;
+    [SerializeField] private Sprite NotFileTimeBackgroundSprite;
 
     private int Index;
     private SaveLoadDataUI UIParent;
@@ -28,18 +34,35 @@ public class SaveLoadDataSlot : MonoBehaviour {
         
         if (fileName != null) {
             string[] texts = fileName.Split('_');
-            if (texts.Length < 4) {
+            if (texts.Length < 5) {
                 this.FileName = null;
                 return;
             }
-            if(this.DungeonNameText) this.DungeonNameText.text = texts[3];
+
+            string prefix = this.Index == -1 ? "自动存档" : "手动存档";
+            if (this.CurrentTaskText) {
+                this.CurrentTaskText.gameObject.SetActive(true);
+                this.CurrentTaskText.text = texts[4];
+            }
+
+            if(this.DungeonNameText) this.DungeonNameText.text = $"{prefix}：{texts[3]}";
             if(this.CreateTimeText) 
                 this.CreateTimeText.text = DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(texts[1])).LocalDateTime.ToString("G");
             if(this.PlayTimeText) this.PlayTimeText.text = GetPlayTimeString(long.Parse(texts[2]));
+
+            foreach (Image timeImage in this.TimeImages) {
+                timeImage.sprite = this.HasFileTimeBackgroundSprite;
+            }
+
         } else {
-            if(this.DungeonNameText) this.DungeonNameText.text = "";
+            if(this.DungeonNameText) this.DungeonNameText.text = "新存档";
             if(this.CreateTimeText) this.CreateTimeText.text = "";
             if(this.PlayTimeText) this.PlayTimeText.text = "";
+            if(this.CurrentTaskText) this.CurrentTaskText.gameObject.SetActive(false);
+            
+            foreach (Image timeImage in this.TimeImages) {
+                timeImage.sprite = this.NotFileTimeBackgroundSprite;
+            }
         }
     }
 
@@ -56,19 +79,16 @@ public class SaveLoadDataSlot : MonoBehaviour {
     }
 
     public void DeleteSaveData() {
-        if (this.FileName != null) {
-            string deletePath = Path.Combine(Application.persistentDataPath, this.FileName);
-            if (File.Exists(deletePath)) {
-                File.Delete(deletePath);
-            }
-            this.SetFileName(null);
-        }
+        if (this.Index < 0) return;
+        SaveDataManager.Instance.DeleteMutualSaveData(this.Index);
+        this.SetFileName(null);
     }
 
     private static string GetPlayTimeString(long seconds) {
         long hour = seconds / 3600;
-        long minute = seconds % 60;
-        return $"{hour:00}:{minute:00}";
+        long minute = seconds / 60 - hour * 60;
+        long second = seconds % 60;
+        return $"{hour:00}:{minute:00}:{second:00}";
     }
 
 }
