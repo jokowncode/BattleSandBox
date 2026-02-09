@@ -8,12 +8,13 @@ public class ClueDetailPanel : MonoBehaviour {
     [SerializeField] private DetailButton CurrentClueButton;
     [SerializeField] private TextMeshProUGUI ClueDescText;
     [SerializeField] private RectTransform DescContainer;
+    [SerializeField] private Sprite ClueBorder;
     
     public void SetClue(string clueName) {
         ClueData data = ClueWarehouseManager.Instance.GetClueByName(clueName);
         if (!data) return;
         CurrentClueButton.SetData(data.ClueName, data.ClueName, 0, false, GoodsType.None);
-        CurrentClueButton.SetIcon(ClueWarehouseManager.Instance.ClueIcons[(int)data.Type], null);
+        CurrentClueButton.SetIcon(ClueWarehouseManager.Instance.ClueIcons[(int)data.Type], this.ClueBorder);
         StopAllCoroutines();
         StartCoroutine(SetDescCoroutine(data.ClueDescription));
     }
