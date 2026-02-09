@@ -15,6 +15,13 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
     [SerializeField] private TextMeshProUGUI BondLevelText;
     [SerializeField] private Image LevelValueProgress;
     [SerializeField] private TacticPanelUI TacticPanel;
+
+    [Header("Bond Border")] 
+    [SerializeField] private Image[] BondBorderImages;
+    [SerializeField] private Sprite WarriorBorder;
+    [SerializeField] private Sprite MageBorder;
+    [SerializeField] private Sprite PriestBorder;
+    [SerializeField] private Sprite EmptyBorder;
     
     private Hero[] CurrentHeroes = new Hero[2];
 
@@ -35,6 +42,12 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
         this.HeroNameTexts[index].text = CurrentHeroes[index].WarehouseData.HeroChineseName;
         this.HeroImages[index].sprite = CurrentHeroes[index].WarehouseData.MiddleSpriteAnims[0];
         this.HeroImages[index].color = Color.white;
+        this.BondBorderImages[index].sprite = CurrentHeroes[index].Type switch {
+            FighterType.Warrior => this.WarriorBorder,
+            FighterType.Mage => this.MageBorder,
+            FighterType.Priest => this.PriestBorder,
+            _ => this.EmptyBorder
+        };
         return true;
     }
 
@@ -57,6 +70,7 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
         this.HeroNameTexts[index].text = "";
         this.HeroImages[index].sprite = null;
         this.HeroImages[index].color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+        this.BondBorderImages[index].sprite = this.EmptyBorder;
         this.UpdateBondData();
         this.GoBackToNormal();
     }

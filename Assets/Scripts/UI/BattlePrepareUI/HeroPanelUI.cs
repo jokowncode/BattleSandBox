@@ -14,7 +14,7 @@ public class HeroPanelUI : MonoBehaviour{
 
     public bool EnergyIsFull => Mathf.Approximately(this.EnergyProgress.fillAmount, 1.0f);
 
-    public RectTransform Rect;
+    public RectTransform Rect { get; private set; }
 
     private void Awake() {
         this.Rect = this.GetComponent<RectTransform>();
