@@ -5,9 +5,10 @@ public enum GoodsType {
     None = -1,
     Hero,
     EXP,
-    PassiveEntry,
+    NormalPassiveEntry,
     BloodBottle,
-    Tactic
+    Tactic,
+    SpecialPassiveEntry
 }
 
 
@@ -17,8 +18,8 @@ public class StoreGoodsData : ScriptableObject {
     public GoodsType Type;
     public float Value;
     public float Money;
-    public Sprite GoodsSprite;
-    public Sprite GoodsBackgroundSprite;
+    // public Sprite GoodsSprite;
+    // public Sprite GoodsBackgroundSprite;
     public Color GoodsColor;
 }
 

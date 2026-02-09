@@ -88,11 +88,10 @@ public class HeroDisplayPanelUI : HeroWarehousePanelWithGoods {
         }
     }
 
-    public void Hide() {
+    public override void Hide() {
         this.CurrentPanelType = ChildPanelType.None;
         StopAllCoroutines();
-        this.HideAudioDialog();
-        this.gameObject.SetActive(false);
+        base.Hide();
     }
 
     private void HideAudioDialog() {

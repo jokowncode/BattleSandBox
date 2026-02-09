@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PassiveEntryWarehouseManager : MonoBehaviour {
 
+    [field: SerializeField] public int SynthPassiveEntryRequiredCount { get; private set; } = 3;
     [SerializeField] private List<PassiveEntry> AllPassiveEntries;
     
     // private List<string> OwnedPassiveEntries = new List<string>();
@@ -77,13 +78,14 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
     }
 
     public void AddPassiveEntry(string passiveEntry, int count) {
+        if (!this.AllPassiveEntryMap.ContainsKey(passiveEntry)) return;
         this.OwnedPassiveEntries.TryAdd(passiveEntry, 0);
         this.OwnedPassiveEntries[passiveEntry] += count;
     }
 
-    public void RemovePassiveEntry(string passiveEntry) {
+    public void RemovePassiveEntry(string passiveEntry, int count = 1) {
         if (ContainsPassiveEntry(passiveEntry)) {
-            this.OwnedPassiveEntries[passiveEntry] -= 1;
+            this.OwnedPassiveEntries[passiveEntry] -= count;
             if (this.OwnedPassiveEntries[passiveEntry] <= 0) {
                 this.OwnedPassiveEntries.Remove(passiveEntry);
             }
@@ -101,12 +103,12 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
 
     public bool UpgradePassiveEntry(string entryName) {
         if (!ContainsPassiveEntry(entryName)) return false;
-        if (this.OwnedPassiveEntries[entryName] < 3) return false;
+        if (this.OwnedPassiveEntries[entryName] < this.SynthPassiveEntryRequiredCount) return false;
 
         PassiveEntry entry = GetPassiveEntryByName(entryName);
         if (!entry.UpgradePassiveEntry) return false;
-
-        this.OwnedPassiveEntries[entryName] -= 3;
+        
+        this.RemovePassiveEntry(entryName, this.SynthPassiveEntryRequiredCount);
         string upgradePassiveEntryName = entry.UpgradePassiveEntry.Data.Name;
         this.AddPassiveEntry(upgradePassiveEntryName, 1);
         return true;

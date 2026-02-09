@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class OpenPassiveEntrySynth : InteractionObject {
 
-    [SerializeField] private PassiveEntrySynthPanel PanelUI;
+    [SerializeField] private PassiveEntrySynthParentPanel PanelUI;
     
     protected override void Awake() {
         this.IsBindTask = false;

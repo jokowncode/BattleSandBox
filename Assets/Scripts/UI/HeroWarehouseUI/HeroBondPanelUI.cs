@@ -32,10 +32,6 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
         this.gameObject.SetActive(true);
     }
 
-    public void Hide() {
-        this.gameObject.SetActive(false);
-    }
-
     private bool TrySelectHero(int index, string heroName) {
         if (CurrentHeroes[index]) return false;
         CurrentHeroes[index] = HeroWarehouseManager.Instance.GetHeroByRef(heroName);
@@ -52,11 +48,9 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
     }
 
     public void SelectHero(string heroName) {
+        if (this.CurrentHeroes.Any(h => h && h.Name == heroName)) return;
         for (int i = 0; i < this.CurrentHeroes.Length; i++) {
-            if (this.CurrentHeroes[i]) {
-                if (this.CurrentHeroes[i].Name == heroName) return;
-                continue;
-            }
+            if (this.CurrentHeroes[i]) continue;
             if (TrySelectHero(i, heroName)) break;
         }
 

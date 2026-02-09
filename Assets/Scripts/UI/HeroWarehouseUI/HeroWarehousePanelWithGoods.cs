@@ -47,6 +47,11 @@ public abstract class HeroWarehousePanelWithGoods : MonoBehaviour {
         if (this.AddText) this.AddText.text = this.ExitText;
     }
 
+    public virtual void Hide() {
+        this.GoBackToNormal();
+        this.gameObject.SetActive(false);
+    }
+
 }
 
 

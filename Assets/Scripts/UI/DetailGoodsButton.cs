@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DetailButton : MonoBehaviour {
+public class DetailGoodsButton : MonoBehaviour {
 
     [SerializeField] private Sprite DefaultOuterIcon;
     [SerializeField] private Image OuterIconImage;
@@ -13,11 +13,21 @@ public class DetailButton : MonoBehaviour {
     [SerializeField] protected TextMeshProUGUI NameText;
     [SerializeField] protected TextMeshProUGUI CountText;
 
-    public Action<string> OnButtonClicked;
+    public Action<string, int> OnButtonClicked;
     private Image InnerIconImage;
-    
+
+    public string Name => this.NameText.text;
+
+    public int GetCurrentCount() {
+        int.TryParse(this.CountText.text, out int count);
+        return count;
+    }
+
     private void Awake() {
         this.InnerIconImage = this.UseButton.GetComponent<Image>();
+        this.UseButton.onClick.AddListener(() => {
+            OnButtonClicked?.Invoke(this.NameText.text, GetCurrentCount());
+        });
     }
 
     private void SetIcon(Sprite innerIcon, Sprite outerIcon) {
@@ -31,17 +41,22 @@ public class DetailButton : MonoBehaviour {
         }
     }
 
-    public void SetData(string desc, string showName, int count, bool canUse) {
+    public void SetCount(int newCount) {
+        if (newCount <= 0) {
+            Destroy(this.gameObject);
+            return;
+        }
+        this.CountText.text = newCount.ToString("D3");
+    }
+
+    public void SetData(string desc, string showName, int count, bool canUse, GoodsType type) {
         this.DescText.text = desc;
         this.CountText.text = count.ToString("D3");
         this.NameText.text = showName;
         
-        StoreGoodsData data = GoodsWarehouseManager.Instance.GetGoodsData(showName);            
-        if(data) this.SetIcon(data.GoodsSprite, data.GoodsBackgroundSprite);
-        
+        GoodsImageData data = GoodsWarehouseManager.Instance.GetImageData(type);            
+        this.SetIcon(data ? data.IconSprite : null, data ? data.BorderSprite : null);
         this.UseButton.enabled = canUse && count != 0;
-        if (!canUse) return;
-        this.UseButton.onClick.AddListener(() => OnButtonClicked?.Invoke(this.NameText.text));
     }
 }
 

@@ -16,12 +16,12 @@ public class WarehouseGoodsUI : MonoBehaviour {
     private string CurrentGoodsName;
     
     public void SetContent(GoodsData data, bool canUse) {
-        this.CurrentGoodsName = data.Data.GoodsName;
+        this.CurrentGoodsName = data.Name;
         
-        this.GoodsNameText.text = data.Data.GoodsName;
+        this.GoodsNameText.text = data.Name;
         this.GoodsCountText.text = $"x{data.GoodsCount}";
-        this.IconImage.sprite = data.Data.GoodsSprite;
-        this.IconBackgroundImage.sprite = data.Data.GoodsBackgroundSprite;
+        this.IconImage.sprite = data.ImageData.IconSprite;
+        this.IconBackgroundImage.sprite = data.ImageData.BorderSprite;
 
         this.IconButton.enabled = canUse;
         this.IconButton.onClick.AddListener(() => {

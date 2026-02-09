@@ -19,8 +19,15 @@ public class StoreGoodsUI : MonoBehaviour {
     }
 
     public void SetData(StoreGoodsData data) {
+        if (data.Type == GoodsType.None) return;
         this.MoneyText.text = data.Money.ToString();
-        this.GoodsImage.sprite = data.GoodsSprite;
+
+        if (data.Type == GoodsType.Hero) {
+            // TODO: 单独处理Hero的Image
+        }
+
+        GoodsImageData imageData = GoodsWarehouseManager.Instance.GetImageData(data.Type);
+        this.GoodsImage.sprite = imageData ? imageData.IconSprite : null;
         this.GoodsOutline.effectColor = data.GoodsColor;
         
         this.PurchaseButton.onClick.AddListener(() => {

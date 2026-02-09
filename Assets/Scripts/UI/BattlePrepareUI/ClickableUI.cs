@@ -33,23 +33,9 @@ public class ClickableUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     public void OnPointerClick(PointerEventData eventData) {
-        // TODO: TEMP -> TEST PASSIVE ENTRY SYNTH
         if (eventData.button == PointerEventData.InputButton.Left) {
             Click();    
-        } else {
-            Synth();
         }
-    }
-
-    private void Synth() {
-        if (this.passiveEntryCount < 3) return;
-        if (!this.passiveEntryData.UpgradePassiveEntry) return;
-        if (!PassiveEntryWarehouseManager.Instance.UpgradePassiveEntry(this.passiveEntryData.Data.Name)) return;
-        
-        // TODO: TEMP -> IN CAMP SYNTH PASSIVE ENTRY, DONT HAVE BattleUIManager
-        BattleUIManager.Instance.PassiveEntryWarehouseUI.RecallPassiveEntry(this.passiveEntryData.UpgradePassiveEntry, 1);
-        
-        this.UpdatePassiveEntryCount(this.passiveEntryCount - 3);
     }
 
     private void Click() {

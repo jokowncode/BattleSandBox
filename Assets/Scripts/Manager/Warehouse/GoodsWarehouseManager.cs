@@ -1,12 +1,15 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = System.Object;
 
 public struct GoodsData {
-    public StoreGoodsData Data;
+    // public StoreGoodsData Data;
+    public string Name;
+    public GoodsImageData ImageData;
     public int GoodsCount;
     public bool IsConsumeGoods;
 }
@@ -17,12 +20,15 @@ public class GoodsWarehouseManager : MonoBehaviour {
 
     [field: SerializeField] public List<StoreGoodsData> AllGoodsData { get; private set; }
     [SerializeField] private AudioClip UseConsumeGoodsErrorSfx;
+    [SerializeField] private List<GoodsImageData> ImageDatas; 
     
     private Dictionary<string, StoreGoodsData> AllStoreGoodsMap;
 
     private Dictionary<string, int> InBattleModifyGoods = new();
     private SerializableDictionary<string, int> OwnedConsumedGoods;
     private bool IsInBattle = false;
+
+    private Dictionary<GoodsType, GoodsImageData> ImageDataMap = new();
     
     private void Awake() {
         if (Instance != null) {
@@ -35,6 +41,10 @@ public class GoodsWarehouseManager : MonoBehaviour {
         this.AllStoreGoodsMap = new Dictionary<string, StoreGoodsData>();
         foreach (StoreGoodsData storeGoodsData in AllGoodsData) {
             this.AllStoreGoodsMap.Add(storeGoodsData.GoodsName, storeGoodsData);
+        }
+
+        foreach (GoodsImageData data in this.ImageDatas) {
+            this.ImageDataMap.Add(data.Type, data);
         }
 
         SceneManager.sceneLoaded += (arg0, mode) => {
@@ -126,7 +136,8 @@ public class GoodsWarehouseManager : MonoBehaviour {
         switch (data.Type) {
             case GoodsType.Hero:
                 return HeroWarehouseManager.Instance.AddHero(data.GoodsName);
-            case GoodsType.PassiveEntry:
+            case GoodsType.NormalPassiveEntry:
+            case GoodsType.SpecialPassiveEntry:
                 PassiveEntryWarehouseManager.Instance.AddPassiveEntry(data.GoodsName, 1);
                 break;
             case GoodsType.Tactic:
@@ -139,7 +150,11 @@ public class GoodsWarehouseManager : MonoBehaviour {
     }
 
     private bool IsConsumeGoods(GoodsType type) {
-        return type != GoodsType.Hero && type != GoodsType.PassiveEntry;
+        return type != GoodsType.Hero && type != GoodsType.NormalPassiveEntry && type != GoodsType.SpecialPassiveEntry;
+    }
+
+    public GoodsImageData GetImageData(GoodsType type) {
+        return this.ImageDataMap.GetValueOrDefault(type);
     }
 
     public List<GoodsData> GetGoodsByType(GoodsType type) {
@@ -149,7 +164,8 @@ public class GoodsWarehouseManager : MonoBehaviour {
                 StoreGoodsData data = GetGoodsData(goodsPair.Key);
                 if (!data || data.Type != type) continue;
                 result.Add(new GoodsData() {
-                    Data = data,
+                    Name = data.GoodsName,
+                    ImageData = GetImageData(data.Type),
                     GoodsCount = goodsPair.Value,
                     IsConsumeGoods = true
                 });
