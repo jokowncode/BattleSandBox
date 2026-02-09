@@ -23,7 +23,7 @@ public class DialogTip : MonoBehaviour {
     private IEnumerator ShowCoroutine(string text) {
         this.TipText.text = text;
         Vector2 size = this.TipTrans.sizeDelta; 
-        size.x = text.Length * this.TipText.fontSize;
+        size.x = text.Length * this.TipText.fontSize + 100.0f;
         this.TipTrans.sizeDelta = size;
 
         for (float t = 0; t <= this.Duration; t += Time.deltaTime) {
