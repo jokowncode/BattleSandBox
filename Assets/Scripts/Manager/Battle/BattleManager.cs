@@ -60,7 +60,7 @@ public class BattleManager : StateMachineController{
     public Action OnEnemyBeClear;
     public Action OnRewindBattle;
 
-    public List<Hero> BeforeBattleHeroes { get; private set; } = new();
+    public List<string> BeforeBattleHeroes { get; private set; } = new();
 
 #if DEBUG_MODE
     public float BattleStartTime {get; private set;}
@@ -196,7 +196,7 @@ public class BattleManager : StateMachineController{
         }
         
         foreach (Hero hero in this.HeroesInBattle) {
-            this.BeforeBattleHeroes.Add(hero);
+            this.BeforeBattleHeroes.Add(hero.Name);
         }
 
 #if DEBUG_MODE
@@ -283,25 +283,10 @@ public class BattleManager : StateMachineController{
     public void BattleVictoryAddHeroBond() {
         for (int i = 0; i < this.BeforeBattleHeroes.Count; i++) {
             for (int j = i + 1; j < this.BeforeBattleHeroes.Count; j++) {
-                EntanglementManager.Instance.AddEntanglementValue(this.BeforeBattleHeroes[i].Name,
-                    this.BeforeBattleHeroes[j].Name, this.BaseBondValue * this.Data.BondMultiplier);
+                EntanglementManager.Instance.AddEntanglementValue(this.BeforeBattleHeroes[i],
+                    this.BeforeBattleHeroes[j], this.BaseBondValue * this.Data.BondMultiplier);
             }
         }
-    }
-
-    public List<StoreGoodsData> GetVictoryGetGoods() {
-        List<StoreGoodsData> goods = new List<StoreGoodsData>();
-        if (this.Data.FixedGetGoods is { Count: > 0 }) {
-            foreach (StoreGoodsData data in this.Data.FixedGetGoods) {
-                if(GoodsWarehouseManager.Instance.AddGoods(data)) goods.Add(data);
-            }    
-        }
-        
-        if (this.Data.RandomBloodBottle) {
-            
-        }
-
-        return goods;
     }
 
     public void AllHeroRecall() {

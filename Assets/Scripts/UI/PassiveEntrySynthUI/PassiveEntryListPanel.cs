@@ -33,7 +33,10 @@ public class PassiveEntryListPanel : MonoBehaviour {
 
     private void OnButtonClicked(string passiveEntryName, int count) {
         int requiredCount = PassiveEntryWarehouseManager.Instance.SynthPassiveEntryRequiredCount;
-        if (count < requiredCount) return;
+        if (count < requiredCount) {
+            AudioManager.Instance.PlayErrorSfx();
+            return;
+        }
         bool? result = this.OnPassiveEntryClicked?.Invoke(passiveEntryName, requiredCount);
         if (result != null && result.Value) {
             foreach (Transform child in this.Container) {

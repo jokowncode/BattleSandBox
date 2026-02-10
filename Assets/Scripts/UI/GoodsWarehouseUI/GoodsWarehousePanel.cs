@@ -3,11 +3,14 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GoodsWarehousePanel : MonoBehaviour {
 
+    [SerializeField] private GridLayoutGroup Layout;
     [SerializeField] private Transform GoodsContainer;
     [SerializeField] private DetailButton GoodsButtonPrefab;
+    [SerializeField] private DetailButton HasDescButtonPrefab;
     [SerializeField] private CategoryList CategoryUI;
     
     public Func<string, bool> OnClickGoods;
@@ -40,8 +43,15 @@ public class GoodsWarehousePanel : MonoBehaviour {
 
             List<GoodsData> goods = GoodsWarehouseManager.Instance.GetGoodsByType(type);
             foreach (GoodsData data in goods) {
-                DetailButton button = Instantiate(GoodsButtonPrefab, GoodsContainer);
-                button.SetData("", data.ShowName, data.GoodsCount, canUse, data.Type, data.Name);
+                DetailButton button;
+                if (data.Type is GoodsType.战术 or GoodsType.普通词条 or GoodsType.特殊词条) {
+                    button = Instantiate(HasDescButtonPrefab, GoodsContainer);
+                    this.Layout.cellSize = new Vector2(600, 100);
+                } else {
+                    button = Instantiate(GoodsButtonPrefab, GoodsContainer);
+                    this.Layout.cellSize = new Vector2(300, 100);
+                }
+                button.SetData(data.Desc, data.ShowName, data.GoodsCount, canUse, data.Type, data.Name);
                 button.OnButtonClicked += OnButtonClicked;
             }
         }

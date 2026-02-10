@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public struct VictoryFixedGoodsData {
+    public StoreGoodsData Data;
+    public int Count;
+}
+
 [CreateAssetMenu(menuName = "DeckBreakers/BattleData", fileName = "BattleData")]
 public class BattleData : ScriptableObject {
     public SceneType BattleScene = SceneType.Battle_Normal;
@@ -17,12 +23,9 @@ public class BattleData : ScriptableObject {
 
     [Header("Victory Get")] 
     public int Money = 50;
-    public List<StoreGoodsData> FixedGetGoods;
-    public bool RandomBloodBottle = true;
-    public int MaxBloodBottleAmount = 2;
-    public bool RandomEXP = true;
-    public int MaxEXPAmount = 2;
-    public bool RandomPassiveEntry = true;
-    public int PassiveEntryAmount = 2;
-    public int MaxPassiveEntryStar = 2;
+    public List<VictoryFixedGoodsData> FixedGetGoods;
+    public int RandomBloodBottleAmount = 3;
+    public int RandomExpAmount = 3;
+    public int RandomPassiveEntryMaxStar = 1;
+    public int RandomPassiveEntryAmount = 3;
 }

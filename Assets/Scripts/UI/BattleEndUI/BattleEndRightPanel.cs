@@ -17,7 +17,7 @@ public class BattleEndRightPanel : MonoBehaviour {
         } else {
             int count = BattleManager.Instance.BeforeBattleHeroes.Count;
             int randomIndex = Random.Range(0, count);
-            hero = BattleManager.Instance.BeforeBattleHeroes[randomIndex]; 
+            hero = HeroWarehouseManager.Instance.GetHeroByRef(BattleManager.Instance.BeforeBattleHeroes[randomIndex]);
         }
 
         if (!hero) return;

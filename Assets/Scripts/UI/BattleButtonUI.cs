@@ -4,13 +4,11 @@ using UnityEngine;
 public class BattleButtonUI : MonoBehaviour {
 
     public void GoToBigMap(){
-        BattleManager.Instance.AllHeroRecall();
-        GameManager.Instance.GoToMap(true, false);
+        BattleManager.Instance.BattleDefeat();
     }
 
     public void WinGame() {
-        BattleManager.Instance.AllHeroRecall();
-        GameManager.Instance.GoToMap(true, true);
+        BattleManager.Instance.BattleVictory();
     }
 
     public void RewindBattle() {

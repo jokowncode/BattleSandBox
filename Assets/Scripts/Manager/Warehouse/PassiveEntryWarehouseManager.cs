@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PassiveEntryWarehouseManager : MonoBehaviour {
 
@@ -65,6 +66,23 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
                 if (entry.Data.Star != star) continue;
                 result.Add(entry, passiveEntryPair.Value);    
             }
+        }
+        return result;
+    }
+
+    public Dictionary<string, int> GetRandomPassiveEntryDataByStar(int maxCount, int maxStar) {
+        Dictionary<string, int> result = new();
+        if (maxCount == 0) return result;
+        int rest = maxCount;
+
+        List<PassiveEntry> entries = this.AllPassiveEntries.FindAll(entry => entry.Data.Star <= maxStar);
+        while (rest != 0) {
+            int index = Random.Range(0, entries.Count);
+            int count = Random.Range(1, rest);
+            rest -= count;
+            string key = entries[index].Data.Name;
+            result.TryAdd(key, 0);
+            result[key] += count;
         }
         return result;
     }

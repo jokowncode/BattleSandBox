@@ -1296,7 +1296,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &131619781
@@ -1659,8 +1659,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -360.00006, y: -54.904373}
-  m_SizeDelta: {x: -1005.0083, y: -267.5878}
+  m_AnchoredPosition: {x: -360.00006, y: -64.90439}
+  m_SizeDelta: {x: -1005.0083, y: -287.58783}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &170276926
 MonoBehaviour:
@@ -3721,7 +3721,7 @@ MonoBehaviour:
   m_StartAxis: 0
   m_CellSize: {x: 300, y: 100}
   m_Spacing: {x: 0, y: 50}
-  m_Constraint: 1
+  m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &474116829
 GameObject:
@@ -9951,7 +9951,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 400, y: 100}
@@ -11320,8 +11320,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23fee4df660549ac83041233a7150f4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Layout: {fileID: 472020478}
   GoodsContainer: {fileID: 472020476}
   GoodsButtonPrefab: {fileID: 849715082279248391, guid: 42fe85fb40b79424b9659ac9bc763424,
+    type: 3}
+  HasDescButtonPrefab: {fileID: 3957712567389997032, guid: ff6c3049b03cb97459cc8e664f5a4bcd,
     type: 3}
   CategoryUI: {fileID: 1604907720}
 --- !u!1 &1251194645
@@ -15648,9 +15651,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23fee4df660549ac83041233a7150f4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Layout: {fileID: 0}
   GoodsContainer: {fileID: 474116830}
   GoodsButtonPrefab: {fileID: 849715082279248391, guid: 42fe85fb40b79424b9659ac9bc763424,
     type: 3}
+  HasDescButtonPrefab: {fileID: 0}
   CategoryUI: {fileID: 0}
 --- !u!1 &1924142410
 GameObject:

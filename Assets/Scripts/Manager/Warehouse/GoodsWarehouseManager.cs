@@ -5,11 +5,13 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = System.Object;
+using Random = UnityEngine.Random;
 
 public struct GoodsData {
     public string Name;
     public string ShowName;
     public int GoodsCount;
+    public string Desc;
     public GoodsType Type;
 }
 
@@ -101,12 +103,12 @@ public class GoodsWarehouseManager : MonoBehaviour {
         return this.OwnedConsumedGoods.ContainsKey(goodsName) ? this.OwnedConsumedGoods[goodsName] : 0;
     }
 
-    private void AddConsumeGoods(string goodsName) {
+    private void AddConsumeGoods(string goodsName, int count) {
         if (!this.AllStoreGoodsMap.ContainsKey(goodsName)) return;
         if (!this.OwnedConsumedGoods.ContainsKey(goodsName)) {
-            this.OwnedConsumedGoods.Add(goodsName, 1);
+            this.OwnedConsumedGoods.Add(goodsName, count);
         } else {
-            this.OwnedConsumedGoods[goodsName] += 1;
+            this.OwnedConsumedGoods[goodsName] += count;
         }
     }
 
@@ -151,18 +153,18 @@ public class GoodsWarehouseManager : MonoBehaviour {
         return true;
     }
 
-    public bool AddGoods(StoreGoodsData data) {
+    public bool AddGoods(StoreGoodsData data, int count = 1) {
         switch (data.Type) {
             case GoodsType.角色:
                 return HeroWarehouseManager.Instance.AddHero(data.GoodsName);
             case GoodsType.普通词条:
             case GoodsType.特殊词条:
-                PassiveEntryWarehouseManager.Instance.AddPassiveEntry(data.GoodsName, 1);
+                PassiveEntryWarehouseManager.Instance.AddPassiveEntry(data.GoodsName, count);
                 break;
             case GoodsType.战术:
             case GoodsType.经验:
             case GoodsType.血瓶:
-                this.AddConsumeGoods(data.GoodsName);
+                this.AddConsumeGoods(data.GoodsName, count);
                 break;
         }
         return true;
@@ -176,17 +178,38 @@ public class GoodsWarehouseManager : MonoBehaviour {
         return this.ImageDataMap.GetValueOrDefault(type);
     }
 
+    public Dictionary<StoreGoodsData, int> GetRandomGoods(GoodsType type, int maxCount) {
+        Dictionary<StoreGoodsData, int> result = new Dictionary<StoreGoodsData, int>();
+        if (!IsConsumeGoods(type)) return result;
+        if (maxCount == 0) return result;
+
+        int rest = maxCount;
+        foreach (StoreGoodsData goods in this.AllGoodsData) {
+            if (goods.Type != type) continue;
+            int count = Mathf.Min(1, rest);
+            rest -= count;
+            result.Add(goods, count);
+            if (rest == 0) break;
+        }
+        return result;
+    }
+
     public List<GoodsData> GetGoodsByType(GoodsType type) {
         List<GoodsData> result = new();
         if (IsConsumeGoods(type)) {
             foreach (KeyValuePair<string, int> goodsPair in this.OwnedConsumedGoods) {
                 StoreGoodsData data = GetGoodsData(goodsPair.Key);
                 if (!data || data.Type != type) continue;
+                string desc = "";
+                if (data.Type == GoodsType.战术 && Enum.TryParse(data.GoodsName, true, out BattleTacticType bType)) {
+                    desc = BattleTacticFactory.GetBattleTacticDescription(bType);
+                }
                 result.Add(new GoodsData() {
                     Name = data.GoodsName,
                     ShowName = data.GoodsShowName,
                     GoodsCount = goodsPair.Value,
-                    Type = type
+                    Type = type,
+                    Desc = desc
                 });
             }
         }
@@ -198,7 +221,8 @@ public class GoodsWarehouseManager : MonoBehaviour {
                     Name = pair.Key.Data.Name,
                     ShowName = pair.Key.Data.Name,
                     GoodsCount = pair.Value,
-                    Type = (GoodsType)(int)pair.Key.Data.Rare
+                    Type = (GoodsType)(int)pair.Key.Data.Rare,
+                    Desc = pair.Key.Data.Description
                 });
             }
         }
