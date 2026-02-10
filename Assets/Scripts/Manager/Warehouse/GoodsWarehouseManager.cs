@@ -35,6 +35,9 @@ public class GoodsWarehouseManager : MonoBehaviour {
     private Dictionary<GoodsType, GoodsImageData> ImageDataMap = new();
     
     private CanvasGroup GoodsPanelCanvasGroup;
+    public bool IsOpen => this.GoodsPanelCanvasGroup.alpha >= 0.9f;
+
+    private Player CurrentPlayer;
     
     private void Awake() {
         if (Instance != null) {
@@ -61,6 +64,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
             } else {
                 this.IsInBattle = false;
             }
+            this.CurrentPlayer = FindObjectOfType<Player>();
         };
         this.GoodsPanelCanvasGroup = this.GetComponent<CanvasGroup>();
     }
@@ -72,8 +76,10 @@ public class GoodsWarehouseManager : MonoBehaviour {
         this.GoodsPanelCanvasGroup.blocksRaycasts = show;
 
         if (show) {
+            if(this.CurrentPlayer) this.CurrentPlayer.TransMove(false);
             this.GoodsPanel.Show();
         } else {
+            if(this.CurrentPlayer) this.CurrentPlayer.TransMove(true);
             this.GoodsPanel.Hide();
         }
     }
