@@ -199,7 +199,13 @@ public class SaveDataManager : MonoBehaviour {
             this.DupDungeonHealth.Clear();
             BattleManager.Instance.OnRewindBattle += () => {
                 foreach (var pair in this.DupDungeonHealth) {
-                    if (this.PlayerData.DungeonHeroHealth.ContainsKey(pair.Key)) {
+                    bool containsKey = this.PlayerData.DungeonHeroHealth.ContainsKey(pair.Key);
+                    if (pair.Value < 0.0f && containsKey) {
+                        this.PlayerData.DungeonHeroHealth.Remove(pair.Key);
+                        continue;
+                    }
+                    
+                    if (containsKey) {
                         this.PlayerData.DungeonHeroHealth[pair.Key] = pair.Value;
                     } else {
                         this.PlayerData.DungeonHeroHealth.Add(pair.Key, pair.Value);
@@ -269,7 +275,7 @@ public class SaveDataManager : MonoBehaviour {
 
     public void SetHeroHealth(string heroName, float health) {
         if (this.IsInBattle && !this.DupDungeonHealth.ContainsKey(heroName)) {
-            float hp = Mathf.Max(0.0f, GetHeroHealth(heroName));
+            float hp = GetHeroHealth(heroName);
             this.DupDungeonHealth.Add(heroName, hp);
         }
 

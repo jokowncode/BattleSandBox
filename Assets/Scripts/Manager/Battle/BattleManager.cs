@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
@@ -142,7 +143,13 @@ public class BattleManager : StateMachineController{
 
     public void RewindBattle() {
         if (!this.IsBattleStart) return;
+        StopAllCoroutines();
+        StartCoroutine(RewindBattleCoroutine());
+    }
+
+    private IEnumerator RewindBattleCoroutine() {
         this.AllHeroRecall();
+        yield return null;
         OnRewindBattle?.Invoke();
         GameManager.Instance.GoToBattle(this.Data, false);
     }
