@@ -87,7 +87,7 @@ public class StoreUI : MonoBehaviour {
             } else {
                 button = Instantiate(this.NormalStoreGoodsPrefab, NormalStoreGoodsContainer);    
             }
-            button.SetData(desc, data.GoodsName, data.Money, true, data.Type);
+            button.SetData(desc, data.GoodsShowName, data.Money, true, data.Type, data.GoodsName);
             if (data.Type == GoodsType.角色) {
                 Hero hero = HeroWarehouseManager.Instance.GetHeroByRef(data.GoodsName);
                 if (hero) {

@@ -8,6 +8,7 @@ using Object = System.Object;
 
 public struct GoodsData {
     public string Name;
+    public string ShowName;
     public int GoodsCount;
     public GoodsType Type;
 }
@@ -183,6 +184,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
                 if (!data || data.Type != type) continue;
                 result.Add(new GoodsData() {
                     Name = data.GoodsName,
+                    ShowName = data.GoodsShowName,
                     GoodsCount = goodsPair.Value,
                     Type = type
                 });
@@ -194,19 +196,9 @@ public class GoodsWarehouseManager : MonoBehaviour {
             foreach (var pair in entries) {
                 result.Add(new GoodsData() {
                     Name = pair.Key.Data.Name,
+                    ShowName = pair.Key.Data.Name,
                     GoodsCount = pair.Value,
                     Type = (GoodsType)(int)pair.Key.Data.Rare
-                });
-            }
-        }
-
-        if (type == GoodsType.角色) {
-            List<string> heroes = HeroWarehouseManager.Instance.GetOwnedHeroesRef();
-            foreach (string hName in heroes) {
-                result.Add(new GoodsData() {
-                    Name = hName,
-                    GoodsCount = 1,
-                    Type = type
                 });
             }
         }

@@ -9,9 +9,9 @@ public class BattleUIManager : MonoBehaviour {
 
     public static BattleUIManager Instance;
 
+    [SerializeField] private GameObject BattleHUD;
     [field: SerializeField] public Canvas UICanvas { get; private set; }
-    [SerializeField] private Image GameEndBannarImage;
-    [SerializeField] private GameObject GameEndObject;
+    [SerializeField] private BattleEndUI BattleEndPanel;
     [SerializeField] private Button RecallHeroButton;
 
     [field: SerializeField] public HeroWarehouseUI heroWarehouseUI { get; private set; }
@@ -51,10 +51,12 @@ public class BattleUIManager : MonoBehaviour {
         Skill2Image = skill2UI.GetComponent<Image>();
     }
 
-    public void GameEnd(Sprite bannarSprite) {
-        this.GameEndBannarImage.sprite = bannarSprite;
-        this.GameEndObject.SetActive(true);
+    public void GameEnd(bool victory) {
+        this.BattleEndPanel.Show(victory);
+        this.BattleHUD.SetActive(false);
+        BattleManager.Instance.AllHeroRecall();
         this.heroPortraitUI.DownAllPanel(false);
+        this.heroPortraitUI.gameObject.SetActive(false);
         UISelectionManager.Instance.UnSelectAll();
     }
 

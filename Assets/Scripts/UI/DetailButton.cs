@@ -16,7 +16,7 @@ public class DetailButton : MonoBehaviour {
 
     public Action<string, int> OnButtonClicked;
 
-    public string Name => this.NameText.text;
+    public string Name { get; private set; }
 
     public int GetCurrentCount() {
         if (!this.CountText) return 0;
@@ -25,8 +25,9 @@ public class DetailButton : MonoBehaviour {
     }
 
     private void Awake() {
+        if (!UseButton) return;
         this.UseButton.onClick.AddListener(() => {
-            OnButtonClicked?.Invoke(this.NameText.text, GetCurrentCount());
+            OnButtonClicked?.Invoke(this.Name, GetCurrentCount());
         });
     }
 
@@ -49,18 +50,19 @@ public class DetailButton : MonoBehaviour {
         this.CountText.text = newCount.ToString("D3");
     }
 
-    public void SetData(string desc, string showName, int count, bool canUse, GoodsType type) {
+    public void SetData(string desc, string showName, int count, bool canUse, GoodsType type, string actualName = null) {
+        this.Name = string.IsNullOrEmpty(actualName) ? showName : actualName;
         if (this.DescText) this.DescText.text = desc;
         if (this.CountText) this.CountText.text = count.ToString("D3");
         this.NameText.text = showName;
         
         GoodsImageData data = GoodsWarehouseManager.Instance.GetImageData(type);         
         this.SetIcon(data ? data.IconSprite : null, data ? data.BorderSprite : null);
-        this.UseButton.enabled = canUse && count != 0;
+        if(this.UseButton) this.UseButton.enabled = canUse && count != 0;
     }
 
     public void TransitionButtonInteractable(bool enable) {
-        this.UseButton.interactable = enable;
+        if(this.UseButton) this.UseButton.interactable = enable;
     }
 }
 

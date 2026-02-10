@@ -332,7 +332,6 @@ public class DialogManager : MonoBehaviour {
         if (data.ClueNames != null && data.ClueNames.Length > 0) {
             foreach (string clueName in data.ClueNames) {
                 if (string.IsNullOrWhiteSpace(clueName)) continue;
-                if(ClueWarehouseManager.Instance) ClueWarehouseManager.Instance.AddClue(clueName);
                 this.TipContainer.AddTip($"获得线索：{clueName}");
             }
         }

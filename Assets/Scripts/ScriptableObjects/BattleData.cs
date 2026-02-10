@@ -12,5 +12,17 @@ public class BattleData : ScriptableObject {
     public Sprite BattleBannarBackground;
     public string BattleText;
     public AudioClip BattleBGM;
+    public float BondMultiplier = 1.0f;
     public List<EnemyDepartmentData> EnemiesInBattle;
+
+    [Header("Victory Get")] 
+    public int Money = 50;
+    public List<StoreGoodsData> FixedGetGoods;
+    public bool RandomBloodBottle = true;
+    public int MaxBloodBottleAmount = 2;
+    public bool RandomEXP = true;
+    public int MaxEXPAmount = 2;
+    public bool RandomPassiveEntry = true;
+    public int PassiveEntryAmount = 2;
+    public int MaxPassiveEntryStar = 2;
 }

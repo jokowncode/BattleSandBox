@@ -9,6 +9,7 @@ public class HeroAudioDialog : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI OtherLanguageText;
 
     public void Show(HeroAudioData data) {
+        if (data == null) return;
         this.AudioContentText.text = data.AudioContent;
         this.OtherLanguageText.text = data.OtherLanguageContent;
         AudioManager.Instance.SetDialog(data.Audio);

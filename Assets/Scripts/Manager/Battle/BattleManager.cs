@@ -13,6 +13,8 @@ public class BattleManager : StateMachineController{
 
     public static BattleManager Instance;
 
+    [SerializeField] private float BaseBondValue = 20.0f;
+    
     [field: SerializeField] public Transform EnemyParent { get; private set; }
     [SerializeField] private Transform HeroParent;
     [SerializeField] private Transform PassiveEntryParent;
@@ -23,9 +25,7 @@ public class BattleManager : StateMachineController{
     
     [SerializeField] private TextMeshProUGUI BattleNameText;
     [SerializeField] private TextMeshProUGUI BattleMessageText;
-
-    [field: SerializeField] public Button ReturnButton{ get; private set; }
-
+    
     [Header("Deploy Place Settings")] 
     [SerializeField] private HeroDeployAreaData[] HeroDeployPlaceArea;
     private int[] DeployAreaCurrentHeroCount;
@@ -50,7 +50,6 @@ public class BattleManager : StateMachineController{
     private InBattleState InBattle;
 
     public bool IsBattleStart { get; private set; }
-    public AudioClip DefeatHeroAudio { get; private set; }
 
 #if TEST_BATTLE
     [field: SerializeField] public BattleData Data { get; private set; }
@@ -60,6 +59,8 @@ public class BattleManager : StateMachineController{
 
     public Action OnEnemyBeClear;
     public Action OnRewindBattle;
+
+    public List<Hero> BeforeBattleHeroes { get; private set; } = new();
 
 #if DEBUG_MODE
     public float BattleStartTime {get; private set;}
@@ -142,6 +143,7 @@ public class BattleManager : StateMachineController{
 
     public void RewindBattle() {
         if (!this.IsBattleStart) return;
+        this.enabled = false;
         StopAllCoroutines();
         StartCoroutine(RewindBattleCoroutine());
     }
@@ -192,11 +194,9 @@ public class BattleManager : StateMachineController{
         foreach (HeroDeployAreaData area in this.HeroDeployPlaceArea) {
             area.DeployArea.gameObject.SetActive(false);    
         }
-
-        int randomIndex = Random.Range(0, this.HeroesInBattle.Count);
-        HeroAudioData data = this.HeroesInBattle[randomIndex].WarehouseData.GetHeroAudio(HeroAudioType.失败);
-        if (data != null) {
-            this.DefeatHeroAudio = data.Audio;
+        
+        foreach (Hero hero in this.HeroesInBattle) {
+            this.BeforeBattleHeroes.Add(hero);
         }
 
 #if DEBUG_MODE
@@ -278,6 +278,30 @@ public class BattleManager : StateMachineController{
                 this.AddPassiveEntry(data);
             }
         }
+    }
+
+    public void BattleVictoryAddHeroBond() {
+        for (int i = 0; i < this.BeforeBattleHeroes.Count; i++) {
+            for (int j = i + 1; j < this.BeforeBattleHeroes.Count; j++) {
+                EntanglementManager.Instance.AddEntanglementValue(this.BeforeBattleHeroes[i].Name,
+                    this.BeforeBattleHeroes[j].Name, this.BaseBondValue * this.Data.BondMultiplier);
+            }
+        }
+    }
+
+    public List<StoreGoodsData> GetVictoryGetGoods() {
+        List<StoreGoodsData> goods = new List<StoreGoodsData>();
+        if (this.Data.FixedGetGoods is { Count: > 0 }) {
+            foreach (StoreGoodsData data in this.Data.FixedGetGoods) {
+                if(GoodsWarehouseManager.Instance.AddGoods(data)) goods.Add(data);
+            }    
+        }
+        
+        if (this.Data.RandomBloodBottle) {
+            
+        }
+
+        return goods;
     }
 
     public void AllHeroRecall() {

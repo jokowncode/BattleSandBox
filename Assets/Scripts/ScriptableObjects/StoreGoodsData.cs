@@ -15,6 +15,7 @@ public enum GoodsType {
 [CreateAssetMenu(menuName = "DeckBreakers/StoreGoods", fileName = "StoreGoodsData")]
 public class StoreGoodsData : ScriptableObject {
     public string GoodsName;
+    public string GoodsShowName;
     public GoodsType Type;
     public float Value;
     public int Money;

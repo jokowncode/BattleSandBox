@@ -41,7 +41,7 @@ public class GoodsWarehousePanel : MonoBehaviour {
             List<GoodsData> goods = GoodsWarehouseManager.Instance.GetGoodsByType(type);
             foreach (GoodsData data in goods) {
                 DetailButton button = Instantiate(GoodsButtonPrefab, GoodsContainer);
-                button.SetData("", data.Name, data.GoodsCount, canUse, data.Type);
+                button.SetData("", data.ShowName, data.GoodsCount, canUse, data.Type, data.Name);
                 button.OnButtonClicked += OnButtonClicked;
             }
         }
