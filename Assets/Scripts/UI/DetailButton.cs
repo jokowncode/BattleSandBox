@@ -58,6 +58,10 @@ public class DetailButton : MonoBehaviour {
         this.SetIcon(data ? data.IconSprite : null, data ? data.BorderSprite : null);
         this.UseButton.enabled = canUse && count != 0;
     }
+
+    public void TransitionButtonInteractable(bool enable) {
+        this.UseButton.interactable = enable;
+    }
 }
 
 

@@ -55,13 +55,6 @@ public class ClueWarehouseManager : MonoBehaviour {
     private void Start() {
         SaveDataManager.Instance.OnLoadData += () => {
             this.OwnedClues = SaveDataManager.Instance.PlayerData.OwnedClues;
-            
-            // TODO: TEMP
-            if (this.OwnedClues.Count == 0) {
-                foreach (ClueData clue in this.AllClueData) {
-                    AddClue(clue.ClueName);
-                }
-            }
         };
     }
 

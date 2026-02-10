@@ -5,12 +5,6 @@ using UnityEngine;
 
 public class HeroWarehouseListUI : MonoBehaviour {
     
-    [Header("Sprite")] 
-    [SerializeField] private Sprite WarriorBorderSprite;
-    [SerializeField] private Sprite MageBorderSprite;
-    [SerializeField] private Sprite PriestBorderSprite;
-    [SerializeField] private Sprite EmptyBorderSprite;
-
     [Header("Hero List")] 
     [SerializeField] private bool ClickFirst = true;
     [SerializeField] private Transform HeroListContainer;
@@ -53,17 +47,13 @@ public class HeroWarehouseListUI : MonoBehaviour {
             Transform child = this.HeroListContainer.GetChild(i);
             if (child.TryGetComponent(out HeroListSingle single)) {
                 if (i < ownedHeroList.Count) {
-                    Sprite borderSprite = ownedHeroList[i].Type switch {
-                        FighterType.Mage => MageBorderSprite,
-                        FighterType.Warrior => WarriorBorderSprite,
-                        _ => PriestBorderSprite
-                    };
+                    Sprite borderSprite = HeroWarehouseManager.Instance.GetHeroBorderSprite(ownedHeroList[i].Type);
                     single.SetContent(ownedHeroList[i], borderSprite, ownedHeroList[i].WarehouseData.AvatarSprite);
                     if (isFirst && i == 0 && this.ClickFirst) {
                         single.ClickButton();
                     }
                 } else {
-                    single.SetContent(null, this.EmptyBorderSprite, null);
+                    single.SetContent(null, HeroWarehouseManager.Instance.EmptyBorderSprite, null);
                 }
             }
         }

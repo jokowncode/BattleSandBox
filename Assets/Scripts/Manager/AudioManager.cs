@@ -12,6 +12,9 @@ public class AudioManager : MonoBehaviour{
     [SerializeField] private AudioSource FootstepAudioSource;
     [SerializeField] private AudioSource DialogAudioSource;
     [SerializeField] private AudioClip[] FootstepAudios;
+    
+    [Header("Tip Sfx")]
+    [SerializeField] private AudioClip ErrorSfx;
 
     private Coroutine CurrentDialogCoroutine;
     public bool DialogIsFinished { get; private set; } = false;
@@ -32,6 +35,10 @@ public class AudioManager : MonoBehaviour{
         this.MainMusicAudioSource.volume = volume;
         this.MainMusicAudioSource.mute = false;
         this.MainMusicAudioSource.Play();
+    }
+
+    public void PlayErrorSfx() {
+        if(this.ErrorSfx) this.PlaySfxAtPoint(this.transform.position, this.ErrorSfx);
     }
 
     public void FadeMainMusic(AudioClip newClip, float duration = 1.0f, float newVolume = 1.0f) {

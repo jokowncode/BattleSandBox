@@ -18,7 +18,6 @@ public class BattleManager : StateMachineController{
     [SerializeField] private Transform PassiveEntryParent;
     [SerializeField] private Transform HeroWarehouseParent;
 
-    [SerializeField] private AudioClip ErrorSfx;
     [SerializeField] private AudioClip EquipPassiveEntrySfx;
     [SerializeField] private AudioClip UndressPassiveEntrySfx;
     
@@ -154,10 +153,6 @@ public class BattleManager : StateMachineController{
         GameManager.Instance.GoToBattle(this.Data, false);
     }
 
-    public void PlayErrorSfx(){
-        if(ErrorSfx) AudioManager.Instance.PlaySfxAtPoint(this.transform.position, ErrorSfx);
-    }
-
     private void DeployEnemy(){
         if (!this.Data) return;
         List<EnemyDepartmentData> departmentAreaData = this.Data.EnemiesInBattle;
@@ -189,7 +184,7 @@ public class BattleManager : StateMachineController{
 
     public void StartBattle(){
         if (this.HeroesInBattle.Count <= 0){
-            PlayErrorSfx();
+            AudioManager.Instance.PlayErrorSfx();
             return;
         }
 

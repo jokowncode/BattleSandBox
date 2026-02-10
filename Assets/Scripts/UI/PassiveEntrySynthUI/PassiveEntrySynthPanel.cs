@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PassiveEntrySynthPanel : MonoBehaviour {
 
-    [SerializeField] private AudioClip ErrorSfx;
     [SerializeField] private DetailButton WaitSynthButton;
     [SerializeField] private DetailButton AfterSynthButton;
 
@@ -18,7 +17,7 @@ public class PassiveEntrySynthPanel : MonoBehaviour {
 
     private void OnWaitSynthButtonClicked(string pName, int pCount) {
         if (!this.CurrentPassiveEntry) {
-            PlayErrorSfx();
+            AudioManager.Instance.PlayErrorSfx();
             return;
         }
 
@@ -32,20 +31,14 @@ public class PassiveEntrySynthPanel : MonoBehaviour {
         this.AfterSynthButton.SetData("", "", 0, false, GoodsType.None);
     }
 
-    private void PlayErrorSfx() {
-        if (this.ErrorSfx) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.ErrorSfx);
-        }
-    }
-
     public void Synth() {
         if (!this.CurrentPassiveEntry) {
-            PlayErrorSfx();
+            AudioManager.Instance.PlayErrorSfx();
             return;
         }
 
         if (!PassiveEntryWarehouseManager.Instance.UpgradePassiveEntry(this.CurrentPassiveEntry.Data.Name)) {
-            PlayErrorSfx();
+            AudioManager.Instance.PlayErrorSfx();
             return;
         }
         this.GoBackToNormal();
@@ -53,13 +46,13 @@ public class PassiveEntrySynthPanel : MonoBehaviour {
 
     public bool ChoosePassiveEntry(string pName, int pCount) {
         if (this.CurrentPassiveEntry) {
-            PlayErrorSfx();
+            AudioManager.Instance.PlayErrorSfx();
             return false;
         }
 
         PassiveEntry passiveEntry = PassiveEntryWarehouseManager.Instance.GetPassiveEntryByName(pName);
         if (!passiveEntry || !passiveEntry.UpgradePassiveEntry) {
-            PlayErrorSfx();
+            AudioManager.Instance.PlayErrorSfx();
             return false;
         }
         this.CurrentPassiveEntry = passiveEntry;

@@ -69,17 +69,6 @@ public class EntanglementManager : MonoBehaviour {
             count = count * (count - 1) / 2;
             for (int i = 0; i < count; i++) { this.HeroEntanglementValues.Add(0); }
         }
-        
-        // TODO: TEMP
-        int index1 = HeroWarehouseManager.Instance.GetHeroIndex("Elara");
-        int index2 = HeroWarehouseManager.Instance.GetHeroIndex("Bullock");
-        int index3 = HeroWarehouseManager.Instance.GetHeroIndex("Dr.Entro");
-        int index = GetHeroEntanglementIndex(index1, index2);
-        int indexo = GetHeroEntanglementIndex(index2, index3);
-        if (this.HeroEntanglementValues == null || this.HeroEntanglementValues[index] == 0.0f) {
-            this.HeroEntanglementValues[index] = 35.0f;
-            this.HeroEntanglementValues[indexo] = 25.0f;
-        }
     }
 
     private void Start() {

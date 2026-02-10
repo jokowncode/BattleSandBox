@@ -16,6 +16,12 @@ public class HeroWarehouseManager : MonoBehaviour {
     [SerializeField] private List<Hero> AllHeroes;
     [SerializeField] private ModeHeroWarehouseUI ModeHeroWarehousePanel;
     
+    [Header("Hero Border Sprite")] 
+    [SerializeField] private Sprite WarriorBorderSprite;
+    [SerializeField] private Sprite MageBorderSprite;
+    [SerializeField] private Sprite PriestBorderSprite;
+    [field: SerializeField] public Sprite EmptyBorderSprite { get; private set; }
+
     private List<string> OwnedHeroes = new List<string>();
     
     private Dictionary<string, Hero> AllHeroMap = new Dictionary<string, Hero>();
@@ -58,6 +64,15 @@ public class HeroWarehouseManager : MonoBehaviour {
         return this.HeroIndexMap.GetValueOrDefault(heroName, -1);
     }
 
+    public Sprite GetHeroBorderSprite(FighterType Type) {
+        return Type switch {
+            FighterType.Warrior => this.WarriorBorderSprite,
+            FighterType.Mage => this.MageBorderSprite,
+            FighterType.Priest => this.PriestBorderSprite,
+            _ => this.EmptyBorderSprite
+        };
+    }
+    
     private void Start() {
         SaveDataManager.Instance.OnLoadData += () => {
             this.OwnedHeroes = SaveDataManager.Instance.PlayerData.OwnedHeroes;
