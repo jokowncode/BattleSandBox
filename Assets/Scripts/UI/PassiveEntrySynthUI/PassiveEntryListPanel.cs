@@ -34,6 +34,7 @@ public class PassiveEntryListPanel : MonoBehaviour {
     private void OnButtonClicked(string passiveEntryName, int count) {
         int requiredCount = PassiveEntryWarehouseManager.Instance.SynthPassiveEntryRequiredCount;
         if (count < requiredCount) {
+            SceneChangeManager.Instance.AddGameTip("低级材料不足");
             AudioManager.Instance.PlayErrorSfx();
             return;
         }

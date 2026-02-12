@@ -1,9 +1,10 @@
 ﻿
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BattleEndUI : MonoBehaviour {
+public class BattleEndUI : MonoBehaviour, IPointerClickHandler {
 
     [SerializeField] private TextMeshProUGUI LevelTitleText;
     [SerializeField] private TextMeshProUGUI BattleResultText;
@@ -17,13 +18,13 @@ public class BattleEndUI : MonoBehaviour {
     [Header("Panel")]
     [SerializeField] private BattleEndLeftPanel LeftPanel;
     [SerializeField] private BattleEndRightPanel RightPanel;
+
+    private bool CurrentIsVictory;
     
     public void Show(bool victory) {
         this.gameObject.SetActive(true);
-        this.ExitButton.onClick.AddListener(() => {
-            AudioManager.Instance.StopDialog();
-            GameManager.Instance.GoToMap(true, victory);
-        });
+        this.CurrentIsVictory = victory;
+        this.ExitButton.onClick.AddListener(this.ExitBattle);
         this.BattleResultText.text = victory ? "战斗胜利" : "战斗失败";
         this.BattleResultEnglishText.text = victory ? "Victory" : "Defeat";
         this.BattleResultText.color = victory ? VictoryColor : DefeatColor;
@@ -38,6 +39,14 @@ public class BattleEndUI : MonoBehaviour {
         HeroWarehouseManager.Instance.TransitionHeroWarehouseCanvas(true);
     }
 
+    public void OnPointerClick(PointerEventData eventData) {
+        this.ExitBattle();
+    }
+
+    private void ExitBattle() {
+        AudioManager.Instance.StopDialog();
+        GameManager.Instance.GoToMap(true, this.CurrentIsVictory);
+    }
 }
 
 

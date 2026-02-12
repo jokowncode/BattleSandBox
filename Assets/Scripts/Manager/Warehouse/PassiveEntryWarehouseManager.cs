@@ -9,6 +9,9 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
     [field: SerializeField] public int SynthPassiveEntryRequiredCount { get; private set; } = 3;
     [SerializeField] private List<PassiveEntry> AllPassiveEntries;
     
+    [Header("Synth")]
+    [SerializeField] private PassiveEntrySynthParentPanel SynthPanel;
+    
     // private List<string> OwnedPassiveEntries = new List<string>();
     
     private SerializableDictionary<string, int> OwnedPassiveEntries;
@@ -85,6 +88,10 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
             result[key] += count;
         }
         return result;
+    }
+
+    public void OpenPassiveEntrySynthPanel() {
+        this.SynthPanel.TransitionShow(true);
     }
 
     public void AddPassiveEntry(string passiveEntry, int count) {

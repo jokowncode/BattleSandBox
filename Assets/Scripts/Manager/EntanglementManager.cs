@@ -141,13 +141,16 @@ public class EntanglementManager : MonoBehaviour {
         return maxCanCastBattleTactic;
     }
 
-    public bool AddEntanglementValue(string hero1, string hero2, float value) {
+    public bool AddEntanglementValue(string hero1, string hero2, float value, bool showErrorTip = false) {
         int index1 = HeroWarehouseManager.Instance.GetHeroIndex(hero1);
         if (index1 < 0) return false;
         int index2 = HeroWarehouseManager.Instance.GetHeroIndex(hero2);
         if (index2 < 0) return false;
         int index = GetHeroEntanglementIndex(index1, index2);
-        if (GetCurrentLevel(this.HeroEntanglementValues[index]) >= this.MaxLevel) return false;
+        if (GetCurrentLevel(this.HeroEntanglementValues[index]) >= this.MaxLevel) {
+            if(showErrorTip) SceneChangeManager.Instance.AddGameTip("当前羁绊已满");
+            return false;
+        }
         this.HeroEntanglementValues[index] += value;
         return true;
     }

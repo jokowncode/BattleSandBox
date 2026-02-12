@@ -287,10 +287,17 @@ public class SaveDataManager : MonoBehaviour {
     }
 
     public bool RecoverHeroHealth(string heroName, float value, bool revive = false) {
-        if (!this.PlayerData.DungeonHeroHealth.ContainsKey(heroName)) return false;
-        if (this.PlayerData.DungeonHeroHealth[heroName] == 0.0f && !revive) return false;
+        if (!this.PlayerData.DungeonHeroHealth.ContainsKey(heroName)) {
+            SceneChangeManager.Instance.AddGameTip("该角色满血");
+            return false;
+        }
+        if (this.PlayerData.DungeonHeroHealth[heroName] == 0.0f && !revive) {
+            SceneChangeManager.Instance.AddGameTip("不可复活角色");
+            return false;
+        }
         Hero hero = HeroWarehouseManager.Instance.GetHeroByRef(heroName);
         if (hero.InitialHealth <= this.PlayerData.DungeonHeroHealth[heroName]) {
+            SceneChangeManager.Instance.AddGameTip("该角色满血");
             return false;
         }
         this.PlayerData.DungeonHeroHealth[heroName] += value;

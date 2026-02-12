@@ -127,7 +127,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
         switch (goodsData.Type) {
             case GoodsType.经验:
                 if (args.Length < 2) return false;
-                result = EntanglementManager.Instance.AddEntanglementValue(args[0].ToString(), args[1].ToString(), goodsData.Value);
+                result = EntanglementManager.Instance.AddEntanglementValue(args[0].ToString(), args[1].ToString(), goodsData.Value, true);
                 break;
             case GoodsType.血瓶:
                 if (args.Length < 1) return false;

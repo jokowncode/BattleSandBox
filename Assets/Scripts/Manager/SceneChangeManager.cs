@@ -14,6 +14,7 @@ public class SceneChangeManager : MonoBehaviour{
     [Header("UI")] 
     [SerializeField] private CanvasGroup BlackCanvasGroup;
     [SerializeField] private LoadingUI Loading;
+    [SerializeField] private GameTipContainer GameTip;
     
     [Header("Black Screen")] 
     [SerializeField] private float Duration = 1.0f;
@@ -40,6 +41,10 @@ public class SceneChangeManager : MonoBehaviour{
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    public void AddGameTip(string tipText) {
+        this.GameTip.AddTip(tipText);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {

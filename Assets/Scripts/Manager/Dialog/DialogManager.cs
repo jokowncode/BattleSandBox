@@ -25,7 +25,7 @@ public class DialogManager : MonoBehaviour {
     [SerializeField] private StoryReviewUI StoryReview;
 
     [SerializeField] private Button SkipButton;
-    [SerializeField] private DialogTipContainer TipContainer;
+    // [SerializeField] private GameTipContainer TipContainer;
     
 	[Header("AutoPlay")]
 	[SerializeField] private Sprite AutoPlaySprite;
@@ -167,7 +167,7 @@ public class DialogManager : MonoBehaviour {
         
         this.CurrentDialogNode = dialogNode;
         this.StoryReview.Reset();
-        this.TipContainer.StartTip();
+        // this.TipContainer.StartTip();
         SetDialog();
         StartCoroutine(Transition(true, false));
         
@@ -222,7 +222,7 @@ public class DialogManager : MonoBehaviour {
         }
         
         this.UnloadSlot();
-        this.TipContainer.EndTip();
+        // this.TipContainer.EndTip();
 
         if (this.CurrentDialogNode.AfterDialogInvokeAction != "GameOver") {
             this.OnDialogEnded?.Invoke();
@@ -325,14 +325,16 @@ public class DialogManager : MonoBehaviour {
 
         if (data.DialogTipTexts != null && data.DialogTipTexts.Length > 0) {
             foreach (string tip in data.DialogTipTexts) {
-                this.TipContainer.AddTip(tip);
+                // this.TipContainer.AddTip(tip);
+                SceneChangeManager.Instance.AddGameTip(tip);
             }
         }
 
         if (data.ClueNames != null && data.ClueNames.Length > 0) {
             foreach (string clueName in data.ClueNames) {
                 if (string.IsNullOrWhiteSpace(clueName)) continue;
-                this.TipContainer.AddTip($"获得线索：{clueName}");
+                // this.TipContainer.AddTip($"获得线索：{clueName}");
+                SceneChangeManager.Instance.AddGameTip($"获得线索：{clueName}");
             }
         }
 

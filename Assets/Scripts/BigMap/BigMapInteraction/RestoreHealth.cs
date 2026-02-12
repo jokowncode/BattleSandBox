@@ -25,10 +25,15 @@ public class RestoreHealth : InteractionObject {
             if(!CanReviveHero && currentHealth == 0.0f) continue;
             Hero hero = HeroWarehouseManager.Instance.GetHeroByRef(heroName);
             if (hero) {
+                if (currentHealth >= hero.InitialHealth) continue;
+                string revive = currentHealth == 0.0f ? "已复活" : "回血后";
                 currentHealth += hero.InitialHealth * this.RestoreHealthPercentage;
+                currentHealth = Mathf.Min(currentHealth, hero.InitialHealth);
                 SaveDataManager.Instance.SetHeroHealth(heroName, currentHealth);
+                SceneChangeManager.Instance.AddGameTip($"{hero.WarehouseData.HeroChineseName}{revive}：{currentHealth}");
             }
         }
+        SceneChangeManager.Instance.AddGameTip($"全员回血{this.RestoreHealthPercentage * 100}%");
     }
 }
 
