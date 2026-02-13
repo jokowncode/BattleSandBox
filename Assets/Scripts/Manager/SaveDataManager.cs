@@ -50,7 +50,8 @@ public class SaveDataManager : MonoBehaviour {
 
     private bool IsInBattle = false;
     
-    public bool HasSaveData => AutoSaveDataPaths.Count != 0 || MutualSaveDataPathMap.Count != 0;
+    public bool HasAutoSaveData => AutoSaveDataPaths.Count != 0;
+    public bool HasSaveData => HasAutoSaveData || MutualSaveDataPathMap.Count != 0;
 
     private void Awake() {
         if (Instance != null) {
@@ -229,7 +230,7 @@ public class SaveDataManager : MonoBehaviour {
     }
 
     private void ClearDungeonData(SceneType dungeon) {
-        this.PlayerData.DungeonHeroHealth.Clear();
+        this.RecoverAllHeroHealth();
         this.RemovePlayerPos(dungeon);
     }
 

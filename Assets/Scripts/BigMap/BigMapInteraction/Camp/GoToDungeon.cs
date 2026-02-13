@@ -12,7 +12,7 @@ public class GoToDungeon : InteractionObject {
     }
 
     protected override InteractionObjType GetInteractionObjType() {
-        return InteractionObjType.副本;
+        return InteractionObjType.出发;
     }
 
     protected override void Interaction() {

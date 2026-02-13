@@ -472,6 +472,82 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 947625014}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &399716604
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 399716605}
+  - component: {fileID: 399716607}
+  - component: {fileID: 399716606}
+  m_Layer: 0
+  m_Name: MoveInstruction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &399716605
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 399716604}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: 9.19}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2246688798301039097}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &399716606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 399716604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab6e184bf2c348f29ed8ad99ba189130, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InteractionObjShowName: 
+  OwnedTaskName: Level1
+  <IsBindTask>k__BackingField: 0
+  IsActiveWhenAwake: 1
+  Dialogs: {fileID: 11400000, guid: 95dfd4f7c8cabc54fa5b893f50e58398, type: 2}
+  CanRepeat: 0
+  IsForce: 1
+  IsFullScreen: 0
+  IsDisappearAfterDialog: 0
+  IsShowIfNotActive: 1
+--- !u!65 &399716607
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 399716604}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.6846623, y: 1, z: 7.3726616}
+  m_Center: {x: -0.6151047, y: 0, z: -0.31268775}
 --- !u!1 &527489015
 GameObject:
   m_ObjectHideFlags: 0
@@ -905,6 +981,7 @@ MonoBehaviour:
   IsActiveWhenAwake: 1
   Data: {fileID: 11400000, guid: 3aea3e16b04e7f54783f04ea09139a50, type: 2}
   Enemies: {fileID: 394394042}
+  IsEnemyMove: 1
   IsDefeatGameOver: 0
   IsForce: 0
   IsDisappearAfterBattle: 0
@@ -1617,6 +1694,7 @@ MonoBehaviour:
   IsActiveWhenAwake: 0
   Data: {fileID: 11400000, guid: ed8855a40e6dd9e4fa37ce573d995b0e, type: 2}
   Enemies: {fileID: 283530914}
+  IsEnemyMove: 0
   IsDefeatGameOver: 1
   IsForce: 0
   IsDisappearAfterBattle: 1
@@ -1781,9 +1859,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4324021956722897633, guid: 50167f71640822640b10af6d52fe0e28,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 399716605}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50167f71640822640b10af6d52fe0e28, type: 3}
+--- !u!4 &2246688798301039097 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4324021956722897633, guid: 50167f71640822640b10af6d52fe0e28,
+    type: 3}
+  m_PrefabInstance: {fileID: 2246688798301039096}
+  m_PrefabAsset: {fileID: 0}
 --- !u!212 &3754021066939076492
 SpriteRenderer:
   m_ObjectHideFlags: 0

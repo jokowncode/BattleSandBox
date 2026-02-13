@@ -52,7 +52,7 @@ public class PassiveEntrySynthPanel : MonoBehaviour {
 
         PassiveEntry passiveEntry = PassiveEntryWarehouseManager.Instance.GetPassiveEntryByName(pName);
         if (!passiveEntry || !passiveEntry.UpgradePassiveEntry) {
-            SceneChangeManager.Instance.AddGameTip("当前词条已是满级");
+            SceneChangeManager.Instance.AddGameTip("当前词条已满级");
             AudioManager.Instance.PlayErrorSfx();
             return false;
         }

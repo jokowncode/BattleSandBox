@@ -18,6 +18,12 @@ public class RestoreHealth : InteractionObject {
     }
 
     protected override void Interaction() {
+        if (this.RestoreHealthPercentage >= 1.0f && this.CanReviveHero) {
+            SceneChangeManager.Instance.AddGameTip($"全员回满血");
+            SaveDataManager.Instance.RecoverAllHeroHealth();
+            return;
+        }
+
         List<string> heroes = HeroWarehouseManager.Instance.GetOwnedHeroesRef();
         foreach (string heroName in heroes) {
             float currentHealth = SaveDataManager.Instance.GetHeroHealth(heroName);

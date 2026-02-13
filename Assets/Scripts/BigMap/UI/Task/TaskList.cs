@@ -9,38 +9,46 @@ public class TaskList : MonoBehaviour {
     [SerializeField] private Transform TaskContainer;
     [SerializeField] private Transform MapTaskDirContainer;
 
-    private TaskUI CurrentInstructTask;
+    private List<GameObject> TaskDirList = new();
+    private TaskUI CurrentTaskDirUI;
+    private Vector2 LastDir = Vector2.zero;
     
-    private void LateUpdate() {
-        if (this.TaskContainer.childCount == 0) return;
-        if (!this.CurrentInstructTask) return;
+    private void Awake() {
+        foreach (Transform child in this.MapTaskDirContainer) {
+            this.TaskDirList.Add(child.gameObject);
+        }
+    }
 
+    private void LateUpdate() {
+        if (!this.CurrentTaskDirUI) return;
+        Vector2 dir = this.CurrentTaskDirUI.GetTaskRotation();
+        if (this.LastDir == dir) return; 
         foreach (Transform child in MapTaskDirContainer) {
             child.gameObject.SetActive(false);
         }
         
-        Vector2 dir = this.CurrentInstructTask.GetTaskRotation();
         if (dir.y > 0.0f) {
-            this.MapTaskDirContainer.GetChild(0).gameObject.SetActive(true);
+            this.TaskDirList[0].SetActive(true);
         }else if (dir.y < 0.0f) {
-            this.MapTaskDirContainer.GetChild(1).gameObject.SetActive(true);
+            this.TaskDirList[1].SetActive(true);
         }else if (dir.x > 0.0f) {
-            this.MapTaskDirContainer.GetChild(3).gameObject.SetActive(true);
+            this.TaskDirList[3].SetActive(true);
         }else if (dir.x < 0.0f) {
-            this.MapTaskDirContainer.GetChild(2).gameObject.SetActive(true);
+            this.TaskDirList[2].SetActive(true);
         }
+        this.LastDir = dir;
     }
 
-    private TaskUI GetCurrentFirstTask() {
+    private void UpdateTaskDir() {
         // TODO: DEFAULT Get First Has Dir Task -> Get Player Set Instruct Task
         foreach (Transform child in TaskContainer) {
             if (child.TryGetComponent(out TaskUI taskUI)) {
                 if (taskUI.HasTaskPos) {
-                    return taskUI;
+                    this.CurrentTaskDirUI = taskUI;
+                    return;
                 }
             }
         }
-        return null;
     }
 
     public void UpdateTaskUI() {
@@ -61,7 +69,7 @@ public class TaskList : MonoBehaviour {
             }
             index += 1;
         }
-        this.CurrentInstructTask = GetCurrentFirstTask();
+        UpdateTaskDir();
     }
 
     public void UpdateTask(string taskName, string desc, Transform position) {
@@ -71,14 +79,14 @@ public class TaskList : MonoBehaviour {
                 break;
             }
         }
-        this.CurrentInstructTask = GetCurrentFirstTask();
+        UpdateTaskDir();
     }
 
     public void AddTask(string taskName, Vector3 position) {
         TaskUI taskUI = Instantiate(this.TaskUIPrefab, this.TaskContainer);
         TaskData data = TaskManager.Instance.GetTask(taskName);
         taskUI.SetTask(data.TaskDescs[0], taskName, position);
-        this.CurrentInstructTask = GetCurrentFirstTask();
+        UpdateTaskDir();
     }
 
     public void RemoveTask(string taskName) {
@@ -88,7 +96,7 @@ public class TaskList : MonoBehaviour {
                 break;
             }
         }
-        this.CurrentInstructTask = GetCurrentFirstTask();
+        UpdateTaskDir();
     }
 }
 

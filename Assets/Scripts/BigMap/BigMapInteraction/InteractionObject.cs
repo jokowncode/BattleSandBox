@@ -12,7 +12,7 @@ public abstract class InteractionObject : MonoBehaviour {
         存档,
         营地,
         回血,
-        副本,
+        出发,
         电梯,
         MiniMap,
         角色仓库,

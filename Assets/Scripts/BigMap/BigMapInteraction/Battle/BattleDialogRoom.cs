@@ -40,6 +40,8 @@ public class BattleDialogRoom : BattleRoom {
             } else {
                 base.PlayerEnter();
             }
+        } else {
+            base.PlayerEnter();
         }
     }
 

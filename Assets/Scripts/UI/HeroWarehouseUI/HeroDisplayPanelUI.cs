@@ -24,6 +24,7 @@ public class HeroDisplayPanelUI : HeroWarehousePanelWithGoods {
     [SerializeField] private TextMeshProUGUI HeroChineseNameText;
     [SerializeField] private HeroAudioDialog AudioDialog;
     [SerializeField] private Image BloodProgressBar;
+    [SerializeField] private TextMeshProUGUI BloodProgressText;
     
     [Header("角色展示子面板")]
     [SerializeField] private HeroDisplayBattlePanel BattlePanel;
@@ -73,6 +74,7 @@ public class HeroDisplayPanelUI : HeroWarehousePanelWithGoods {
         float health = SaveDataManager.Instance.GetHeroHealth(this.CurrentDisplayHero.Name);
         health = Mathf.Min(health, this.CurrentDisplayHero.InitialData.Health);
         this.BloodProgressBar.fillAmount = health < 0.0f ? 1.0f : health / this.CurrentDisplayHero.InitialData.Health;
+        this.BloodProgressText.text = $"{Mathf.RoundToInt(health)}/{this.CurrentDisplayHero.InitialHealth}";
     }
 
     public void ShowAudioDialog(HeroAudioData data) {

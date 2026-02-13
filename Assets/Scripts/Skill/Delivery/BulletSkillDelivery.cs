@@ -19,6 +19,7 @@ public class BulletSkillDelivery : SkillDelivery{
     }
 
     protected override void PrepareDelivery() {
+        this.CurrentBulletPenetrateCount = 0;
         if (Flash != null) {
             var flashInstance = Instantiate(Flash, transform.position, Quaternion.identity);
             flashInstance.transform.forward = gameObject.transform.forward;
@@ -75,8 +76,8 @@ public class BulletSkillDelivery : SkillDelivery{
             this.Effect.ApplyEffect(fighter, this.EffectData);
         }
 
-        BulletPenetrateCount--;
-        if (BulletPenetrateCount <= 0) {
+        this.CurrentBulletPenetrateCount += 1;
+        if (this.CurrentBulletPenetrateCount >= this.BulletPenetrateCount) {
             DestroyBullet();
         }
     }
