@@ -57,6 +57,9 @@ public class SceneChangeManager : MonoBehaviour{
             this.IsLoadDungeon = true;
             AudioManager.Instance.SetMainMusic(this.BigMapBGM);
             BigMapUIManager.Instance.TaskList.UpdateTaskUI();
+            if (this.DungeonScene == SceneType.Dungeons_Newbie) {
+                PlayerPrefs.DeleteAll();
+            }
             StartCoroutine(AsyncLoadSceneCallback(this.DungeonScene));
         }
 

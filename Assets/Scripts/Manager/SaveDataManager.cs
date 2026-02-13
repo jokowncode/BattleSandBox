@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 
 [Serializable]
 public class PlayerSaveData {
+    public int BattleInstructionIndex = 0;
     public float PlayerMoney = -1.0f;
     public SceneType CurrentDungeon = SceneType.None;
     public SerializableDictionary<SceneType, Vector3> PlayerPos = new();

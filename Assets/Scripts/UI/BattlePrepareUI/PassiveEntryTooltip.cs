@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -14,13 +15,22 @@ public class PassiveEntryTooltip : MonoBehaviour{
         HideTooltip();
     }
 
-    public void ShowTooltip(string message, Vector3 position){
+    public void ShowTooltip(string message, Vector3 position) {
         if(ShowTipSfx)
             AudioManager.Instance.PlaySfxAtPoint(this.transform.position, ShowTipSfx);
         
         this.gameObject.SetActive(true);
+        StopAllCoroutines();
+        StartCoroutine(SetTextCoroutine(message, position));
+    }
+
+    private IEnumerator SetTextCoroutine(string message, Vector3 position) {
         tooltipText.text = message;
         tooltipRect.position = position;
+        yield return null;
+        Vector2 size = this.tooltipRect.sizeDelta;
+        size.y = tooltipText.preferredHeight + 70.0f;
+        this.tooltipRect.sizeDelta = size;
     }
 
     public void HideTooltip(){

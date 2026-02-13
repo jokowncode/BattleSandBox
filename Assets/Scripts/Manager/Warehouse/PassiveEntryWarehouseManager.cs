@@ -19,6 +19,8 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
     public static PassiveEntryWarehouseManager Instance;
 
     private Dictionary<string, PassiveEntry> AllPassiveEntryMap;
+
+    public bool HasPassiveEntry => this.OwnedPassiveEntries.Count != 0;
     
     private void Awake() {
         if (Instance != null) {
