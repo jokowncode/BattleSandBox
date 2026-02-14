@@ -65,6 +65,16 @@ public class HeroPortraitUI : MonoBehaviour {
         }
     }
 
+    public List<string> HeroEnergyFullList() {
+        List<string> fullEnergyHeroes = new List<string>();
+        foreach (var pair in heroPortraitUIDict) {
+            if (pair.Value.EnergyIsFull) {
+                fullEnergyHeroes.Add(pair.Key);
+            }
+        }
+        return fullEnergyHeroes;
+    }
+
     public bool HeroEnergyIsFull(string heroName) {
         if (heroPortraitUIDict.ContainsKey(heroName)) {
             return heroPortraitUIDict[heroName].EnergyIsFull;

@@ -73,7 +73,8 @@ public class HeroDisplayPanelUI : HeroWarehousePanelWithGoods {
     private void UpdateBloodBar() {
         float health = SaveDataManager.Instance.GetHeroHealth(this.CurrentDisplayHero.Name);
         health = Mathf.Min(health, this.CurrentDisplayHero.InitialData.Health);
-        this.BloodProgressBar.fillAmount = health < 0.0f ? 1.0f : health / this.CurrentDisplayHero.InitialData.Health;
+        if (health < 0.0f) health = this.CurrentDisplayHero.InitialHealth;
+        this.BloodProgressBar.fillAmount = health / this.CurrentDisplayHero.InitialData.Health;
         this.BloodProgressText.text = $"{Mathf.RoundToInt(health)}/{this.CurrentDisplayHero.InitialHealth}";
     }
 

@@ -20,7 +20,7 @@ public class EntanglementManager : MonoBehaviour {
 
     private List<float> HeroEntanglementValues;
 
-    private float MinHasTacticEntangleValue = float.MaxValue;
+    public float MinHasTacticEntangleValue { get; private set; } = float.MaxValue;
     public int MaxLevel { get; private set; }
     
     private void Awake() {
@@ -55,6 +55,14 @@ public class EntanglementManager : MonoBehaviour {
 
         index += maxIndex - (minIndex + 1);
         return index;
+    }
+
+    public float GetHeroEntanglementValue(string h1, string h2) {
+        int index1 = HeroWarehouseManager.Instance.GetHeroIndex(h1);
+        if (index1 == -1) return 0.0f;
+        int index2 = HeroWarehouseManager.Instance.GetHeroIndex(h2);
+        if (index2 == -1) return 0.0f;
+        return GetHeroEntanglementValue(index1, index2);
     }
 
     private float GetHeroEntanglementValue(int index1, int index2) {

@@ -12,6 +12,7 @@ public class UISelectionManager : MonoBehaviour
     public int SelectedSize => selectedList.Count;
 
     private float InitialFixedDeltaTime;
+    public bool HasOpenTacticUI => this.thirdUI.gameObject.activeSelf;
     
     void Awake() {
         if (Instance == null)

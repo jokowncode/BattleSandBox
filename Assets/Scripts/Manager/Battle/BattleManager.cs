@@ -50,6 +50,7 @@ public class BattleManager : StateMachineController{
     private InBattleState InBattle;
 
     public bool IsBattleStart { get; private set; }
+    public bool IsVictory => this.CurrentState is VictoryState;
 
 #if TEST_BATTLE
     [field: SerializeField] public BattleData Data { get; private set; }
