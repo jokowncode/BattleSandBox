@@ -11,10 +11,9 @@ public class HeroDetailUI : MonoBehaviour {
     [SerializeField] private Image heroImage;
     
     [Header("Detail")]
-    [SerializeField] private TextMeshProUGUI Name;
+    [SerializeField] private TextMeshProUGUI ChineseName;
     [SerializeField] private TextMeshProUGUI Description;
-    [SerializeField] private GameObject StarLevelUI;
-    [SerializeField] private GameObject StarLevelPrefab;
+    [SerializeField] private TextMeshProUGUI EnglishName;
     
     [SerializeField] private TextMeshProUGUI Hp;
     [SerializeField] private TextMeshProUGUI PhysicsAttack;
@@ -48,9 +47,9 @@ public class HeroDetailUI : MonoBehaviour {
     }
 
     public void ChangeDetailUI(Hero hero){
-        Name.text = hero.Name;
+        this.ChineseName.text = hero.WarehouseData.HeroChineseName;
+        this.EnglishName.text = hero.WarehouseData.HeroEnglishName;
         Description.text = hero.Description;
-        UpdateStarLevelUI(hero);
         Hp.text = hero.InitialHealth.ToString();
         PhysicsAttack.text = hero.InitialPhysicsAttack.ToString();
         MagicAttack.text = hero.InitialMagicAttack.ToString();
@@ -80,17 +79,6 @@ public class HeroDetailUI : MonoBehaviour {
             CooldownChange.text = GetPropertyDiff(hero.FighterSkillCaster.GetCurrentData(SkillProperty.Cooldown),
                 hero.FighterSkillCaster.GetInitialData(SkillProperty.Cooldown));
         }
-    }
-
-    private void UpdateStarLevelUI(Hero hero){
-        foreach (Transform child in StarLevelUI.transform){
-            Destroy(child.gameObject);
-        }
-
-        for (int i = 0; i < hero.StarLevel; i++){
-            GameObject go = Instantiate(StarLevelPrefab, StarLevelUI.transform);
-        }
-        
     }
 
     /// <summary>

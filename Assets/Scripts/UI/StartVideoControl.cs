@@ -19,6 +19,7 @@ public class StartVideoControl : MonoBehaviour {
         this.StartButtons.SetActive(false);
         this.FirstPlayer.isLooping = false;
         this.FirstPlayer.clip = this.StartVideoClip;
+        this.FirstPlayer.playbackSpeed = 1.0f;
         this.FirstPlayer.Prepare();  
         
         this.SecondPlayer.isLooping = true;
