@@ -34,6 +34,7 @@ public class NewbieBattleInstruction : MonoBehaviour, IPointerClickHandler {
         
         if (this.CurrentInstructionIndex == 8) {
             if (!BattleManager.Instance.IsBattleStart) return false;
+            if (BattleManager.Instance.IsGameOver) return false;
             List<string> heroes = BattleUIManager.Instance.heroPortraitUI.HeroEnergyFullList();
             if (heroes.Count < 2) return false;
             for (int i = 0; i < heroes.Count; i++) {

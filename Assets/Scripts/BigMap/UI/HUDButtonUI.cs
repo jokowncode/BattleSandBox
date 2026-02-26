@@ -24,7 +24,7 @@ public class HUDButtonUI : MonoBehaviour {
     }
 
     public void QuitGame() {
-        Application.Quit();
+        GameManager.Instance.GoToScene(SceneType.Main);
     }
 
 }

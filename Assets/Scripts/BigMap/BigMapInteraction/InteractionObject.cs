@@ -20,6 +20,7 @@ public abstract class InteractionObject : MonoBehaviour {
         道具仓库
     }
 
+    [SerializeField] private GameObject Edge;
     [SerializeField] protected string InteractionObjShowName = null;
     
     [ScriptableObjectNameProp(typeof(TaskData), "TaskName")]
@@ -101,6 +102,7 @@ public abstract class InteractionObject : MonoBehaviour {
         this.InAreaPlayer = player;
         if (!this.IsEnd || this.IsEndCanInteract) {
             this.EnableInteraction(true);
+            if(this.Edge) this.Edge.SetActive(true);
         }
         this.PlayerEnter();
     }
@@ -111,6 +113,7 @@ public abstract class InteractionObject : MonoBehaviour {
         if (!other.TryGetComponent(out Player _)) return;
         this.EnableInteraction(false);
         this.InAreaPlayer = null;
+        if(this.Edge) this.Edge.SetActive(false);
     }
 
     protected abstract void Interaction();

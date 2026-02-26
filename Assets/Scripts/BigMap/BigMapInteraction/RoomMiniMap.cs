@@ -6,6 +6,9 @@ public class RoomMiniMap : InteractionObject {
     [SerializeField] private SpriteRenderer BackgroundRenderer;
     [SerializeField] private Sprite UnSeenSprite;
     [SerializeField] private Sprite PlayerEnterSprite;
+
+    [Header("Light")] 
+    [SerializeField] private GameObject Lights;
     
     protected override void Awake() {
         base.Awake();
@@ -25,6 +28,7 @@ public class RoomMiniMap : InteractionObject {
         foreach (Transform child in this.transform) {
             child.gameObject.SetActive(this.IsEnd);
         }
+        this.Lights.SetActive(this.IsEnd);
     }
 
     protected override void EnableInteraction(bool enable) { }
