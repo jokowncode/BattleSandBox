@@ -47,8 +47,9 @@ public class HeroDisplayPanelUI : HeroWarehousePanelWithGoods {
         
         if (!this.CurrentDisplayHero) return;
         this.gameObject.SetActive(true);
-        StopAllCoroutines();
-        StartCoroutine(MiddleHeroAnimsCoroutine(this.CurrentDisplayHero.WarehouseData.MiddleSpriteAnims));
+        // StopAllCoroutines();
+        // StartCoroutine(MiddleHeroAnimsCoroutine(this.CurrentDisplayHero.WarehouseData.MiddleSpriteAnims));
+        this.MiddleHeroImage.sprite = this.CurrentDisplayHero.WarehouseData.HeroWarehouseSprite;
         this.MiddleHeroNameText.text = this.CurrentDisplayHero.WarehouseData.HeroEnglishName;
         this.HeroEnglishNameText.text = this.CurrentDisplayHero.WarehouseData.HeroEnglishName;
         this.HeroChineseNameText.text = this.CurrentDisplayHero.WarehouseData.HeroChineseName;

@@ -36,7 +36,7 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
         if (CurrentHeroes[index]) return false;
         CurrentHeroes[index] = HeroWarehouseManager.Instance.GetHeroByRef(heroName);
         this.HeroNameTexts[index].text = CurrentHeroes[index].WarehouseData.HeroChineseName;
-        this.HeroImages[index].sprite = CurrentHeroes[index].WarehouseData.MiddleSpriteAnims[0];
+        this.HeroImages[index].sprite = CurrentHeroes[index].WarehouseData.HeroWarehouseSprite;
         this.HeroImages[index].color = Color.white;
         this.BondBorderImages[index].sprite = CurrentHeroes[index].Type switch {
             FighterType.Warrior => this.WarriorBorder,
