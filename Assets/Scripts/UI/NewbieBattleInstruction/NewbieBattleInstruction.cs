@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class NewbieBattleInstruction : MonoBehaviour, IPointerClickHandler {
+
+    [SerializeField] private GameObject Mask;
     
     private CanvasGroup CanvasGroup;
     private int CurrentInstructionIndex = -1;
@@ -18,6 +20,7 @@ public class NewbieBattleInstruction : MonoBehaviour, IPointerClickHandler {
     private void Transition(bool show) {
         this.CanvasGroup.interactable = show;
         this.CanvasGroup.blocksRaycasts = show;
+        if(this.Mask) this.Mask.SetActive(show);
     }
 
     private bool IsSatisfyCondition() {

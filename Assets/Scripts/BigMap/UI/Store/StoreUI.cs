@@ -12,6 +12,7 @@ public class StoreUI : MonoBehaviour {
     [SerializeField] private DetailButton NormalStoreGoodsPrefab;
     [SerializeField] private DetailButton HasDescStoreGoodsPrefab;
 
+    [SerializeField] private GameObject Mask;
     [SerializeField] private RectTransform Instruction;
     
     public static StoreUI Instance;
@@ -135,12 +136,14 @@ public class StoreUI : MonoBehaviour {
         if(index < 0 || index >= this.CurrentGoods.Count) return;
         this.CurrentGoods[index].OnButtonClicked += (_, _) => {
             this.Instruction.gameObject.SetActive(false);
+            this.Mask.SetActive(false);
             this.IsInstructionMode = false;
         };
         this.CurrentGoods[index].OnButtonClicked += (_, _) => onGoodsBePurchased?.Invoke();
         for (int i = 0; i < this.CurrentGoods.Count; i++) {
             this.CurrentGoods[i].TransitionButtonInteractable(i == index);
             if (i == index) {
+                this.Mask.SetActive(true);
                 this.Instruction.gameObject.SetActive(true);
                 this.Instruction.position = this.CurrentGoods[i].transform.position;
                 this.Instruction.sizeDelta = ((RectTransform)this.CurrentGoods[i].transform).sizeDelta;

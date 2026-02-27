@@ -7,20 +7,20 @@ public class TaskList : MonoBehaviour {
 
     [SerializeField] private TaskUI TaskUIPrefab;
     [SerializeField] private Transform TaskContainer;
-    [SerializeField] private Transform MapTaskDirContainer;
+    // [SerializeField] private Transform MapTaskDirContainer;
 
-    private List<GameObject> TaskDirList = new();
-    private TaskUI CurrentTaskDirUI;
-    private Vector2 LastDir = Vector2.zero;
+    // private List<GameObject> TaskDirList = new();
+    // private TaskUI CurrentTaskDirUI;
+    // private Vector2 LastDir = Vector2.zero;
     
     private void Awake() {
-        foreach (Transform child in this.MapTaskDirContainer) {
+        /*foreach (Transform child in this.MapTaskDirContainer) {
             this.TaskDirList.Add(child.gameObject);
-        }
+        }*/
     }
 
     private void LateUpdate() {
-        if (!this.CurrentTaskDirUI) return;
+        /*if (!this.CurrentTaskDirUI) return;
         Vector2 dir = this.CurrentTaskDirUI.GetTaskRotation();
         if (this.LastDir == dir) return; 
         foreach (Transform child in MapTaskDirContainer) {
@@ -36,19 +36,19 @@ public class TaskList : MonoBehaviour {
         }else if (dir.x < 0.0f) {
             this.TaskDirList[2].SetActive(true);
         }
-        this.LastDir = dir;
+        this.LastDir = dir;*/
     }
 
     private void UpdateTaskDir() {
         // TODO: DEFAULT Get First Has Dir Task -> Get Player Set Instruct Task
-        foreach (Transform child in TaskContainer) {
+        /*foreach (Transform child in TaskContainer) {
             if (child.TryGetComponent(out TaskUI taskUI)) {
                 if (taskUI.HasTaskPos) {
                     this.CurrentTaskDirUI = taskUI;
                     return;
                 }
             }
-        }
+        }*/
     }
 
     public void UpdateTaskUI() {
