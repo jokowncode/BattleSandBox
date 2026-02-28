@@ -99,6 +99,7 @@ public class GameManager : MonoBehaviour{
             SceneChangeManager.Instance.GoToDungeon(SaveDataManager.Instance.PlayerData.CurrentDungeon);
         } else {
             if (!SaveDataManager.Instance.DungeonIsComplete(SceneType.Dungeons_Newbie)) {
+                PlayerPrefs.DeleteAll();
                 SceneChangeManager.Instance.GoToDungeon(SceneType.Dungeons_Newbie);      
             } else {
                 SceneChangeManager.Instance.GoToScene(SceneType.Camp);
