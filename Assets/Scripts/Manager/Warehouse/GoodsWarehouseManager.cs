@@ -184,6 +184,14 @@ public class GoodsWarehouseManager : MonoBehaviour {
         return this.ImageDataMap.GetValueOrDefault(type);
     }
 
+    public StoreGoodsData GetFirstGoodsByType(GoodsType type) {
+        foreach (StoreGoodsData goods in this.AllGoodsData) {
+            if (goods.Type != type) continue;
+            return goods;
+        }
+        return null;
+    }
+
     public Dictionary<StoreGoodsData, int> GetRandomGoods(GoodsType type, int maxCount) {
         Dictionary<StoreGoodsData, int> result = new Dictionary<StoreGoodsData, int>();
         if (!IsConsumeGoods(type)) return result;

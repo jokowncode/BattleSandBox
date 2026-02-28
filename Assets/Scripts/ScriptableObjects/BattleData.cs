@@ -24,8 +24,4 @@ public class BattleData : ScriptableObject {
     [Header("Victory Get")] 
     public int Money = 50;
     public List<VictoryFixedGoodsData> FixedGetGoods;
-    public int RandomBloodBottleAmount = 3;
-    public int RandomExpAmount = 3;
-    public int RandomPassiveEntryMaxStar = 1;
-    public int RandomPassiveEntryAmount = 3;
 }

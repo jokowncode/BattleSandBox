@@ -75,7 +75,14 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         return result;
     }
 
-    public Dictionary<string, int> GetRandomPassiveEntryDataByStar(int maxCount, int maxStar) {
+    public PassiveEntryData GetRandomPassiveEntryByStar(int star) {
+        List<PassiveEntry> entries = this.AllPassiveEntries.FindAll(entry => entry.Data.Star == star);
+        if (entries.Count == 0) return null;
+        int randomIndex = Random.Range(0, entries.Count);
+        return entries[randomIndex].Data;
+    }
+
+    /*public Dictionary<string, int> GetRandomPassiveEntryDataByStar(int maxCount, int maxStar) {
         Dictionary<string, int> result = new();
         if (maxCount == 0) return result;
         int rest = maxCount;
@@ -90,7 +97,7 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
             result[key] += count;
         }
         return result;
-    }
+    }*/
 
     public void OpenPassiveEntrySynthPanel() {
         this.SynthPanel.TransitionShow(true);

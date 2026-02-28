@@ -30,32 +30,42 @@ public class BattleEndLeftPanel : MonoBehaviour {
         GameManager.Instance.SetMoney(GameManager.Instance.Money + getMoney);
         this.MoneyText.text = $"货币：{getMoney}";
 
+        int bloodBottleCount = Random.value > 0.5f ? 2 : 1;
+        int expCount = Random.value > 0.5f ? 2 : 1;
+        this.InstantiateConsumeGoodsByGoodsType(GoodsType.血瓶, bloodBottleCount);
+        this.InstantiateConsumeGoodsByGoodsType(GoodsType.经验, expCount);
+        
         List<VictoryFixedGoodsData> datas = BattleManager.Instance.Data.FixedGetGoods;
         foreach (VictoryFixedGoodsData data in datas) {
             this.InstantiateGoodsItem(data.Data, data.Count);
         }
-
-        this.InstantiateByGoodsType(GoodsType.血瓶, BattleManager.Instance.Data.RandomBloodBottleAmount);
-        this.InstantiateByGoodsType(GoodsType.经验, BattleManager.Instance.Data.RandomExpAmount);
-        this.RandomPassiveEntry(BattleManager.Instance.Data.RandomPassiveEntryAmount, 
-            BattleManager.Instance.Data.RandomPassiveEntryMaxStar);
+        this.RandomPassiveEntry();
     }
 
-    private void RandomPassiveEntry(int count, int maxStar) {
-        maxStar = Mathf.Min(maxStar, 2);
-        Dictionary<string, int> result = PassiveEntryWarehouseManager.Instance.GetRandomPassiveEntryDataByStar(count, maxStar);
-        foreach (var pair in result) {
-            PassiveEntryWarehouseManager.Instance.AddPassiveEntry(pair.Key, pair.Value);
-            DetailButton button = Instantiate(this.GetGoodsButtonPrefab, Container);
-            button.SetData("", pair.Key,  pair.Value, false, GoodsType.普通词条, pair.Key);
-        }
+    private void RandomPassiveEntry() {
+        float star1 = Random.value;
+        int star1_count = star1 > 0.85f ? 2 : (star1 > 0.7f ? 1 : 0);
+        int star2_count = Random.value > 0.95f ? 1 : 0;
+        int star3_count = Random.value > 0.97f ? 1 : 0;
+        
+        InstantiateRandomPassiveEntry(1, star1_count);
+        InstantiateRandomPassiveEntry(2, star2_count);
+        InstantiateRandomPassiveEntry(3, star3_count);
     }
 
-    private void InstantiateByGoodsType(GoodsType type, int count) {
-        Dictionary<StoreGoodsData, int> result = GoodsWarehouseManager.Instance.GetRandomGoods(type, count);
-        foreach (var pair in result) {
-            this.InstantiateGoodsItem(pair.Key, pair.Value);
-        }
+    private void InstantiateRandomPassiveEntry(int star, int count) {
+        if (count == 0) return;
+        PassiveEntryData result = PassiveEntryWarehouseManager.Instance.GetRandomPassiveEntryByStar(star);
+        if (!result) return;
+        PassiveEntryWarehouseManager.Instance.AddPassiveEntry(result.Name, count);
+        DetailButton button = Instantiate(this.GetGoodsButtonPrefab, Container);
+        button.SetData("", result.Name,  count, false, (GoodsType)(int)result.Rare, result.Name);
+    }
+
+    private void InstantiateConsumeGoodsByGoodsType(GoodsType type, int count) {
+        StoreGoodsData data = GoodsWarehouseManager.Instance.GetFirstGoodsByType(type);
+        if (!data) return;
+        this.InstantiateGoodsItem(data, count);
     }
 
 }
