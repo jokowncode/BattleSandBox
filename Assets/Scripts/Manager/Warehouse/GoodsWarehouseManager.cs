@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Object = System.Object;
 using Random = UnityEngine.Random;
 
@@ -38,6 +39,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
     public bool IsOpen => this.GoodsPanelCanvasGroup.alpha >= 0.9f;
 
     private Player CurrentPlayer;
+    private List<Button> HUDButtons = new();
     
     private void Awake() {
         if (Instance != null) {
@@ -57,7 +59,8 @@ public class GoodsWarehouseManager : MonoBehaviour {
         }
 
         SceneManager.sceneLoaded += (arg0, mode) => {
-            if (SceneTools.IsBattleScene(SceneChangeManager.Instance.CurrentScene)) {
+            SceneType currentScene = SceneChangeManager.Instance.CurrentScene;
+            if (SceneTools.IsBattleScene(currentScene)) {
                 this.IsInBattle = true;
                 this.InBattleModifyGoods.Clear();
                 BattleManager.Instance.OnRewindBattle += OnRewindBattle;
@@ -65,6 +68,16 @@ public class GoodsWarehouseManager : MonoBehaviour {
                 this.IsInBattle = false;
             }
             this.CurrentPlayer = FindObjectOfType<Player>();
+
+            this.HUDButtons.Clear();
+            if (currentScene == SceneType.BigMap || currentScene == SceneType.Camp) {
+                GameObject[] buttons = GameObject.FindGameObjectsWithTag("HUDButton");
+                foreach (GameObject go in buttons) {
+                    if (go.TryGetComponent(out Button button)) {
+                        this.HUDButtons.Add(button);
+                    }
+                }
+            }
         };
         this.GoodsPanelCanvasGroup = this.GetComponent<CanvasGroup>();
     }
@@ -81,6 +94,13 @@ public class GoodsWarehouseManager : MonoBehaviour {
         } else {
             if(this.CurrentPlayer) this.CurrentPlayer.TransMove(true);
             this.GoodsPanel.Hide();
+        }
+        SetHUDButtonsInteractable(!show);
+    }
+
+    public void SetHUDButtonsInteractable(bool interact) {
+        foreach (Button button in this.HUDButtons) {
+            button.interactable = interact;
         }
     }
 

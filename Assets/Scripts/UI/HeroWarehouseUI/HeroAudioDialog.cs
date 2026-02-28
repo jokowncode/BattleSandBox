@@ -12,7 +12,7 @@ public class HeroAudioDialog : MonoBehaviour {
         if (data == null) return;
         this.AudioContentText.text = data.AudioContent;
         this.OtherLanguageText.text = data.OtherLanguageContent;
-        AudioManager.Instance.SetDialog(data.Audio);
+        AudioManager.Instance.SetDialog(data.Audio, true);
         this.gameObject.SetActive(true);
     }
 

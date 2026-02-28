@@ -53,14 +53,18 @@ public class UISelectionManager : MonoBehaviour
     }
 
     private void BulletTime(bool open) {
-        if (open) {
-            Time.timeScale = 0.5f;
-        } else {
-            Time.timeScale = 1.0f;
-        }
+        SetTimeScale(open ? 0.5f : 1.0f);
+    }
+
+    private void SetTimeScale(float scale) {
+        Time.timeScale = scale;
         Time.fixedDeltaTime = this.InitialFixedDeltaTime * Time.timeScale;
     }
 
+    public void StopTime(bool open) {
+        if(open) SetTimeScale(0.0f);
+        else BulletTime(this.HasOpenTacticUI);
+    }
 
     /// <summary>
     /// 取消选中 UI

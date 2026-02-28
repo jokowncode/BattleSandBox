@@ -34,7 +34,7 @@ public class CameraManager : MonoBehaviour {
         while (elapsed < duration){
             Vector3 value = Random.Range(-1f, 1f) * magnitude * magnitudeDir;
             MainCamera.transform.localPosition = originalPos + value;
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             yield return null;
         }
 

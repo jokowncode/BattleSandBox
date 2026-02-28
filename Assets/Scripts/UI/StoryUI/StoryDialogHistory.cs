@@ -14,7 +14,7 @@ public class StoryDialogHistory : MonoBehaviour {
         this.PlaySoundButton.gameObject.SetActive(data.DialogAudio);
         if (data.DialogAudio) {
             this.PlaySoundButton.onClick.AddListener(() => {
-                AudioManager.Instance.SetDialog(data.DialogAudio);
+                AudioManager.Instance.SetDialog(data.DialogAudio, false);
             });
         }
     }

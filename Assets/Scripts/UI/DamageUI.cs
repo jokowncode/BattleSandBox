@@ -31,7 +31,7 @@ public class DamageUI : MonoBehaviour{
         dir.z = 0.0f;
         dir.y = Mathf.Abs(dir.y);
         
-        for (float t = 0.0f; t < duration; t += Time.deltaTime) {
+        for (float t = 0.0f; t < duration; t += Time.unscaledDeltaTime) {
             Vector3 newPos = this.transform.position + t * 0.1f * dir.normalized;
             this.transform.position = newPos;
             yield return null;

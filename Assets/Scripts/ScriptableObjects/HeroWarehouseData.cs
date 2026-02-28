@@ -20,6 +20,7 @@ public class HeroWarehouseData : ScriptableObject {
     [TextArea] public string HeroStory;
     public HeroAudioData[] HeroAudios;
     public Sprite HeroWarehouseSprite;
+    public Sprite HeroDefeatSprite;
 
     private Dictionary<HeroAudioType, HeroAudioData> HeroAudioMaps = new ();
     

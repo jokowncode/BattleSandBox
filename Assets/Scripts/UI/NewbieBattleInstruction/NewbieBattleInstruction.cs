@@ -21,6 +21,7 @@ public class NewbieBattleInstruction : MonoBehaviour, IPointerClickHandler {
         this.CanvasGroup.interactable = show;
         this.CanvasGroup.blocksRaycasts = show;
         if(this.Mask) this.Mask.SetActive(show);
+        UISelectionManager.Instance.StopTime(show);
     }
 
     private bool IsSatisfyCondition() {
@@ -31,11 +32,12 @@ public class NewbieBattleInstruction : MonoBehaviour, IPointerClickHandler {
         if (this.CurrentInstructionIndex == 6) {
             return BattleManager.Instance.IsVictory;
         }
-        if (this.CurrentInstructionIndex == 7)
+        if (this.CurrentInstructionIndex == 7) return true;
+        if (this.CurrentInstructionIndex == 8)
             return BattleUIManager.Instance.heroDetailUI.gameObject.activeSelf &&
                    PassiveEntryWarehouseManager.Instance.HasPassiveEntry;
         
-        if (this.CurrentInstructionIndex == 8) {
+        if (this.CurrentInstructionIndex == 9) {
             if (!BattleManager.Instance.IsBattleStart) return false;
             if (BattleManager.Instance.IsGameOver) return false;
             List<string> heroes = BattleUIManager.Instance.heroPortraitUI.HeroEnergyFullList();
@@ -48,7 +50,7 @@ public class NewbieBattleInstruction : MonoBehaviour, IPointerClickHandler {
             }
         }
 
-        if (this.CurrentInstructionIndex == 9) {
+        if (this.CurrentInstructionIndex == 10) {
             return UISelectionManager.Instance.HasOpenTacticUI;
         }
         return false;

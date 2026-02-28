@@ -18,6 +18,8 @@ public class AudioManager : MonoBehaviour{
 
     private Coroutine CurrentDialogCoroutine;
     public bool DialogIsFinished { get; private set; } = false;
+    private float MainMusicVolumeBeforeDialog;
+    private bool DialogIsDecreaseMainMusicVolume = false;
 
     private void Awake(){
         if (Instance != null) {
@@ -68,13 +70,19 @@ public class AudioManager : MonoBehaviour{
         this.MainMusicAudioSource.Stop();
     }
 
-    public void SetDialog(AudioClip newClip, float volume = 1.0f) {
+    public void SetDialog(AudioClip newClip, bool decreaseMainMusic, float volume = 1.0f) {
         this.DialogIsFinished = false;
         this.DialogAudioSource.mute = true;
         this.DialogAudioSource.volume = volume;
         this.DialogAudioSource.clip = newClip;
         this.DialogAudioSource.mute = false;
         this.DialogAudioSource.Play();
+
+        this.DialogIsDecreaseMainMusicVolume = decreaseMainMusic;
+        if (decreaseMainMusic) {
+            this.MainMusicVolumeBeforeDialog = this.MainMusicAudioSource.volume;
+            this.MainMusicAudioSource.volume = 0.3f;
+        }
         
         if (this.CurrentDialogCoroutine != null) {
             StopCoroutine(this.CurrentDialogCoroutine);
@@ -93,8 +101,9 @@ public class AudioManager : MonoBehaviour{
     }
 
     private IEnumerator DialogPlayCoroutine(float length) {
-        yield return new WaitForSeconds(length);
+        yield return new WaitForSecondsRealtime(length);
         this.DialogIsFinished = true;
+        if(this.DialogIsDecreaseMainMusicVolume) this.MainMusicAudioSource.volume = this.MainMusicVolumeBeforeDialog;
     }
 
     public void StopDialog() {
@@ -103,6 +112,7 @@ public class AudioManager : MonoBehaviour{
             this.CurrentDialogCoroutine = null;
         }
         this.DialogIsFinished = true;
+        if(this.DialogIsDecreaseMainMusicVolume) this.MainMusicAudioSource.volume = this.MainMusicVolumeBeforeDialog;
         this.DialogAudioSource.Stop();
     }
 

@@ -354,7 +354,7 @@ public class DialogManager : MonoBehaviour {
         
         AudioManager.Instance.StopDialog();
         if (data.DialogAudio) {
-            AudioManager.Instance.SetDialog(data.DialogAudio, data.CharacterAudioVolume);
+            AudioManager.Instance.SetDialog(data.DialogAudio, false, data.CharacterAudioVolume);
         }
         
         foreach (Transform option in this.DialogOptionContainer) {

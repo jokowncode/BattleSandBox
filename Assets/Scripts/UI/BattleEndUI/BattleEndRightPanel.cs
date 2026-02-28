@@ -21,7 +21,7 @@ public class BattleEndRightPanel : MonoBehaviour {
         }
 
         if (!hero) return;
-        this.HeroImage.sprite = hero.WarehouseData.MiddleSpriteAnims[0];
+        this.HeroImage.sprite = victory ? hero.WarehouseData.HeroWarehouseSprite : hero.WarehouseData.HeroDefeatSprite;
         this.AudioDialog.Show(hero.WarehouseData.GetHeroAudio(victory ? HeroAudioType.胜利 : HeroAudioType.失败));
     }
 }
