@@ -27,6 +27,7 @@ public class HUDButtonUI : MonoBehaviour {
         if (SceneChangeManager.Instance.CurrentScene == SceneType.BigMap && DialogManager.Instance.IsInDialog) {
             return;
         }
+        SaveDataManager.Instance.AutoSaveData();
         GameManager.Instance.GoToScene(SceneType.Main);
     }
 
