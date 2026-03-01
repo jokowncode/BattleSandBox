@@ -83,9 +83,11 @@ public class StoreUI : MonoBehaviour {
                 if (data.Type == GoodsType.战术 &&
                     Enum.TryParse(data.GoodsName, true, out BattleTacticType type)) {
                     desc = BattleTacticFactory.GetBattleTacticDescription(type);
-                } else {
+                } else if (data.Value == 0) {
                     PassiveEntry entry = PassiveEntryWarehouseManager.Instance.GetPassiveEntryByName(data.GoodsName);
                     if (entry) desc = entry.Data.Description;
+                } else {
+                    desc = data.GoodsName;
                 }
             } else {
                 button = Instantiate(this.NormalStoreGoodsPrefab, NormalStoreGoodsContainer);    
@@ -108,6 +110,7 @@ public class StoreUI : MonoBehaviour {
         float currentMoney = GameManager.Instance.Money;
         if (currentMoney < money) {
             AudioManager.Instance.PlayErrorSfx();
+            SceneChangeManager.Instance.AddGameTip("资金不足！");
             return;
         }
         

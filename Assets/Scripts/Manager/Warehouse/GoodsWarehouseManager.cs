@@ -189,7 +189,8 @@ public class GoodsWarehouseManager : MonoBehaviour {
                 return HeroWarehouseManager.Instance.AddHero(data.GoodsName);
             case GoodsType.普通词条:
             case GoodsType.特殊词条:
-                PassiveEntryWarehouseManager.Instance.AddPassiveEntry(data.GoodsName, count);
+                if(data.Value == 0) PassiveEntryWarehouseManager.Instance.AddPassiveEntry(data.GoodsName, count);
+                else PassiveEntryWarehouseManager.Instance.AddRandomPassiveEntry((int)data.Value, count);
                 break;
             case GoodsType.战术:
             case GoodsType.经验:

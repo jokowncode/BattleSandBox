@@ -109,6 +109,13 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         this.OwnedPassiveEntries[passiveEntry] += count;
     }
 
+    public void AddRandomPassiveEntry(int star, int count) {
+        PassiveEntryData data = GetRandomPassiveEntryByStar(star);
+        if (!data) return;
+        SceneChangeManager.Instance.AddGameTip($"获得芯片：{data.Name}");
+        this.AddPassiveEntry(data.Name, count);
+    }
+
     public void RemovePassiveEntry(string passiveEntry, int count = 1) {
         if (ContainsPassiveEntry(passiveEntry)) {
             this.OwnedPassiveEntries[passiveEntry] -= count;
