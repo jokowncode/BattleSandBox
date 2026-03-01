@@ -12,7 +12,7 @@ public class HealAllSkillCaster : SkillCaster{
             foreach (Hero hero in heroes){
                 float value = GetSkillEffectValue(out bool isCritical);
                 hero.BeHealed(new EffectData{
-                    Value = value * OwnedFighter.HealMultiplier,
+                    Value = value,
                     IsCritical = isCritical
                 });
             }
@@ -21,7 +21,7 @@ public class HealAllSkillCaster : SkillCaster{
             foreach (Enemy enemy in enemies) {
                 float value = GetSkillEffectValue(out bool isCritical);
                 enemy.BeHealed(new EffectData{
-                    Value = value * OwnedFighter.HealMultiplier,
+                    Value = value,
                     IsCritical = isCritical
                 });
             }

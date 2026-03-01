@@ -37,8 +37,8 @@ public class Fighter : StateMachineController{
     private SkillState FighterSkill;
     private PatrolState FighterPatrol;
     
-    public float HealMultiplier { get; protected set; } = 1.0f;
-    public float ShieldMultiplier{ get; protected set; } = 1.0f;
+    private float HealMultiplier = 1.0f;
+    private float ShieldMultiplier = 1.0f;
 
     private TargetType CurrentFighterType;
     public FighterRenderer Renderer { get; private set; }
@@ -246,7 +246,7 @@ public class Fighter : StateMachineController{
             PoolManager.Instance.ReleaseGameObject(go, 0.7f);
         }
         
-        this.InBattleHealth = Mathf.Min(this.CurrentData.Health, this.InBattleHealth + effectData.Value);
+        this.InBattleHealth = Mathf.Min(this.CurrentData.Health, this.InBattleHealth + effectData.Value * this.HealMultiplier);
         UpdateBloodBar();
     }
     

@@ -19,7 +19,7 @@ public class HealMinHealthPercentageState : AttackState{
         EffectData healMsg = new EffectData{
             TargetType = Controller.AttackTargetType,
             Force = 0.0f,
-            Value = Controller.Health * HealPercentage * Controller.HealMultiplier * critical,
+            Value = Controller.Health * HealPercentage * critical,
             IsCritical = criticalTest
         };
         target.BeHealed(healMsg);

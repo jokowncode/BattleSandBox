@@ -8,10 +8,6 @@ public class SkillPropertyPassiveEntry : PassiveEntry{
     [SerializeField] private float Value;
     
     private void OnValidate(){
-        if (ModifyWay == PropertyModifyWay.Percentage){
-            Value = Mathf.Clamp(Value, -100.0f, 100.0f);
-        }
-
         if (Property == SkillProperty.SummonCount){
             ModifyWay = PropertyModifyWay.Value;
         }
