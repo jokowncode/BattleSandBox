@@ -295,7 +295,7 @@ public class SaveDataManager : MonoBehaviour {
         }
     }
 
-    public bool RecoverHeroHealth(string heroName, float value, bool revive = false) {
+    public bool RecoverHeroHealth(string heroName, float value, bool revive = false, bool percentage = false) {
         if (!this.PlayerData.DungeonHeroHealth.ContainsKey(heroName)) {
             SceneChangeManager.Instance.AddGameTip("该角色满血");
             return false;
@@ -309,7 +309,12 @@ public class SaveDataManager : MonoBehaviour {
             SceneChangeManager.Instance.AddGameTip("该角色满血");
             return false;
         }
-        this.PlayerData.DungeonHeroHealth[heroName] += value;
+
+        float addValue = value;
+        if (percentage) {
+            addValue = hero.InitialHealth * value / 100.0f;
+        }
+        this.PlayerData.DungeonHeroHealth[heroName] += addValue;
         return true;
     }
 

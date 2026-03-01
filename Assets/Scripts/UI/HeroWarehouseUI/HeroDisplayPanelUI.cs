@@ -64,7 +64,7 @@ public class HeroDisplayPanelUI : HeroWarehousePanelWithGoods {
         this.TransitionGoodsWarehouse();
     }
 
-    public bool UseBloodBottle(string goodsName) {
+    public bool UseRecoverGoods(string goodsName) {
         if (!this.CurrentDisplayHero) return false;
         bool result = GoodsWarehouseManager.Instance.UseConsumedGoods(goodsName, this.CurrentDisplayHero.Name);
         if (result) UpdateBloodBar();

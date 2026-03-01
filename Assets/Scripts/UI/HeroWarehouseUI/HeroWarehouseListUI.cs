@@ -39,6 +39,14 @@ public class HeroWarehouseListUI : MonoBehaviour {
         this.UpdateHeroList(HeroWarehouseCategory.All, isFirst);
     }
 
+    public void UpdateHeroHealth() {
+        foreach (Transform child in this.HeroListContainer) {
+            if (child.TryGetComponent(out HeroListSingle single)) {
+                single.UpdateHeroHealth();
+            }
+        }
+    }
+
     private void UpdateHeroList(HeroWarehouseCategory category = HeroWarehouseCategory.All, bool isFirst = false) {
         if (this.CurrentCategory == category && !isFirst) return;
         CurrentCategory = category;

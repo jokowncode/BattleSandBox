@@ -32,9 +32,13 @@ public class BattleEndLeftPanel : MonoBehaviour {
 
         int bloodBottleCount = Random.value > 0.5f ? 2 : 1;
         int expCount = Random.value > 0.5f ? 2 : 1;
+        int reviveCount = Random.value > 0.8f ? 1 : 0;
         this.InstantiateConsumeGoodsByGoodsType(GoodsType.血瓶, bloodBottleCount);
         this.InstantiateConsumeGoodsByGoodsType(GoodsType.经验, expCount);
-        
+        if (reviveCount != 0) {
+            this.InstantiateConsumeGoodsByGoodsType(GoodsType.复活书, reviveCount);
+        }
+
         List<VictoryFixedGoodsData> datas = BattleManager.Instance.Data.FixedGetGoods;
         foreach (VictoryFixedGoodsData data in datas) {
             this.InstantiateGoodsItem(data.Data, data.Count);

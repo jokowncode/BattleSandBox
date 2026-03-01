@@ -14,7 +14,7 @@ public class GoodsWarehousePanel : MonoBehaviour {
     [SerializeField] private CategoryList CategoryUI;
     
     public Func<string, bool> OnClickGoods;
-    private GoodsType CurrentShowGoodsType = GoodsType.None;
+    private int CurrentShowGoodsType = 0;
 
     private void Awake() {
         if (this.CategoryUI) {
@@ -23,22 +23,29 @@ public class GoodsWarehousePanel : MonoBehaviour {
     }
 
     private void OnCategoryClicked(string cName, int index) {
-        GoodsType type = GoodsType.None;
+        List<GoodsType> type = new();
         if (cName == "词条") {
-            type = GoodsType.普通词条;
-        } else {
-            Enum.TryParse(cName, true, out type);
+            type.Add(GoodsType.普通词条);
+        }else if (cName == "回复") {
+            type.Add(GoodsType.血瓶);
+            type.Add(GoodsType.复活书);
+        } else if(Enum.TryParse(cName, true, out GoodsType t)) {
+            type.Add(t);
         }
 
-        if (type == GoodsType.None) return;
-        Show(type, false);
+        if (type.Count == 0) return;
+        for (int i = 0; i < type.Count; i++) {
+            Show(type[i], false, i != 0);
+        }
     }
 
-    public void Show(GoodsType type, bool canUse) {
-        if (type != this.CurrentShowGoodsType) {
-            this.CurrentShowGoodsType = type;
-            foreach (Transform child in GoodsContainer) {
-                Destroy(child.gameObject);
+    public void Show(GoodsType type, bool canUse, bool append) {
+        if (append || this.CurrentShowGoodsType != (int)type) {
+            if (!append) {
+                this.CurrentShowGoodsType = (int)type;
+                foreach (Transform child in GoodsContainer) {
+                    Destroy(child.gameObject);
+                }    
             }
 
             List<GoodsData> goods = GoodsWarehouseManager.Instance.GetGoodsByType(type);
@@ -70,7 +77,7 @@ public class GoodsWarehousePanel : MonoBehaviour {
     }
 
     public void Hide() {
-        this.CurrentShowGoodsType = GoodsType.None;
+        this.CurrentShowGoodsType = 0;
         this.gameObject.SetActive(false);
     }
 

@@ -151,7 +151,11 @@ public class GoodsWarehouseManager : MonoBehaviour {
                 break;
             case GoodsType.血瓶:
                 if (args.Length < 1) return false;
-                result = SaveDataManager.Instance.RecoverHeroHealth(args[0].ToString(), goodsData.Value, false);
+                result = SaveDataManager.Instance.RecoverHeroHealth(args[0].ToString(), goodsData.Value);
+                break;
+            case GoodsType.复活书:
+                if (args.Length < 1) return false;
+                result = SaveDataManager.Instance.RecoverHeroHealth(args[0].ToString(), goodsData.Value, true, true);
                 break;
             case GoodsType.战术:
                 if (!Enum.TryParse(goodsName, true, out BattleTacticType type)) return false;
@@ -189,6 +193,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
                 break;
             case GoodsType.战术:
             case GoodsType.经验:
+            case GoodsType.复活书: 
             case GoodsType.血瓶:
                 this.AddConsumeGoods(data.GoodsName, count);
                 break;

@@ -33,7 +33,9 @@ public class ModeHeroWarehouseUI : MonoBehaviour {
         if (this.CurrentMode == WarehouseMode.CharacterBond) {
             return this.HeroBondPanel.UseBond(goodsName);
         }else if (this.CurrentMode == WarehouseMode.CharacterDisplay) {
-            return this.HeroDisplayPanel.UseBloodBottle(goodsName);
+            bool result = this.HeroDisplayPanel.UseRecoverGoods(goodsName);
+            if(result) this.HeroListPanel.UpdateHeroHealth();
+            return result;
         }
         return false;
     }
@@ -77,8 +79,10 @@ public class ModeHeroWarehouseUI : MonoBehaviour {
         this.ModeImage.sprite = CharacterBondModeSprite;
     }
 
-    public void ShowGoodsWarehouse(GoodsType type) {
-        this.GoodsWarehouseUI.Show(type, true);
+    public void ShowGoodsWarehouse(GoodsType[] type) {
+        for (int i = 0; i < type.Length; i++) {
+            this.GoodsWarehouseUI.Show(type[i], true, i != 0);
+        }
     }
 
     public void HideGoodsWarehouse() {

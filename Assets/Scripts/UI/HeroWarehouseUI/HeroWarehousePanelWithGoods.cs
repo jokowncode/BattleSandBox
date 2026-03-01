@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public abstract class HeroWarehousePanelWithGoods : MonoBehaviour {
 
-    [SerializeField] private GoodsType OpenGoodsWarehouseType;
+    [SerializeField] private GoodsType[] OpenGoodsWarehouseType;
     [SerializeField] private GameObject RightPanel;
     [SerializeField] private ModeHeroWarehouseUI ParentPanel;
     
