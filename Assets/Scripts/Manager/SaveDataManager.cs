@@ -164,6 +164,13 @@ public class SaveDataManager : MonoBehaviour {
         this.MutualSaveDataPathMap.Remove(slot);
     }
 
+    public void NewGame() {
+        this.PlayerData = new PlayerSaveData();
+        this.AlreadyPlayTime = 0;
+        this.LoadTimeStamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        this.OnLoadData?.Invoke();
+    }
+
     public void LoadData(string loadPath) {
         this.LoadTimeStamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         if (!File.Exists(loadPath)) {

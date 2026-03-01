@@ -83,7 +83,8 @@ public class GameManager : MonoBehaviour{
     }
 
     public void StartGame(){
-        SaveDataManager.Instance.LoadLastAutoSaveData();
+        // SaveDataManager.Instance.LoadLastAutoSaveData();
+        SaveDataManager.Instance.NewGame();
         this.EnterGame();
     }
 
