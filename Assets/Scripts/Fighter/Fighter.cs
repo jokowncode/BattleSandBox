@@ -12,6 +12,7 @@ public class Fighter : StateMachineController{
     [field: SerializeField] public FighterData InitialData { get; protected set; }
     [SerializeField] protected Canvas FighterCanvas;
     [SerializeField] private Image BloodBarImage;
+    [SerializeField] private TextMeshProUGUI BloodValueText;
     [SerializeField] private Image ShieldBarImage;
     [field: SerializeField] public SkillNameUI SkillNameText{ get; private set; }
     [SerializeField] private ParticleSystem BloodParticle;
@@ -129,6 +130,17 @@ public class Fighter : StateMachineController{
             this.InBattleShield = this.CurrentData.Shield;
             UpdateShieldBar();
         }
+        this.BloodValueText.gameObject.SetActive(false);
+    }
+
+    private void OnMouseEnter() {
+        if (!BattleManager.Instance.IsBattleStart || BattleManager.Instance.IsGameOver) return;
+        this.BloodValueText.gameObject.SetActive(true);
+    }
+
+    private void OnMouseExit() {
+        if (!BattleManager.Instance.IsBattleStart || BattleManager.Instance.IsGameOver) return;
+        this.BloodValueText.gameObject.SetActive(false);
     }
 
     private void OnFindAttackTarget(Fighter target){
@@ -277,6 +289,7 @@ public class Fighter : StateMachineController{
     private void UpdateBloodBar() {
         this.BloodBarImage.fillAmount = this.CurrentData.Health == 0.0f ? 0.0f : this.InBattleHealth / this.CurrentData.Health;
         this.BloodBarImage.color = Color.Lerp(this.InitialColor, this.FinalColor, 1.0f - this.BloodBarImage.fillAmount);
+        this.BloodValueText.text = $"{Mathf.RoundToInt(this.InBattleHealth)}/{this.CurrentData.Health}";
         UpdatePortraitBloodBar();
     }
 
