@@ -31,6 +31,7 @@ public class GameEndUI : MonoBehaviour, IPointerClickHandler {
     public void Show() {
         long time = SaveDataManager.Instance.GetCurrentPlayTime();
         this.CurrentPlayTime.text = GetPlayTimeString(time);
+        SaveDataManager.Instance.PlayerInBigMap.TransMove(false);
         StopAllCoroutines();
         StartCoroutine(this.CanvasGroupFadeCoroutine(this.UICanvasGroup, 0.0f, 1.0f));
     }
@@ -58,6 +59,7 @@ public class GameEndUI : MonoBehaviour, IPointerClickHandler {
         } else if(!this.SecondContentTypeWriter.IsDelayEnd) {
             this.SecondContentTypeWriter.EndText();
         } else {
+            SaveDataManager.Instance.PlayerInBigMap.TransMove(true);
             StartCoroutine(CanvasGroupFadeCoroutine(this.UICanvasGroup, 1.0f, 0.0f));
         }
     }
