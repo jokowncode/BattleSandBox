@@ -14,6 +14,7 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
     [Header("Bond UI")] 
     [SerializeField] private TextMeshProUGUI BondLevelText;
     [SerializeField] private Image LevelValueProgress;
+    [SerializeField] private TextMeshProUGUI LevelValueText;
     [SerializeField] private TacticPanelUI TacticPanel;
 
     [Header("Bond Border")] 
@@ -74,6 +75,7 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
         if (!CurrentHeroes[0] || !CurrentHeroes[1]) {
             this.BondLevelText.text = "";
             this.LevelValueProgress.fillAmount = 0.0f;
+            this.LevelValueText.text = "";
             return;
         }
 
@@ -84,10 +86,12 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
 
         if (isMaxLevel) {
             this.LevelValueProgress.fillAmount = 1.0f;
+            this.LevelValueText.text = "MAX";
         } else {
             float upgradeValue = data.NextLevelValue - data.CurrentLevelValue;
             float current = data.CurrentValue - data.CurrentLevelValue;
             this.LevelValueProgress.fillAmount = current / upgradeValue;
+            this.LevelValueText.text = $"{current}/{upgradeValue}";
         }
         this.TacticPanel.Show(CurrentHeroes[0].Name, CurrentHeroes[1].Name, false);
     }

@@ -341,7 +341,8 @@ public class Fighter : StateMachineController{
             if (modifyWay == PropertyModifyWay.Percentage) {
                 change = sign * value / 100.0f;
             }
-            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, currentMultiplier + change);
+            float result = Mathf.Clamp(currentMultiplier + change, 0.0f, 3.0f);
+            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, result);
             return change;
         }
 

@@ -116,11 +116,14 @@ public class EntanglementManager : MonoBehaviour {
             foreach (EntanglementData data in this.EntanglementLevelDatas) {
                 if (value < data.Value) break;
                 if (!data.PropertyChange) continue;
+                if (data.PropertyChangeDatas == null || data.PropertyChangeDatas.Length == 0) continue;
 
-                hero.FighterPropertyChange(data.ChangeProperty, data.ChangeProperty, data.ModifyWay,
-                    PropertyRef.Initial, data.ChangeValue, isUp);
-                h.FighterPropertyChange(data.ChangeProperty, data.ChangeProperty, data.ModifyWay, PropertyRef.Initial,
-                    data.ChangeValue, isUp);
+                foreach (EntanglementPropertyChangeData pData in data.PropertyChangeDatas) {
+                    hero.FighterPropertyChange(pData.ChangeProperty, pData.ChangeProperty, pData.ModifyWay,
+                        PropertyRef.Initial, pData.ChangeValue, isUp);
+                    h.FighterPropertyChange(pData.ChangeProperty, pData.ChangeProperty, pData.ModifyWay, PropertyRef.Initial,
+                        pData.ChangeValue, isUp);    
+                }
             }
         }
     }
