@@ -54,7 +54,7 @@ public class HeroDetailUI : MonoBehaviour {
         Hp.text = hero.InitialHealth.ToString();
         PhysicsAttack.text = hero.InitialPhysicsAttack.ToString();
         MagicAttack.text = hero.InitialMagicAttack.ToString();
-        Speed.text = hero.AttackSpeed.ToString();
+        Speed.text = "1";
         Critical.text = hero.InitialCritical.ToString();
         if (hero.FighterSkillCaster) {
             Cooldown.text = hero.FighterSkillCaster.GetInitialData(SkillProperty.Cooldown).ToString();
@@ -63,7 +63,7 @@ public class HeroDetailUI : MonoBehaviour {
     }
 
     private string GetPropertyDiff(float current, float initial){
-        double diff = Math.Round(current - initial, 1);
+        double diff = Math.Round(current - initial, 2);
         if (diff == 0){
             return "";
         }

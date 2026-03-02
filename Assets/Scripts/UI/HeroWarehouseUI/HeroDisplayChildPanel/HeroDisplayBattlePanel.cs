@@ -23,7 +23,7 @@ public class HeroDisplayBattlePanel : HeroDisplayChildPanel {
         this.Hp.text = hero.InitialHealth.ToString();
         this.PhysicsAttack.text = hero.InitialPhysicsAttack.ToString();
         this.MagicAttack.text = hero.InitialMagicAttack.ToString();
-        this.Speed.text = "1.0";
+        this.Speed.text = "1";
         this.Critical.text = hero.InitialCritical.ToString();
 
         SkillCaster skillCaster = hero.GetComponentInChildren<SkillCaster>();
