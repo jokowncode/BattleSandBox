@@ -15,6 +15,8 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
     [SerializeField] private TextMeshProUGUI BondLevelText;
     [SerializeField] private Image LevelValueProgress;
     [SerializeField] private TextMeshProUGUI LevelValueText;
+
+    [SerializeField] private HeroBondPropertyChange BondPropertyPanel;
     [SerializeField] private TacticPanelUI TacticPanel;
 
     [Header("Bond Border")] 
@@ -72,6 +74,7 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
 
     private void UpdateBondData() {
         this.TacticPanel.ClearTactic();
+        this.BondPropertyPanel.SetContent(0);
         if (!CurrentHeroes[0] || !CurrentHeroes[1]) {
             this.BondLevelText.text = "";
             this.LevelValueProgress.fillAmount = 0.0f;
@@ -93,6 +96,7 @@ public class HeroBondPanelUI : HeroWarehousePanelWithGoods {
             this.LevelValueProgress.fillAmount = current / upgradeValue;
             this.LevelValueText.text = $"{current}/{upgradeValue}";
         }
+        this.BondPropertyPanel.SetContent(data.BondLevel);
         this.TacticPanel.Show(CurrentHeroes[0].Name, CurrentHeroes[1].Name, false);
     }
 

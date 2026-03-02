@@ -16,4 +16,5 @@ public class EntanglementData : ScriptableObject {
     public bool PropertyChange;
     public BattleTacticType CanUseMaxBattleTactic = BattleTacticType.None;
     public EntanglementPropertyChangeData[] PropertyChangeDatas;
+    public string LevelDescription;
 }

@@ -14,8 +14,8 @@ public struct BondData {
 
 public class EntanglementManager : MonoBehaviour {
 
-    [SerializeField] private List<EntanglementData> EntanglementLevelDatas;
-    
+    [field: SerializeField] public List<EntanglementData> EntanglementLevelDatas { get; private set; }
+
     public static EntanglementManager Instance;
 
     private List<float> HeroEntanglementValues;
