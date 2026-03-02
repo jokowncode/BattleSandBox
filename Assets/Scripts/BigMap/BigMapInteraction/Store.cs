@@ -20,28 +20,31 @@ public class Store : InteractionObject {
     }
 
     protected override void LoadBigMapData() {
+        var storeGoods = SaveDataManager.Instance.PlayerData.StoreGoods;
         if ((this.Goods == null || this.Goods.Count == 0) && !this.IsEnd) {
             // Random Store
             if (SceneChangeManager.Instance.IsNewDungeon) {
-                if(PlayerPrefs.HasKey(GetName())) PlayerPrefs.DeleteKey(GetName());
+                if(storeGoods.ContainsKey(GetName())) storeGoods.Remove(GetName());
                 // TODO: Random Store Goods
                 this.Goods = StoreUI.Instance.RandomGoodsSimple();
             }
         }
         
         if (!this.IsEnd) {
-            if(PlayerPrefs.HasKey(GetName())) PlayerPrefs.DeleteKey(GetName());
+            if(storeGoods.ContainsKey(GetName())) storeGoods.Remove(GetName());
         }
         
-        if (PlayerPrefs.HasKey(GetName())) {
-            string json = PlayerPrefs.GetString(GetName());
+        if (storeGoods.ContainsKey(GetName())) {
+            string json = storeGoods[GetName()];
             this.Goods = JsonUtility.FromJson<Serialization<string>>(json).ToList();
         }
     }
 
     private void OnDestroy() {
         string json = JsonUtility.ToJson(new Serialization<string>(this.Goods));
-        PlayerPrefs.SetString(GetName(), json);
+        if (!SaveDataManager.Instance.PlayerData.StoreGoods.TryAdd(GetName(), json)) {
+            SaveDataManager.Instance.PlayerData.StoreGoods[GetName()] = json;
+        }
     }
 
     protected override void Interaction() {

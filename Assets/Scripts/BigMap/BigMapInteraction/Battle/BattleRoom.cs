@@ -36,6 +36,7 @@ public class BattleRoom : InteractionObject {
         }
         if (this.IsInteract) return;
         this.IsInteract = true;
+        SaveDataManager.Instance.PlayerInBigMap.TransMove(false);
         GameManager.Instance.GoToBattle(this.Data);
     }
 
