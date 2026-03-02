@@ -128,6 +128,12 @@ public class SaveDataManager : MonoBehaviour {
         return result + ".save";
     }
 
+    public long GetCurrentPlayTime() {
+        long currentTimeStamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        long diff = (currentTimeStamp - this.LoadTimeStamp) / 1000 + this.AlreadyPlayTime;
+        return diff;
+    }
+
     public void AutoSaveData() {
         if (this.AutoSaveDataPaths.Count >= this.MaxSaveDataCount) {
             string deleteFileName = this.AutoSaveDataPaths.Dequeue();
