@@ -53,7 +53,7 @@ public class GoodsWarehousePanel : MonoBehaviour {
                 DetailButton button;
                 if (data.Type is GoodsType.战术 or GoodsType.普通词条 or GoodsType.特殊词条) {
                     button = Instantiate(HasDescButtonPrefab, GoodsContainer);
-                    this.Layout.cellSize = new Vector2(600, 100);
+                    this.Layout.cellSize = new Vector2(600, 140);
                 } else {
                     button = Instantiate(GoodsButtonPrefab, GoodsContainer);
                     this.Layout.cellSize = new Vector2(300, 100);

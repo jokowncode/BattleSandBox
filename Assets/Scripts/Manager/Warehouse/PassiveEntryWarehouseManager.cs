@@ -75,6 +75,14 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
         return result;
     }
 
+    public void GetAllPassiveEntry(int count) {
+        foreach (PassiveEntry entry in this.AllPassiveEntries) {
+            if (!this.OwnedPassiveEntries.TryAdd(entry.Data.Name, count)) {
+                this.OwnedPassiveEntries[entry.Data.Name] = count;
+            }
+        }
+    }
+
     public PassiveEntryData GetRandomPassiveEntryByStar(int star) {
         List<PassiveEntry> entries = this.AllPassiveEntries.FindAll(entry => entry.Data.Star == star);
         if (entries.Count == 0) return null;

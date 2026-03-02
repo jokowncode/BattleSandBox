@@ -129,6 +129,15 @@ public class GoodsWarehouseManager : MonoBehaviour {
         return this.OwnedConsumedGoods.ContainsKey(goodsName) ? this.OwnedConsumedGoods[goodsName] : 0;
     }
 
+    public void GetAllTactic(int count) {
+        foreach (StoreGoodsData data in this.AllGoodsData) {
+            if (data.Type != GoodsType.战术) continue;
+            if (!this.OwnedConsumedGoods.TryAdd(data.GoodsName, count)) {
+                this.OwnedConsumedGoods[data.GoodsName] = count;
+            }
+        }
+    }
+
     private void AddConsumeGoods(string goodsName, int count) {
         if (!this.AllStoreGoodsMap.ContainsKey(goodsName)) return;
         if (!this.OwnedConsumedGoods.ContainsKey(goodsName)) {

@@ -64,6 +64,11 @@ public class GameManager : MonoBehaviour{
     public void GoBackToCamp(bool isSaveRoom) {
         if (!isSaveRoom) {
             SaveDataManager.Instance.CurrentDungeonComplete();
+            // TODO: DEMO END -> GET ALL PASSIVE ENTRY AND TACTIC
+            if (SceneChangeManager.Instance.DungeonScene == SceneType.Dungeons_Level1) {
+                PassiveEntryWarehouseManager.Instance.GetAllPassiveEntry(8);                
+                GoodsWarehouseManager.Instance.GetAllTactic(50);
+            }
         }
         this.GoToScene(SceneType.Camp);
     }
