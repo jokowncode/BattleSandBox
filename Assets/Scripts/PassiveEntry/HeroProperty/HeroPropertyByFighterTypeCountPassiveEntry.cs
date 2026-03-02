@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: BUG -> IF ENTER HERO SATISFY CONDITION, BUT NOT OPEN THIS HERO DETAIL -> PROPERTY NOT CHANGE
 public class HeroPropertyByFighterTypeCountPassiveEntry : PassiveEntry {
     
     [SerializeField] private FighterType TargetFighterType;

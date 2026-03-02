@@ -5,6 +5,8 @@ using UnityEngine;
 
 [Serializable]
 public struct EntanglementPropertyChangeData {
+    public bool IsHeroProperty;
+    public SkillProperty ChangeSkillProperty;
     public FighterProperty ChangeProperty;
     public PropertyModifyWay ModifyWay;
     public float ChangeValue;

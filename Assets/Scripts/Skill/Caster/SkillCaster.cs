@@ -152,7 +152,7 @@ public abstract class SkillCaster : MonoBehaviour{
         }
     }
 
-    public void SKillPropertyChange(SkillProperty property, PropertyModifyWay modifyWay, float value, bool isUp) {
+    public void SkillPropertyChange(SkillProperty property, PropertyModifyWay modifyWay, float value, bool isUp) {
 
         float sign = isUp ? 1.0f : -1.0f;
         if (property == SkillProperty.SummonCount && this is SummonSkillCaster summonSkill){

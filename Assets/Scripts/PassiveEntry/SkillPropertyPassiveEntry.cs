@@ -14,11 +14,11 @@ public class SkillPropertyPassiveEntry : PassiveEntry{
     }
     
     public override void Construct(Hero hero){
-        hero.FighterSkillCaster.SKillPropertyChange(this.Property, this.ModifyWay, this.Value, true);
+        hero.FighterSkillCaster.SkillPropertyChange(this.Property, this.ModifyWay, this.Value, true);
     }
 
     public override void Destruct(Hero hero){
-        hero.FighterSkillCaster.SKillPropertyChange(this.Property, this.ModifyWay, this.Value, false);
+        hero.FighterSkillCaster.SkillPropertyChange(this.Property, this.ModifyWay, this.Value, false);
     }
 }
 
