@@ -336,7 +336,7 @@ public class Fighter : StateMachineController{
         }
         
         if (updateProperty == FighterProperty.CooldownPercentage){
-            float currentMultiplier = FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
+            float currentMultiplier = this.AttackSpeed;
             float change = sign * value;
             if (modifyWay == PropertyModifyWay.Percentage) {
                 change = sign * value / 100.0f;
@@ -478,6 +478,7 @@ public class Fighter : StateMachineController{
     public Sprite DetailPortrait => InitialData.DetailPortrait;
     public Sprite WarehouseHeroPortrait => InitialData.WarehouseHeroPortrait;
     public Sprite SkillPortrait => InitialData.SkillPortrait;
+    public float AttackSpeed => FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
     
     #endregion
 }

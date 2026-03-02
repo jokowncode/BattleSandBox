@@ -25,6 +25,7 @@ public class HeroDetailUI : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI HpChange;
     [SerializeField] private TextMeshProUGUI PhysicsAttackChange;
     [SerializeField] private TextMeshProUGUI MagicAttackChange;
+    [SerializeField] private TextMeshProUGUI SpeedChange;
     [SerializeField] private TextMeshProUGUI CriticalChange;
     [SerializeField] private TextMeshProUGUI CooldownChange;
 
@@ -53,7 +54,7 @@ public class HeroDetailUI : MonoBehaviour {
         Hp.text = hero.InitialHealth.ToString();
         PhysicsAttack.text = hero.InitialPhysicsAttack.ToString();
         MagicAttack.text = hero.InitialMagicAttack.ToString();
-        Speed.text = hero.Speed.ToString();
+        Speed.text = hero.AttackSpeed.ToString();
         Critical.text = hero.InitialCritical.ToString();
         if (hero.FighterSkillCaster) {
             Cooldown.text = hero.FighterSkillCaster.GetInitialData(SkillProperty.Cooldown).ToString();
@@ -75,6 +76,7 @@ public class HeroDetailUI : MonoBehaviour {
         PhysicsAttackChange.text = GetPropertyDiff(hero.PhysicsAttack, hero.InitialPhysicsAttack);
         MagicAttackChange.text = GetPropertyDiff(hero.MagicAttack, hero.InitialMagicAttack);
         CriticalChange.text = GetPropertyDiff(hero.Critical, hero.InitialCritical);
+        SpeedChange.text = GetPropertyDiff(hero.AttackSpeed, 1.0f);
         if (hero.FighterSkillCaster) {
             CooldownChange.text = GetPropertyDiff(hero.FighterSkillCaster.GetCurrentData(SkillProperty.Cooldown),
                 hero.FighterSkillCaster.GetInitialData(SkillProperty.Cooldown));
