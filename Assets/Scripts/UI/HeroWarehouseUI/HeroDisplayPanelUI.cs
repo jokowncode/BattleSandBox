@@ -76,7 +76,7 @@ public class HeroDisplayPanelUI : HeroWarehousePanelWithGoods {
         health = Mathf.Min(health, this.CurrentDisplayHero.InitialData.Health);
         if (health < 0.0f) health = this.CurrentDisplayHero.InitialHealth;
         this.BloodProgressBar.fillAmount = health / this.CurrentDisplayHero.InitialData.Health;
-        this.BloodProgressText.text = $"{Mathf.RoundToInt(health)}/{this.CurrentDisplayHero.InitialHealth}";
+        this.BloodProgressText.text = $"{Mathf.RoundToInt(health)}/{Mathf.RoundToInt(this.CurrentDisplayHero.InitialHealth)}";
     }
 
     public void ShowAudioDialog(HeroAudioData data) {

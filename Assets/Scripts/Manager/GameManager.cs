@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour{
     public float Money { get; private set; } = 0.0f;
         
     private BattleData NextBattleData;
+    private bool IsTrainBattle = false;
     
     public bool IsBattleEnd{ get; private set; }
     public bool IsBattleVictory{ get; private set; }
@@ -53,14 +54,10 @@ public class GameManager : MonoBehaviour{
         if (SceneTools.IsBattleScene(SceneChangeManager.Instance.CurrentScene)){
             BattleManager.Instance.SetBattleData(this.NextBattleData);
         }
-
-        if (SceneChangeManager.Instance.CurrentScene != SceneType.BigMap){
-            ResetBattleFlag();
-        }
     }
 
     public void DungeonFail() {
-        ResetBattleFlag();
+        this.ResetBattleFlag();
         SceneChangeManager.Instance.GoToDungeon(SceneChangeManager.Instance.DungeonScene, true);
     }
 
@@ -71,14 +68,26 @@ public class GameManager : MonoBehaviour{
         this.GoToScene(SceneType.Camp);
     }
 
-    public void GoToBattle(BattleData battleData, bool showStartUI = true){
+    public void GoToBattle(BattleData battleData, bool showStartUI = true, bool isTrain = false){
         this.NextBattleData = battleData;
+        this.IsTrainBattle = isTrain;
+        ResetBattleFlag();
         if (showStartUI) {
             if(GoToBattleSfx)
                 AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.GoToBattleSfx);
             BigMapUIManager.Instance.ShowBattleStartUI(battleData.BattleScene, battleData.BattleBannarBackground, battleData.BattleImage, battleData.BattleText);
         } else {
             SceneChangeManager.Instance.GoToScene(battleData.BattleScene);   
+        }
+    }
+
+    public void BattleEndGoBack(bool victory) {
+        if (this.IsTrainBattle) {
+            this.ResetBattleFlag();
+            SaveDataManager.Instance.RecoverAllHeroHealth();
+            this.GoToScene(SceneType.Camp);
+        } else {
+            GoToMap(true, victory);
         }
     }
 

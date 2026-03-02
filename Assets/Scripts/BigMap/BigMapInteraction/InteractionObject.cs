@@ -17,7 +17,8 @@ public abstract class InteractionObject : MonoBehaviour {
         MiniMap,
         角色仓库,
         词条合成,
-        道具仓库
+        道具仓库,
+        训练室
     }
 
     [SerializeField] private GameObject Edge;

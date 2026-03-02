@@ -16,6 +16,10 @@ public class GoToDungeon : InteractionObject {
     }
 
     protected override void Interaction() {
+        if (SaveDataManager.Instance.DungeonIsComplete(this.Dungeon)) {
+            SceneChangeManager.Instance.AddGameTip("后面的内容暂未解锁！");
+            return;
+        }
         SaveDataManager.Instance.AutoSaveData();
         SceneChangeManager.Instance.GoToDungeon(this.Dungeon);
     }

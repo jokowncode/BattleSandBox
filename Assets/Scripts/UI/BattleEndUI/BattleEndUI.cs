@@ -45,7 +45,7 @@ public class BattleEndUI : MonoBehaviour, IPointerClickHandler {
 
     private void ExitBattle() {
         AudioManager.Instance.StopDialog();
-        GameManager.Instance.GoToMap(true, this.CurrentIsVictory);
+        GameManager.Instance.BattleEndGoBack(this.CurrentIsVictory);
     }
 }
 

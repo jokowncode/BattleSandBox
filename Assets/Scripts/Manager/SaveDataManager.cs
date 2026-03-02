@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 
 [Serializable]
 public class PlayerSaveData {
+    public bool IsCampTrainInstruction = false;
     public int BattleInstructionIndex = 0;
     public float PlayerMoney = -1.0f;
     public SceneType CurrentDungeon = SceneType.None;

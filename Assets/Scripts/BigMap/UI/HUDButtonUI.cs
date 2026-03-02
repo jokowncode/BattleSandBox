@@ -28,8 +28,9 @@ public class HUDButtonUI : MonoBehaviour {
             return;
         }
 
-        if (SceneChangeManager.Instance.CurrentScene == SceneType.BigMap 
-            && SceneChangeManager.Instance.DungeonScene != SceneType.Dungeons_Newbie) {
+        if (SceneChangeManager.Instance.CurrentScene == SceneType.Camp ||
+            (SceneChangeManager.Instance.CurrentScene == SceneType.BigMap 
+            && SceneChangeManager.Instance.DungeonScene != SceneType.Dungeons_Newbie)) {
             SaveDataManager.Instance.AutoSaveData();
         }
         GameManager.Instance.GoToScene(SceneType.Main);

@@ -289,7 +289,7 @@ public class Fighter : StateMachineController{
     private void UpdateBloodBar() {
         this.BloodBarImage.fillAmount = this.CurrentData.Health == 0.0f ? 0.0f : this.InBattleHealth / this.CurrentData.Health;
         this.BloodBarImage.color = Color.Lerp(this.InitialColor, this.FinalColor, 1.0f - this.BloodBarImage.fillAmount);
-        this.BloodValueText.text = $"{Mathf.RoundToInt(this.InBattleHealth)}/{this.CurrentData.Health}";
+        this.BloodValueText.text = $"{Mathf.RoundToInt(this.InBattleHealth)}/{Mathf.RoundToInt(this.CurrentData.Health)}";
         UpdatePortraitBloodBar();
     }
 
