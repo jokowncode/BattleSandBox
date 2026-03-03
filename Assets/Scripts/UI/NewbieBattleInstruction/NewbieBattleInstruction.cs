@@ -28,16 +28,17 @@ public class NewbieBattleInstruction : MonoBehaviour, IPointerClickHandler {
         if (this.CurrentInstructionIndex == 0) return true;
         if (this.CurrentInstructionIndex == 1) return BattleUIManager.Instance.heroDetailUI.gameObject.activeSelf;
         if (this.CurrentInstructionIndex <= 4) return true;
-        if (this.CurrentInstructionIndex == 5) return HeroWarehouseManager.Instance.OwnedHeroesCount >= 2;
-        if (this.CurrentInstructionIndex == 6) {
+        if (this.CurrentInstructionIndex == 5) return BattleManager.Instance.IsBattleStart;
+        if (this.CurrentInstructionIndex == 6) return HeroWarehouseManager.Instance.OwnedHeroesCount >= 2;
+        if (this.CurrentInstructionIndex == 7) {
             return BattleManager.Instance.IsVictory;
         }
-        if (this.CurrentInstructionIndex == 7) return true;
-        if (this.CurrentInstructionIndex == 8)
+        if (this.CurrentInstructionIndex == 8) return true;
+        if (this.CurrentInstructionIndex == 9)
             return BattleUIManager.Instance.heroDetailUI.gameObject.activeSelf &&
                    PassiveEntryWarehouseManager.Instance.HasPassiveEntry;
         
-        if (this.CurrentInstructionIndex == 9) {
+        if (this.CurrentInstructionIndex == 10) {
             if (!BattleManager.Instance.IsBattleStart) return false;
             if (BattleManager.Instance.IsGameOver) return false;
             List<string> heroes = BattleUIManager.Instance.heroPortraitUI.HeroEnergyFullList();
@@ -50,7 +51,7 @@ public class NewbieBattleInstruction : MonoBehaviour, IPointerClickHandler {
             }
         }
 
-        if (this.CurrentInstructionIndex == 10) {
+        if (this.CurrentInstructionIndex == 11) {
             return UISelectionManager.Instance.HasOpenTacticUI;
         }
         return false;

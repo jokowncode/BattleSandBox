@@ -18,8 +18,8 @@ public class GameManager : MonoBehaviour{
     public float Money { get; private set; } = 0.0f;
         
     private BattleData NextBattleData;
-    private bool IsTrainBattle = false;
-    
+    public bool IsTrainBattle { get; private set; } = false;
+
     public bool IsBattleEnd{ get; private set; }
     public bool IsBattleVictory{ get; private set; }
 
