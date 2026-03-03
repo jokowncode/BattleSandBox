@@ -356,7 +356,7 @@ public class BattleManager : StateMachineController{
 
     public void ShowHeroDetail(Hero hero){
         this.selectedHero = hero;
-        hero.OnShowHeroDetail?.Invoke(hero);
+        hero.UpdateByFighterTypeCountPropertyChange();
         UpdatePassiveEntryUI(hero);
         BattleUIManager.Instance.ShowHeroDetail(hero);
     }

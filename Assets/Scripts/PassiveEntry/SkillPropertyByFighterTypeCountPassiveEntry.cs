@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO: BUG -> IF ENTER HERO SATISFY CONDITION, BUT NOT OPEN THIS HERO DETAIL -> PROPERTY NOT CHANGE
 public class SkillPropertyByFighterTypeCountPassiveEntry : PassiveEntry {
     
     [SerializeField] private FighterType TargetFighterType;
@@ -17,26 +16,16 @@ public class SkillPropertyByFighterTypeCountPassiveEntry : PassiveEntry {
     }
     
     public override void Construct(Hero hero){
-        hero.OnShowHeroDetail += OnShowHeroDetail;
         float changeValue = GetChangeValue();
         hero.FighterSkillCaster.SkillPropertyChange(Property, ModifyWay, changeValue, true);
         hero.Records.Add($"Skill{Property}PassiveEntryChangeValue", changeValue);
     }
 
-    private void OnShowHeroDetail(Hero hero) {
-        float changeValue = GetChangeValue();
-        string key = $"Skill{Property}PassiveEntryChangeValue";
-        if (hero.Records.ContainsKey(key)) {
-            hero.FighterSkillCaster.SkillPropertyChange(Property, ModifyWay, (float)hero.Records[key], false);
-        }
-        hero.FighterSkillCaster.SkillPropertyChange(Property, ModifyWay, changeValue, true);
-        hero.Records[key] = changeValue;
-    }
-
     public override void Destruct(Hero hero) {
-        hero.OnShowHeroDetail -= OnShowHeroDetail;
-        float changeValue = GetChangeValue();
+        if (!hero.Records.ContainsKey($"Skill{Property}PassiveEntryChangeValue")) return;
+        float changeValue = (float) hero.Records[$"Skill{Property}PassiveEntryChangeValue"];
         hero.FighterSkillCaster.SkillPropertyChange(Property, ModifyWay, changeValue, false);
+        hero.Records.Remove($"Skill{Property}PassiveEntryChangeValue");
     }
 
     private float GetChangeValue() {

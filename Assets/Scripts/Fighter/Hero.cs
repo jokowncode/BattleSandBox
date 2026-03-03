@@ -23,7 +23,6 @@ public class Hero : Fighter {
     public int DeployAreaIndex { get; private set; }
     public Vector3 StartPosition { get; private set; }
 
-    public Action<Hero> OnShowHeroDetail;
     public Dictionary<string, Object> Records = new();
 
     // public int MergeGroupIndex { get; set; } = -1;
@@ -45,6 +44,7 @@ public class Hero : Fighter {
     }
     
     private void OnDestroy() {
+        BattleManager.Instance.OnBattleStart -= UpdateByFighterTypeCountPropertyChange;
         if (!IsSummon) {
             SaveDataManager.Instance.SetHeroHealth(this.Name, Mathf.Max(this.InBattleHealth, 0.0f));
         }
@@ -123,11 +123,28 @@ public class Hero : Fighter {
         }
         BattleManager.Instance.LoadHeroPassiveEntry(this);
         BattleManager.Instance.ShowHeroDetail(this);
+        BattleManager.Instance.OnBattleStart += UpdateByFighterTypeCountPropertyChange;
     }
 
     public void UndressSelfEntry(){
         for (int i = 0; i < SelfPassiveEntries.Count; ) {
             RemovePassiveEntry(SelfPassiveEntries[i], true);
+        }
+    }
+
+    public void UpdateByFighterTypeCountPropertyChange() {
+        foreach (PassiveEntry passiveEntry in SelfPassiveEntries) {
+            if (passiveEntry is not (HeroPropertyByFighterTypeCountPassiveEntry
+                or SkillPropertyByFighterTypeCountPassiveEntry)) continue;
+            passiveEntry.Destruct(this);
+            passiveEntry.Construct(this);
+        }
+        
+        foreach (PassiveEntry passiveEntry in EquipPassiveEntries) {
+            if (passiveEntry is not (HeroPropertyByFighterTypeCountPassiveEntry
+                or SkillPropertyByFighterTypeCountPassiveEntry)) continue;
+            passiveEntry.Destruct(this);
+            passiveEntry.Construct(this);
         }
     }
 
