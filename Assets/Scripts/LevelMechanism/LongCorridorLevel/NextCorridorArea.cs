@@ -29,6 +29,7 @@ public class NextCorridorArea : MonoBehaviour {
     private bool IsActive;
     private bool IsEnd;
     private Vector3 Offset = Vector3.zero;
+    private WaitForSecondsRealtime DisappearWaitTimer = new(0.25f);
 
     private int ArriveHeroCount = 0;
     private MoveCamera MoveCam;
@@ -70,7 +71,7 @@ public class NextCorridorArea : MonoBehaviour {
                 summonSkill.ClearPet();
             }
         }
-        yield return null;
+        yield return this.DisappearWaitTimer;
         foreach (Hero hero in BattleManager.Instance.HeroesInBattle) {
             Vector3 targetPos = this.MoveArea.GetWorldPosition(hero.Name);
             hero.Move.OnArriveDestination += OnArriveDestination_Disappear;

@@ -237,13 +237,14 @@ public class Fighter : StateMachineController{
         this.gameObject.layer = LayerMask.NameToLayer("Default");
         this.Move.StopMove();
         this.FighterIdle();
+        this.Shadow.SetActive(false);
             
 #if DEBUG_MODE
         if (this.CurrentFighterType == TargetType.Hero) {
             Debug.Log($"{this.gameObject.name} Dead -> Caused Total Damage: {this.TotalDamage}");    
         }    
 #endif
-        if (this is Hero hero){ 
+        if (this is Hero hero && !this.IsSummon){ 
             BattleUIManager.Instance.heroPortraitUI.SetHeroPortraitsGray(hero);
             BattleManager.Instance.RemoveHero(hero);
         }else if (this is Enemy enemy) {

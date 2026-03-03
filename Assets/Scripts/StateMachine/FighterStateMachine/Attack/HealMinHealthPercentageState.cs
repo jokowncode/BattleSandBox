@@ -13,6 +13,8 @@ public class HealMinHealthPercentageState : AttackState{
     protected override void NormalAttack(){
         Fighter target = BattleManager.Instance.FindMinPercentagePropertyHero(FighterProperty.Health, Controller.AttackTargetType);
         if (!target) return;
+        Vector3 moveVec = target.Center.position - transform.position;
+        Controller.Move.ChangeForward(moveVec.x);
 
         bool criticalTest = Random.value < Controller.Critical / 100.0f;
         float critical = criticalTest ? 1.5f : 1.0f;

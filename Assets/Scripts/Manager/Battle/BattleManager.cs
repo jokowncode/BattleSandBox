@@ -89,6 +89,7 @@ public class BattleManager : StateMachineController{
         }
         
         // For Scene Already Exist Hero
+        // TODO: BUG -> ALREADY EXIST HERO NOT EXECUTE NORMAL
         if (this.HeroParent.childCount != 0) {
             foreach (Transform child in this.HeroParent.transform) {
                 if (child.TryGetComponent(out Hero hero)) {
@@ -153,7 +154,7 @@ public class BattleManager : StateMachineController{
         this.AllHeroRecall();
         yield return null;
         OnRewindBattle?.Invoke();
-        GameManager.Instance.GoToBattle(this.Data, false);
+        GameManager.Instance.GoToBattle(this.Data, false, GameManager.Instance.IsTrainBattle);
     }
 
     private void DeployEnemy(){
