@@ -15,7 +15,18 @@ public class MoveCamera : MonoBehaviour {
         StartX = transform.position.x;
     }
 
+    public void GoBackToStartX() {
+        Vector3 pos = this.transform.position;
+        pos.x = this.StartX;
+        this.transform.position = pos;
+    }
+
+    public void MoveToInXDirByOffset(float offset) {
+        this.MoveToInXDir(this.transform.position.x + offset - this.StartX);
+    }
+
     public void MoveToInXDir(float x) {
+        StopAllCoroutines();
         StartCoroutine(MoveCoroutine(x));
     }
 
