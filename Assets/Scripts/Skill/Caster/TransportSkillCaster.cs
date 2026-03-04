@@ -21,7 +21,6 @@ public class TransportSkillCaster : SkillCaster {
         Vector3 summonPos = centerPos + rotVector * OwnedFighter.AttackRadius;
         Fighter summon = Instantiate(OwnedFighter, summonPos, Quaternion.identity);
         summon.SetCurrentData(OwnedFighter.CurrentData);
-        summon.FighterSkillCaster.SetSkillCastCount(this.CurrentSkillCastCount);
         summon.BattleStart(true);
         summon.TransitionShow(true);
 
@@ -48,16 +47,25 @@ public class TransportSkillCaster : SkillCaster {
             Destroy(ps.gameObject, ps.main.duration + ps.main.startLifetime.constantMax);
         }
 
-        Fighter fighter = null;
-        if (OwnedFighter.AttackTargetType == TargetType.Enemy) {
-            fighter = BattleManager.Instance.FindFurthestEnemyTarget(OwnedFighter.transform.position);
-        } else {
-            fighter = BattleManager.Instance.FindFurthestHeroTarget(OwnedFighter.transform.position);
-        }
+        Vector3 targetPos = this.OwnedFighter.transform.position;
+        if (this.CurrentSkillCastCount <= 1) {
+            Fighter fighter = null;
+            if (OwnedFighter.AttackTargetType == TargetType.Enemy) {
+                fighter = BattleManager.Instance.FindFurthestEnemyTarget(OwnedFighter.transform.position);
+            } else {
+                fighter = BattleManager.Instance.FindFurthestHeroTarget(OwnedFighter.transform.position);
+            }
         
-        Vector3 dir = OwnedFighter.AttackTargetType == TargetType.Enemy ? Vector3.right : Vector3.left;
-        Vector3 targetPos = fighter.transform.position + dir * OwnedFighter.AttackRadius;
-        OwnedFighter.ChangePositionWithTrail(targetPos);
+            Vector3 dir = OwnedFighter.AttackTargetType == TargetType.Enemy ? Vector3.right : Vector3.left;
+            targetPos = fighter.transform.position + dir * OwnedFighter.AttackRadius;
+            OwnedFighter.ChangePositionWithTrail(targetPos);
+            
+            if (SkillStartParticle){
+                ParticleSystem ps = Instantiate(SkillStartParticle, fighter.transform.position, Quaternion.identity);
+                ps.Play();
+                Destroy(ps.gameObject, ps.main.duration + ps.main.startLifetime.constantMax);
+            }
+        }
         
         if (SummonCount != 0) {
             for (int i = 0; i < SummonCount / 2; i++) {
@@ -65,13 +73,6 @@ public class TransportSkillCaster : SkillCaster {
                 Summon(targetPos, (i + 1) * SummonAngle);
             }    
         }
-        
-        if (SkillStartParticle){
-            ParticleSystem ps = Instantiate(SkillStartParticle, fighter.transform.position, Quaternion.identity);
-            ps.Play();
-            Destroy(ps.gameObject, ps.main.duration + ps.main.startLifetime.constantMax);
-        }
-        
         if(BuffData) BuffManager.Instance.AddBuff(this.OwnedFighter,this.OwnedFighter,BuffData);
     }
 }

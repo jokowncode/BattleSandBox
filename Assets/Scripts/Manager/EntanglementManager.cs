@@ -216,6 +216,20 @@ public class EntanglementManager : MonoBehaviour {
         return result;
     }
 
+    public void AllHeroFullEntanglement() {
+       List<string> ownedHeroes = HeroWarehouseManager.Instance.GetOwnedHeroesRef();
+       for (int i = 0; i < ownedHeroes.Count; i++) {
+           int index1 = HeroWarehouseManager.Instance.GetHeroIndex(ownedHeroes[i]);
+           if (index1 < 0) continue;
+
+           for (int j = i + 1; j < ownedHeroes.Count; j++) {
+               int index2 = HeroWarehouseManager.Instance.GetHeroIndex(ownedHeroes[j]);
+               if (index2 < 0) continue;
+               int index = GetHeroEntanglementIndex(index1, index2);
+               this.HeroEntanglementValues[index] = this.EntanglementLevelDatas[this.MaxLevel - 1].Value;
+           }
+       }
+    }
 }
 
 

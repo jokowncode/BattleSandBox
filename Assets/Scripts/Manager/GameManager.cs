@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour{
             if (SceneChangeManager.Instance.DungeonScene == SceneType.Dungeons_Level1) {
                 PassiveEntryWarehouseManager.Instance.GetAllPassiveEntry(8);                
                 GoodsWarehouseManager.Instance.GetAllTactic(50);
+                EntanglementManager.Instance.AllHeroFullEntanglement();
             }
         }
         this.GoToScene(SceneType.Camp);

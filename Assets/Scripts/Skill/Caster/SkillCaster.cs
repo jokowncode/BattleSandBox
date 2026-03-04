@@ -34,20 +34,16 @@ public abstract class SkillCaster : MonoBehaviour{
         this.Data = Instantiate(InitialData);
     }
 
-    public void SetSkillCastCount(int count) {
-        this.CurrentSkillCastCount = count;
-    }
-
     public void BattleStart(){
         LastCastTime = -1.0f;
-        if (OwnedFighter.Type != FighterType.Warrior){
+        CurrentSkillCastCount = 0;
+        if (OwnedFighter.Type != FighterType.Warrior && !this.Data.CanCastAtStart){
             LastCastTime = Time.time;
         }
     }
 
     public virtual bool CanCastSkill(){
-        return (Data.MaxCastCount <= 0 || CurrentSkillCastCount < Data.MaxCastCount)
-               && (!Data.SkillNeedTarget || OwnedFighter.AttackTarget != null)
+        return (!Data.SkillNeedTarget || OwnedFighter.AttackTarget)
                && (LastCastTime < 0.0f || Time.time - LastCastTime > Data.Cooldown);
     }
 
@@ -170,6 +166,11 @@ public abstract class SkillCaster : MonoBehaviour{
                 float initialValue = GetInitialData(property);
                 currentValue += sign * initialValue * percentage;
                 break;
+        }
+
+        currentValue = Mathf.Max(0, currentValue);
+        if (property == SkillProperty.Cooldown) {
+            currentValue = Mathf.Max(currentValue, 0.5f);
         }
         SetData(property, currentValue);
     }

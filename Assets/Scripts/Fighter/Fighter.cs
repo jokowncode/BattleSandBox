@@ -111,6 +111,11 @@ public class Fighter : StateMachineController{
 
     public void BattleStart(bool isSummon = false) {
         this.IsSummon = isSummon;
+        if (this.IsSummon) {
+            this.FighterSkillCaster = null;
+            if (this.SkillNameText) this.SkillNameText.Hide(true);
+        }
+
         // Turn To Patrol State / Skill State
         if (FighterSkillCaster) {
             FighterSkillCaster.BattleStart();
@@ -122,7 +127,6 @@ public class Fighter : StateMachineController{
             this.ChangeState(FighterPatrol);
         }
         if(FighterPatrol) FighterPatrol.OnFindAttackTarget += OnFindAttackTarget;
-        if (SkillNameText) SkillNameText.Hide(true);
         
         UpdatePortraitBloodBar();
         if (!IsBattleStart || this.IsSummon) {
@@ -176,6 +180,7 @@ public class Fighter : StateMachineController{
     }
 
     public void FighterIdle(){
+        if(this.SkillNameText) this.SkillNameText.Hide(true);
         this.FighterAnimator.SetTrigger(AnimationParams.Idle);
         this.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
         this.ChangeState(null);

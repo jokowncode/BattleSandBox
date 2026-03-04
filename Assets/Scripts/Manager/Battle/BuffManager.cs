@@ -64,8 +64,10 @@ public class BuffManager : MonoBehaviour {
         }
         
         // Remove Property Change
-        foreach (KeyValuePair<FighterProperty, float> pair in buffChangeProperty) {
-            target.FighterPropertyChange(pair.Key, pair.Key, PropertyModifyWay.Value, PropertyRef.Initial, pair.Value, false);
+        if (target) {
+            foreach (KeyValuePair<FighterProperty, float> pair in buffChangeProperty) {
+                target.FighterPropertyChange(pair.Key, pair.Key, PropertyModifyWay.Value, PropertyRef.Initial, pair.Value, false);
+            }    
         }
         
         // Remove Particle
