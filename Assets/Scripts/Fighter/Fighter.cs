@@ -243,6 +243,7 @@ public class Fighter : StateMachineController{
         this.Move.StopMove();
         this.FighterIdle();
         this.Shadow.SetActive(false);
+        this.Center.gameObject.SetActive(false);
             
 #if DEBUG_MODE
         if (this.CurrentFighterType == TargetType.Hero) {
