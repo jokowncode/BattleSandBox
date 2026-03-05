@@ -2,8 +2,8 @@
 using UnityEngine;
 
 public enum PassiveEntryRare {
-    NormalPassiveEntry = GoodsType.普通词条,
-    SpecialPassiveEntry = GoodsType.特殊词条,
+    NormalPassiveEntry = GoodsType.普通芯片,
+    SpecialPassiveEntry = GoodsType.特殊芯片,
 }
 
 [CreateAssetMenu(menuName = "DeckBreakers/PassiveEntryData", fileName = "PassiveEntryData")]

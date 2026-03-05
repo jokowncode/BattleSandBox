@@ -25,7 +25,7 @@ public class GoodsWarehousePanel : MonoBehaviour {
     private void OnCategoryClicked(string cName, int index) {
         List<GoodsType> type = new();
         if (cName == "词条") {
-            type.Add(GoodsType.普通词条);
+            type.Add(GoodsType.普通芯片);
         }else if (cName == "回复") {
             type.Add(GoodsType.血瓶);
             type.Add(GoodsType.复活书);
@@ -51,7 +51,7 @@ public class GoodsWarehousePanel : MonoBehaviour {
             List<GoodsData> goods = GoodsWarehouseManager.Instance.GetGoodsByType(type);
             foreach (GoodsData data in goods) {
                 DetailButton button;
-                if (data.Type is GoodsType.战术 or GoodsType.普通词条 or GoodsType.特殊词条) {
+                if (data.Type is GoodsType.战术集 or GoodsType.普通芯片 or GoodsType.特殊芯片) {
                     button = Instantiate(HasDescButtonPrefab, GoodsContainer);
                     this.Layout.cellSize = new Vector2(600, 140);
                 } else {

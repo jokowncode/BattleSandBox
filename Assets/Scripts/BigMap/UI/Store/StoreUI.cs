@@ -78,9 +78,9 @@ public class StoreUI : MonoBehaviour {
             if (!data || data.Type == GoodsType.None) continue;
             DetailButton button = null;
             string desc = "";
-            if (data.Type is GoodsType.战术 or GoodsType.普通词条 or GoodsType.特殊词条) {
+            if (data.Type is GoodsType.战术集 or GoodsType.普通芯片 or GoodsType.特殊芯片) {
                 button = Instantiate(this.HasDescStoreGoodsPrefab, HasDescStoreGoodsContainer);
-                if (data.Type == GoodsType.战术 &&
+                if (data.Type == GoodsType.战术集 &&
                     Enum.TryParse(data.GoodsName, true, out BattleTacticType type)) {
                     desc = BattleTacticFactory.GetBattleTacticDescription(type);
                 } else if (data.Value == 0) {

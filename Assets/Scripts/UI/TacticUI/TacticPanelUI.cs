@@ -22,7 +22,7 @@ public class TacticPanelUI : MonoBehaviour {
             string tacticName = type.ToString();
             int count = GoodsWarehouseManager.Instance.GetGoodsCount(tacticName);
             string desc = BattleTacticFactory.GetBattleTacticDescription(type);
-            button.SetData(desc, tacticName, count, canUseTactic, GoodsType.战术);
+            button.SetData(desc, tacticName, count, canUseTactic, GoodsType.战术集);
             button.TransitionButtonInteractable(count != 0);
             button.OnButtonClicked += (showName, _) => {
                 GoodsWarehouseManager.Instance.UseConsumedGoods(showName);

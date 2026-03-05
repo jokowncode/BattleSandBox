@@ -131,7 +131,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
 
     public void GetAllTactic(int count) {
         foreach (StoreGoodsData data in this.AllGoodsData) {
-            if (data.Type != GoodsType.战术) continue;
+            if (data.Type != GoodsType.战术集) continue;
             if (!this.OwnedConsumedGoods.TryAdd(data.GoodsName, count)) {
                 this.OwnedConsumedGoods[data.GoodsName] = count;
             }
@@ -154,7 +154,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
         bool result = true;
         StoreGoodsData goodsData = this.AllStoreGoodsMap[goodsName];
         switch (goodsData.Type) {
-            case GoodsType.经验:
+            case GoodsType.羁绊经验书:
                 if (args.Length < 2) return false;
                 result = EntanglementManager.Instance.AddEntanglementValue(args[0].ToString(), args[1].ToString(), goodsData.Value, true);
                 break;
@@ -166,7 +166,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
                 if (args.Length < 1) return false;
                 result = SaveDataManager.Instance.RecoverHeroHealth(args[0].ToString(), goodsData.Value, true, true);
                 break;
-            case GoodsType.战术:
+            case GoodsType.战术集:
                 if (!Enum.TryParse(goodsName, true, out BattleTacticType type)) return false;
                 result = UISelectionManager.Instance.UseTactic(type);
                 break;
@@ -196,13 +196,13 @@ public class GoodsWarehouseManager : MonoBehaviour {
         switch (data.Type) {
             case GoodsType.角色:
                 return HeroWarehouseManager.Instance.AddHero(data.GoodsName);
-            case GoodsType.普通词条:
-            case GoodsType.特殊词条:
+            case GoodsType.普通芯片:
+            case GoodsType.特殊芯片:
                 if(data.Value == 0) PassiveEntryWarehouseManager.Instance.AddPassiveEntry(data.GoodsName, count);
                 else PassiveEntryWarehouseManager.Instance.AddRandomPassiveEntry((int)data.Value, count);
                 break;
-            case GoodsType.战术:
-            case GoodsType.经验:
+            case GoodsType.战术集:
+            case GoodsType.羁绊经验书:
             case GoodsType.复活书: 
             case GoodsType.血瓶:
                 this.AddConsumeGoods(data.GoodsName, count);
@@ -212,7 +212,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
     }
 
     private bool IsConsumeGoods(GoodsType type) {
-        return type != GoodsType.角色 && type != GoodsType.普通词条 && type != GoodsType.特殊词条;
+        return type != GoodsType.角色 && type != GoodsType.普通芯片 && type != GoodsType.特殊芯片;
     }
 
     public GoodsImageData GetImageData(GoodsType type) {
@@ -250,7 +250,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
                 StoreGoodsData data = GetGoodsData(goodsPair.Key);
                 if (!data || data.Type != type) continue;
                 string desc = "";
-                if (data.Type == GoodsType.战术 && Enum.TryParse(data.GoodsName, true, out BattleTacticType bType)) {
+                if (data.Type == GoodsType.战术集 && Enum.TryParse(data.GoodsName, true, out BattleTacticType bType)) {
                     desc = BattleTacticFactory.GetBattleTacticDescription(bType);
                 }
                 result.Add(new GoodsData() {
@@ -263,7 +263,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
             }
         }
         
-        if (type is GoodsType.普通词条 or GoodsType.特殊词条) {
+        if (type is GoodsType.普通芯片 or GoodsType.特殊芯片) {
             Dictionary<PassiveEntry, int> entries = PassiveEntryWarehouseManager.Instance.GetPassiveEntryFilterBySort(0x7FFFFFFF);
             foreach (var pair in entries) {
                 result.Add(new GoodsData() {

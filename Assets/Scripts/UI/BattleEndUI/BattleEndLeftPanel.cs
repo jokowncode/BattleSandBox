@@ -34,7 +34,7 @@ public class BattleEndLeftPanel : MonoBehaviour {
         int expCount = Random.value > 0.5f ? 2 : 1;
         int reviveCount = Random.value > 0.8f ? 1 : 0;
         this.InstantiateConsumeGoodsByGoodsType(GoodsType.血瓶, bloodBottleCount);
-        this.InstantiateConsumeGoodsByGoodsType(GoodsType.经验, expCount);
+        this.InstantiateConsumeGoodsByGoodsType(GoodsType.羁绊经验书, expCount);
         if (reviveCount != 0) {
             this.InstantiateConsumeGoodsByGoodsType(GoodsType.复活书, reviveCount);
         }

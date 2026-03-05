@@ -21,6 +21,7 @@ public class HeroWarehouseData : ScriptableObject {
     public HeroAudioData[] HeroAudios;
     public Sprite HeroWarehouseSprite;
     public Sprite HeroDefeatSprite;
+    public GameObject CampHeroPrefab;
 
     private Dictionary<HeroAudioType, HeroAudioData> HeroAudioMaps = new ();
     

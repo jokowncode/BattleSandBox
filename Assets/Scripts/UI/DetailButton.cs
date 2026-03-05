@@ -50,7 +50,7 @@ public class DetailButton : MonoBehaviour {
         this.CountText.text = newCount.ToString("D3");
     }
 
-    public void SetData(string desc, string showName, int count, bool canUse, GoodsType type, string actualName = null) {
+    public virtual void SetData(string desc, string showName, int count, bool canUse, GoodsType type, string actualName = null) {
         this.Name = string.IsNullOrEmpty(actualName) ? showName : actualName;
         if (this.DescText) this.DescText.text = desc;
         if (this.CountText) this.CountText.text = count.ToString("D3");
