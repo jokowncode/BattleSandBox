@@ -21,6 +21,8 @@ public class BattleRoom : InteractionObject {
     private bool EnemyMove => this.IsEnemyMove && this.Enemies && this.Enemies.gameObject.activeSelf;
     private bool IsInteract = false;
 
+    private int InitialLayer;
+
     protected override InteractionObjType GetInteractionObjType() {
         return InteractionObjType.战斗;
     }
@@ -28,6 +30,7 @@ public class BattleRoom : InteractionObject {
     protected override void Awake(){
         base.Awake();
         this.Collider = this.GetComponent<BoxCollider>();
+        this.InitialLayer = this.gameObject.layer;
     }
 
     protected override void Interaction(){
@@ -49,6 +52,10 @@ public class BattleRoom : InteractionObject {
         if (this.IsEnd && this.IsDisappearAfterBattle) {
             this.gameObject.SetActive(false);
         }
+
+        if (!this.IsActive) {
+            this.gameObject.layer = LayerMask.NameToLayer("Default");
+        }
     }
 
     public override void Activate() {
@@ -56,6 +63,7 @@ public class BattleRoom : InteractionObject {
         if (this.Enemies) {
             this.Enemies.gameObject.SetActive(true);
         }
+        this.gameObject.layer = this.InitialLayer;
     }
 
     protected override void Update(){

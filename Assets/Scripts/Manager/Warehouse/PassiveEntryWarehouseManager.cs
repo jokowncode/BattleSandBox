@@ -84,7 +84,15 @@ public class PassiveEntryWarehouseManager : MonoBehaviour {
     }
 
     public PassiveEntryData GetRandomPassiveEntryByStar(int star) {
-        List<PassiveEntry> entries = this.AllPassiveEntries.FindAll(entry => entry.Data.Star == star);
+        List<string> ownedHeros = HeroWarehouseManager.Instance.GetOwnedHeroesRef();
+        int sortCode = (int)PassiveEntrySort.General;
+        foreach (string heroName in ownedHeros) {
+            Hero hero = HeroWarehouseManager.Instance.GetHeroByRef(heroName);
+            sortCode |= hero.HeroAvailablePassiveEntrySortCode;
+        }
+
+        List<PassiveEntry> entries = this.AllPassiveEntries.FindAll(entry => 
+            entry.Data.Star == star && (entry.GetSortCode() & sortCode) != 0);
         if (entries.Count == 0) return null;
         int randomIndex = Random.Range(0, entries.Count);
         return entries[randomIndex].Data;

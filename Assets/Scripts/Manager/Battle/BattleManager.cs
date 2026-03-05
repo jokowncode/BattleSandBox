@@ -152,6 +152,10 @@ public class BattleManager : StateMachineController{
 
     private IEnumerator RewindBattleCoroutine() {
         this.AllHeroRecall();
+        foreach (Transform child in this.HeroParent) {
+            Destroy(child.gameObject);
+        }
+
         yield return null;
         OnRewindBattle?.Invoke();
         GameManager.Instance.GoToBattle(this.Data, false, GameManager.Instance.IsTrainBattle);

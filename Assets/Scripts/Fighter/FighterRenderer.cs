@@ -31,16 +31,15 @@ public class FighterRenderer : MonoBehaviour{
 
     public void Dead(){
         if (IsDead) return;
+        this.IsDead = true;
         if (this.gameObject.activeInHierarchy) {
             StartCoroutine(DeadCoroutine());
         } else {
             Destroy(this.transform.parent.gameObject);
-            IsDead = false;
         }
     }
     
     private IEnumerator DeadCoroutine(){
-        IsDead = true;
         float currentDissolve = this.Renderer.material.GetFloat(MaterialProperty.Dissolve);
         for (float t = 0.0f; t < this.DeadDissolveDuration; t += Time.deltaTime){
             this.Renderer.material.SetFloat(MaterialProperty.Dissolve, Mathf.Lerp(currentDissolve, 1.0f, t / DeadDissolveDuration));
@@ -48,7 +47,6 @@ public class FighterRenderer : MonoBehaviour{
         }
         this.Renderer.material.SetFloat(MaterialProperty.Dissolve, 1.0f);
         Destroy(this.transform.parent.gameObject);
-        IsDead = false;
     }
 
     private IEnumerator FlashingCoroutine(){
