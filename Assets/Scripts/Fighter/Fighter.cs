@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -58,6 +59,9 @@ public class Fighter : StateMachineController{
 
     public float HealthPercentage => this.CurrentData.Health == 0.0f ? 0.0f : this.InBattleHealth / this.CurrentData.Health;
 
+    private List<Fighter> Attackers = new();
+    public int AttackerCount => this.Attackers.Count;
+    
 #if DEBUG_MODE
     public float TotalDamage {get; set;}    
 #endif
@@ -147,9 +151,23 @@ public class Fighter : StateMachineController{
         this.BloodValueText.gameObject.SetActive(false);
     }
 
+    private void AddAttacker(Fighter attacker) {
+        if (this.Attackers.Contains(attacker)) return;
+        this.Attackers.Add(attacker);
+        attacker.OnDead += RemoveAttacker;
+    }
+
+    private void RemoveAttacker(Fighter attacker) {
+        if(this.Attackers.Contains(attacker)) this.Attackers.Remove(attacker);
+    }
+
     private void OnFindAttackTarget(Fighter target){
-        if (!target) return; 
+        if (!target) return;
+        if (this.AttackTarget && this.Type == FighterType.Warrior) {
+            this.AttackTarget.RemoveAttacker(this);
+        }
         this.AttackTarget = target;
+        if(this.Type == FighterType.Warrior) this.AttackTarget.AddAttacker(this);
         this.AttackTarget.OnDead += OnTargetDead;
         this.AttackTarget.OnDisappear += OnTargetDisappear;
     }

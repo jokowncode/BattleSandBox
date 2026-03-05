@@ -63,6 +63,10 @@ public class SceneChangeManager : MonoBehaviour{
         if (this.CurrentScene == SceneType.AboutUs){
             AudioManager.Instance.SetMainMusic(this.AboutUsBGM);
         }
+
+        if (this.CurrentScene == SceneType.Camp) {
+            SaveDataManager.Instance.RecoverAllHeroHealth();
+        }
         AudioManager.Instance.StopFootstep();
         this.BlackCanvasGroup.alpha = 0.0f;
     }

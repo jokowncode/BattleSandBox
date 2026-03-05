@@ -8,38 +8,26 @@ public class FormationManager : MonoBehaviour{
     
     public static FormationManager Instance;
 
-    [SerializeField] private int Angle = 60;
-    
-    private Dictionary<Fighter, int> TargetRecords;
-    public int MaxCount => 360 / Angle;
+    [SerializeField] private int MaxCount = 5;
+
+    private int Angle => 180 / this.MaxCount;
     
     private void Awake(){
         if (Instance != null){
             return;
         }
         Instance = this;
-        TargetRecords = new Dictionary<Fighter, int>();
+    }
+    
+    public bool ValidTarget(Fighter target) {
+        return target.AttackerCount < this.MaxCount;
     }
 
-    public bool ValidTarget(Fighter target){
-        if (!TargetRecords.TryGetValue(target, out int count)) return true;
-        return count < MaxCount;
-    }
-
-    public Vector3 GetFormationPosition(Fighter target, Fighter oldTarget, float radius){
-        // TODO: maybe has bug
-        if (oldTarget && TargetRecords.ContainsKey(oldTarget)){
-            TargetRecords[oldTarget]--;
-            if(TargetRecords[oldTarget] <= 0) TargetRecords.Remove(oldTarget);
-        }
-
-        if (!TargetRecords.TryAdd(target, 1)) TargetRecords[target]++;
-
-        int currentIndex = TargetRecords[target];
-        float angle = ((currentIndex - 1) * Angle) % 360f;
+    public Vector3 GetFormationPosition(Fighter target, float radius) {
+        float angle = (target.AttackerCount * Angle) % 360f;
         Vector3 theoreticalPos = CalculatePosition(target.transform.position, angle, radius);
         Vector3 validPosition = GetValidNavMeshPosition(theoreticalPos);
-        return validPosition;
+        return validPosition;    
     }
     
     private Vector3 CalculatePosition(Vector3 center, float angle, float radius) {

@@ -17,11 +17,10 @@ public class PatrolState : FighterState{
     private bool IsFirstFrame = true;
     private Fighter LastPatrolPoint;
 
-    private bool IsFirstTimePatrol = true;
+    private bool IsIdle = false;
     
     protected override void Awake(){
         base.Awake();
-        IsFirstTimePatrol = true;
         FighterAttack = GetComponent<AttackState>();
         FighterSkill = GetComponent<SkillState>();
         FighterChase = GetComponent<ChaseState>();
@@ -31,6 +30,7 @@ public class PatrolState : FighterState{
     public override void Construct() {
         IsMoveStop = false;
         IsFirstFrame = true;
+        IsIdle = false;
         Controller.Move.StartMove();
     }
 
@@ -41,44 +41,36 @@ public class PatrolState : FighterState{
             return;
         }
         if (BattleManager.Instance.IsGameOver) return;
-
-        /*if (!this.PatrolPoint) {
-            this.PatrolPoint = BattleManager.Instance.GetRandomFighter(Controller.AttackTargetType);
-        }
-
-        if (this.PatrolPoint){
-            Controller.Move.MoveTo(this.PatrolPoint.transform.position);
-        }*/
-        if (!this.PatrolPoint){
+        if (!this.PatrolPoint || !FormationManager.Instance.ValidTarget(this.PatrolPoint)){
             Func<Fighter, bool> condition = null;
             if (Controller.Type == FighterType.Warrior){
                 condition = (Fighter warrior) => FormationManager.Instance.ValidTarget(warrior);
             }
-
-            if (IsFirstTimePatrol) {
-                this.PatrolPoint = BattleManager.Instance.GetRandomFighter(Controller.AttackTargetType, condition);
-            } else {
-                this.PatrolPoint = BattleManager.Instance.GetNearestFighter(Controller, condition);
-            }
-            this.LastPatrolPoint = this.PatrolPoint;
+            this.PatrolPoint = BattleManager.Instance.GetNearestFighter(Controller, condition);
         }
 
-        if (this.PatrolPoint){
+        if (!this.PatrolPoint && !this.IsIdle) {
+            this.IsIdle = true;
+            Controller.Move.MoveTo(this.Controller.transform.position);
+            Controller.FighterAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
+            Controller.FighterAnimator.SetTrigger(AnimationParams.Idle);
+        }
+
+        if (this.PatrolPoint) {
+            this.IsIdle = false;
             Vector3 finalPos = Controller.Type == FighterType.Warrior ? 
-                FormationManager.Instance.GetFormationPosition(this.PatrolPoint, this.LastPatrolPoint, Controller.AttackRadius) : 
+                FormationManager.Instance.GetFormationPosition(this.PatrolPoint, Controller.AttackRadius) : 
                 this.PatrolPoint.transform.position;
             Controller.Move.MoveTo(finalPos);
         }
     }
 
     public override void Destruct() {
-        IsFirstTimePatrol = false;
         PatrolPoint = null;
         if(IsMoveStop) Controller.Move.StopMove();
     }
 
     public override void Transition() {
-
         if (BattleManager.Instance.IsGameOver){
             IsMoveStop = true;
             Controller.FighterIdle();
@@ -87,7 +79,8 @@ public class PatrolState : FighterState{
 
         int result = Physics.OverlapSphereNonAlloc(transform.position, Controller.AttackRadius, 
             SearchTarget, LayerMask.GetMask(Controller.AttackTargetType.ToString()));
-        if (result != 0 && SearchTarget[0].gameObject.TryGetComponent(out Fighter attackTarget)) {
+        if (result != 0 && SearchTarget[0].gameObject.TryGetComponent(out Fighter attackTarget)
+            && FormationManager.Instance.ValidTarget(attackTarget)) {
             IsMoveStop = true;
             OnFindAttackTarget?.Invoke(attackTarget);
             if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()){
@@ -101,7 +94,8 @@ public class PatrolState : FighterState{
         if (this.FighterChase && Controller.Type == FighterType.Warrior) {
             result = Physics.OverlapSphereNonAlloc(transform.position, 10.0f, 
                 SearchTarget, LayerMask.GetMask(Controller.AttackTargetType.ToString()));
-            if (result != 0 && SearchTarget[0].gameObject.TryGetComponent(out Fighter chaseTarget)) {
+            if (result != 0 && SearchTarget[0].gameObject.TryGetComponent(out Fighter chaseTarget)
+                && FormationManager.Instance.ValidTarget(chaseTarget)) {
                 OnFindAttackTarget?.Invoke(chaseTarget);
                 Controller.ChangeState(FighterChase);
             }

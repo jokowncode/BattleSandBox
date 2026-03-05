@@ -31,6 +31,7 @@ public class FighterMove : MonoBehaviour{
             Obstacle.enabled = false;
             Agent.enabled = true;
         }
+        this.enabled = false;
     }
 
     public void ChangeForward(float sign) {
@@ -55,9 +56,9 @@ public class FighterMove : MonoBehaviour{
     public void MoveTo(Vector3 targetPos) {
         if (!CanMove) return;
         if (this.Owner.IsDead) return;
-        // this.Obstacle.enabled = false;
-        // this.Obstacle.carving = false;
+        
         this.Agent.enabled = true;
+        this.Agent.SetDestination(targetPos);
         this.CurrentTargetPos = targetPos;
         this.CurrentTargetPos.y = 0.0f;
         
@@ -66,16 +67,11 @@ public class FighterMove : MonoBehaviour{
         if (velocityDir == Vector3.zero){
             IsArrive = true;
             OnArriveDestination?.Invoke(this.Owner);
+            this.enabled = false;
             return;
         }
-
-        //  Control Character Face Forward
-        // ChangeForward(velocityDir.x);
-        
-        //this.transform.position += Owner.Speed * Time.deltaTime * velocityDir;
-        // Vector3 randomPos = GenerateRandomPoint(targetPos, this.Owner.AttackRadius);
         IsArrive = false;
-        Agent.SetDestination(targetPos);
+        this.enabled = true;
     }
     
     private Vector3 GenerateRandomPoint(Vector3 center, float radius) {
@@ -95,6 +91,7 @@ public class FighterMove : MonoBehaviour{
             currentPos.y = 0.0f;
             if (!IsArrive && (CurrentTargetPos - currentPos).sqrMagnitude <= 0.005f) {
                 IsArrive = true;
+                this.enabled = false;
                 OnArriveDestination?.Invoke(this.Owner);
             }
         }

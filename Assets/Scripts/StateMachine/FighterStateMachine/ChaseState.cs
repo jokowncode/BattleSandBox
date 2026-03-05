@@ -23,7 +23,6 @@ public class ChaseState : FighterState {
         IsMoveStop = false;
         IsFirstFrame = true;
         this.ChaseTarget = Controller.AttackTarget;
-        Controller.FighterAnimator.SetTrigger(AnimationParams.Idle);
         Controller.Move.StartMove();
     }
 

@@ -90,7 +90,6 @@ public class GameManager : MonoBehaviour{
     public void BattleEndGoBack(bool victory) {
         if (this.IsTrainBattle) {
             this.ResetBattleFlag();
-            SaveDataManager.Instance.RecoverAllHeroHealth();
             this.GoToScene(SceneType.Camp);
         } else {
             GoToMap(true, victory);
