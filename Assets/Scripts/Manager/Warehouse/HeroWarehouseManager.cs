@@ -60,6 +60,10 @@ public class HeroWarehouseManager : MonoBehaviour {
         else this.ModeHeroWarehousePanel.Hide();
     }
 
+    public void ShowBondPanel() {
+        this.ModeHeroWarehousePanel.SwitchModeToCharacterBond();
+    }
+
     public int GetHeroIndex(string heroName) {
         return this.HeroIndexMap.GetValueOrDefault(heroName, -1);
     }

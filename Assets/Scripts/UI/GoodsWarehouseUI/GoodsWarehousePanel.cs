@@ -24,22 +24,24 @@ public class GoodsWarehousePanel : MonoBehaviour {
 
     private void OnCategoryClicked(string cName, int index) {
         List<GoodsType> type = new();
-        if (cName == "词条") {
+        if (cName == "芯片") {
             type.Add(GoodsType.普通芯片);
         }else if (cName == "回复") {
             type.Add(GoodsType.血瓶);
             type.Add(GoodsType.复活书);
-        } else if(Enum.TryParse(cName, true, out GoodsType t)) {
-            type.Add(t);
+        } else if(cName == "战术") {
+            type.Add(GoodsType.战术集);
+        } else if (cName == "经验") {
+            type.Add(GoodsType.羁绊经验书);
         }
 
         if (type.Count == 0) return;
         for (int i = 0; i < type.Count; i++) {
-            Show(type[i], false, i != 0);
+            Show(type[i], i != 0);
         }
     }
 
-    public void Show(GoodsType type, bool canUse, bool append) {
+    public void Show(GoodsType type, bool append) {
         if (append || this.CurrentShowGoodsType != (int)type) {
             if (!append) {
                 this.CurrentShowGoodsType = (int)type;
@@ -51,12 +53,15 @@ public class GoodsWarehousePanel : MonoBehaviour {
             List<GoodsData> goods = GoodsWarehouseManager.Instance.GetGoodsByType(type);
             foreach (GoodsData data in goods) {
                 DetailButton button;
+                bool canUse = false;
                 if (data.Type is GoodsType.战术集 or GoodsType.普通芯片 or GoodsType.特殊芯片) {
                     button = Instantiate(HasDescButtonPrefab, GoodsContainer);
                     this.Layout.cellSize = new Vector2(600, 140);
+                    canUse = false;
                 } else {
                     button = Instantiate(GoodsButtonPrefab, GoodsContainer);
                     this.Layout.cellSize = new Vector2(300, 100);
+                    canUse = true;
                 }
                 button.SetData(data.Desc, data.ShowName, data.GoodsCount, canUse, data.Type, data.Name);
                 button.OnButtonClicked += OnButtonClicked;
@@ -67,7 +72,13 @@ public class GoodsWarehousePanel : MonoBehaviour {
 
     private void OnButtonClicked(string gName, int currentCount) {
         bool? result = OnClickGoods?.Invoke(gName);
-        if (result != null && result.Value) {
+        if (result == null) {
+            StoreGoodsData data = GoodsWarehouseManager.Instance.GetGoodsData(gName);
+            if (!data) return;
+            GoodsWarehouseManager.Instance.TransitionGoodsPanel(false);
+            HeroWarehouseManager.Instance.TransitionHeroWarehouseCanvas(true);
+            if(data.Type == GoodsType.羁绊经验书) HeroWarehouseManager.Instance.ShowBondPanel();
+        } else if (result.Value) {
             foreach (Transform child in this.GoodsContainer) {
                 if (child.TryGetComponent(out DetailButton button) && button.Name == gName) {
                     button.SetCount(currentCount - 1);

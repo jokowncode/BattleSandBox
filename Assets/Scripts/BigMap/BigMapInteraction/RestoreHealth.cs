@@ -19,7 +19,7 @@ public class RestoreHealth : InteractionObject {
 
     protected override void Interaction() {
         if (this.RestoreHealthPercentage >= 1.0f && this.CanReviveHero) {
-            SceneChangeManager.Instance.AddGameTip($"全员回满血");
+            SceneChangeManager.Instance.AddGameTip($"全员复活并回满血");
             SaveDataManager.Instance.RecoverAllHeroHealth();
             return;
         }

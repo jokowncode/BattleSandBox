@@ -69,7 +69,7 @@ public class ModeHeroWarehouseUI : MonoBehaviour {
         }
     }
 
-    private void SwitchModeToCharacterBond() {
+    public void SwitchModeToCharacterBond() {
         if(CurrentMode == WarehouseMode.CharacterBond) return;
         CurrentMode = WarehouseMode.CharacterBond;
 
@@ -81,7 +81,7 @@ public class ModeHeroWarehouseUI : MonoBehaviour {
 
     public void ShowGoodsWarehouse(GoodsType[] type) {
         for (int i = 0; i < type.Length; i++) {
-            this.GoodsWarehouseUI.Show(type[i], true, i != 0);
+            this.GoodsWarehouseUI.Show(type[i], i != 0);
         }
     }
 
