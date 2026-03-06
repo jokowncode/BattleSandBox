@@ -31,6 +31,10 @@ public class StealthBattleRoom : BattleRoom {
         }
     }
 
+    protected override bool EnableInteractionCondition() {
+        return false;
+    }
+
     protected override void PlayerEnter() {
         if (this.InAreaPlayer.Move.HorizontalDir.x == 0.0f) {
             this.CurrentPlayerDir = PlayerPrefs.GetFloat(GetName());
@@ -40,7 +44,6 @@ public class StealthBattleRoom : BattleRoom {
         }
         
         base.PlayerEnter();
-        this.EnableInteraction(false);
         foreach (StealthDetection detector in this.Detectors) {
             detector.Activate();
         }

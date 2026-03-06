@@ -31,8 +31,10 @@ public class RoomMiniMap : InteractionObject {
         this.Lights.SetActive(this.IsEnd);
     }
 
-    protected override void EnableInteraction(bool enable) { }
-
+    protected override bool EnableInteractionCondition() {
+        return false;
+    }
+    
     protected override void PlayerEnter() {
         this.EndInteraction();
         this.SetMiniMap();

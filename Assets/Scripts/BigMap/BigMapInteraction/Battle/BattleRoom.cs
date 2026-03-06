@@ -74,16 +74,17 @@ public class BattleRoom : InteractionObject {
         if (!this.IsEnd && this.Collider.bounds.Contains(this.InAreaPlayer.transform.position)){
             this.InAreaPlayer.SetCollider(this.Collider);
         } 
-        
-        // TODO: MYSTERIOUS BUG
-        if (!this.EnemyMove) {
-            this.EnableInteraction(true);
-        }
+    }
+
+    protected override bool EnableInteractionCondition() {
+        return !this.EnemyMove && 
+               (!GameManager.Instance.IsBattleEnd || 
+                (!GameManager.Instance.IsBattleVictory && !this.IsDefeatGameOver));
     }
 
     protected override void PlayerEnter() {
         if (this.EnemyMove) {
-            this.InAreaPlayer.TransitionInteractionTip(false, "");
+            this.enabled = true;
             foreach (Transform child in this.Enemies) {
                 if (child.TryGetComponent(out BigMapEnemy enemy)) {
                     enemy.ChasePlayer(this.InAreaPlayer, this.Interaction);
@@ -93,7 +94,6 @@ public class BattleRoom : InteractionObject {
 
         if (GameManager.Instance.IsBattleEnd){
             if (GameManager.Instance.IsBattleVictory) {
-                this.EnableInteraction(false);
                 if(this.Enemies) Destroy(this.Enemies.gameObject);
                 OnVictory?.Invoke();
                 if (!this.IsEnd) {

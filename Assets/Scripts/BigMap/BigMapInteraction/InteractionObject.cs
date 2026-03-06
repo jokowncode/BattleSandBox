@@ -87,7 +87,9 @@ public abstract class InteractionObject : MonoBehaviour {
         this.OnInteractionEnded?.Invoke();
     }
 
-    protected virtual void EnableInteraction(bool enable) {
+    protected virtual bool EnableInteractionCondition() { return true;}
+
+    protected void EnableInteraction(bool enable) {
         if (!this.InAreaPlayer) return;
         this.InAreaPlayer.TransitionInteractionTip(enable, this.InteractionObjShowName);
         this.enabled = enable;
@@ -102,7 +104,7 @@ public abstract class InteractionObject : MonoBehaviour {
         if (!other.TryGetComponent(out Player player)) return;
         this.InAreaPlayer = player;
         if (!this.IsEnd || this.IsEndCanInteract) {
-            this.EnableInteraction(true);
+            if(this.EnableInteractionCondition()) this.EnableInteraction(true);
             if(this.Edge) this.Edge.SetActive(true);
         }
         this.PlayerEnter();

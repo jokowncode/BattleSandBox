@@ -10,9 +10,11 @@ public class InteractionTip : MonoBehaviour {
     [SerializeField] private AnimationCurve Curve;
 
     private Animator TipAnimator;
+    private CanvasGroup TipCanvasGroup;
 
     private void Awake() {
         this.TipAnimator = this.GetComponent<Animator>();
+        this.TipCanvasGroup = this.GetComponent<CanvasGroup>();
     }
 
     public void Show(string text, bool canInteract) {
@@ -24,6 +26,7 @@ public class InteractionTip : MonoBehaviour {
     }
 
     public void Hide() {
+        if (this.TipCanvasGroup.alpha < 0.1f) return;
         this.TipAnimator.SetTrigger(AnimationParams.Hide);
     }
 }

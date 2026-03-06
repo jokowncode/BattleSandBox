@@ -1,6 +1,7 @@
 ﻿
 using System;
 using DialogueEditor;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -42,6 +43,10 @@ public class Dialogue : InteractionObject {
             OnInteractionPre?.Invoke();
             this.Interaction();
         }
+    }
+
+    protected override bool EnableInteractionCondition() {
+        return !this.IsForce;
     }
 
     private void OnDialogEnded(){

@@ -41,9 +41,12 @@ public class Obstacle : InteractionObject {
         } 
     }
 
+    protected override bool EnableInteractionCondition() {
+        return !(!this.IsEnd && this.CancelObstacleObj && this.CancelObstacleObj.IsEnd);
+    }
+
     protected override void PlayerEnter() {
         if (!this.IsEnd && this.CancelObstacleObj && this.CancelObstacleObj.IsEnd) {
-            this.EnableInteraction(false);
             this.EndInteraction();
             return;
         }
