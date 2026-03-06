@@ -15,7 +15,7 @@ public abstract class AttackState : FighterState{
     private PatrolState FighterPatrol;
     private ChaseState FighterChase;
     
-    public bool CanAttack(){
+    public virtual bool CanAttack(){
         if (!IsNeedTarget){
             return true;
         }

@@ -502,6 +502,23 @@ public class BattleManager : StateMachineController{
         this.EnemiesInBattle.Remove(enemy);
     }
 
+    public bool HasBeDamagedTarget(TargetType type) {
+        if (type == TargetType.Hero){
+            foreach (Hero hero in HeroesInBattle){
+                if (hero.HealthPercentage < 1.0f) {
+                    return true;
+                }
+            }    
+        }else if (type == TargetType.Enemy){
+            foreach (Enemy enemy in EnemiesInBattle){
+                if (enemy.HealthPercentage < 1.0f) {
+                    return true;
+                }
+            }    
+        }
+        return false;
+    }
+
     public Fighter FindMinPercentagePropertyHero(FighterProperty property, TargetType type){
         Fighter result = null;
         float minPercentage = 1.0f;

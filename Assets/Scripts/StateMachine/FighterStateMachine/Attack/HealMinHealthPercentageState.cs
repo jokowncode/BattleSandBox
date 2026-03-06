@@ -4,10 +4,18 @@ using UnityEngine;
 public class HealMinHealthPercentageState : AttackState{
 
     [SerializeField] private float HealPercentage = 0.3f;
+
+    private PatrolState FighterPatrol;
     
     protected override void Awake(){
         base.Awake();
         IsNeedTarget = false;
+        this.FighterPatrol = this.GetComponent<PatrolState>();
+    }
+
+    public override bool CanAttack() {
+        return base.CanAttack() && 
+               BattleManager.Instance.HasBeDamagedTarget(Controller.AttackTargetType);
     }
 
     protected override void NormalAttack(){
@@ -39,6 +47,11 @@ public class HealMinHealthPercentageState : AttackState{
         
         if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()){
             Controller.ChangeState(FighterSkill);
+            return;
+        }
+
+        if (!this.CanAttack()) {
+            Controller.ChangeState(this.FighterPatrol);
         }
     }
 }

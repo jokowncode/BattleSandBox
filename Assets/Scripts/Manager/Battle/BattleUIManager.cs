@@ -55,15 +55,20 @@ public class BattleUIManager : MonoBehaviour {
         this.BattleEndPanel.Show(victory);
         this.BattleHUD.SetActive(false);
         BattleManager.Instance.AllHeroRecall();
-        this.heroPortraitUI.DownAllPanel(false);
+        this.DownHero();
         this.heroPortraitUI.gameObject.SetActive(false);
-        UISelectionManager.Instance.UnSelectAll();
     }
 
     private void Start() {
         heroWarehouseUI.UpdateHeroWarehouse();
         BattleManager.Instance.LoadHeroDeploy();
         // PassiveEntryWarehouseUI.UpdatePassiveEntryWarehouse();
+        BattleManager.Instance.OnEnemyBeClear += DownHero;
+    }
+
+    private void DownHero() {
+        this.heroPortraitUI.DownAllPanel(false);
+        UISelectionManager.Instance.UnSelectAll();
     }
 
     public void UpdatePassiveEntryWarehouse(int passiveEntrySortCode) {
