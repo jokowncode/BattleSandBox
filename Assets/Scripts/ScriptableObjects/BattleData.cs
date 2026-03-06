@@ -13,13 +13,14 @@ public class BattleData : ScriptableObject {
     public SceneType BattleScene = SceneType.Battle_Normal;
     public int MaxHeroCount = 6;
     public string BattleName;
-    public string BattleMessage;
+    [TextArea] public string BattleMessage;
     public Sprite BattleImage;
     public Sprite BattleBannarBackground;
     public string BattleText;
     public AudioClip BattleBGM;
     public float BondMultiplier = 1.0f;
     public List<EnemyDepartmentData> EnemiesInBattle;
+    public List<HeroDepartmentArea> HeroesInBattle;
 
     [Header("Victory Get")] 
     public int Money = 50;

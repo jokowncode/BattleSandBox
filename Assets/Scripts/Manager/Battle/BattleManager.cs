@@ -24,6 +24,7 @@ public class BattleManager : StateMachineController{
     [SerializeField] private AudioClip UndressPassiveEntrySfx;
     
     [SerializeField] private TextMeshProUGUI BattleNameText;
+    [SerializeField] private RectTransform BattleMessageTrans;
     [SerializeField] private TextMeshProUGUI BattleMessageText;
     
     [Header("Deploy Place Settings")] 
@@ -87,19 +88,6 @@ public class BattleManager : StateMachineController{
         if (this.HeroDeployPlaceArea != null && this.HeroDeployPlaceArea.Length != 0) {
             this.DeployAreaCurrentHeroCount = new int[this.HeroDeployPlaceArea.Length];    
         }
-        
-        // For Scene Already Exist Hero
-        // TODO: BUG -> ALREADY EXIST HERO NOT EXECUTE NORMAL
-        if (this.HeroParent.childCount != 0) {
-            foreach (Transform child in this.HeroParent.transform) {
-                if (child.TryGetComponent(out Hero hero)) {
-                    hero.IsOriginExist = true;
-                    hero.SetStartPosition();
-                    this.HeroesInBattle.Add(hero);
-                    // OnHeroEnterTheField?.Invoke(hero);
-                }
-            }
-        }
 
 #if TEST_BATTLE
         if (this.EnemyParent.childCount != 0) {
@@ -122,10 +110,8 @@ public class BattleManager : StateMachineController{
         
         ChangeState(Prepare);
 
-        if (this.Data) {
-            this.BattleNameText.text = this.Data.BattleName;
-            this.BattleMessageText.text = this.Data.BattleMessage;
-        }
+        StopAllCoroutines();
+        StartCoroutine(SetBattleMessageCoroutine());
 
         BattleUIManager.Instance.SetHeroWarehouseActive(true);
         BattleUIManager.Instance.SetHeroPortraitActive(false);
@@ -138,9 +124,20 @@ public class BattleManager : StateMachineController{
 #endif
     }
 
+    private IEnumerator SetBattleMessageCoroutine() {
+        if (!this.Data) yield break;
+        this.BattleNameText.text = this.Data.BattleName;
+        this.BattleMessageText.text = this.Data.BattleMessage;
+        yield return null;
+        this.BattleMessageTrans.sizeDelta = 
+            new Vector2(this.BattleMessageText.preferredWidth + 50.0f,
+                this.BattleMessageText.preferredHeight + 50.0f);
+    }
+
     public void SetBattleData(BattleData data){
         this.Data = data;
         DeployEnemy();
+        DeployHero();
     }
 
     public void RewindBattle() {
@@ -169,6 +166,26 @@ public class BattleManager : StateMachineController{
             GetNavMeshPosition(data.Position, 1.0f, out Vector3 finalPos);
             enemy.Deploy(finalPos);
             this.EnemiesInBattle.Add(enemy);
+        }
+    }
+
+    private void DeployHero() {
+        if (!this.Data) return;
+        List<HeroDepartmentArea> departmentAreaData = this.Data.HeroesInBattle;
+        foreach (HeroDepartmentArea data in departmentAreaData){
+            Hero hero = Instantiate(data.HeroPrefab, this.HeroParent);
+            hero.IsOriginExist = true;
+            GetNavMeshPosition(data.Position, 1.0f, out Vector3 finalPos);
+            int deployAreaIndex = this.IsWithinArea(finalPos);
+            if (deployAreaIndex != -1){
+                hero.transform.position = finalPos;
+                hero.Deploy(deployAreaIndex);
+                if (data.IsDeadBattleDefeat) {
+                    hero.AddComponent<FighterDeadBattleDefeat>();
+                }
+            }else{
+                Destroy(hero.gameObject);
+            }
         }
     }
 

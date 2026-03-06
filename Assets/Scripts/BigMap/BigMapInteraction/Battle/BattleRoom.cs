@@ -77,7 +77,7 @@ public class BattleRoom : InteractionObject {
     }
 
     protected override bool EnableInteractionCondition() {
-        return !this.EnemyMove && 
+        return !this.EnemyMove && !this.IsForce &&
                (!GameManager.Instance.IsBattleEnd || 
                 (!GameManager.Instance.IsBattleVictory && !this.IsDefeatGameOver));
     }

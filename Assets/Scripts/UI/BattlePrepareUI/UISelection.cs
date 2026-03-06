@@ -103,6 +103,7 @@ public class UISelectableShaker : MonoBehaviour,
 
     // ===== Shake =====
     public void Shake() {
+        if (!this.gameObject.activeInHierarchy) return;
         if (!isShaking)
             StartCoroutine(ShakeCoroutine());
     }

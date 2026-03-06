@@ -70,6 +70,10 @@ public class PatrolState : FighterState{
         if(IsMoveStop) Controller.Move.StopMove();
     }
 
+    private bool IsValid(Fighter target) {
+        return this.Controller.Type != FighterType.Warrior || FormationManager.Instance.ValidTarget(target);
+    }
+
     public override void Transition() {
         if (BattleManager.Instance.IsGameOver){
             IsMoveStop = true;
@@ -80,7 +84,7 @@ public class PatrolState : FighterState{
         int result = Physics.OverlapSphereNonAlloc(transform.position, Controller.AttackRadius, 
             SearchTarget, LayerMask.GetMask(Controller.AttackTargetType.ToString()));
         if (result != 0 && SearchTarget[0].gameObject.TryGetComponent(out Fighter attackTarget)
-            && FormationManager.Instance.ValidTarget(attackTarget)) {
+            && IsValid(attackTarget)) {
             IsMoveStop = true;
             OnFindAttackTarget?.Invoke(attackTarget);
             if (Controller.FighterSkillCaster && Controller.FighterSkillCaster.CanCastSkill()){
@@ -95,7 +99,7 @@ public class PatrolState : FighterState{
             result = Physics.OverlapSphereNonAlloc(transform.position, 10.0f, 
                 SearchTarget, LayerMask.GetMask(Controller.AttackTargetType.ToString()));
             if (result != 0 && SearchTarget[0].gameObject.TryGetComponent(out Fighter chaseTarget)
-                && FormationManager.Instance.ValidTarget(chaseTarget)) {
+                && IsValid(chaseTarget)) {
                 OnFindAttackTarget?.Invoke(chaseTarget);
                 Controller.ChangeState(FighterChase);
             }

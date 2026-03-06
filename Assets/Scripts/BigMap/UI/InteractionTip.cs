@@ -22,12 +22,12 @@ public class InteractionTip : MonoBehaviour {
         this.TipText.characterSpacing = Curve.Evaluate(text.Length);
         this.TipText.gameObject.SetActive(false);
         this.EText.text = canInteract ? "E" : "×";
-        this.TipAnimator.SetTrigger(AnimationParams.Show);
+        this.TipAnimator.SetBool(AnimationParams.Show, true);
     }
 
     public void Hide() {
         if (this.TipCanvasGroup.alpha < 0.1f) return;
-        this.TipAnimator.SetTrigger(AnimationParams.Hide);
+        this.TipAnimator.SetBool(AnimationParams.Show, false);
     }
 }
 
