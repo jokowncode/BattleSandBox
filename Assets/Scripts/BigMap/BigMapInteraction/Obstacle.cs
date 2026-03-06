@@ -66,7 +66,7 @@ public class Obstacle : InteractionObject {
         if (!other.TryGetComponent(out Player _)) return;
         if (this.InAreaPlayer) {
             if (this.HasShowTip) {
-                this.InAreaPlayer.TransitionInteractionTip(false, this.InteractionObjShowName, false);
+                this.InAreaPlayer.TransitionInteractionTip(false, this.InteractionObjShowName);
                 this.HasShowTip = false;
             }
             this.InAreaPlayer.SetCollider(null);

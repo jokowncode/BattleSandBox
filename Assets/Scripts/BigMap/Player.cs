@@ -11,7 +11,7 @@ public enum PlayerInAreaColliderDir {
 
 public class Player : MonoBehaviour{
 
-    [SerializeField] private TextMeshProUGUI InteractionTip;
+    [SerializeField] private InteractionTip InteractionTip;
 
     public PlayerMove Move { get; private set; }
 
@@ -19,10 +19,9 @@ public class Player : MonoBehaviour{
         Move = GetComponent<PlayerMove>();
     }
 
-    public void TransitionInteractionTip(bool show, string interactionObjName, bool showE = true){
-        InteractionTip.transform.parent.gameObject.SetActive(show);
-        string text = showE ? $"E {interactionObjName}" : interactionObjName;
-        InteractionTip.text = text;
+    public void TransitionInteractionTip(bool show, string interactionObjName, bool canInteract = true){
+        if (show) this.InteractionTip.Show(interactionObjName, canInteract);
+        else this.InteractionTip.Hide();
     }
 
     public void SetCollider(BoxCollider inAreaCollider, PlayerInAreaColliderDir dir = PlayerInAreaColliderDir.Both){
