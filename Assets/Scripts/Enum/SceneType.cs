@@ -2,7 +2,7 @@
 public enum SceneType{
     None = -1,
     Main,
-    Tutorial,
+    BaseBattleScene,
     AboutUs,
     Camp,
     BigMap,

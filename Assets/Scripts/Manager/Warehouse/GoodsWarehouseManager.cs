@@ -60,7 +60,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
 
         SceneManager.sceneLoaded += (arg0, mode) => {
             SceneType currentScene = SceneChangeManager.Instance.CurrentScene;
-            if (SceneTools.IsBattleScene(currentScene)) {
+            if (SceneTools.IsBattleScene(currentScene) && BattleManager.Instance) {
                 this.IsInBattle = true;
                 this.InBattleModifyGoods.Clear();
                 BattleManager.Instance.OnRewindBattle += OnRewindBattle;

@@ -41,5 +41,17 @@ public class BattleButtonUI : MonoBehaviour {
         UISelectionManager.Instance.StopTime(this.IsPauseBattle);
     }
 
+    public void StartBattle() {
+        BattleManager.Instance.StartBattle();
+    }
+
+    public void ClearHeroes() {
+        BattleManager.Instance.AllHeroRecall();
+    }
+
+    public void RecallSelectedHero() {
+        BattleManager.Instance.RecallSelectedHero();
+    }
+
 }
 

@@ -4,13 +4,10 @@ using UnityEngine;
 public class HealMinHealthPercentageState : AttackState{
 
     [SerializeField] private float HealPercentage = 0.3f;
-
-    private PatrolState FighterPatrol;
     
     protected override void Awake(){
         base.Awake();
         IsNeedTarget = false;
-        this.FighterPatrol = this.GetComponent<PatrolState>();
     }
 
     public override bool CanAttack() {

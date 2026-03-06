@@ -86,8 +86,8 @@ public class Fighter : StateMachineController{
         this.InitHealth();
     }
 
-    private void InitHealth() {
-        if (this is not Hero || IsSummon) {
+    protected void InitHealth() {
+        if (this is not Hero hero || IsSummon || hero.IsOriginExist) {
             this.InBattleHealth = this.CurrentData.Health;
         } else {
             float health = SaveDataManager.Instance.GetHeroHealth(this.Name);

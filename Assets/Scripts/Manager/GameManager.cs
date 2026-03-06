@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour{
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode){
         if (SceneTools.IsBattleScene(SceneChangeManager.Instance.CurrentScene)){
-            BattleManager.Instance.SetBattleData(this.NextBattleData);
+            if(BattleManager.Instance) BattleManager.Instance.SetBattleData(this.NextBattleData);
         }
     }
 
@@ -81,10 +81,15 @@ public class GameManager : MonoBehaviour{
         if (showStartUI) {
             if(GoToBattleSfx)
                 AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.GoToBattleSfx);
-            BigMapUIManager.Instance.ShowBattleStartUI(battleData.BattleScene, battleData.BattleBannarBackground, battleData.BattleImage, battleData.BattleText);
+            BigMapUIManager.Instance.ShowBattleStartUI(SceneType.BaseBattleScene, battleData.BattleBannarBackground, battleData.BattleImage, battleData.BattleText);
         } else {
-            SceneChangeManager.Instance.GoToScene(battleData.BattleScene);   
+            SceneChangeManager.Instance.GoToScene(SceneType.BaseBattleScene);   
         }
+    }
+
+    public SceneType GetBattleSubScene() {
+        if (!this.NextBattleData) return SceneType.None;
+        return this.NextBattleData.BattleScene;
     }
 
     public void BattleEndGoBack(bool victory) {

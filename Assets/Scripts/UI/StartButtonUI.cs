@@ -21,7 +21,7 @@ public class StartButtonUI : MonoBehaviour {
     }
 
     public void Tutorial(){
-        GameManager.Instance.GoToScene(SceneType.Tutorial);
+        // GameManager.Instance.GoToScene(SceneType.Tutorial);
     }
 
     public void AboutUs(){

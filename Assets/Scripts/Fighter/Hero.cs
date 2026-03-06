@@ -50,6 +50,11 @@ public class Hero : Fighter {
         }
     }
 
+    public void SetOriginExist() {
+        this.IsOriginExist = true;
+        this.InitHealth();
+    }
+
     public void ShareDamage(Hero hero) {
         this.ShareDamageHero = hero;
     }

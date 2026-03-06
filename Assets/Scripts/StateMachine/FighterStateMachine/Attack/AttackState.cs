@@ -12,7 +12,7 @@ public abstract class AttackState : FighterState{
     protected SkillState FighterSkill;
     protected bool IsNeedTarget = true;
     
-    private PatrolState FighterPatrol;
+    protected PatrolState FighterPatrol;
     private ChaseState FighterChase;
     
     public virtual bool CanAttack(){

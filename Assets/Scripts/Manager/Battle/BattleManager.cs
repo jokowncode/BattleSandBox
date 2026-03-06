@@ -17,15 +17,9 @@ public class BattleManager : StateMachineController{
     
     [field: SerializeField] public Transform EnemyParent { get; private set; }
     [SerializeField] private Transform HeroParent;
-    [SerializeField] private Transform PassiveEntryParent;
-    [SerializeField] private Transform HeroWarehouseParent;
-
+    
     [SerializeField] private AudioClip EquipPassiveEntrySfx;
     [SerializeField] private AudioClip UndressPassiveEntrySfx;
-    
-    [SerializeField] private TextMeshProUGUI BattleNameText;
-    [SerializeField] private RectTransform BattleMessageTrans;
-    [SerializeField] private TextMeshProUGUI BattleMessageText;
     
     [Header("Deploy Place Settings")] 
     [SerializeField] private HeroDeployAreaData[] HeroDeployPlaceArea;
@@ -110,8 +104,9 @@ public class BattleManager : StateMachineController{
         
         ChangeState(Prepare);
 
-        StopAllCoroutines();
-        StartCoroutine(SetBattleMessageCoroutine());
+        if (this.Data) {
+            BattleUIManager.Instance.SetBattleMessage(this.Data.BattleName, this.Data.BattleMessage);
+        }
 
         BattleUIManager.Instance.SetHeroWarehouseActive(true);
         BattleUIManager.Instance.SetHeroPortraitActive(false);
@@ -122,16 +117,6 @@ public class BattleManager : StateMachineController{
 #if TEST_BATTLE
         SetBattleData(this.Data);
 #endif
-    }
-
-    private IEnumerator SetBattleMessageCoroutine() {
-        if (!this.Data) yield break;
-        this.BattleNameText.text = this.Data.BattleName;
-        this.BattleMessageText.text = this.Data.BattleMessage;
-        yield return null;
-        this.BattleMessageTrans.sizeDelta = 
-            new Vector2(this.BattleMessageText.preferredWidth + 50.0f,
-                this.BattleMessageText.preferredHeight + 50.0f);
     }
 
     public void SetBattleData(BattleData data){
@@ -174,7 +159,7 @@ public class BattleManager : StateMachineController{
         List<HeroDepartmentArea> departmentAreaData = this.Data.HeroesInBattle;
         foreach (HeroDepartmentArea data in departmentAreaData){
             Hero hero = Instantiate(data.HeroPrefab, this.HeroParent);
-            hero.IsOriginExist = true;
+            hero.SetOriginExist();
             GetNavMeshPosition(data.Position, 1.0f, out Vector3 finalPos);
             int deployAreaIndex = this.IsWithinArea(finalPos);
             if (deployAreaIndex != -1){
@@ -256,7 +241,7 @@ public class BattleManager : StateMachineController{
         HeroDeploySaveData saveData = JsonUtility.FromJson<HeroDeploySaveData>(PlayerPrefs.GetString(this.Data.BattleName));
         foreach (HeroDeployData data in saveData.Datas) {
             if (IsFullHero) break;
-            foreach (Transform child in HeroWarehouseParent) {
+            foreach (Transform child in BattleUIManager.Instance.HeroWarehouseParent) {
                 if (child.TryGetComponent(out DraggableUI draggable)
                     && draggable.prefabReference == data.HeroName) {
                     draggable.DeployHero(data.HeroPosition);
@@ -312,9 +297,13 @@ public class BattleManager : StateMachineController{
         }
     }
 
-    public void AllHeroRecall() {
+    public void AllHeroRecall(bool isForceOriginExistHero = false) {
         for (int i = 0; i < HeroesInBattle.Count; ) {
             this.selectedHero = HeroesInBattle[i];
+            if (!isForceOriginExistHero && (!this.selectedHero || this.selectedHero.IsOriginExist)) {
+                i++;
+                continue;
+            }
             RecallSelectedHero();
         }
     }

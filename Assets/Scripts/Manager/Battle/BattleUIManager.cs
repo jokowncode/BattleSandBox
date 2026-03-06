@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -34,6 +35,12 @@ public class BattleUIManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI PassiveSkill1Description;
     [SerializeField] private TextMeshProUGUI PassiveSkill2Description;
 
+    [field: SerializeField] public Transform HeroWarehouseParent { get; private set; }
+    
+    [SerializeField] private TextMeshProUGUI BattleNameText;
+    [SerializeField] private RectTransform BattleMessageTrans;
+    [SerializeField] private TextMeshProUGUI BattleMessageText;
+    
     private Image Skill1Image;
     private Image Skill2Image;
     private Image SkillBackgroundImage;
@@ -54,7 +61,7 @@ public class BattleUIManager : MonoBehaviour {
     public void GameEnd(bool victory) {
         this.BattleEndPanel.Show(victory);
         this.BattleHUD.SetActive(false);
-        BattleManager.Instance.AllHeroRecall();
+        BattleManager.Instance.AllHeroRecall(true);
         this.DownHero();
         this.heroPortraitUI.gameObject.SetActive(false);
     }
@@ -73,6 +80,20 @@ public class BattleUIManager : MonoBehaviour {
 
     public void UpdatePassiveEntryWarehouse(int passiveEntrySortCode) {
         PassiveEntryWarehouseUI.UpdatePassiveEntryWarehouse(passiveEntrySortCode);
+    }
+
+    public void SetBattleMessage(string battleName, string battleMessage) {
+        StopAllCoroutines();
+        StartCoroutine(SetBattleMessageCoroutine(battleName, battleMessage));
+    }
+
+    private IEnumerator SetBattleMessageCoroutine(string battleName, string battleMessage) {
+        this.BattleNameText.text = battleName;
+        this.BattleMessageText.text = battleMessage;
+        yield return null;
+        this.BattleMessageTrans.sizeDelta = 
+            new Vector2(this.BattleMessageText.preferredWidth + 50.0f,
+                this.BattleMessageText.preferredHeight + 50.0f);
     }
 
     public void ShowHeroDetail(Hero hero) {

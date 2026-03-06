@@ -211,7 +211,7 @@ public class SaveDataManager : MonoBehaviour {
             }
         }
 
-        if (SceneTools.IsBattleScene(SceneChangeManager.Instance.CurrentScene)) {
+        if (SceneTools.IsBattleScene(SceneChangeManager.Instance.CurrentScene) && BattleManager.Instance) {
             this.IsInBattle = true;
             this.DupDungeonHealth.Clear();
             BattleManager.Instance.OnRewindBattle += () => {

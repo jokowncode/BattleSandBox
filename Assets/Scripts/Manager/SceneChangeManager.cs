@@ -25,7 +25,7 @@ public class SceneChangeManager : MonoBehaviour{
     public Action<SceneType, SceneType> OnSceneChange;
 
     public SceneType DungeonScene { get; private set; }
-    private bool IsLoadDungeon = false;
+    private bool IsLoadSubScene = false;
 
     public string CurrentDungeonName => this.DungeonScene.ToString();
 
@@ -49,15 +49,23 @@ public class SceneChangeManager : MonoBehaviour{
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         this.IsLoadScene = false;
-        if (this.CurrentScene is SceneType.Main or SceneType.Tutorial){
+        if (this.CurrentScene is SceneType.Main){
             AudioManager.Instance.SetMainMusic(this.MainMenuBGM);
         }
 
-        if (this.CurrentScene == SceneType.BigMap && !this.IsLoadDungeon){
-            this.IsLoadDungeon = true;
+        if (this.CurrentScene == SceneType.BigMap && !this.IsLoadSubScene){
+            this.IsLoadSubScene = true;
             AudioManager.Instance.SetMainMusic(this.BigMapBGM);
             BigMapUIManager.Instance.TaskList.UpdateTaskUI();
             StartCoroutine(AsyncLoadSceneCallback(this.DungeonScene));
+        }
+
+        if (this.CurrentScene == SceneType.BaseBattleScene && !this.IsLoadSubScene) {
+            this.IsLoadSubScene = true;
+            SceneType battleSubScene = GameManager.Instance.GetBattleSubScene();
+            if (battleSubScene != SceneType.None) {
+                StartCoroutine(AsyncLoadSceneCallback(battleSubScene));
+            }
         }
 
         if (this.CurrentScene == SceneType.AboutUs){
@@ -108,8 +116,8 @@ public class SceneChangeManager : MonoBehaviour{
         if (this.IsLoadScene) return;
         this.IsLoadScene = true;
         
-        if (type == SceneType.BigMap) {
-            this.IsLoadDungeon = false;
+        if (type == SceneType.BigMap || type == SceneType.BaseBattleScene) {
+            this.IsLoadSubScene = false;
         }
 
         if (SceneTools.IsBattleScene(this.CurrentScene) && type == SceneType.BigMap) {
