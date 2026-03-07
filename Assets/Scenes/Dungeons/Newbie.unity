@@ -1627,6 +1627,7 @@ GameObject:
   - component: {fileID: 2007145221}
   - component: {fileID: 2007145218}
   - component: {fileID: 2007145222}
+  - component: {fileID: 2007145223}
   m_Layer: 12
   m_Name: Bullock
   m_TagString: Player
@@ -1705,7 +1706,7 @@ MonoBehaviour:
   Data: {fileID: 11400000, guid: ed8855a40e6dd9e4fa37ce573d995b0e, type: 2}
   Enemies: {fileID: 283530914}
   IsEnemyMove: 0
-  IsDefeatGameOver: 1
+  IsDefeatGameOver: 0
   IsForce: 0
   IsDisappearAfterBattle: 1
   BattleStartDialog: {fileID: 11400000, guid: 192b4b5cf37b4ab4a89f286559643661, type: 2}
@@ -1726,6 +1727,18 @@ MonoBehaviour:
   TriggerType: 1
   ActivateInteractionObjects:
   - {fileID: 527489018}
+--- !u!114 &2007145223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007145215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f0e5f1a0b354ad78502668b59b4baa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &278028778331155689
 Transform:
   m_ObjectHideFlags: 0

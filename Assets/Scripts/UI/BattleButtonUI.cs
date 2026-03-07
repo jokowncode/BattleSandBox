@@ -53,5 +53,13 @@ public class BattleButtonUI : MonoBehaviour {
         BattleManager.Instance.RecallSelectedHero();
     }
 
+    public void RecallFirstPassiveEntry() {
+        BattleManager.Instance.RemoveSkillFromSlot1();
+    }
+
+    public void RecallSecondPassiveEntry() {
+        BattleManager.Instance.RemoveSkillFromSlot2();
+    }
+
 }
 

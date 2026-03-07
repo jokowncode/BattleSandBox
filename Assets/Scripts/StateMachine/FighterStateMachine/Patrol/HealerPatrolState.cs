@@ -1,8 +1,20 @@
 ﻿
+using UnityEngine;
+
 public class HealerPatrolState : PatrolState {
+
+    private int DefaultAnimatorState;
     
+    protected override void Awake() {
+        base.Awake();
+        this.DefaultAnimatorState = Controller.FighterAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+    }
+
     public override void Construct() {
-        Controller.FighterAnimator.SetTrigger(AnimationParams.Idle);
+        AnimatorStateInfo stateInfo = Controller.FighterAnimator.GetCurrentAnimatorStateInfo(0);
+        if (stateInfo.shortNameHash != DefaultAnimatorState) {
+            Controller.FighterAnimator.SetTrigger(AnimationParams.Idle);
+        }
     }
 
     public override void Execute(){ }
