@@ -41,5 +41,10 @@ public class RoomMiniMap : InteractionObject {
     }
 
     protected override void Interaction() { }
+
+    protected override void OnTriggerExit(Collider other) {
+        if (!other.TryGetComponent(out Player _)) return;
+        this.InAreaPlayer = null;
+    }
 }
 

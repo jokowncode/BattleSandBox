@@ -20,7 +20,7 @@ public class BattleDialogRoom : BattleRoom {
     private void OnDialogEnded() {
         DialogManager.Instance.OnDialogEnded -= OnDialogEnded;
         if (this.CurrentState == State.PreBattle) {
-            GameManager.Instance.GoToBattle(this.Data);
+            base.Interaction();
         } else {
             base.PlayerEnter();
         }
@@ -51,7 +51,7 @@ public class BattleDialogRoom : BattleRoom {
             DialogManager.Instance.OnDialogEnded += OnDialogEnded;
             DialogManager.Instance.PlayNewDialog(this.BattleStartDialog);
         } else {
-            GameManager.Instance.GoToBattle(this.Data);
+            base.Interaction();
         }
     }
 }

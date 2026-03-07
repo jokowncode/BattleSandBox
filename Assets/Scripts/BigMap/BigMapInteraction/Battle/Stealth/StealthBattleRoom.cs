@@ -36,7 +36,7 @@ public class StealthBattleRoom : BattleRoom {
     }
 
     protected override void PlayerEnter() {
-        if (this.InAreaPlayer.Move.HorizontalDir.x == 0.0f) {
+        if (GameManager.Instance.IsBattleEnd) {
             this.CurrentPlayerDir = PlayerPrefs.GetFloat(GetName());
         } else {
             this.CurrentPlayerDir = Mathf.Sign(this.InAreaPlayer.Move.HorizontalDir.x);

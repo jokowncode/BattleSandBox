@@ -37,8 +37,7 @@ public class TaskUI : MonoBehaviour {
         Vector3 playerPos = SaveDataManager.Instance.PlayerInBigMap.transform.position;
         Vector3 dir = this.TaskPos - playerPos;
         dir.z = 0.0f;
-        dir = dir.normalized;
-
+        
         float x = Mathf.Abs(dir.x) <= 0.6 ? 0.0f : Mathf.Sign(dir.x);
         float y = Mathf.Abs(dir.y) <= 0.6 ? 0.0f : Mathf.Sign(dir.y);
         return new Vector2(x, y);
