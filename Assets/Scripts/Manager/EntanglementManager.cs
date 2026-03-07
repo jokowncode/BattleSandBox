@@ -85,12 +85,8 @@ public class EntanglementManager : MonoBehaviour {
 
 #if TEST_BATTLE
     public void TEMPFORBATTLE() {
-        int index1 = HeroWarehouseManager.Instance.GetHeroIndex(this.EntanglementHero1);
-        int index2 = HeroWarehouseManager.Instance.GetHeroIndex(this.EntanglementHero2);
-        int index = GetHeroEntanglementIndex(index1, index2);
-        if (this.HeroEntanglementValues == null || this.HeroEntanglementValues[index] == 0.0f) {
-            this.LoadHeroEntanglement();
-        }
+        this.LoadHeroEntanglement();
+        this.AllHeroFullEntanglement();
     }
 #endif
     

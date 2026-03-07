@@ -129,6 +129,13 @@ public class GoodsWarehouseManager : MonoBehaviour {
         return this.OwnedConsumedGoods.ContainsKey(goodsName) ? this.OwnedConsumedGoods[goodsName] : 0;
     }
 
+#if TEST_BATTLE
+    public void TEMPFORBATTLE() {
+        this.OwnedConsumedGoods = new SerializableDictionary<string, int>();
+        this.GetAllTactic(10);
+    }
+#endif
+    
     public void GetAllTactic(int count) {
         foreach (StoreGoodsData data in this.AllGoodsData) {
             if (data.Type != GoodsType.战术集) continue;

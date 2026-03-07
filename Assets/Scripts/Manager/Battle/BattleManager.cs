@@ -100,6 +100,7 @@ public class BattleManager : StateMachineController{
             HeroWarehouseManager.Instance.TEMPFORBATTLE();
             PassiveEntryWarehouseManager.Instance.TEMPFORBATTLE();
             EntanglementManager.Instance.TEMPFORBATTLE();
+            GoodsWarehouseManager.Instance.TEMPFORBATTLE();
 #endif
         
         ChangeState(Prepare);

@@ -88,6 +88,7 @@ public class HeroWarehouseManager : MonoBehaviour {
 
 #if TEST_BATTLE
     public void TEMPFORBATTLE() {
+        this.OwnedHeroes = new List<string>();
         if (this.OwnedHeroes.Count == 0) {
             foreach (Hero hero in AllHeroes) {
                 this.OwnedHeroes.Add(hero.Name);
