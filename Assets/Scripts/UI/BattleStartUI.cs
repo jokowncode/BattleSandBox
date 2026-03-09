@@ -7,7 +7,6 @@ public class BattleStartUI : MonoBehaviour{
 
     [SerializeField] private Image Background;
     [SerializeField] private Image BattleImage;
-    [SerializeField] private TextMeshProUGUI BattleText;
 
     private SceneType BattleScene;
     
@@ -21,7 +20,7 @@ public class BattleStartUI : MonoBehaviour{
         this.Background.color = new Color(1, 1, 1, background?1:0);
         
         this.BattleImage.sprite = battleImage;
-        this.BattleText.text = battleText;
+        this.BattleImage.color = new Color(1, 1, 1, battleImage?1:0);
         this.gameObject.SetActive(true);
     }
 
