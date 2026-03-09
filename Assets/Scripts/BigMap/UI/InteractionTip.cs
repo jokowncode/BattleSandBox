@@ -21,7 +21,7 @@ public class InteractionTip : MonoBehaviour {
         this.TipText.text = text;
         this.TipText.characterSpacing = Curve.Evaluate(text.Length);
         this.TipText.gameObject.SetActive(false);
-        this.EText.text = canInteract ? "E" : "×";
+        this.EText.text = canInteract ? "E" : "!";
         this.TipAnimator.SetBool(AnimationParams.Show, true);
     }
 
