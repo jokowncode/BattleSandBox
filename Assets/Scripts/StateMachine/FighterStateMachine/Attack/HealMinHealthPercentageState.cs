@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class HealMinHealthPercentageState : AttackState{
 
-    [SerializeField] private float HealPercentage = 0.3f;
+    // [SerializeField] private float HealPercentage = 0.3f;
     
     protected override void Awake(){
         base.Awake();
@@ -26,7 +26,7 @@ public class HealMinHealthPercentageState : AttackState{
         EffectData healMsg = new EffectData{
             TargetType = Controller.AttackTargetType,
             Force = 0.0f,
-            Value = Controller.Health * HealPercentage * critical,
+            Value = Controller.Attack * critical,
             IsCritical = criticalTest
         };
         target.BeHealed(healMsg);
