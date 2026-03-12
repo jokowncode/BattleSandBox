@@ -15,9 +15,8 @@ public class BattleButtonUI : MonoBehaviour {
         BattleManager.Instance.OnBattleStart += () => {
             this.RewindButton.SetActive(true);
             this.PauseButton.SetActive(true);
-            // TODO: FOR TEST -> ALWAYS CAN SKIP BATTLE
-            // this.QuitBattle.SetActive(GameManager.Instance.IsTrainBattle);
-            this.QuitBattle.SetActive(true);
+            this.QuitBattle.SetActive(GameManager.Instance.IsTrainBattle);
+            // this.QuitBattle.SetActive(true);
         };
     }
 
