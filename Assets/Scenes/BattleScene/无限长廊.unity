@@ -7605,15 +7605,10 @@ MonoBehaviour:
   BaseBondValue: 10
   <EnemyParent>k__BackingField: {fileID: 1970743192}
   HeroParent: {fileID: 1241361657}
-  PassiveEntryParent: {fileID: 0}
-  HeroWarehouseParent: {fileID: 0}
   EquipPassiveEntrySfx: {fileID: 8300000, guid: 720316a1b6edac7478d8b8a5153a5d21,
     type: 3}
   UndressPassiveEntrySfx: {fileID: 8300000, guid: 1f8b63ca53e435544b2b3eae808f2c67,
     type: 3}
-  BattleNameText: {fileID: 0}
-  BattleMessageTrans: {fileID: 0}
-  BattleMessageText: {fileID: 0}
   HeroDeployPlaceArea:
   - DeployArea: {fileID: 2101567191}
     MaxHeroCount: 6
@@ -47848,6 +47843,7 @@ GameObject:
   - component: {fileID: 1925961377}
   - component: {fileID: 1925961381}
   - component: {fileID: 1925961382}
+  - component: {fileID: 1925961383}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -48003,6 +47999,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 1549148585}
+--- !u!114 &1925961383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1925961376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49b4cc203aa6414fae5c798d1d0e7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 64
+  m_MaxRayIntersections: 0
 --- !u!1001 &1939319162
 PrefabInstance:
   m_ObjectHideFlags: 0

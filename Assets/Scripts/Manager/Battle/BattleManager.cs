@@ -164,6 +164,8 @@ public class BattleManager : StateMachineController{
             int deployAreaIndex = this.IsWithinArea(finalPos);
             if (deployAreaIndex != -1){
                 hero.transform.position = finalPos;
+                DraggableUI dragHero = hero.AddComponent<DraggableUI>();
+                dragHero.prefabReference = hero.Name;
                 hero.Deploy(deployAreaIndex);
                 if (data.IsDeadBattleDefeat) {
                     hero.AddComponent<FighterDeadBattleDefeat>();
@@ -339,20 +341,23 @@ public class BattleManager : StateMachineController{
     
     protected override void Update(){
         base.Update();
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
-
         if (Input.GetMouseButtonDown(0)){
-            Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit,maxDistance:100f,layerMask:LayerMask.GetMask("Hero"))
-                && hit.collider.gameObject.TryGetComponent(out Hero hero)){
-                SelectObject(hero);
-            }else{
-                SelectObject(null);
+            PointerEventData eventData = new PointerEventData(EventSystem.current);
+            eventData.position = Input.mousePosition;
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, results);
+            Hero hero = null;
+            foreach (var res in results) {
+                if (res.gameObject.layer == LayerMask.NameToLayer("UI")) {
+                    return ;
+                }
+
+                if (res.gameObject.layer == LayerMask.NameToLayer("Hero")) {
+                    res.gameObject.TryGetComponent(out hero);
+                }
             }
+            SelectObject(hero);
         }
-        
-        
     }
     
     private void SelectObject(Hero so){
@@ -372,14 +377,22 @@ public class BattleManager : StateMachineController{
         BattleUIManager.Instance.ShowHeroDetail(hero);
     }
 
+    public void RecallHero(Hero hero, bool isDestroy = true) {
+        BattleUIManager.Instance.HideHeroDetail();
+        selectedHero = hero;
+        this.RecallSelectedHero(isDestroy);
+    }
+
     /// <summary>
     /// 召回英雄
     /// </summary>
-    public void RecallSelectedHero() {
+    public void RecallSelectedHero(bool isDestroy = true) {
         if (!selectedHero) return;
-        BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.Name);
         this.RemoveHero(selectedHero);
-        Destroy(selectedHero.gameObject);
+        if (isDestroy) {
+            BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.Name);
+            Destroy(selectedHero.gameObject);
+        }
         selectedHero = null;
         BattleUIManager.Instance.HideHeroDetail();
     }
