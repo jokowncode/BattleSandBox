@@ -17,8 +17,8 @@ public class BattleButtonUI : MonoBehaviour {
             this.RewindButton.SetActive(true);
             this.PauseButton.SetActive(true);
             this.HeroWarehouseButton.SetActive(false);
-            this.QuitBattle.SetActive(GameManager.Instance.IsTrainBattle);
-            // this.QuitBattle.SetActive(true);
+            // this.QuitBattle.SetActive(GameManager.Instance.IsTrainBattle);
+            this.QuitBattle.SetActive(true);
         };
     }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StoreUI : MonoBehaviour {
 
@@ -12,7 +13,7 @@ public class StoreUI : MonoBehaviour {
     [SerializeField] private DetailButton NormalStoreGoodsPrefab;
     [SerializeField] private DetailButton HasDescStoreGoodsPrefab;
 
-    [SerializeField] private GameObject Mask;
+    [SerializeField] private StoreInstructionMask Mask;
     [SerializeField] private RectTransform Instruction;
     
     public static StoreUI Instance;
@@ -139,17 +140,20 @@ public class StoreUI : MonoBehaviour {
         if(index < 0 || index >= this.CurrentGoods.Count) return;
         this.CurrentGoods[index].OnButtonClicked += (_, _) => {
             this.Instruction.gameObject.SetActive(false);
-            this.Mask.SetActive(false);
+            this.Mask.Hide();
             this.IsInstructionMode = false;
         };
         this.CurrentGoods[index].OnButtonClicked += (_, _) => onGoodsBePurchased?.Invoke();
         for (int i = 0; i < this.CurrentGoods.Count; i++) {
             this.CurrentGoods[i].TransitionButtonInteractable(i == index);
             if (i == index) {
-                this.Mask.SetActive(true);
                 this.Instruction.gameObject.SetActive(true);
-                this.Instruction.position = this.CurrentGoods[i].transform.position;
-                this.Instruction.sizeDelta = ((RectTransform)this.CurrentGoods[i].transform).sizeDelta;
+                Transform useButtonTrans = this.CurrentGoods[i].GetUseButtonTransform();
+                Vector3 center = useButtonTrans.position + new Vector3(-8.0f, 8.0f, 0.0f);
+                Vector2 size = ((RectTransform)useButtonTrans).sizeDelta + new Vector2(20.0f, 20.0f);
+                this.Instruction.position = center;
+                this.Instruction.sizeDelta = size;
+                this.Mask.Show((RectTransform)useButtonTrans, size);
             }
         }
     }

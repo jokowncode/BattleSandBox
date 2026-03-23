@@ -18,6 +18,10 @@ public class DetailButton : MonoBehaviour {
 
     public string Name { get; private set; }
 
+    public Transform GetUseButtonTransform() {
+        return this.UseButton.transform.parent;
+    }
+
     public int GetCurrentCount() {
         if (!this.CountText) return 0;
         int.TryParse(this.CountText.text, out int count);

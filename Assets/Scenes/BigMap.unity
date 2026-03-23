@@ -22816,8 +22816,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 115.49701, y: 199}
-  m_SizeDelta: {x: 703.006, y: 160}
+  m_AnchoredPosition: {x: 110.1491, y: 197.10043}
+  m_SizeDelta: {x: 144.3588, y: 151.9544}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &278510671
 MonoBehaviour:
@@ -29809,13 +29809,14 @@ GameObject:
   - component: {fileID: 441008283}
   - component: {fileID: 441008285}
   - component: {fileID: 441008284}
+  - component: {fileID: 441008286}
   m_Layer: 5
   m_Name: Mask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &441008283
 RectTransform:
   m_ObjectHideFlags: 0
@@ -29847,15 +29848,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.54509807}
+  m_Material: {fileID: 2100000, guid: cd50386f286458c47b083758fd096193, type: 2}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.9019608}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 0a92e2ffc165f1a42879d4da3d2d0c17, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -29873,6 +29874,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 441008282}
   m_CullTransparentMesh: 1
+--- !u!114 &441008286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441008282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be4d4fb46bb34bfdab3832c3698ca3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &451201995
 GameObject:
   m_ObjectHideFlags: 0
@@ -68360,7 +68373,7 @@ MonoBehaviour:
     type: 3}
   HasDescStoreGoodsPrefab: {fileID: 3957712567389997032, guid: ebc80a4af63c08f4aa6633e90592bf3b,
     type: 3}
-  Mask: {fileID: 441008282}
+  Mask: {fileID: 441008286}
   Instruction: {fileID: 278510670}
 --- !u!1 &855780786
 GameObject:
