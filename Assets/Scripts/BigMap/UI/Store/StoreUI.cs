@@ -13,7 +13,7 @@ public class StoreUI : MonoBehaviour {
     [SerializeField] private DetailButton NormalStoreGoodsPrefab;
     [SerializeField] private DetailButton HasDescStoreGoodsPrefab;
 
-    [SerializeField] private StoreInstructionMask Mask;
+    [SerializeField] private InstructionMask Mask;
     [SerializeField] private RectTransform Instruction;
     
     public static StoreUI Instance;

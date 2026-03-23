@@ -3,23 +3,22 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StoreInstructionMask : MonoBehaviour {
+public class InstructionMask : MonoBehaviour {
     
     private Material MaskMaterial;
     private RectTransform MaskTransform;
-    
-    private void Awake() {
-        Image image = GetComponent<Image>();
-        if (image) {
+
+    public void Show(RectTransform targetRect, Vector4 size) {
+        if (!this.MaskMaterial && this.TryGetComponent(out Image image)) {
             MaskMaterial = Instantiate(image.material);
             MaskMaterial.SetColor(MaterialProperty.Color, image.color);
             image.material = MaskMaterial;
         }
-        this.MaskTransform = this.GetComponent<RectTransform>();
-        this.gameObject.SetActive(false);
-    }
 
-    public void Show(RectTransform targetRect, Vector4 size) {
+        if (!this.MaskTransform) {
+            this.TryGetComponent(out this.MaskTransform);
+        }
+        
         Vector3[] targetCorners = new Vector3[4];
         targetRect.GetWorldCorners(targetCorners);
         

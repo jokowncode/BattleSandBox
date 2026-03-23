@@ -8,6 +8,8 @@ public class BigMapUIManager : MonoBehaviour{
 
     [SerializeField] private CanvasGroup HUDCanvasGroup;
     [SerializeField] private BattleStartUI BattleStartBannar;
+
+    [SerializeField] private InstructionMask Mask;
     [SerializeField] private GameObject HUDButtonInstruction;
 
     [field: SerializeField] public TaskList TaskList { get; private set; }
@@ -27,11 +29,14 @@ public class BigMapUIManager : MonoBehaviour{
 
     private void Start() {
         DialogEventManager.Instance.AddEvent("ShowHUDButtonInstruction", () => {
+            RectTransform targetRect = (RectTransform)this.HUDButtonInstruction.transform;
+            this.Mask.Show(targetRect, targetRect.sizeDelta);
             this.HUDButtonInstruction.SetActive(true);
             GoodsWarehouseManager.Instance.SetHUDButtonsInteractable(false);
         });
         
         DialogEventManager.Instance.AddEvent("HideHUDButtonInstruction", () => {
+            this.Mask.Hide();
             this.HUDButtonInstruction.SetActive(false);
             GoodsWarehouseManager.Instance.SetHUDButtonsInteractable(true);
         });
