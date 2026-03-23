@@ -135,6 +135,7 @@ public class SaveDataManager : MonoBehaviour {
     }
 
     public void AutoSaveData() {
+        SceneChangeManager.Instance.AddGameTip("已自动保存！");
         if (this.AutoSaveDataPaths.Count >= this.MaxSaveDataCount) {
             string deleteFileName = this.AutoSaveDataPaths.Dequeue();
             string deletePath = Path.Combine(Application.persistentDataPath, deleteFileName);
@@ -147,6 +148,10 @@ public class SaveDataManager : MonoBehaviour {
         string path = Path.Combine(Application.persistentDataPath, fileName);
         this.AutoSaveDataPaths.Enqueue(fileName);
         this.SaveData(path);
+    }
+
+    public bool HasMutualSaveData(int slot) {
+        return this.MutualSaveDataPathMap.ContainsKey(slot);
     }
 
     public string MutualSaveData(int slot) {

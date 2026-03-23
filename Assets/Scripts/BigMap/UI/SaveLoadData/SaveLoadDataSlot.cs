@@ -66,11 +66,19 @@ public class SaveLoadDataSlot : MonoBehaviour {
         }
     }
 
+    private void SaveData() {
+        string newFileName = SaveDataManager.Instance.MutualSaveData(Index);
+        SetFileName(newFileName);
+    }
+
     public void SaveOrLoad() {
         if (this.UIParent.IsSaveData) {
             if (this.Index < 0) return;
-            string newFileName = SaveDataManager.Instance.MutualSaveData(Index);
-            SetFileName(newFileName);
+            if (SaveDataManager.Instance.HasMutualSaveData(this.Index)) {
+                this.UIParent.ShowConfirmDialog(this.SaveData);
+            } else {
+                this.SaveData();
+            }
         } else if (this.FileName != null) {
             SaveDataManager.Instance.LoadData(Path.Combine(Application.persistentDataPath, this.FileName));
             this.UIParent.TransitionShow(false, false);
