@@ -403,11 +403,6 @@ public class BattleManager : StateMachineController{
     public int AddPassiveEntry(PassiveEntry data){
         if (!selectedHero) return -1;
         if (!data.Precondition(selectedHero)) return -1;
-
-        if (EquipPassiveEntrySfx) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EquipPassiveEntrySfx);
-        }
-
         if (!PassiveEntryWarehouseManager.Instance.ContainsPassiveEntry(data.Data.Name)) {
             return -1;
         }
@@ -417,6 +412,9 @@ public class BattleManager : StateMachineController{
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
             PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data.Data.Name);
+            if (EquipPassiveEntrySfx) {
+                AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EquipPassiveEntrySfx);
+            }
             return 0;
         }
         
@@ -425,9 +423,13 @@ public class BattleManager : StateMachineController{
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
             PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data.Data.Name);
+            if (EquipPassiveEntrySfx) {
+                AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EquipPassiveEntrySfx);
+            }
             return 1;
         }
-
+        SceneChangeManager.Instance.AddGameTip("芯片已满！");
+        AudioManager.Instance.PlayErrorSfx();
         return -1;
     }
     
