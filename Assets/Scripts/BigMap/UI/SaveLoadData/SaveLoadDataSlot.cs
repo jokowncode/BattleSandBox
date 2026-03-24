@@ -75,7 +75,7 @@ public class SaveLoadDataSlot : MonoBehaviour {
         if (this.UIParent.IsSaveData) {
             if (this.Index < 0) return;
             if (SaveDataManager.Instance.HasMutualSaveData(this.Index)) {
-                this.UIParent.ShowConfirmDialog(this.SaveData);
+                this.UIParent.ShowConfirmDialog(this.SaveData, "确定覆盖存档？");
             } else {
                 this.SaveData();
             }
@@ -88,8 +88,10 @@ public class SaveLoadDataSlot : MonoBehaviour {
 
     public void DeleteSaveData() {
         if (this.Index < 0) return;
-        SaveDataManager.Instance.DeleteMutualSaveData(this.Index);
-        this.SetFileName(null);
+        this.UIParent.ShowConfirmDialog(() => {
+            SaveDataManager.Instance.DeleteMutualSaveData(this.Index);
+            this.SetFileName(null);
+        }, "确定删除存档？");
     }
 
     private static string GetPlayTimeString(long seconds) {

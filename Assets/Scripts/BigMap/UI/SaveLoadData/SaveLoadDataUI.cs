@@ -25,8 +25,8 @@ public class SaveLoadDataUI : MonoBehaviour {
         this.TransitionShow(false, false);
     }
 
-    public void ShowConfirmDialog(Action onConfirm) {
-        this.ConfirmDialogUI.Show(onConfirm);
+    public void ShowConfirmDialog(Action onConfirm, string text) {
+        this.ConfirmDialogUI.Show(onConfirm, text);
     }
 
     public void TransitionShow(bool show, bool isSaveData) {
