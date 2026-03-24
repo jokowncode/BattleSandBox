@@ -46,6 +46,7 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
         Hero go = HeroWarehouseManager.Instance.GetHeroByRef(prefabReference);
         if (go) {
             previewInstance = Instantiate(go);
+            previewInstance.gameObject.layer = LayerMask.NameToLayer("Default");
             if (CurrentHero && CurrentHero.IsOriginExist) {
                 previewInstance.SetOriginExist();
                 if (CurrentHero.TryGetComponent(out FighterDeadBattleDefeat _)) {
@@ -84,6 +85,7 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
             hero.transform.position = finalPos;
             DraggableUI dragHero = hero.AddComponent<DraggableUI>();
             dragHero.prefabReference = hero.Name;
+            hero.gameObject.layer = LayerMask.NameToLayer("Hero");
             hero.Deploy(deploAreaIndex);
             Destroy(this.gameObject);
         }else {

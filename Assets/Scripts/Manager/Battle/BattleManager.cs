@@ -361,7 +361,9 @@ public class BattleManager : StateMachineController{
         for (int i = 0; i < HeroDeployPlaceArea.Length; i++) {
             HeroDeployAreaData areaData = HeroDeployPlaceArea[i];
             if (areaData.DeployArea.bounds.Contains(targetPos) && this.DeployAreaCurrentHeroCount[i] < areaData.MaxHeroCount) {
-                return i;
+                if (!Physics.CheckSphere(targetPos, 2.0f, 1 << LayerMask.NameToLayer("Hero"))) {
+                    return i;    
+                }
             }
         }
         return -1;
