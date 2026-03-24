@@ -217,8 +217,6 @@ public class SaveDataManager : MonoBehaviour {
         }
 
         if (SceneTools.IsBattleScene(SceneChangeManager.Instance.CurrentScene) && BattleManager.Instance) {
-            this.IsInBattle = true;
-            this.DupDungeonHealth.Clear();
             BattleManager.Instance.OnRewindBattle += () => {
                 foreach (var pair in this.DupDungeonHealth) {
                     bool containsKey = this.PlayerData.DungeonHeroHealth.ContainsKey(pair.Key);
@@ -235,11 +233,15 @@ public class SaveDataManager : MonoBehaviour {
                 }
                 this.DupDungeonHealth.Clear();
             };
+            BattleManager.Instance.OnBattleStart += () => {
+                this.IsInBattle = true;
+                this.DupDungeonHealth.Clear();
+            };
         } else {
             this.IsInBattle = false;
         }
     }
-    
+
     public void ShowSaveLoadDataUI(bool isSaveData) {
         this.SaveLoadDataUI.TransitionShow(true, isSaveData);
     }

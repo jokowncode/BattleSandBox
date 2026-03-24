@@ -58,6 +58,12 @@ public class BattleManager : StateMachineController{
 
     public List<string> BeforeBattleHeroes { get; private set; } = new();
 
+    private struct DupHeroData {
+        public string HeroName;
+        public Vector3 HeroPosition;
+    }
+    private List<DupHeroData> DupHeroesInBattle = new List<DupHeroData>();
+
 #if DEBUG_MODE
     public float BattleStartTime {get; private set;}
 #endif
@@ -117,6 +123,24 @@ public class BattleManager : StateMachineController{
 #if TEST_BATTLE
         SetBattleData(this.Data);
 #endif
+    }
+    
+    public void DupHeroesInBattleData() {
+        this.DupHeroesInBattle.Clear();
+        foreach (Hero h in this.HeroesInBattle) {
+            if (h.IsOriginExist) continue;
+            this.DupHeroesInBattle.Add(new DupHeroData() {
+                HeroName = h.Name,
+                HeroPosition = h.transform.position,
+            });
+        }
+    }
+
+    public void RedeployAllHero() {
+        foreach (DupHeroData data in this.DupHeroesInBattle) {
+            this.DeployHeroThroughDraggable(data.HeroName, data.HeroPosition);
+        }
+        this.DupHeroesInBattle.Clear();
     }
 
     public void SetBattleData(BattleData data){
@@ -237,19 +261,23 @@ public class BattleManager : StateMachineController{
         PlayerPrefs.SetString(this.Data.BattleName, json);
     }
 
+    private void DeployHeroThroughDraggable(string heroName, Vector3 position) {
+        foreach (Transform child in BattleUIManager.Instance.HeroWarehouseParent) {
+            if (child.TryGetComponent(out DraggableUI draggable)
+                && draggable.prefabReference == heroName) {
+                draggable.DeployHero(position);
+                break;
+            }
+        }
+    }
+
     public void LoadHeroDeploy() {
         if (!this.Data) return;
         if (!PlayerPrefs.HasKey(this.Data.BattleName)) return;
         HeroDeploySaveData saveData = JsonUtility.FromJson<HeroDeploySaveData>(PlayerPrefs.GetString(this.Data.BattleName));
         foreach (HeroDeployData data in saveData.Datas) {
             if (IsFullHero) break;
-            foreach (Transform child in BattleUIManager.Instance.HeroWarehouseParent) {
-                if (child.TryGetComponent(out DraggableUI draggable)
-                    && draggable.prefabReference == data.HeroName) {
-                    draggable.DeployHero(data.HeroPosition);
-                    break;
-                }
-            }
+            this.DeployHeroThroughDraggable(data.HeroName, data.HeroPosition);
         }
     }
 
