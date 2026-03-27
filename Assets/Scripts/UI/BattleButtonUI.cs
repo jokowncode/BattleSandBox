@@ -7,6 +7,7 @@ public class BattleButtonUI : MonoBehaviour {
     [SerializeField] private GameObject QuitBattle;
     [SerializeField] private GameObject RewindButton;
     [SerializeField] private GameObject PauseButton;
+    [SerializeField] private GameObject HeroWarehouseButton;
     [SerializeField] private GameObject PausePanel;
 
     private bool IsPauseBattle = false;
@@ -15,10 +16,14 @@ public class BattleButtonUI : MonoBehaviour {
         BattleManager.Instance.OnBattleStart += () => {
             this.RewindButton.SetActive(true);
             this.PauseButton.SetActive(true);
-            // TODO: FOR TEST -> ALWAYS CAN SKIP BATTLE
-            // this.QuitBattle.SetActive(GameManager.Instance.IsTrainBattle);
-            this.QuitBattle.SetActive(true);
+            this.HeroWarehouseButton.SetActive(false);
+            this.QuitBattle.SetActive(GameManager.Instance.IsTrainBattle);
+            // this.QuitBattle.SetActive(true);
         };
+    }
+
+    public void OpenHeroWarehouse() {
+        HeroWarehouseManager.Instance.TransitionHeroWarehouseCanvas(true);
     }
 
     public void GoToBigMap(){

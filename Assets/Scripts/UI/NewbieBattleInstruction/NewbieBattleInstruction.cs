@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public class NewbieBattleInstruction : MonoBehaviour, IPointerClickHandler {
 
-    [SerializeField] private GameObject Mask;
+    [SerializeField] private InstructionMask Mask;
     
     private CanvasGroup CanvasGroup;
     private int CurrentInstructionIndex = -1;
@@ -20,7 +20,15 @@ public class NewbieBattleInstruction : MonoBehaviour, IPointerClickHandler {
     private void Transition(bool show) {
         this.CanvasGroup.interactable = show;
         this.CanvasGroup.blocksRaycasts = show;
-        if(this.Mask) this.Mask.SetActive(show);
+        if (this.Mask) {
+            if (show) {
+                RectTransform targetRect = (RectTransform)this.transform.GetChild(CurrentInstructionIndex);
+                this.Mask.Show(targetRect, targetRect.sizeDelta);
+            } else {
+                this.Mask.Hide();
+            }
+        }
+
         UISelectionManager.Instance.StopTime(show);
     }
 

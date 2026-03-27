@@ -92,7 +92,10 @@ public class BattleRoom : InteractionObject {
             this.enabled = true;
             foreach (Transform child in this.Enemies) {
                 if (child.TryGetComponent(out BigMapEnemy enemy)) {
-                    enemy.ChasePlayer(this.InAreaPlayer, this.Interaction);
+                    enemy.ChasePlayer(this.InAreaPlayer, () => {
+                        this.OnInteractionPre?.Invoke();
+                        this.Interaction();
+                    });
                 }
             }
         }

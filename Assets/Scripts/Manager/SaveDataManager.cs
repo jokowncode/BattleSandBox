@@ -135,6 +135,7 @@ public class SaveDataManager : MonoBehaviour {
     }
 
     public void AutoSaveData() {
+        SceneChangeManager.Instance.AddGameTip("已自动保存！");
         if (this.AutoSaveDataPaths.Count >= this.MaxSaveDataCount) {
             string deleteFileName = this.AutoSaveDataPaths.Dequeue();
             string deletePath = Path.Combine(Application.persistentDataPath, deleteFileName);
@@ -147,6 +148,10 @@ public class SaveDataManager : MonoBehaviour {
         string path = Path.Combine(Application.persistentDataPath, fileName);
         this.AutoSaveDataPaths.Enqueue(fileName);
         this.SaveData(path);
+    }
+
+    public bool HasMutualSaveData(int slot) {
+        return this.MutualSaveDataPathMap.ContainsKey(slot);
     }
 
     public string MutualSaveData(int slot) {
@@ -212,8 +217,6 @@ public class SaveDataManager : MonoBehaviour {
         }
 
         if (SceneTools.IsBattleScene(SceneChangeManager.Instance.CurrentScene) && BattleManager.Instance) {
-            this.IsInBattle = true;
-            this.DupDungeonHealth.Clear();
             BattleManager.Instance.OnRewindBattle += () => {
                 foreach (var pair in this.DupDungeonHealth) {
                     bool containsKey = this.PlayerData.DungeonHeroHealth.ContainsKey(pair.Key);
@@ -230,11 +233,15 @@ public class SaveDataManager : MonoBehaviour {
                 }
                 this.DupDungeonHealth.Clear();
             };
+            BattleManager.Instance.OnBattleStart += () => {
+                this.IsInBattle = true;
+                this.DupDungeonHealth.Clear();
+            };
         } else {
             this.IsInBattle = false;
         }
     }
-    
+
     public void ShowSaveLoadDataUI(bool isSaveData) {
         this.SaveLoadDataUI.TransitionShow(true, isSaveData);
     }

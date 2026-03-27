@@ -13,6 +13,7 @@ public class PlayerMove : MonoBehaviour{
     private Animator PlayerAnimator;
     private BoxCollider PlayerInAreaCollider;
     private PlayerInAreaColliderDir PlayerInAreaColliderDir;
+    private Rigidbody PlayerRigidbody;
     
     private float LastPlayFootstepTime = -1.0f;
 
@@ -20,6 +21,7 @@ public class PlayerMove : MonoBehaviour{
 
     private void Awake(){
         PlayerAnimator = GetComponentInChildren<Animator>();
+        PlayerRigidbody = GetComponent<Rigidbody>();
     }
 
     public void SetInAreaCollider(BoxCollider inAreaCollider, PlayerInAreaColliderDir dir) {
@@ -31,7 +33,7 @@ public class PlayerMove : MonoBehaviour{
         PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
     }
 
-    private void Update() {
+    private void FixedUpdate() {
         if (DialogManager.Instance && DialogManager.Instance.IsInDialog) {
             PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
             return;
@@ -42,15 +44,25 @@ public class PlayerMove : MonoBehaviour{
         Vector3 velocity = new Vector3(x, 0.0f, z).normalized;
         this.HorizontalDir = new Vector3(Mathf.Sign(x), 0.0f, 0.0f);
 
-        if (Physics.BoxCast(this.transform.position + transform.up * 0.5f, Vector3.one * 0.1f, velocity, 
-                Quaternion.identity, 0.1f, 1 << LayerMask.NameToLayer("Wall"))) {
+        Vector3 center = this.transform.position + transform.up * 0.5f;
+        Vector3 extents = Vector3.one * 0.1f;
+        int layerMask = 1 << LayerMask.NameToLayer("Wall");
+        
+        if (x != 0.0f && Physics.BoxCast(center, extents, new Vector3(Mathf.Sign(x), 0.0f, 0.0f), 
+                Quaternion.identity, this.HorizontalSpeed * Time.fixedDeltaTime + 0.02f, layerMask)) {
+            PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
+            return;
+        }
+        
+        if (z != 0.0f && Physics.BoxCast(center, extents, new Vector3(0.0f, 0.0f, Mathf.Sign(z)), 
+                Quaternion.identity, this.VerticalSpeed * Time.fixedDeltaTime + 0.02f, layerMask)) {
             PlayerAnimator.SetFloat(AnimationParams.Velocity, 0.0f);
             return;
         }
 
         velocity.x *= HorizontalSpeed;
         velocity.z *= VerticalSpeed;
-        Vector3 newPos = this.transform.position + Time.deltaTime * velocity;
+        Vector3 newPos = this.transform.position + Time.fixedDeltaTime * velocity;
         if (PlayerInAreaCollider) {
             bool isStop = false;
             switch (this.PlayerInAreaColliderDir) {
@@ -77,7 +89,8 @@ public class PlayerMove : MonoBehaviour{
             }
         }
 
-        this.transform.position = newPos;
+        // this.transform.position = newPos;
+        this.PlayerRigidbody.MovePosition(newPos);
         PlayerAnimator.SetFloat(AnimationParams.Velocity, Vector3.SqrMagnitude(velocity));
         if (Vector3.SqrMagnitude(velocity) != 0){
             if (LastPlayFootstepTime < 0.0f || Time.time - LastPlayFootstepTime >= FootstepCycle){

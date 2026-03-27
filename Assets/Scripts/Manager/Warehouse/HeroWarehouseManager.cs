@@ -56,8 +56,18 @@ public class HeroWarehouseManager : MonoBehaviour {
         this.HeroWarehouseCanvasGroup.alpha = show ? 1.0f : 0.0f;
         this.HeroWarehouseCanvasGroup.blocksRaycasts = show;
         this.HeroWarehouseCanvasGroup.interactable = show;
-        if (show) this.ModeHeroWarehousePanel.Show();
-        else this.ModeHeroWarehousePanel.Hide();
+        if (show) {
+            if (BattleManager.Instance && !BattleManager.Instance.IsBattleStart) {
+                BattleManager.Instance.DupHeroesInBattleData();
+                BattleManager.Instance.AllHeroRecall();
+            }
+            this.ModeHeroWarehousePanel.Show();
+        } else {
+            this.ModeHeroWarehousePanel.Hide();
+            if (BattleManager.Instance && !BattleManager.Instance.IsBattleStart) {
+                BattleManager.Instance.RedeployAllHero();
+            }
+        }
     }
 
     public void ShowBondPanel() {

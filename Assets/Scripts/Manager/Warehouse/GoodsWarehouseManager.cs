@@ -61,9 +61,8 @@ public class GoodsWarehouseManager : MonoBehaviour {
         SceneManager.sceneLoaded += (arg0, mode) => {
             SceneType currentScene = SceneChangeManager.Instance.CurrentScene;
             if (SceneTools.IsBattleScene(currentScene) && BattleManager.Instance) {
-                this.IsInBattle = true;
-                this.InBattleModifyGoods.Clear();
                 BattleManager.Instance.OnRewindBattle += OnRewindBattle;
+                BattleManager.Instance.OnBattleStart += OnBattleStart;
             } else {
                 this.IsInBattle = false;
             }
@@ -82,6 +81,11 @@ public class GoodsWarehouseManager : MonoBehaviour {
         this.GoodsPanelCanvasGroup = this.GetComponent<CanvasGroup>();
     }
 
+    private void OnBattleStart() {
+        this.IsInBattle = true;
+        this.InBattleModifyGoods.Clear();
+    }
+    
     public void TransitionGoodsPanel(bool show) {
         if (show && this.GoodsPanelCanvasGroup.alpha >= 0.9f) return;
         this.GoodsPanelCanvasGroup.alpha = show ? 1.0f : 0.0f;

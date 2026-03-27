@@ -58,6 +58,12 @@ public class BattleManager : StateMachineController{
 
     public List<string> BeforeBattleHeroes { get; private set; } = new();
 
+    private struct DupHeroData {
+        public string HeroName;
+        public Vector3 HeroPosition;
+    }
+    private List<DupHeroData> DupHeroesInBattle = new List<DupHeroData>();
+
 #if DEBUG_MODE
     public float BattleStartTime {get; private set;}
 #endif
@@ -118,6 +124,24 @@ public class BattleManager : StateMachineController{
         SetBattleData(this.Data);
 #endif
     }
+    
+    public void DupHeroesInBattleData() {
+        this.DupHeroesInBattle.Clear();
+        foreach (Hero h in this.HeroesInBattle) {
+            if (h.IsOriginExist) continue;
+            this.DupHeroesInBattle.Add(new DupHeroData() {
+                HeroName = h.Name,
+                HeroPosition = h.transform.position,
+            });
+        }
+    }
+
+    public void RedeployAllHero() {
+        foreach (DupHeroData data in this.DupHeroesInBattle) {
+            this.DeployHeroThroughDraggable(data.HeroName, data.HeroPosition);
+        }
+        this.DupHeroesInBattle.Clear();
+    }
 
     public void SetBattleData(BattleData data){
         this.Data = data;
@@ -164,6 +188,8 @@ public class BattleManager : StateMachineController{
             int deployAreaIndex = this.IsWithinArea(finalPos);
             if (deployAreaIndex != -1){
                 hero.transform.position = finalPos;
+                DraggableUI dragHero = hero.AddComponent<DraggableUI>();
+                dragHero.prefabReference = hero.Name;
                 hero.Deploy(deployAreaIndex);
                 if (data.IsDeadBattleDefeat) {
                     hero.AddComponent<FighterDeadBattleDefeat>();
@@ -235,19 +261,23 @@ public class BattleManager : StateMachineController{
         PlayerPrefs.SetString(this.Data.BattleName, json);
     }
 
+    private void DeployHeroThroughDraggable(string heroName, Vector3 position) {
+        foreach (Transform child in BattleUIManager.Instance.HeroWarehouseParent) {
+            if (child.TryGetComponent(out DraggableUI draggable)
+                && draggable.prefabReference == heroName) {
+                draggable.DeployHero(position);
+                break;
+            }
+        }
+    }
+
     public void LoadHeroDeploy() {
         if (!this.Data) return;
         if (!PlayerPrefs.HasKey(this.Data.BattleName)) return;
         HeroDeploySaveData saveData = JsonUtility.FromJson<HeroDeploySaveData>(PlayerPrefs.GetString(this.Data.BattleName));
         foreach (HeroDeployData data in saveData.Datas) {
             if (IsFullHero) break;
-            foreach (Transform child in BattleUIManager.Instance.HeroWarehouseParent) {
-                if (child.TryGetComponent(out DraggableUI draggable)
-                    && draggable.prefabReference == data.HeroName) {
-                    draggable.DeployHero(data.HeroPosition);
-                    break;
-                }
-            }
+            this.DeployHeroThroughDraggable(data.HeroName, data.HeroPosition);
         }
     }
 
@@ -331,7 +361,9 @@ public class BattleManager : StateMachineController{
         for (int i = 0; i < HeroDeployPlaceArea.Length; i++) {
             HeroDeployAreaData areaData = HeroDeployPlaceArea[i];
             if (areaData.DeployArea.bounds.Contains(targetPos) && this.DeployAreaCurrentHeroCount[i] < areaData.MaxHeroCount) {
-                return i;
+                if (!Physics.CheckSphere(targetPos, 2.0f, 1 << LayerMask.NameToLayer("Hero"))) {
+                    return i;    
+                }
             }
         }
         return -1;
@@ -339,20 +371,23 @@ public class BattleManager : StateMachineController{
     
     protected override void Update(){
         base.Update();
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
-
         if (Input.GetMouseButtonDown(0)){
-            Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit,maxDistance:100f,layerMask:LayerMask.GetMask("Hero"))
-                && hit.collider.gameObject.TryGetComponent(out Hero hero)){
-                SelectObject(hero);
-            }else{
-                SelectObject(null);
+            PointerEventData eventData = new PointerEventData(EventSystem.current);
+            eventData.position = Input.mousePosition;
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, results);
+            Hero hero = null;
+            foreach (var res in results) {
+                if (res.gameObject.layer == LayerMask.NameToLayer("UI")) {
+                    return ;
+                }
+
+                if (res.gameObject.layer == LayerMask.NameToLayer("Hero")) {
+                    res.gameObject.TryGetComponent(out hero);
+                }
             }
+            SelectObject(hero);
         }
-        
-        
     }
     
     private void SelectObject(Hero so){
@@ -372,14 +407,22 @@ public class BattleManager : StateMachineController{
         BattleUIManager.Instance.ShowHeroDetail(hero);
     }
 
+    public void RecallHero(Hero hero, bool isDestroy = true) {
+        BattleUIManager.Instance.HideHeroDetail();
+        selectedHero = hero;
+        this.RecallSelectedHero(isDestroy);
+    }
+
     /// <summary>
     /// 召回英雄
     /// </summary>
-    public void RecallSelectedHero() {
+    public void RecallSelectedHero(bool isDestroy = true) {
         if (!selectedHero) return;
-        BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.Name);
         this.RemoveHero(selectedHero);
-        Destroy(selectedHero.gameObject);
+        if (isDestroy) {
+            BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.Name);
+            Destroy(selectedHero.gameObject);
+        }
         selectedHero = null;
         BattleUIManager.Instance.HideHeroDetail();
     }
@@ -390,11 +433,6 @@ public class BattleManager : StateMachineController{
     public int AddPassiveEntry(PassiveEntry data){
         if (!selectedHero) return -1;
         if (!data.Precondition(selectedHero)) return -1;
-
-        if (EquipPassiveEntrySfx) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EquipPassiveEntrySfx);
-        }
-
         if (!PassiveEntryWarehouseManager.Instance.ContainsPassiveEntry(data.Data.Name)) {
             return -1;
         }
@@ -404,6 +442,9 @@ public class BattleManager : StateMachineController{
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
             PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data.Data.Name);
+            if (EquipPassiveEntrySfx) {
+                AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EquipPassiveEntrySfx);
+            }
             return 0;
         }
         
@@ -412,9 +453,13 @@ public class BattleManager : StateMachineController{
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
             PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data.Data.Name);
+            if (EquipPassiveEntrySfx) {
+                AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EquipPassiveEntrySfx);
+            }
             return 1;
         }
-
+        SceneChangeManager.Instance.AddGameTip("芯片已满！");
+        AudioManager.Instance.PlayErrorSfx();
         return -1;
     }
     
