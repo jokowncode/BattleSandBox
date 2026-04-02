@@ -12,6 +12,8 @@ public class Hero : Fighter {
     [SerializeField] private PassiveEntry[] HeroSelfPassiveEntries;
     [field: SerializeField] public SkillCaster HeroUpdateSkillCaster { get; private set; }
 
+    [SerializeField] private GameObject HeroDeploy;
+    
     [Header("Revenge")] 
     [SerializeField] private BuffData RevengeBuff;
     
@@ -109,10 +111,16 @@ public class Hero : Fighter {
         this.StartPosition = this.transform.position;
     }
 
+    public void CancelHeroDeploy() {
+        this.HeroDeploy.gameObject.layer = LayerMask.NameToLayer("Default");
+    }
+
     public void Deploy(int deployAreaIndex) {
         this.SetStartPosition();
         this.DeployAreaIndex = deployAreaIndex;
         this.Move.Agent.enabled = true;
+        this.HeroDeploy.gameObject.layer = LayerMask.NameToLayer("HeroDeploy");
+        this.Renderer.ChangeColor(Color.white, false);
         
         HeroAudioData data = this.WarehouseData.GetHeroAudio(HeroAudioType.上阵);
         if (data != null) {

@@ -356,12 +356,17 @@ public class BattleManager : StateMachineController{
         OnHeroEnterTheField?.Invoke(hero);
         HeroesInBattle.Add(hero);
     }
+    
+    private bool CheckPointInsideBoxCollider(BoxCollider boxCollider, Vector3 worldPoint) {
+        Vector3 closest = boxCollider.ClosestPoint(worldPoint);
+        return Vector3.Distance(closest, worldPoint) < 0.0001f;
+    }
 
     public int IsWithinArea(Vector3 targetPos) {
         for (int i = 0; i < HeroDeployPlaceArea.Length; i++) {
             HeroDeployAreaData areaData = HeroDeployPlaceArea[i];
-            if (areaData.DeployArea.bounds.Contains(targetPos) && this.DeployAreaCurrentHeroCount[i] < areaData.MaxHeroCount) {
-                if (!Physics.CheckSphere(targetPos, 2.0f, 1 << LayerMask.NameToLayer("Hero"))) {
+            if (CheckPointInsideBoxCollider(areaData.DeployArea, targetPos) && this.DeployAreaCurrentHeroCount[i] < areaData.MaxHeroCount) {
+                if (!Physics.CheckSphere(targetPos, 1.0f, 1 << LayerMask.NameToLayer("HeroDeploy"))) {
                     return i;    
                 }
             }

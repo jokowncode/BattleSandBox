@@ -41,12 +41,13 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
         if (CurrentHero) {
             position = this.CurrentHero.transform.position;
             this.CurrentHero.TransitionShow(false);
+            this.CurrentHero.CancelHeroDeploy();
             BattleManager.Instance.RecallHero(this.CurrentHero, false);
         }
         Hero go = HeroWarehouseManager.Instance.GetHeroByRef(prefabReference);
         if (go) {
             previewInstance = Instantiate(go);
-            previewInstance.gameObject.layer = LayerMask.NameToLayer("Default");
+            //previewInstance.gameObject.layer = LayerMask.NameToLayer("Default");
             if (CurrentHero && CurrentHero.IsOriginExist) {
                 previewInstance.SetOriginExist();
                 if (CurrentHero.TryGetComponent(out FighterDeadBattleDefeat _)) {
@@ -60,9 +61,10 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
     public void OnDrag(PointerEventData eventData){
         if (!previewInstance) return;
         Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, LayerMask.GetMask("Deploy"))
-            && BattleManager.Instance.IsWithinArea(hit.point) != -1){
+        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, LayerMask.GetMask("Deploy"))){
             previewInstance.transform.position = hit.point;
+            bool isValid = BattleManager.Instance.IsWithinArea(hit.point) != -1;
+            previewInstance.Renderer.ChangeColor(isValid ? Color.green :  Color.red, false);
         }
     }
 
@@ -80,12 +82,12 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
     private void DeployHero(Hero hero, Vector3 heroPos) {
         hero.transform.position = heroPos;
         GetNavMeshPosition(hero.transform.position, 1.0f, out Vector3 finalPos);
-        int deploAreaIndex = BattleManager.Instance.IsWithinArea(finalPos);
+        int deploAreaIndex = BattleManager.Instance.IsWithinArea(heroPos);
         if (deploAreaIndex != -1){
             hero.transform.position = finalPos;
             DraggableUI dragHero = hero.AddComponent<DraggableUI>();
             dragHero.prefabReference = hero.Name;
-            hero.gameObject.layer = LayerMask.NameToLayer("Hero");
+            //hero.gameObject.layer = LayerMask.NameToLayer("Hero");
             hero.Deploy(deploAreaIndex);
             Destroy(this.gameObject);
         }else {

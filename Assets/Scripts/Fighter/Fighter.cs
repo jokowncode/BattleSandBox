@@ -236,7 +236,7 @@ public class Fighter : StateMachineController{
         if(this.BloodParticle && !effectData.NotShowParticle) this.BloodParticle.Play();
 
         if (this.CurrentFighterType == TargetType.Enemy) {
-            this.Renderer.ChangeColor(Color.red);    
+            this.Renderer.ChangeColor(Color.red, true);    
         } else{
             this.Renderer.Flash();
 #if DEBUG_MODE
