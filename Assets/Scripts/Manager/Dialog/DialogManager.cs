@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using XNode;
@@ -18,6 +19,7 @@ public class DialogManager : MonoBehaviour {
     
     [SerializeField] private Image CharacterPortrait;
     [SerializeField] private TextMeshProUGUI CharacterName;
+    [SerializeField] private GameObject NameGameObject;
     // [SerializeField] private GameObject CharacterNameShadow;
     
     [SerializeField] private CanvasGroup DialogContentCanvasGroup;
@@ -29,8 +31,11 @@ public class DialogManager : MonoBehaviour {
     
 	[Header("AutoPlay")]
 	[SerializeField] private Sprite AutoPlaySprite;
+    [SerializeField] private Sprite AutoPlayHighlightSprite;
     [SerializeField] private Sprite NotAutoPlaySprite;
+    [SerializeField] private Sprite NotAutoPlayHighlightSprite;
     [SerializeField] private Image AutoPlayImage;
+    [SerializeField] private Button AutoPlayButton;
     
     [Header("Background Character Portrait")]
     [SerializeField] private Transform CharacterPortraitContainer;
@@ -255,11 +260,18 @@ public class DialogManager : MonoBehaviour {
 
     private void SetAutoPlay(bool isAutoPlay) {
         this.IsAutoPlay = isAutoPlay;
+        SpriteState currentSpriteState = AutoPlayButton.spriteState;
         if (this.IsAutoPlay) {
             this.AutoPlayImage.sprite = this.AutoPlaySprite;
+            currentSpriteState.disabledSprite = this.AutoPlaySprite;
+            currentSpriteState.highlightedSprite = this.AutoPlayHighlightSprite;
         } else {
             this.AutoPlayImage.sprite = this.NotAutoPlaySprite;
+            currentSpriteState.disabledSprite = this.NotAutoPlaySprite;
+            currentSpriteState.highlightedSprite = this.NotAutoPlayHighlightSprite;
         }
+        AutoPlayButton.spriteState = currentSpriteState;
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     private IEnumerator BackgroundImageCoroutine(Sprite newBG, bool isFadeIn, bool isFadeOut) {
@@ -314,6 +326,7 @@ public class DialogManager : MonoBehaviour {
         this.CharacterPortrait.color = new Color(1, 1, 1, data.CharacterPortrait ? 1.0f : 0.0f); 
         this.CharacterPortrait.sprite = data.CharacterPortrait;
         this.CharacterName.text = data.CharacterName;
+        this.NameGameObject.SetActive(!String.IsNullOrWhiteSpace(data.CharacterName));
         // this.CharacterNameShadow.SetActive(this.CharacterName.text != "");
 
         this.HasSound = data.DialogAudio;
