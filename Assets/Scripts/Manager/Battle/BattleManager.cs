@@ -635,6 +635,30 @@ public class BattleManager : StateMachineController{
         return null;
     }
 
+    public List<Fighter> GetRandomCountFighter(TargetType type, int count) {
+        int size = type == TargetType.Hero ? this.HeroesInBattle.Count : this.EnemiesInBattle.Count;
+        List<Fighter> result = new List<Fighter>();
+        if (count >= size) {
+            result.AddRange(type == TargetType.Hero ? this.HeroesInBattle : this.EnemiesInBattle);
+            return result;
+        }
+
+        List<int> container = new List<int>();
+        for (int i = 0; i < size; i++) {
+            container.Add(i);
+        }
+
+        int k = container.Count - 1;
+        for (int j = 1; j <= count; j++) {
+            int randomIndex = Random.Range(0, k);
+            (container[randomIndex], container[k]) = (container[k], container[randomIndex]);
+            int index = container[k];
+            result.Add(type == TargetType.Hero ? this.HeroesInBattle[index] : this.EnemiesInBattle[index]);
+            k--;
+        }
+        return result;
+    }
+
     public Fighter GetRandomFighter(TargetType type, Func<Fighter, bool> condition = null) {
         if (IsGameOver) return null;
         int randomIndex = -1;
