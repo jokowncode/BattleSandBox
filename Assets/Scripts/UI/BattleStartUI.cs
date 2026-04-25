@@ -21,6 +21,7 @@ public class BattleStartUI : MonoBehaviour{
         
         this.BattleImage.sprite = battleImage;
         this.BattleImage.color = new Color(1, 1, 1, battleImage?1:0);
+        AudioManager.Instance.StopFootstep();
         this.gameObject.SetActive(true);
     }
 
