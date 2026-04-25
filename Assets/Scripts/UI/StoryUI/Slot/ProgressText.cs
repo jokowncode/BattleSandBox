@@ -42,6 +42,7 @@ public class ProgressText : DialogUISlot {
             textUI.color = Color.gray;
             this.TextUI.Add(textUI);
         }
+        DialogManager.Instance.TransitionPause(true);
 
         StopAllCoroutines();
         StartCoroutine(ProgressTextCoroutine());
@@ -80,6 +81,7 @@ public class ProgressText : DialogUISlot {
             yield return this.Timer;
             this.CurrentSecond += 1;
         }
+        DialogManager.Instance.TransitionPause(false);
     }
 
     public override void End() {

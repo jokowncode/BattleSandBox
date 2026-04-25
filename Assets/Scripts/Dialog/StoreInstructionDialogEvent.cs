@@ -18,8 +18,10 @@ public class StoreInstructionDialogEvent : MonoBehaviour {
         
         DialogEventManager.Instance.AddEvent("ProceedStoreInstruction", () => {
             DialogManager.Instance.TransitionPause(true);
+            DialogManager.Instance.TransitionClickArea(false);
             StoreUI.Instance.StoreInstructionMode(0, () => {
                 DialogManager.Instance.TransitionPause(false);
+                DialogManager.Instance.TransitionClickArea(true);
                 DialogManager.Instance.Next();
             });
         });

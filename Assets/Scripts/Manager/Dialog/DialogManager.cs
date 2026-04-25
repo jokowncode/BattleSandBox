@@ -27,6 +27,7 @@ public class DialogManager : MonoBehaviour {
     [SerializeField] private StoryReviewUI StoryReview;
 
     [SerializeField] private Button SkipButton;
+    [SerializeField] private GameObject ClickArea;
     // [SerializeField] private GameTipContainer TipContainer;
     
 	[Header("AutoPlay")]
@@ -141,6 +142,10 @@ public class DialogManager : MonoBehaviour {
             DialogCanvasGroup.interactable = true;
             DialogCanvasGroup.blocksRaycasts = true;
         }
+    }
+
+    public void TransitionClickArea(bool show) {
+        if (this.ClickArea) this.ClickArea.SetActive(show);
     }
 
     private void Update() {

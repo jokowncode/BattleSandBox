@@ -36,12 +36,14 @@ public class BigMapUIManager : MonoBehaviour{
             this.Mask.Show(targetRect, targetRect.sizeDelta);
             this.Mask.OnInstructionMaskClicked += this.HideHUDButtonInstruction;
             this.HUDButtonInstruction.SetActive(true);
+            SaveDataManager.Instance.PlayerInBigMap.TransMove(false);
             GoodsWarehouseManager.Instance.SetHUDButtonsInteractable(false);
         });
     }
 
     private void HideHUDButtonInstruction() {
         this.HUDButtonInstruction.SetActive(false);
+        SaveDataManager.Instance.PlayerInBigMap.TransMove(true);
         GoodsWarehouseManager.Instance.SetHUDButtonsInteractable(true);
     }
 
