@@ -56,7 +56,7 @@ public class SceneChangeManager : MonoBehaviour{
         if (this.CurrentScene == SceneType.BigMap && !this.IsLoadSubScene){
             this.IsLoadSubScene = true;
             AudioManager.Instance.SetMainMusic(this.BigMapBGM);
-            BigMapUIManager.Instance.TaskList.UpdateTaskUI();
+            BigMapUIManager.Instance.TaskUI.UpdateTask();
             StartCoroutine(AsyncLoadSceneCallback(this.DungeonScene));
         }
 

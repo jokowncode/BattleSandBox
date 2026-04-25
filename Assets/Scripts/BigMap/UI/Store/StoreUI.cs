@@ -32,6 +32,7 @@ public class StoreUI : MonoBehaviour {
         Instance = this;
 
         this.StoreCanvasGroup = this.GetComponent<CanvasGroup>();
+        if (this.Mask) this.Mask.IsClickCanHide = false;
     }
 
     public List<string> RandomGoodsSimple() {
@@ -48,6 +49,7 @@ public class StoreUI : MonoBehaviour {
         StoreCanvasGroup.alpha = 0.0f;
         StoreCanvasGroup.interactable = false;
         StoreCanvasGroup.blocksRaycasts = false;
+        BigMapUIManager.Instance.UpdateMoneyText();
     }
 
     public void ShowStoreUI(Store store) {

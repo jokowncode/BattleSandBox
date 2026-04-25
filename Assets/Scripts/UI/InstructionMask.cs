@@ -1,13 +1,18 @@
 ﻿
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InstructionMask : MonoBehaviour {
+public class InstructionMask : MonoBehaviour, IPointerClickHandler {
     
     private Material MaskMaterial;
     private RectTransform MaskTransform;
 
+    public Action OnInstructionMaskClicked;
+
+    [HideInInspector] public bool IsClickCanHide = true;
+    
     public void Show(RectTransform targetRect, Vector4 size) {
         if (!this.MaskMaterial && this.TryGetComponent(out Image image)) {
             MaskMaterial = Instantiate(image.material);
@@ -31,6 +36,11 @@ public class InstructionMask : MonoBehaviour {
 
     public void Hide() {
         this.gameObject.SetActive(false);
+    }
+
+    public void OnPointerClick(PointerEventData eventData) {
+        if (this.IsClickCanHide) this.Hide();
+        OnInstructionMaskClicked?.Invoke();
     }
 }
 

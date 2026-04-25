@@ -8,12 +8,10 @@ using UnityEngine.UI;
 public class TaskUI : MonoBehaviour {
 
     [SerializeField] private TextMeshProUGUI Description;
-    [SerializeField] private TextMeshProUGUI TaskNameTextUI;
+    // [SerializeField] private TextMeshProUGUI TaskNameTextUI;
 
     [SerializeField] private Transform TaskDirs;
-    
     private Vector3 TaskPos;
-    public string TaskName { get; private set; }
 
     public bool HasTaskPos => this.TaskPos != Vector3.zero;
     private Vector2 LastDir = Vector2.zero;
@@ -24,11 +22,25 @@ public class TaskUI : MonoBehaviour {
             this.TaskDirList.Add(child.gameObject);
         }
     }
-    
-    public void SetTask(string desc, string taskName, Vector3 position) {
-        this.Description.text = desc;
-        this.TaskNameTextUI.text = taskName + ":";
-        this.TaskName = taskName;
+
+    public void UpdateTask() {
+        string taskName = TaskManager.Instance.CurrentFollowTaskName;
+        if (taskName == null) {
+            SetTask("", "暂无任务", Vector3.zero);
+            return;
+        }
+
+        TaskData data = TaskManager.Instance.GetTask(taskName);
+        TaskCurrentData currentData = TaskManager.Instance.GetCurrentTaskData(taskName);
+        if (data is null || currentData is null) {
+            SetTask("", "暂无任务", Vector3.zero);
+            return;
+        }
+        SetTask(data.TaskDescs[currentData.Index], taskName, currentData.Position);
+    }
+
+    private void SetTask(string desc, string taskName, Vector3 position) {
+        this.Description.text = $"{taskName} {desc}";
         this.TaskPos = position;
     }
 

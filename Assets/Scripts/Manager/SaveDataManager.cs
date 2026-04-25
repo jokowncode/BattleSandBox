@@ -11,6 +11,7 @@ public class PlayerSaveData {
     public bool IsCampTrainInstruction = false;
     public int BattleInstructionIndex = 0;
     public float PlayerMoney = -1.0f;
+    public string CurrentFollowTaskName = null;
     public SceneType CurrentDungeon = SceneType.None;
     public SerializableDictionary<SceneType, Vector3> PlayerPos = new();
     [SerializeReference] public List<string> InteractionObjectsEnds = new();
@@ -104,7 +105,8 @@ public class SaveDataManager : MonoBehaviour {
             this.PlayerData.PlayerPos[currentDungeon] = this.PlayerInBigMap.transform.position;
         }
         this.PlayerData.PlayerMoney = GameManager.Instance.Money;
-
+        this.PlayerData.CurrentFollowTaskName = TaskManager.Instance.CurrentFollowTaskName;
+        
         string dataJson = JsonUtility.ToJson(this.PlayerData);
         File.WriteAllText(savePath, dataJson);
     }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class NewbieBattleInstruction : MonoBehaviour, IPointerClickHandler {
+public class NewbieBattleInstruction : MonoBehaviour {
 
     [SerializeField] private InstructionMask Mask;
     
@@ -15,6 +15,7 @@ public class NewbieBattleInstruction : MonoBehaviour, IPointerClickHandler {
     private void Awake() {
         this.CanvasGroup = this.GetComponent<CanvasGroup>();
         this.Transition(false);
+        this.Mask.OnInstructionMaskClicked += this.OnClick;
     }
 
     private void Transition(bool show) {
@@ -24,8 +25,6 @@ public class NewbieBattleInstruction : MonoBehaviour, IPointerClickHandler {
             if (show) {
                 RectTransform targetRect = (RectTransform)this.transform.GetChild(CurrentInstructionIndex);
                 this.Mask.Show(targetRect, targetRect.sizeDelta);
-            } else {
-                this.Mask.Hide();
             }
         }
 
@@ -78,7 +77,7 @@ public class NewbieBattleInstruction : MonoBehaviour, IPointerClickHandler {
         }
     }
 
-    public void OnPointerClick(PointerEventData eventData) {
+    private void OnClick() {
         this.Transition(false);
         this.transform.GetChild(CurrentInstructionIndex).gameObject.SetActive(false);
         SaveDataManager.Instance.PlayerData.BattleInstructionIndex += 1;
