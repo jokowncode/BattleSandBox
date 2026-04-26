@@ -219,10 +219,12 @@ public class DialogManager : MonoBehaviour {
         AudioManager.Instance.StopDialog();
         StartCoroutine(Transition(false, false));
         SetAutoPlay(false);
-
-        AudioManager.Instance.StopMainMusic();
-        if(this.PreBGM) AudioManager.Instance.SetMainMusic(this.PreBGM);
         
+        if (this.PreBGM && this.PreBGM != AudioManager.Instance.GetCurrentMainMusic()) {
+            AudioManager.Instance.StopMainMusic();
+            AudioManager.Instance.SetMainMusic(this.PreBGM);
+        }
+
         if (this.IsFullScreen) {
             CameraManager.Instance.MainCamera.cullingMask = ~LayerMask.GetMask("UI", "Map");
         }
