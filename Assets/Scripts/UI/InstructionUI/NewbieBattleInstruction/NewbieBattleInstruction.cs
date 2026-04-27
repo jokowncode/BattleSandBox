@@ -24,7 +24,7 @@ public class NewbieBattleInstruction : MonoBehaviour {
         if (this.Mask) {
             if (show) {
                 RectTransform targetRect = (RectTransform)this.transform.GetChild(CurrentInstructionIndex);
-                this.Mask.Show(targetRect, targetRect.sizeDelta);
+                this.Mask.Show(targetRect, targetRect.sizeDelta, true);
             }
         }
 

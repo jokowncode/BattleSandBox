@@ -32,7 +32,6 @@ public class StoreUI : MonoBehaviour {
         Instance = this;
 
         this.StoreCanvasGroup = this.GetComponent<CanvasGroup>();
-        if (this.Mask) this.Mask.IsClickCanHide = false;
     }
 
     public List<string> RandomGoodsSimple() {
@@ -155,7 +154,7 @@ public class StoreUI : MonoBehaviour {
                 Vector2 size = ((RectTransform)useButtonTrans).sizeDelta + new Vector2(20.0f, 20.0f);
                 this.Instruction.position = center;
                 this.Instruction.sizeDelta = size;
-                this.Mask.Show((RectTransform)useButtonTrans, size);
+                this.Mask.Show((RectTransform)useButtonTrans, size, false);
             }
         }
     }

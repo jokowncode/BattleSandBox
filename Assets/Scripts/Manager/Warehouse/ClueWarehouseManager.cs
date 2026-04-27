@@ -13,6 +13,8 @@ public class ClueWarehouseManager : MonoBehaviour {
     [SerializeField] private ClueDetailPanel ClueDetailPanelUI;
     [field: SerializeField] public Sprite[] ClueIcons { get; private set; }
 
+    [SerializeField] private InstructionContainer ClueInstruction;
+    
     private List<string> OwnedClues;
     private Dictionary<string, ClueData> ClueMap;
     public static ClueWarehouseManager Instance;
@@ -77,6 +79,11 @@ public class ClueWarehouseManager : MonoBehaviour {
 
     public ClueData GetClueByName(string clueName) {
         return this.ClueMap.GetValueOrDefault(clueName);
+    }
+    
+    public void ShowClueInstruction() {
+        if (!this.ClueInstruction) return;
+        this.ClueInstruction.ActivateInstruction();
     }
 }
 

@@ -22,6 +22,8 @@ public class HeroWarehouseManager : MonoBehaviour {
     [SerializeField] private Sprite PriestBorderSprite;
     [field: SerializeField] public Sprite EmptyBorderSprite { get; private set; }
 
+    [SerializeField] private InstructionContainer HeroWarehouseInstruction;
+    
     private List<string> OwnedHeroes = new List<string>();
     
     private Dictionary<string, Hero> AllHeroMap = new Dictionary<string, Hero>();
@@ -156,8 +158,9 @@ public class HeroWarehouseManager : MonoBehaviour {
         return AllHeroMap.GetValueOrDefault(heroRef);
     }
     
-    
-    
-    
+    public void ShowHeroWarehouseInstruction() {
+        if (!this.HeroWarehouseInstruction) return;
+        this.HeroWarehouseInstruction.ActivateInstruction();
+    }
 }
 
