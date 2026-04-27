@@ -60,7 +60,7 @@ public class InstructionMask : MonoBehaviour, IPointerClickHandler, ICanvasRayca
         Vector2 center = this.MaskMaterial.GetVector(MaterialProperty.Center);   
         Vector2 size = this.MaskMaterial.GetVector(MaterialProperty.Size);       
         Vector2 delta = localPoint - center;
-        return Mathf.Abs(delta.x) >= size.x * 0.5f || Mathf.Abs(delta.y) >= size.y * 0.5f; 
+        return Mathf.Abs(delta.x) >= size.x * 0.4f || Mathf.Abs(delta.y) >= size.y * 0.4f; 
     }
 }
 
