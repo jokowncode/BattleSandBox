@@ -102,7 +102,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
         SetHUDButtonsInteractable(!show);
     }
 
-    public void SetHUDButtonsInteractable(bool interact) {
+    private void SetHUDButtonsInteractable(bool interact) {
         foreach (Button button in this.HUDButtons) {
             button.interactable = interact;
         }

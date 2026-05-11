@@ -1,21 +1,20 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InstructionMask : MonoBehaviour, IPointerClickHandler, ICanvasRaycastFilter {
+public class InstructionMask : MonoBehaviour, ICanvasRaycastFilter {
     
     private Material MaskMaterial;
     private RectTransform MaskTransform;
 
     public Action OnInstructionMaskClicked;
 
-    private bool IsClickCanHide = true;
     private Image MaskImage;
     
     public void Show(RectTransform targetRect, Vector4 size, bool isClickCanHide) {
-        this.IsClickCanHide = isClickCanHide;
         if (this.TryGetComponent(out Image image)) {
             this.MaskImage = image;
         }
@@ -38,19 +37,30 @@ public class InstructionMask : MonoBehaviour, IPointerClickHandler, ICanvasRayca
         MaskMaterial.SetVector(MaterialProperty.Center, new Vector4(localCenter.x, localCenter.y, 0, 0));
         MaskMaterial.SetVector(MaterialProperty.Size, size);
         this.gameObject.SetActive(true);
+        this.enabled = isClickCanHide;
     }
 
     public void Hide() {
+        this.enabled = false;
         this.gameObject.SetActive(false);
     }
 
-    public void OnPointerClick(PointerEventData eventData) {
-        if (this.IsClickCanHide) this.Hide();
-        OnInstructionMaskClicked?.Invoke();
+    private void Update() {
+        if (Input.GetMouseButtonDown(0)) {
+            this.Hide();
+            OnInstructionMaskClicked?.Invoke();
+            
+            List<RaycastResult> results = EventSystem.current.GetRaycastResult();
+            foreach (var result in results) {
+                if (result.gameObject.TryGetComponent(out Button button)) {
+                    button.onClick.Invoke();
+                    break;
+                }
+            }
+        }
     }
 
     public bool IsRaycastLocationValid(Vector2 sp, Camera _) {
-        if (this.IsClickCanHide) return true;
         RectTransform rectTrans = this.MaskImage.rectTransform;
         if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 rectTrans, sp, null, out Vector2 localPoint)) {

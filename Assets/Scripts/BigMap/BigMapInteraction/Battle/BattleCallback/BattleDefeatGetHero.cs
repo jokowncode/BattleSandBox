@@ -2,7 +2,8 @@
 using UnityEngine;
 
 public class BattleDefeatGetHero : MonoBehaviour {
-
+    
+    [ScriptableObjectNameProp(typeof(FighterData), "Name")]
     [SerializeField] private string[] GetHeroNames;
     
     private void Awake() {

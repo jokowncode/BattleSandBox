@@ -46,14 +46,14 @@ public class BigMapUIManager : MonoBehaviour{
             this.Mask.OnInstructionMaskClicked += this.HideHUDButtonInstruction;
             this.HUDButtonInstruction.SetActive(true);
             SaveDataManager.Instance.PlayerInBigMap.TransMove(false);
-            GoodsWarehouseManager.Instance.SetHUDButtonsInteractable(false);
+            // GoodsWarehouseManager.Instance.SetHUDButtonsInteractable(false);
         });
     }
 
     private void HideHUDButtonInstruction() {
         this.HUDButtonInstruction.SetActive(false);
         SaveDataManager.Instance.PlayerInBigMap.TransMove(true);
-        GoodsWarehouseManager.Instance.SetHUDButtonsInteractable(true);
+        // GoodsWarehouseManager.Instance.SetHUDButtonsInteractable(true);
     }
 
     public void ShowBattleStartUI(SceneType battleScene, Sprite background, Sprite battleImage, string battleText){

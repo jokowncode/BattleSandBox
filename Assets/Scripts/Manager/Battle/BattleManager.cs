@@ -377,10 +377,7 @@ public class BattleManager : StateMachineController{
     protected override void Update(){
         base.Update();
         if (Input.GetMouseButtonDown(0)){
-            PointerEventData eventData = new PointerEventData(EventSystem.current);
-            eventData.position = Input.mousePosition;
-            List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(eventData, results);
+            List<RaycastResult> results = EventSystem.current.GetRaycastResult();
             Hero hero = null;
             foreach (var res in results) {
                 if (res.gameObject.layer == LayerMask.NameToLayer("UI")) {

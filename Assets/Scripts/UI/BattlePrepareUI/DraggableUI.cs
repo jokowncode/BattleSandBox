@@ -64,7 +64,7 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
         if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, LayerMask.GetMask("Deploy"))){
             previewInstance.transform.position = hit.point;
             bool isValid = BattleManager.Instance.IsWithinArea(hit.point) != -1;
-            previewInstance.Renderer.ChangeColor(isValid ? Color.green :  Color.red, false);
+            previewInstance.Renderer.ChangeColor(isValid ? Color.white :  Color.red, false);
         }
     }
 

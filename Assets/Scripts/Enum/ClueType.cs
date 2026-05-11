@@ -1,7 +1,7 @@
 ﻿
 public enum ClueType {
-    人物,
     环境,
+    人物,
     技术
 }
 
