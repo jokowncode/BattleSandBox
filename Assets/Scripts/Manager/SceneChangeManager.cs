@@ -99,7 +99,7 @@ public class SceneChangeManager : MonoBehaviour{
             return;
         }
         this.DungeonScene = dungeonType;
-        if (reloadData) SaveDataManager.Instance.LoadLastAutoSaveData();
+        if (reloadData) SaveDataManager.Instance.LoadLatestSaveData();
         
         SceneType dungeon = SaveDataManager.Instance.PlayerData.CurrentDungeon;
         this.IsNewDungeon = dungeon == SceneType.None || dungeon != this.DungeonScene;

@@ -57,6 +57,8 @@ public class SaveDataManager : MonoBehaviour {
     public bool HasAutoSaveData => AutoSaveDataPaths.Count != 0;
     public bool HasSaveData => HasAutoSaveData || MutualSaveDataPathMap.Count != 0;
 
+    private string LatestLoadPath = null;
+
     private void Awake() {
         if (Instance != null) {
             Destroy(this.gameObject);
@@ -100,6 +102,7 @@ public class SaveDataManager : MonoBehaviour {
     }
 
     private void SaveData(string savePath) {
+        this.LatestLoadPath = savePath;
         if (this.PlayerInBigMap) {
             SceneType currentDungeon = SceneChangeManager.Instance.DungeonScene;
             this.PlayerData.PlayerPos[currentDungeon] = this.PlayerInBigMap.transform.position;
@@ -183,10 +186,12 @@ public class SaveDataManager : MonoBehaviour {
         this.PlayerData = new PlayerSaveData();
         this.AlreadyPlayTime = 0;
         this.LoadTimeStamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        this.LatestLoadPath = null;
         this.OnLoadData?.Invoke();
     }
 
     public void LoadData(string loadPath) {
+        this.LatestLoadPath = loadPath;
         this.LoadTimeStamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         if (!File.Exists(loadPath)) {
             this.AlreadyPlayTime = 0;
@@ -199,10 +204,13 @@ public class SaveDataManager : MonoBehaviour {
         this.OnLoadData?.Invoke();
     }
 
-    public void LoadLastAutoSaveData() {
-        string fileName = this.AutoSaveDataPaths.LastOrDefault();
-        fileName ??= "";
-        string loadPath = Path.Combine(Application.persistentDataPath, fileName);
+    public void LoadLatestSaveData() {
+        string loadPath = this.LatestLoadPath;
+        if (loadPath == null) {
+            string fileName = this.AutoSaveDataPaths.LastOrDefault();
+            fileName ??= "";
+            loadPath = Path.Combine(Application.persistentDataPath, fileName);
+        }
         this.LoadData(loadPath);
     }
 
