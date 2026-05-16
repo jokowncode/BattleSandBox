@@ -118,6 +118,7 @@ public class DialogManager : MonoBehaviour {
         DialogEventManager.Instance.AddEvent("GameOver", () => {
             GameManager.Instance.DungeonFail();
         });
+        this.enabled = false;
     }
 
     private IEnumerator Transition(bool show, bool quick) {
@@ -149,6 +150,9 @@ public class DialogManager : MonoBehaviour {
     }
 
     private void Update() {
+        if (!this.IsAutoPlay && Input.GetKeyDown(KeyCode.Space)) {
+            this.Next();
+        }
         if (!this.IsAutoPlay) return;
         if (this.CurrentDialogIsFinished) NextDialog();
     }
@@ -162,6 +166,7 @@ public class DialogManager : MonoBehaviour {
     }
     
     public void PlayNewDialog(DialogGraph dialog, bool isFullScreen = true) {
+        this.enabled = true;
         this.IsFullScreen = isFullScreen;
         this.PreBGM = AudioManager.Instance.GetCurrentMainMusic();
         AudioManager.Instance.StopFootstep();
@@ -216,6 +221,7 @@ public class DialogManager : MonoBehaviour {
     }
 
     public void DialogEnd() {
+        this.enabled = false;
         AudioManager.Instance.StopDialog();
         StartCoroutine(Transition(false, false));
         SetAutoPlay(false);
