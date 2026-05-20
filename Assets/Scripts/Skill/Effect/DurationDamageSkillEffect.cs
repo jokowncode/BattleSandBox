@@ -69,4 +69,42 @@ public class DurationDamageSkillEffect : SkillEffect{
             this.InMagicCircleAreaFighters.Remove(fighter);
         }
     }
+
+    protected override void ApplySkillEndBuffToTarget(Fighter caster, Fighter _) {
+        if (!this.SkillEndBuff) return;
+        if (this.InMagicCircleAreaFighters.Count == 0) return;
+        
+        foreach (Fighter fighter in this.InMagicCircleAreaFighters) {
+            BuffManager.Instance.AddBuff(caster, fighter, this.SkillEndBuff);
+        }
+    }
+
+    protected override void ApplySkillEndPlugin(Fighter _, EffectData effectData) {
+        if (this.SkillEndPlugins == null) return;
+        if (this.InMagicCircleAreaFighters.Count == 0) return;
+        
+        // TODO: Need Optimize
+        List<SkillEnd> occurSkillEnds = new();
+        foreach (Fighter fighter in this.InMagicCircleAreaFighters) {
+            occurSkillEnds.Clear();
+            foreach (SkillEnd end in this.SkillEndPlugins) {
+                if (occurSkillEnds.Contains(end)){
+                    continue;
+                }
+                occurSkillEnds.Add(end);
+                end.gameObject.SetActive(true);
+                end.AdditionalProcedure(fighter, this, effectData);
+            }
+        }
+        
+        occurSkillEnds.Clear();
+        for (int i = 0; i < this.SkillEndPlugins.Count; ) {
+            SkillEnd end = this.SkillEndPlugins[i];
+            if (occurSkillEnds.Contains(end)) {
+                i++;
+                continue;
+            }
+            this.SkillEndPlugins.Remove(end);
+        }
+    }
 }

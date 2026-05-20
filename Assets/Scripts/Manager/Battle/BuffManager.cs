@@ -178,7 +178,7 @@ public class BuffManager : MonoBehaviour {
         return this.FighterBuffs.ContainsKey(fighter) && this.FighterBuffs[fighter].ContainsKey(type);
     }
 
-    private bool TryGetFighterBuffCount(Fighter fighter, CascadeBuffType type, out int count) {
+    public bool TryGetFighterBuffCount(Fighter fighter, CascadeBuffType type, out int count) {
         bool result = HasFighterBuff(fighter, type);
         count = result ? this.FighterBuffs[fighter][type] : -1;
         return result;

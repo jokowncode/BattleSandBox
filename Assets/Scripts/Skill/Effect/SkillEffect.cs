@@ -6,10 +6,10 @@ using UnityEngine;
 public abstract class SkillEffect : MonoBehaviour {
 
     [SerializeField] private AudioClip SkillApplyEffectSfx;
-    
+
     [Header("Skill End Buff")]
-    [SerializeField] private BuffData SkillEndBuff;
     [SerializeField] private bool BuffTargetIsSelf = true;
+    [field: SerializeField] public BuffData SkillEndBuff { get; private set; }
     
     public List<SkillEnd> SkillEndPlugins{ get; private set; }
     public SkillDelivery Delivery{ get; private set; }
@@ -40,10 +40,17 @@ public abstract class SkillEffect : MonoBehaviour {
         }
 
         if (SkillEndBuff && this.Delivery.Caster.TryGetComponent(out Fighter caster)) {
-            Fighter target = this.BuffTargetIsSelf ? caster : influenceFighter;
-            BuffManager.Instance.AddBuff(caster, target, SkillEndBuff);
+            if (this.BuffTargetIsSelf) BuffManager.Instance.AddBuff(caster, caster, SkillEndBuff);
+            else this.ApplySkillEndBuffToTarget(caster, influenceFighter);
         }
+        this.ApplySkillEndPlugin(influenceFighter, effectData);
+    }
 
+    protected virtual void ApplySkillEndBuffToTarget(Fighter caster, Fighter target) {
+        BuffManager.Instance.AddBuff(caster, target, SkillEndBuff);
+    }
+
+    protected virtual void ApplySkillEndPlugin(Fighter influenceFighter, EffectData effectData) {
         if (this.SkillEndPlugins == null) return;
         Dictionary<SkillEnd, bool> occurSkillEnds = new Dictionary<SkillEnd, bool>();
         for (int i = 0; i < this.SkillEndPlugins.Count; ){
