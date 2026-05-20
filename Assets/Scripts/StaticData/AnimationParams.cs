@@ -12,5 +12,6 @@ public static class AnimationParams{
     public static readonly int Hide = Animator.StringToHash("Hide");
     public static readonly int Shake = Animator.StringToHash("Shake");
     public static readonly int Red = Animator.StringToHash("Red");
+    public static readonly int WalkAnimSpeedMultiplier = Animator.StringToHash("WalkAnimSpeedMultiplier");
 }
 
