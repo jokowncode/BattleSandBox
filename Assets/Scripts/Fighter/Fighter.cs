@@ -382,14 +382,14 @@ public class Fighter : StateMachineController{
 
         if (updateProperty == FighterProperty.CooldownPercentage){
             finalValue = Mathf.Clamp(finalValue, 0.0f, 3.0f);
-            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, result);
+            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, finalValue);
         }
 
         if (updateProperty == FighterProperty.Speed){
             finalValue = Mathf.Max(finalValue, 0.0f);
             if(finalValue == 0.0f) this.Move.StopMove();
             else {
-                this.Move.StratMove();
+                this.Move.StartMove();
                 this.Move.ChangeSpeed(finalValue);
             }
         }
