@@ -10,6 +10,7 @@ public class DurationDamageSkillEffect : SkillEffect{
     [SerializeField] private float DamageInterval = 1.0f;
     
     private List<Fighter> InMagicCircleAreaFighters;
+    private HashSet<Fighter> AlreadyInfluenceFighters;
 
     private float LastDamageTime = -1.0f;
     private EffectData DefaultEffectData;
@@ -17,6 +18,8 @@ public class DurationDamageSkillEffect : SkillEffect{
     protected override void Awake(){
         base.Awake();
         this.InMagicCircleAreaFighters = new List<Fighter>();
+        this.AlreadyInfluenceFighters = new HashSet<Fighter>();
+        this.IsAreaSkill = true;
     }
 
     public override void PrepareEffect() {
@@ -36,12 +39,19 @@ public class DurationDamageSkillEffect : SkillEffect{
     private void Update(){
         if (LastDamageTime > 0.0f && Time.time - LastDamageTime < DamageInterval) return;
         if (InMagicCircleAreaFighters.Count == 0) return;
+        EffectData data = this.Delivery ? this.Delivery.EffectData : this.DefaultEffectData;
         foreach (Fighter fighter in InMagicCircleAreaFighters) {
-            EffectData data = this.Delivery ? this.Delivery.EffectData : this.DefaultEffectData;
             if(fighter) fighter.BeDamaged(data);
             #if DEBUG_MODE
                 Debug.Log($"{this.Delivery.Caster.name} Cast Skill : {this.Delivery.EffectData.Value}");
             #endif 
+        }
+        if (!this.BuffTargetIsSelf && this.Delivery?.TryGetComponent(out Fighter caster)) {
+            this.ApplySkillEndBuffToTarget(caster);    
+        }
+        this.ApplySkillEndPlugin(data);
+        foreach (Fighter fighter in this.InMagicCircleAreaFighters) {
+            this.AlreadyInfluenceFighters.Add(fighter);
         }
         LastDamageTime = Time.time;
     }
@@ -70,39 +80,26 @@ public class DurationDamageSkillEffect : SkillEffect{
         }
     }
 
-    protected override void ApplySkillEndBuffToTarget(Fighter caster, Fighter _) {
+    private void ApplySkillEndBuffToTarget(Fighter caster) {
         if (!this.SkillEndBuff) return;
         if (this.InMagicCircleAreaFighters.Count == 0) return;
         
         foreach (Fighter fighter in this.InMagicCircleAreaFighters) {
+            if(!fighter || this.AlreadyInfluenceFighters.Contains(fighter)) continue;
             BuffManager.Instance.AddBuff(caster, fighter, this.SkillEndBuff);
         }
     }
 
-    protected override void ApplySkillEndPlugin(Fighter _, EffectData effectData) {
+    private void ApplySkillEndPlugin(EffectData effectData) {
         if (this.SkillEndPlugins == null) return;
         if (this.InMagicCircleAreaFighters.Count == 0) return;
         
-        // TODO: Need Optimize
-        List<SkillEnd> occurSkillEnds = new();
-        foreach (Fighter fighter in this.InMagicCircleAreaFighters) {
-            occurSkillEnds.Clear();
-            foreach (SkillEnd end in this.SkillEndPlugins) {
-                if (occurSkillEnds.Contains(end)){
-                    continue;
-                }
-                occurSkillEnds.Add(end);
-                end.gameObject.SetActive(true);
-                end.AdditionalProcedure(fighter, this, effectData);
-            }
-        }
-        
-        occurSkillEnds.Clear();
-        for (int i = 0; i < this.SkillEndPlugins.Count; ) {
-            SkillEnd end = this.SkillEndPlugins[i];
-            if (occurSkillEnds.Contains(end)) {
-                i++;
-                continue;
+        HashSet<SkillEnd> uniqueSkillEnds = new HashSet<SkillEnd>(this.SkillEndPlugins);
+        foreach (SkillEnd end in uniqueSkillEnds) {
+            end.gameObject.SetActive(true);
+            foreach (Fighter f in this.InMagicCircleAreaFighters) {
+                if(!f || this.AlreadyInfluenceFighters.Contains(f)) continue;
+                end.AdditionalProcedure(f, this, effectData);
             }
             this.SkillEndPlugins.Remove(end);
         }

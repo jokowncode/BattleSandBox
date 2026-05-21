@@ -8,12 +8,14 @@ public abstract class SkillEffect : MonoBehaviour {
     [SerializeField] private AudioClip SkillApplyEffectSfx;
 
     [Header("Skill End Buff")]
-    [SerializeField] private bool BuffTargetIsSelf = true;
+    [SerializeField] protected bool BuffTargetIsSelf = true;
     [field: SerializeField] public BuffData SkillEndBuff { get; private set; }
     
     public List<SkillEnd> SkillEndPlugins{ get; private set; }
     public SkillDelivery Delivery{ get; private set; }
     public PoolGO InPoolGO { get; private set; }
+
+    protected bool IsAreaSkill = false;
 
     protected virtual void Awake(){
         Delivery = GetComponent<SkillDelivery>();
@@ -41,27 +43,16 @@ public abstract class SkillEffect : MonoBehaviour {
 
         if (SkillEndBuff && this.Delivery.Caster.TryGetComponent(out Fighter caster)) {
             if (this.BuffTargetIsSelf) BuffManager.Instance.AddBuff(caster, caster, SkillEndBuff);
-            else this.ApplySkillEndBuffToTarget(caster, influenceFighter);
+            else if(!this.IsAreaSkill) BuffManager.Instance.AddBuff(caster, influenceFighter, SkillEndBuff);
         }
-        this.ApplySkillEndPlugin(influenceFighter, effectData);
-    }
-
-    protected virtual void ApplySkillEndBuffToTarget(Fighter caster, Fighter target) {
-        BuffManager.Instance.AddBuff(caster, target, SkillEndBuff);
-    }
-
-    protected virtual void ApplySkillEndPlugin(Fighter influenceFighter, EffectData effectData) {
-        if (this.SkillEndPlugins == null) return;
-        Dictionary<SkillEnd, bool> occurSkillEnds = new Dictionary<SkillEnd, bool>();
-        for (int i = 0; i < this.SkillEndPlugins.Count; ){
-            SkillEnd end = this.SkillEndPlugins[i];
-            if (!occurSkillEnds.TryAdd(end, true)){
-                i += 1;
-                continue;
+        if (!this.IsAreaSkill) {
+            if (this.SkillEndPlugins == null) return;
+            HashSet<SkillEnd> uniqueSkillEnds = new HashSet<SkillEnd>(this.SkillEndPlugins);
+            foreach (SkillEnd end in uniqueSkillEnds) {
+                end.gameObject.SetActive(true);
+                end.AdditionalProcedure(influenceFighter, this, effectData);
+                this.SkillEndPlugins.Remove(end);
             }
-            this.SkillEndPlugins.Remove(end);
-            end.gameObject.SetActive(true);
-            end.AdditionalProcedure(influenceFighter, this, effectData);
         }
     }
 
