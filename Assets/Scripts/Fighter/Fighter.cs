@@ -334,12 +334,6 @@ public class Fighter : StateMachineController{
         Fighter refFighter = null){
 
         float sign = isUp ? 1.0f : -1.0f;
-        if (updateProperty == FighterProperty.Speed && value == 0.0f) {
-            if(isUp) this.Move.StopMove();
-            else this.Move.StartMove();
-            return 0.0f;
-        }
-        
         if (updateProperty == FighterProperty.HealMultiplier) {
             float change = sign * value;
             if (modifyWay == PropertyModifyWay.Percentage) {
@@ -381,16 +375,14 @@ public class Fighter : StateMachineController{
         ReflectionTools.SetObjectProperty(propertyName, this, finalValue);
 
         if (updateProperty == FighterProperty.CooldownPercentage){
-            finalValue = Mathf.Clamp(finalValue, 0.0f, 3.0f);
-            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, finalValue);
+            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, this.EffectiveCooldownPercentage);
         }
 
         if (updateProperty == FighterProperty.Speed){
-            finalValue = Mathf.Max(finalValue, 0.0f);
-            if(finalValue == 0.0f) this.Move.StopMove();
+            if(this.EffectiveSpeed == 0.0f) this.Move.StopMove();
             else {
                 this.Move.StartMove();
-                this.Move.ChangeSpeed(finalValue);
+                this.Move.ChangeSpeed(this.EffectiveSpeed);
             }
         }
 
@@ -525,6 +517,9 @@ public class Fighter : StateMachineController{
         get => CurrentData.CooldownPercentage;
         set => CurrentData.CooldownPercentage = value;
     }
+
+    public float EffectiveSpeed => Mathf.Max(this.Speed, 0.0f);
+    public float EffectiveCooldownPercentage => Mathf.Clamp(this.CooldownPercentage, 0.0f, 3.0f);
 
     public TargetType AttackTargetType => InitialData.AttackTargetType;
 
