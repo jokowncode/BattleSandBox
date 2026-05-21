@@ -17,7 +17,7 @@ public class PassiveEntryTooltip : MonoBehaviour{
 
     public void ShowTooltip(string message, Vector3 position) {
         if(ShowTipSfx)
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, ShowTipSfx);
+            AudioManager.Instance.PlaySfx(ShowTipSfx);
         
         this.gameObject.SetActive(true);
         StopAllCoroutines();

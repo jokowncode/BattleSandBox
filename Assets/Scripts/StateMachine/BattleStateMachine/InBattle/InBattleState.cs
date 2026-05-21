@@ -18,7 +18,7 @@ public class InBattleState : BattleState{
     public override void Construct(){
 
         if (InBattleSfx) { 
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, InBattleSfx);
+            AudioManager.Instance.PlaySfx(InBattleSfx);
         }
         
         if(Controller.Data.BattleBGM)

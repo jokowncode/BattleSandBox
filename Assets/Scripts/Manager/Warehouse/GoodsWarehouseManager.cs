@@ -179,7 +179,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
 
         if (!result) {
             if (this.UseConsumeGoodsErrorSfx) {
-                AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.UseConsumeGoodsErrorSfx);
+                AudioManager.Instance.PlaySfx(this.UseConsumeGoodsErrorSfx);
             }
             return false;
         }

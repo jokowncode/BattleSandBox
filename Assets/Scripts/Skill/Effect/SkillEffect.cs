@@ -31,7 +31,7 @@ public abstract class SkillEffect : MonoBehaviour {
 
     public void ApplyEffect(Fighter influenceFighter, EffectData effectData) {
         if (SkillApplyEffectSfx) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.SkillApplyEffectSfx);
+            AudioManager.Instance.PlaySfx(this.SkillApplyEffectSfx);
         }
 
         Apply(influenceFighter, effectData);

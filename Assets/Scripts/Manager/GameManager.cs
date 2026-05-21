@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour{
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
+        Cursor.SetCursor(this.MouseCursor, Vector2.zero, CursorMode.Auto);
     }
 
     private void Start() {
@@ -44,10 +45,6 @@ public class GameManager : MonoBehaviour{
 
     public void SetMoney(float money) {
         this.Money = money < 0.0f ? this.InitialMoney : money;
-    }
-
-    private void Update(){
-        Cursor.SetCursor(this.MouseCursor, Vector2.zero, CursorMode.Auto);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode){
@@ -80,7 +77,7 @@ public class GameManager : MonoBehaviour{
         ResetBattleFlag();
         if (showStartUI) {
             if(GoToBattleSfx)
-                AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.GoToBattleSfx);
+                AudioManager.Instance.PlaySfx(this.GoToBattleSfx);
             BigMapUIManager.Instance.ShowBattleStartUI(SceneType.BaseBattleScene, battleData.BattleBannarBackground, battleData.BattleImage, battleData.BattleText);
         } else {
             SceneChangeManager.Instance.GoToScene(SceneType.BaseBattleScene);   

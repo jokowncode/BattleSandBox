@@ -245,7 +245,7 @@ public class Fighter : StateMachineController{
         }
 
         if (this.BeDamagedSfx) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.BeDamagedSfx);
+            AudioManager.Instance.PlaySfx(this.BeDamagedSfx);
         }
         
         if (this.InBattleHealth <= 0.0f && !IsDead) {

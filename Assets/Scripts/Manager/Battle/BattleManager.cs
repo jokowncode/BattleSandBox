@@ -445,7 +445,7 @@ public class BattleManager : StateMachineController{
             UpdatePassiveEntryUI(selectedHero);
             PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data.Data.Name);
             if (EquipPassiveEntrySfx) {
-                AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EquipPassiveEntrySfx);
+                AudioManager.Instance.PlaySfx(EquipPassiveEntrySfx);
             }
             return 0;
         }
@@ -456,7 +456,7 @@ public class BattleManager : StateMachineController{
             UpdatePassiveEntryUI(selectedHero);
             PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data.Data.Name);
             if (EquipPassiveEntrySfx) {
-                AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EquipPassiveEntrySfx);
+                AudioManager.Instance.PlaySfx(EquipPassiveEntrySfx);
             }
             return 1;
         }
@@ -478,7 +478,7 @@ public class BattleManager : StateMachineController{
     /// </summary>
     public void RemoveSkillFromSlot1(){
         if (UndressPassiveEntrySfx && !IsBattleStart) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
+            AudioManager.Instance.PlaySfx(UndressPassiveEntrySfx);
         }
         if (Skills1InBattle.Remove(selectedHero, out PassiveEntry removedSkillData)){
             RecallSelectedPassiveEntry(removedSkillData);
@@ -496,7 +496,7 @@ public class BattleManager : StateMachineController{
     /// </summary>
     public void RemoveSkillFromSlot2(){
         if (UndressPassiveEntrySfx&& !IsBattleStart) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
+            AudioManager.Instance.PlaySfx(UndressPassiveEntrySfx);
         }
         if (Skills2InBattle.Remove(selectedHero, out PassiveEntry removedSkillData)){
             RecallSelectedPassiveEntry(removedSkillData);

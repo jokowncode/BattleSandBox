@@ -8,7 +8,7 @@ public class Room : MonoBehaviour{
 
     private void OnTriggerEnter(Collider other){
         if (other.CompareTag("Player") && this.EnterRoomSfx){
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EnterRoomSfx);
+            AudioManager.Instance.PlaySfx(EnterRoomSfx);
         }
     }
 }

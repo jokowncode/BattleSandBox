@@ -124,7 +124,6 @@ public class Hero : Fighter {
         
         HeroAudioData data = this.WarehouseData.GetHeroAudio(HeroAudioType.上阵);
         if (data != null) {
-            // AudioManager.Instance.PlaySfxAtPoint(this.transform.position, data.Audio);
             AudioManager.Instance.SetDialog(data.Audio, false);
         }
 

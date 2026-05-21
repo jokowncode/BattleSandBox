@@ -88,7 +88,7 @@ public abstract class AttackState : FighterState{
     private void OnAttack(){
         if (IsNeedTarget && !this.AttackTarget) return;
         if (AttackSfx) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.AttackSfx);
+            AudioManager.Instance.PlaySfx(this.AttackSfx);
         }
 
         if (SpecialAttackCondition()) {

@@ -34,7 +34,7 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
         }
         
         if (StartDragSfx) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, StartDragSfx);
+            AudioManager.Instance.PlaySfx(StartDragSfx);
         }
 
         Vector3 position = Vector3.one * 100.0f;
