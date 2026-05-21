@@ -1,6 +1,8 @@
 
 using UnityEngine;
 using System.Collections;
+using System;
+using System.Collections.Generic;
 
 public static class BattleFindCharacterTools {
     private static List<Fighter> GetFightersByType(TargetType type) {
@@ -30,7 +32,7 @@ public static class BattleFindCharacterTools {
         return false;
     }
 
-    public static Fighter FindMinHealthPercentageHero(TargetType type){
+    public static Fighter FindMinHealthPercentageTarget(TargetType type){
         List<Fighter> fighters = GetFightersByType(type);
         if (fighters == null) return null;
 
@@ -63,7 +65,7 @@ public static class BattleFindCharacterTools {
 
     public static Fighter GetNearestFighter(Fighter selfFighter, Func<Fighter, bool> condition = null) {
         List<Fighter> sortedFighter = GetSortedFightersByDistance(selfFighter);
-        if (sortedFighter == null) return null;
+        if (sortedFighter == null || sortedFighter.Count == 0) return null;
 
         if (condition == null) return sortedFighter[0];
         foreach (Fighter f in sortedFighter) {
@@ -75,24 +77,22 @@ public static class BattleFindCharacterTools {
     }
 
     public static List<Fighter> GetRandomCountFighter(TargetType type, int count) {
-        int size = type == TargetType.Hero ? this.HeroesInBattle.Count : this.EnemiesInBattle.Count;
-        List<Fighter> result = new List<Fighter>();
-        if (count >= size) {
-            result.AddRange(type == TargetType.Hero ? this.HeroesInBattle : this.EnemiesInBattle);
-            return result;
-        }
+        List<Fighter> fighters = GetFightersByType(type);
+        if (fighters == null) return null;
+        if (count >= fighters.Count) return fighters; 
 
         List<int> container = new List<int>();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < fighters.Count; i++) {
             container.Add(i);
         }
 
+        List<Fighter> result = new();
         int k = container.Count - 1;
         for (int j = 1; j <= count; j++) {
             int randomIndex = Random.Range(0, k);
             (container[randomIndex], container[k]) = (container[k], container[randomIndex]);
             int index = container[k];
-            result.Add(type == TargetType.Hero ? this.HeroesInBattle[index] : this.EnemiesInBattle[index]);
+            result.Add(fighters[index]);
             k--;
         }
         return result;
@@ -101,18 +101,14 @@ public static class BattleFindCharacterTools {
     public static Fighter GetRandomFighter(TargetType type, Func<Fighter, bool> condition = null) {
         if (!BattleManager.Instance || BattleManager.Instance.IsGameOver) return null;
         List<Fighter> fighters = GetFightersByType(type);
-        if (fighters == null) return null;
+        if (fighters == null || fighters.Count == 0) return null;
         int randomIndex = UnityEngine.Random.Range(0, fighters.Count);
         if (condition == null || condition(fighters[randomIndex])) return fighters[randomIndex];
-        
-        int index = randomIndex + 1;
-        Fighter fighter = fighters[index % fighters.Count];
-        while (index % fighters.Count != randomIndex && !condition(fighter)){
-            index++;
-            fighter = fighters[index % fighters.Count];
+
+        for (int index = (randomIndex + 1) % fighters.Count; (index % fighters.Count) != randomIndex; index = (index + 1) % fighters.Count) {
+            if(condition(fighters[index])) return fighters[index];
         }
-        if (index % fighters.Count == randomIndex) return null;
-        return fighter;
+        return null;
     }
 }
 

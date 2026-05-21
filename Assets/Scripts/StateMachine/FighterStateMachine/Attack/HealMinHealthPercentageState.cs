@@ -16,7 +16,7 @@ public class HealMinHealthPercentageState : AttackState{
     }
 
     protected override void NormalAttack(){
-        Fighter target = BattleFindCharacterTools.FindMinHealthPercentageHero(Controller.AttackTargetType);
+        Fighter target = BattleFindCharacterTools.FindMinHealthPercentageTarget(Controller.AttackTargetType);
         if (!target) return;
         Vector3 moveVec = target.Center.position - transform.position;
         Controller.Move.ChangeForward(moveVec.x);
