@@ -91,12 +91,11 @@ public class Bullet : MonoBehaviour {
         if (other.gameObject.TryGetComponent(out Fighter fighter)){
             IsHitTarget = true;
             fighter.BeDamaged(this.BulletDamageMsg);
-            if (this.AttackBuff) {
-                BuffManager.Instance.AddBuff(fighter, fighter, this.AttackBuff, this.AttackBuffCount);
-            }
-
+            
             if (this.CriticalBuff && this.BulletDamageMsg.IsCritical) {
                 BuffManager.Instance.AddBuff(fighter, fighter, this.CriticalBuff, this.CriticalBuffCount);
+            } else if (this.AttackBuff) {
+                BuffManager.Instance.AddBuff(fighter, fighter, this.AttackBuff, this.AttackBuffCount);
             }
         }
         foreach (var detachedPrefab in Detached) {
