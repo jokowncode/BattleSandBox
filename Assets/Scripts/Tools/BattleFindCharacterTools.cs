@@ -89,7 +89,7 @@ public static class BattleFindCharacterTools {
         List<Fighter> result = new();
         int k = container.Count - 1;
         for (int j = 1; j <= count; j++) {
-            int randomIndex = Random.Range(0, k);
+            int randomIndex = UnityEngine.Random.Range(0, k);
             (container[randomIndex], container[k]) = (container[k], container[randomIndex]);
             int index = container[k];
             result.Add(fighters[index]);

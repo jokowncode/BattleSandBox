@@ -47,7 +47,7 @@ public class FighterMove : MonoBehaviour{
 
     public void ChangeSpeed(float speed) {
         this.Agent.speed = speed;
-        float per = speed / Mathf.max(Owner.InitialSpeed, 0.1f);
+        float per = speed / Mathf.Max(Owner.InitialSpeed, 0.1f);
         Owner.FighterAnimator.SetFloat(AnimationParams.WalkAnimSpeedMultiplier, per);
     }
 

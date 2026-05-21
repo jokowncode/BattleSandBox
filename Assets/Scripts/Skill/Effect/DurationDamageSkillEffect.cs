@@ -14,22 +14,25 @@ public class DurationDamageSkillEffect : SkillEffect{
 
     private float LastDamageTime = -1.0f;
     private EffectData DefaultEffectData;
+
+    private Fighter ParentFighter;
     
     protected override void Awake(){
         base.Awake();
         this.InMagicCircleAreaFighters = new List<Fighter>();
         this.AlreadyInfluenceFighters = new HashSet<Fighter>();
         this.IsAreaSkill = true;
+
+        this.ParentFighter = this.GetComponentInParent<Fighter>();
     }
 
     public override void PrepareEffect() {
         this.InMagicCircleAreaFighters.Clear();
         this.LastDamageTime = -1.0f;
-        if (this.Delivery) return;
-        Fighter fighter = this.GetComponentInParent<Fighter>();
-        float value = fighter.FighterSkillCaster.GetSkillEffectValue(out bool isCritical);
+        if (this.Delivery || !this.ParentFighter || !this.ParentFighter.FighterSkillCaster) return;
+        float value = this.ParentFighter.FighterSkillCaster.GetSkillEffectValue(out bool isCritical);
         this.DefaultEffectData = new EffectData {
-            TargetType = fighter.FighterSkillCaster.Data.TargetType,
+            TargetType = this.ParentFighter.FighterSkillCaster.Data.TargetType,
             Value = value,
             IsCritical = isCritical,
             NotShowParticle = false
@@ -46,7 +49,7 @@ public class DurationDamageSkillEffect : SkillEffect{
                 Debug.Log($"{this.Delivery.Caster.name} Cast Skill : {this.Delivery.EffectData.Value}");
             #endif 
         }
-        if (!this.BuffTargetIsSelf && this.Delivery?.TryGetComponent(out Fighter caster)) {
+        if (!this.BuffTargetIsSelf && this.Delivery && this.Delivery.TryGetComponent(out Fighter caster)) {
             this.ApplySkillEndBuffToTarget(caster);    
         }
         this.ApplySkillEndPlugin(data);

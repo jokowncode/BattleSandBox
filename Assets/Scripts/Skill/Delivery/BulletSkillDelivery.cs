@@ -20,14 +20,12 @@ public class BulletSkillDelivery : SkillDelivery{
 
     protected override void PrepareDelivery() {
         this.CurrentBulletPenetrateCount = 0;
-        if (Flash != null) {
+        if (Flash) {
             var flashInstance = Instantiate(Flash, transform.position, Quaternion.identity);
             flashInstance.transform.forward = gameObject.transform.forward;
-            var flashPs = flashInstance.GetComponent<ParticleSystem>();
-            if (flashPs != null) {
+            if (flashInstance.TryGetComponent(out ParticleSystem flashPs)) {
                 Destroy(flashInstance, flashPs.main.duration);
-            } else {
-                var flashPsParts = flashInstance.transform.GetChild(0).GetComponent<ParticleSystem>();
+            } else if(flashInstance.transform.GetChild(0).TryGetComponent(out ParticleSystem flashPsParts)){
                 Destroy(flashInstance, flashPsParts.main.duration);
             }
         }
