@@ -172,7 +172,7 @@ public class BattleManager : StateMachineController{
         List<EnemyDepartmentData> departmentAreaData = this.Data.EnemiesInBattle;
         foreach (EnemyDepartmentData data in departmentAreaData){
             Enemy enemy = Instantiate(data.EnemyPrefab, this.EnemyParent);
-            GetNavMeshPosition(data.Position, 1.0f, out Vector3 finalPos);
+            NavMeshTools.GetNavMeshPosition(data.Position, 1.0f, out Vector3 finalPos);
             enemy.Deploy(finalPos);
             this.EnemiesInBattle.Add(enemy);
         }
@@ -184,7 +184,7 @@ public class BattleManager : StateMachineController{
         foreach (HeroDepartmentArea data in departmentAreaData){
             Hero hero = Instantiate(data.HeroPrefab, this.HeroParent);
             hero.SetOriginExist();
-            GetNavMeshPosition(data.Position, 1.0f, out Vector3 finalPos);
+            NavMeshTools.GetNavMeshPosition(data.Position, 1.0f, out Vector3 finalPos);
             int deployAreaIndex = this.IsWithinArea(finalPos);
             if (deployAreaIndex != -1){
                 hero.transform.position = finalPos;
@@ -536,164 +536,6 @@ public class BattleManager : StateMachineController{
 
     public void RemoveEnemy(Enemy enemy) {
         this.EnemiesInBattle.Remove(enemy);
-    }
-
-    public bool HasBeDamagedTarget(TargetType type) {
-        if (type == TargetType.Hero){
-            foreach (Hero hero in HeroesInBattle){
-                if (hero.HealthPercentage < 1.0f) {
-                    return true;
-                }
-            }    
-        }else if (type == TargetType.Enemy){
-            foreach (Enemy enemy in EnemiesInBattle){
-                if (enemy.HealthPercentage < 1.0f) {
-                    return true;
-                }
-            }    
-        }
-        return false;
-    }
-
-    public Fighter FindMinPercentagePropertyHero(FighterProperty property, TargetType type){
-        Fighter result = null;
-        float minPercentage = 1.0f;
-        if (type == TargetType.Hero){
-            foreach (Hero hero in HeroesInBattle){
-                if (hero.HealthPercentage < minPercentage){
-                    minPercentage = hero.HealthPercentage;
-                    result = hero;
-                }
-            }    
-        }else if (type == TargetType.Enemy){
-            foreach (Enemy enemy in EnemiesInBattle){
-                if (enemy.HealthPercentage < minPercentage){
-                    minPercentage = enemy.HealthPercentage;
-                    result = enemy;
-                }
-            }    
-        }
-        return result;
-    }
-
-    public Fighter FindFurthestEnemyTarget(Vector3 position) {
-        float maxDistance = -1.0f;
-        Fighter result = null;
-        foreach (Enemy enemy in EnemiesInBattle) {
-            float distance = (position - enemy.transform.position).sqrMagnitude;
-            if (distance > maxDistance) {
-                maxDistance = distance;
-                result = enemy;
-            }
-        }
-        return result;
-    }
-
-    public Fighter FindFurthestHeroTarget(Vector3 position) {
-        float maxDistance = -1.0f;
-        Fighter result = null;
-        foreach (Hero hero in HeroesInBattle) {
-            float distance = (position - hero.transform.position).sqrMagnitude;
-            if (distance > maxDistance) {
-                maxDistance = distance;
-                result = hero;
-            }
-        }
-        return result;
-    }
-
-    private List<Fighter> GetSortedFightersByDistance(Fighter self) {
-        List<Fighter> result = new List<Fighter>();
-        if (self.AttackTargetType == TargetType.Hero) {
-            foreach (Hero hero in this.HeroesInBattle) {
-                result.Add(hero);
-            }
-        }else if (self.AttackTargetType == TargetType.Enemy) {
-            foreach (Enemy enemy in this.EnemiesInBattle) {
-                result.Add(enemy);
-            }
-        }
-        result.Sort((Fighter f1, Fighter f2) => {
-            float d1 = (self.transform.position - f1.transform.position).sqrMagnitude;
-            float d2 = (self.transform.position - f2.transform.position).sqrMagnitude;
-            return d1 > d2 ? 1 : (d1 < d2 ? -1 : 0);
-        });
-        return result;
-    }
-
-    public Fighter GetNearestFighter(Fighter selfFighter, Func<Fighter, bool> condition = null) {
-        List<Fighter> sortedFighter = GetSortedFightersByDistance(selfFighter);
-        if (condition == null) return sortedFighter[0];
-        foreach (Fighter f in sortedFighter) {
-            if (condition(f)) {
-                return f;
-            }
-        }
-        return null;
-    }
-
-    public List<Fighter> GetRandomCountFighter(TargetType type, int count) {
-        int size = type == TargetType.Hero ? this.HeroesInBattle.Count : this.EnemiesInBattle.Count;
-        List<Fighter> result = new List<Fighter>();
-        if (count >= size) {
-            result.AddRange(type == TargetType.Hero ? this.HeroesInBattle : this.EnemiesInBattle);
-            return result;
-        }
-
-        List<int> container = new List<int>();
-        for (int i = 0; i < size; i++) {
-            container.Add(i);
-        }
-
-        int k = container.Count - 1;
-        for (int j = 1; j <= count; j++) {
-            int randomIndex = Random.Range(0, k);
-            (container[randomIndex], container[k]) = (container[k], container[randomIndex]);
-            int index = container[k];
-            result.Add(type == TargetType.Hero ? this.HeroesInBattle[index] : this.EnemiesInBattle[index]);
-            k--;
-        }
-        return result;
-    }
-
-    public Fighter GetRandomFighter(TargetType type, Func<Fighter, bool> condition = null) {
-        if (IsGameOver) return null;
-        int randomIndex = -1;
-        switch (type) {
-            case TargetType.Hero:
-                randomIndex = UnityEngine.Random.Range(0, this.HeroesInBattle.Count);
-                break;
-            case TargetType.Enemy:
-                randomIndex = UnityEngine.Random.Range(0, this.EnemiesInBattle.Count);
-                break;
-        }
-
-        if (randomIndex == -1) return null;
-        if (condition == null)
-            return type == TargetType.Hero ? this.HeroesInBattle[randomIndex] : this.EnemiesInBattle[randomIndex];
-
-        Fighter fighter = type == TargetType.Hero ? this.HeroesInBattle[randomIndex] : this.EnemiesInBattle[randomIndex];
-        if (condition(fighter)) return fighter;
-        int index = randomIndex + 1;
-        fighter = type == TargetType.Hero ? this.HeroesInBattle[index % this.HeroesInBattle.Count] 
-            : this.EnemiesInBattle[index % this.EnemiesInBattle.Count];
-            
-        while (index % this.HeroesInBattle.Count != randomIndex && !condition(fighter)){
-            index++;
-            fighter = type == TargetType.Hero ? this.HeroesInBattle[index % this.HeroesInBattle.Count] 
-                : this.EnemiesInBattle[index % this.EnemiesInBattle.Count];
-        }
-
-        if (index % this.HeroesInBattle.Count == randomIndex) return null;
-        return fighter;
-    }
-    
-    private void GetNavMeshPosition(Vector3 currentPos, float maxDistance, out Vector3 navMeshPos){
-        if (UnityEngine.AI.NavMesh.SamplePosition(currentPos, out var hit, maxDistance, UnityEngine.AI.NavMesh.AllAreas)){
-            navMeshPos = hit.position;
-            return;
-        }
-        navMeshPos = currentPos;
     }
 
 }

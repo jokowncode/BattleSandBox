@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public static class RaycastTools {
+public static class EventSystemExtensions {
 
     public static List<RaycastResult> GetRaycastResult(this EventSystem es) {
         // TODO: MAYBE NEED OPTIMIZE, BUT ONLY INSTRUCTION USE, NOT VERY EXPENSIVE?

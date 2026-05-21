@@ -81,7 +81,7 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
 
     private void DeployHero(Hero hero, Vector3 heroPos) {
         hero.transform.position = heroPos;
-        GetNavMeshPosition(hero.transform.position, 1.0f, out Vector3 finalPos);
+        NavMeshTools.GetNavMeshPosition(hero.transform.position, 1.0f, out Vector3 finalPos);
         int deploAreaIndex = BattleManager.Instance.IsWithinArea(heroPos);
         if (deploAreaIndex != -1){
             hero.transform.position = finalPos;
@@ -102,13 +102,5 @@ public class DraggableUI : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDrag
 
     private void SetAlpha(float alpha){
         // image.color = new Color(image.color.r,image.color.g,image.color.b, alpha);
-    }
-
-    private void GetNavMeshPosition(Vector3 currentPos, float maxDistance, out Vector3 navMeshPos){
-        if (NavMesh.SamplePosition(currentPos, out var hit, maxDistance, NavMesh.AllAreas)){
-            navMeshPos = hit.position;
-            return;
-        }
-        navMeshPos = currentPos;
     }
 }

@@ -44,16 +44,8 @@ public class SummonSkillCaster : SkillCaster{
         float rad = angle * Mathf.Deg2Rad;
         float x = center.x + radius * Mathf.Cos(rad);
         float z = center.z + radius * Mathf.Sin(rad);
-        GetNavMeshPosition(new Vector3(x, center.y, z), 3.0f, out Vector3 finalPos);
+        NavMeshTools.GetNavMeshPosition(new Vector3(x, center.y, z), 3.0f, out Vector3 finalPos);
         return finalPos;
-    }
-    
-    private void GetNavMeshPosition(Vector3 currentPos, float maxDistance, out Vector3 navMeshPos){
-        if (UnityEngine.AI.NavMesh.SamplePosition(currentPos, out var hit, maxDistance, UnityEngine.AI.NavMesh.AllAreas)){
-            navMeshPos = hit.position;
-            return;
-        }
-        navMeshPos = currentPos;
     }
 
     private void SummonPet() {

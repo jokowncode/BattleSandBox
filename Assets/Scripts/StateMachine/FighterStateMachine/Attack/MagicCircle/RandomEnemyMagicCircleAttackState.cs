@@ -13,7 +13,7 @@ public class RandomEnemyMagicCircleAttackState : MagicCircleAttackState{
     
     protected override void NormalAttack(){
         if(AttackParticle) AttackParticle.Play();
-        List<Fighter> result = BattleManager.Instance.GetRandomCountFighter(Controller.AttackTargetType, this.RandomEnemyCount);
+        List<Fighter> result = BattleFindCharacterTools.GetRandomCountFighter(Controller.AttackTargetType, this.RandomEnemyCount);
         foreach (Fighter target in result) {
             if (!target) continue;
             CastMagicCircle(target.transform, 1.0f / result.Count);

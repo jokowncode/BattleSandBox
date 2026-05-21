@@ -12,11 +12,11 @@ public class HealMinHealthPercentageState : AttackState{
 
     public override bool CanAttack() {
         return base.CanAttack() && 
-               BattleManager.Instance.HasBeDamagedTarget(Controller.AttackTargetType);
+               BattleFindCharacterTools.HasBeDamagedTarget(Controller.AttackTargetType);
     }
 
     protected override void NormalAttack(){
-        Fighter target = BattleManager.Instance.FindMinPercentagePropertyHero(FighterProperty.Health, Controller.AttackTargetType);
+        Fighter target = BattleFindCharacterTools.FindMinHealthPercentageHero(Controller.AttackTargetType);
         if (!target) return;
         Vector3 moveVec = target.Center.position - transform.position;
         Controller.Move.ChangeForward(moveVec.x);
