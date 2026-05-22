@@ -9,6 +9,7 @@ public class TestDialog : MonoBehaviour {
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Space)) {
             DialogManager.Instance.PlayNewDialog(this.Dialog);
+            this.enabled = false;
         }
     }
 }

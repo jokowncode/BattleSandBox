@@ -155,7 +155,7 @@ public class NextCorridorArea : MonoBehaviour {
     private void OnArriveDestination(Fighter fighter) {
         fighter.Move.OnArriveDestination -= OnArriveDestination;
         fighter.FighterIdle();
-        fighter.Move.RecoverSpeed();
+        fighter.Move.ChangeSpeed(fighter.Speed);
         fighter.Move.StopMove();
         
         ArriveHeroCount += 1;

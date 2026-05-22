@@ -104,7 +104,7 @@ public abstract class SkillCaster : MonoBehaviour{
         }
 
         if (SkillCastSfx){
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.SkillCastSfx);
+            AudioManager.Instance.PlaySfx(this.SkillCastSfx);
         }
         CurrentSkillCastCount++;
         Cast(attackTarget);

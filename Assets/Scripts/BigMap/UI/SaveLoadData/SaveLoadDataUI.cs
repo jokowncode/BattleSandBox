@@ -10,6 +10,7 @@ public class SaveLoadDataUI : MonoBehaviour {
     [SerializeField] private int MaxMutualSaveSlots = 5;
     [SerializeField] private Transform Container;
     [SerializeField] private SaveLoadDataSlot SaveLoadDataSlotPrefab;
+    [SerializeField] private ConfirmDialog ConfirmDialogUI;
     
     private CanvasGroup UICanvasGroup;
 
@@ -22,6 +23,10 @@ public class SaveLoadDataUI : MonoBehaviour {
 
     private void Close() {
         this.TransitionShow(false, false);
+    }
+
+    public void ShowConfirmDialog(Action onConfirm, string text) {
+        this.ConfirmDialogUI.Show(onConfirm, text);
     }
 
     public void TransitionShow(bool show, bool isSaveData) {

@@ -58,6 +58,12 @@ public class BattleManager : StateMachineController{
 
     public List<string> BeforeBattleHeroes { get; private set; } = new();
 
+    private struct DupHeroData {
+        public string HeroName;
+        public Vector3 HeroPosition;
+    }
+    private List<DupHeroData> DupHeroesInBattle = new List<DupHeroData>();
+
 #if DEBUG_MODE
     public float BattleStartTime {get; private set;}
 #endif
@@ -119,6 +125,24 @@ public class BattleManager : StateMachineController{
         SetBattleData(this.Data);
 #endif
     }
+    
+    public void DupHeroesInBattleData() {
+        this.DupHeroesInBattle.Clear();
+        foreach (Hero h in this.HeroesInBattle) {
+            if (h.IsOriginExist) continue;
+            this.DupHeroesInBattle.Add(new DupHeroData() {
+                HeroName = h.Name,
+                HeroPosition = h.transform.position,
+            });
+        }
+    }
+
+    public void RedeployAllHero() {
+        foreach (DupHeroData data in this.DupHeroesInBattle) {
+            this.DeployHeroThroughDraggable(data.HeroName, data.HeroPosition);
+        }
+        this.DupHeroesInBattle.Clear();
+    }
 
     public void SetBattleData(BattleData data){
         this.Data = data;
@@ -149,7 +173,7 @@ public class BattleManager : StateMachineController{
         List<EnemyDepartmentData> departmentAreaData = this.Data.EnemiesInBattle;
         foreach (EnemyDepartmentData data in departmentAreaData){
             Enemy enemy = Instantiate(data.EnemyPrefab, this.EnemyParent);
-            GetNavMeshPosition(data.Position, 1.0f, out Vector3 finalPos);
+            NavMeshTools.GetNavMeshPosition(data.Position, 1.0f, out Vector3 finalPos);
             enemy.Deploy(finalPos);
             this.EnemiesInBattle.Add(enemy);
         }
@@ -161,10 +185,12 @@ public class BattleManager : StateMachineController{
         foreach (HeroDepartmentArea data in departmentAreaData){
             Hero hero = Instantiate(data.HeroPrefab, this.HeroParent);
             hero.SetOriginExist();
-            GetNavMeshPosition(data.Position, 1.0f, out Vector3 finalPos);
+            NavMeshTools.GetNavMeshPosition(data.Position, 1.0f, out Vector3 finalPos);
             int deployAreaIndex = this.IsWithinArea(finalPos);
             if (deployAreaIndex != -1){
                 hero.transform.position = finalPos;
+                DraggableUI dragHero = hero.AddComponent<DraggableUI>();
+                dragHero.prefabReference = hero.Name;
                 hero.Deploy(deployAreaIndex);
                 if (data.IsDeadBattleDefeat) {
                     hero.AddComponent<FighterDeadBattleDefeat>();
@@ -236,19 +262,23 @@ public class BattleManager : StateMachineController{
         PlayerPrefs.SetString(this.Data.BattleName, json);
     }
 
+    private void DeployHeroThroughDraggable(string heroName, Vector3 position) {
+        foreach (Transform child in BattleUIManager.Instance.HeroWarehouseParent) {
+            if (child.TryGetComponent(out DraggableUI draggable)
+                && draggable.prefabReference == heroName) {
+                draggable.DeployHero(position);
+                break;
+            }
+        }
+    }
+
     public void LoadHeroDeploy() {
         if (!this.Data) return;
         if (!PlayerPrefs.HasKey(this.Data.BattleName)) return;
         HeroDeploySaveData saveData = JsonUtility.FromJson<HeroDeploySaveData>(PlayerPrefs.GetString(this.Data.BattleName));
         foreach (HeroDeployData data in saveData.Datas) {
             if (IsFullHero) break;
-            foreach (Transform child in BattleUIManager.Instance.HeroWarehouseParent) {
-                if (child.TryGetComponent(out DraggableUI draggable)
-                    && draggable.prefabReference == data.HeroName) {
-                    draggable.DeployHero(data.HeroPosition);
-                    break;
-                }
-            }
+            this.DeployHeroThroughDraggable(data.HeroName, data.HeroPosition);
         }
     }
 
@@ -327,12 +357,19 @@ public class BattleManager : StateMachineController{
         OnHeroEnterTheField?.Invoke(hero);
         HeroesInBattle.Add(hero);
     }
+    
+    private bool CheckPointInsideBoxCollider(BoxCollider boxCollider, Vector3 worldPoint) {
+        Vector3 closest = boxCollider.ClosestPoint(worldPoint);
+        return Vector3.Distance(closest, worldPoint) < 0.0001f;
+    }
 
     public int IsWithinArea(Vector3 targetPos) {
         for (int i = 0; i < HeroDeployPlaceArea.Length; i++) {
             HeroDeployAreaData areaData = HeroDeployPlaceArea[i];
-            if (areaData.DeployArea.bounds.Contains(targetPos) && this.DeployAreaCurrentHeroCount[i] < areaData.MaxHeroCount) {
-                return i;
+            if (CheckPointInsideBoxCollider(areaData.DeployArea, targetPos) && this.DeployAreaCurrentHeroCount[i] < areaData.MaxHeroCount) {
+                if (!Physics.CheckSphere(targetPos, 1.0f, 1 << LayerMask.NameToLayer("HeroDeploy"))) {
+                    return i;    
+                }
             }
         }
         return -1;
@@ -340,20 +377,20 @@ public class BattleManager : StateMachineController{
     
     protected override void Update(){
         base.Update();
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
-
         if (Input.GetMouseButtonDown(0)){
-            Ray ray = CameraManager.Instance.MainCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit,maxDistance:100f,layerMask:LayerMask.GetMask("Hero"))
-                && hit.collider.gameObject.TryGetComponent(out Hero hero)){
-                SelectObject(hero);
-            }else{
-                SelectObject(null);
+            List<RaycastResult> results = EventSystem.current.GetRaycastResult();
+            Hero hero = null;
+            foreach (var res in results) {
+                if (res.gameObject.layer == LayerMask.NameToLayer("UI")) {
+                    return ;
+                }
+
+                if (res.gameObject.layer == LayerMask.NameToLayer("Hero")) {
+                    res.gameObject.TryGetComponent(out hero);
+                }
             }
+            SelectObject(hero);
         }
-        
-        
     }
     
     private void SelectObject(Hero so){
@@ -373,14 +410,22 @@ public class BattleManager : StateMachineController{
         BattleUIManager.Instance.ShowHeroDetail(hero);
     }
 
+    public void RecallHero(Hero hero, bool isDestroy = true) {
+        BattleUIManager.Instance.HideHeroDetail();
+        selectedHero = hero;
+        this.RecallSelectedHero(isDestroy);
+    }
+
     /// <summary>
     /// 召回英雄
     /// </summary>
-    public void RecallSelectedHero() {
+    public void RecallSelectedHero(bool isDestroy = true) {
         if (!selectedHero) return;
-        BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.Name);
         this.RemoveHero(selectedHero);
-        Destroy(selectedHero.gameObject);
+        if (isDestroy) {
+            BattleUIManager.Instance.heroWarehouseUI.AddItem(selectedHero.Name);
+            Destroy(selectedHero.gameObject);
+        }
         selectedHero = null;
         BattleUIManager.Instance.HideHeroDetail();
     }
@@ -391,11 +436,6 @@ public class BattleManager : StateMachineController{
     public int AddPassiveEntry(PassiveEntry data){
         if (!selectedHero) return -1;
         if (!data.Precondition(selectedHero)) return -1;
-
-        if (EquipPassiveEntrySfx) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EquipPassiveEntrySfx);
-        }
-
         if (!PassiveEntryWarehouseManager.Instance.ContainsPassiveEntry(data.Data.Name)) {
             return -1;
         }
@@ -405,6 +445,9 @@ public class BattleManager : StateMachineController{
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
             PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data.Data.Name);
+            if (EquipPassiveEntrySfx) {
+                AudioManager.Instance.PlaySfx(EquipPassiveEntrySfx);
+            }
             return 0;
         }
         
@@ -413,9 +456,13 @@ public class BattleManager : StateMachineController{
             BattleUIManager.Instance.heroDetailUI.UpdateDetailUI(selectedHero);
             UpdatePassiveEntryUI(selectedHero);
             PassiveEntryWarehouseManager.Instance.RemovePassiveEntry(data.Data.Name);
+            if (EquipPassiveEntrySfx) {
+                AudioManager.Instance.PlaySfx(EquipPassiveEntrySfx);
+            }
             return 1;
         }
-
+        SceneChangeManager.Instance.AddGameTip("芯片已满！");
+        AudioManager.Instance.PlayErrorSfx();
         return -1;
     }
     
@@ -432,7 +479,7 @@ public class BattleManager : StateMachineController{
     /// </summary>
     public void RemoveSkillFromSlot1(){
         if (UndressPassiveEntrySfx && !IsBattleStart) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
+            AudioManager.Instance.PlaySfx(UndressPassiveEntrySfx);
         }
         if (Skills1InBattle.Remove(selectedHero, out PassiveEntry removedSkillData)){
             RecallSelectedPassiveEntry(removedSkillData);
@@ -450,7 +497,7 @@ public class BattleManager : StateMachineController{
     /// </summary>
     public void RemoveSkillFromSlot2(){
         if (UndressPassiveEntrySfx&& !IsBattleStart) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, UndressPassiveEntrySfx);
+            AudioManager.Instance.PlaySfx(UndressPassiveEntrySfx);
         }
         if (Skills2InBattle.Remove(selectedHero, out PassiveEntry removedSkillData)){
             RecallSelectedPassiveEntry(removedSkillData);
@@ -490,140 +537,6 @@ public class BattleManager : StateMachineController{
 
     public void RemoveEnemy(Enemy enemy) {
         this.EnemiesInBattle.Remove(enemy);
-    }
-
-    public bool HasBeDamagedTarget(TargetType type) {
-        if (type == TargetType.Hero){
-            foreach (Hero hero in HeroesInBattle){
-                if (hero.HealthPercentage < 1.0f) {
-                    return true;
-                }
-            }    
-        }else if (type == TargetType.Enemy){
-            foreach (Enemy enemy in EnemiesInBattle){
-                if (enemy.HealthPercentage < 1.0f) {
-                    return true;
-                }
-            }    
-        }
-        return false;
-    }
-
-    public Fighter FindMinPercentagePropertyHero(FighterProperty property, TargetType type){
-        Fighter result = null;
-        float minPercentage = 1.0f;
-        if (type == TargetType.Hero){
-            foreach (Hero hero in HeroesInBattle){
-                if (hero.HealthPercentage < minPercentage){
-                    minPercentage = hero.HealthPercentage;
-                    result = hero;
-                }
-            }    
-        }else if (type == TargetType.Enemy){
-            foreach (Enemy enemy in EnemiesInBattle){
-                if (enemy.HealthPercentage < minPercentage){
-                    minPercentage = enemy.HealthPercentage;
-                    result = enemy;
-                }
-            }    
-        }
-        return result;
-    }
-
-    public Fighter FindFurthestEnemyTarget(Vector3 position) {
-        float maxDistance = -1.0f;
-        Fighter result = null;
-        foreach (Enemy enemy in EnemiesInBattle) {
-            float distance = (position - enemy.transform.position).sqrMagnitude;
-            if (distance > maxDistance) {
-                maxDistance = distance;
-                result = enemy;
-            }
-        }
-        return result;
-    }
-
-    public Fighter FindFurthestHeroTarget(Vector3 position) {
-        float maxDistance = -1.0f;
-        Fighter result = null;
-        foreach (Hero hero in HeroesInBattle) {
-            float distance = (position - hero.transform.position).sqrMagnitude;
-            if (distance > maxDistance) {
-                maxDistance = distance;
-                result = hero;
-            }
-        }
-        return result;
-    }
-
-    private List<Fighter> GetSortedFightersByDistance(Fighter self) {
-        List<Fighter> result = new List<Fighter>();
-        if (self.AttackTargetType == TargetType.Hero) {
-            foreach (Hero hero in this.HeroesInBattle) {
-                result.Add(hero);
-            }
-        }else if (self.AttackTargetType == TargetType.Enemy) {
-            foreach (Enemy enemy in this.EnemiesInBattle) {
-                result.Add(enemy);
-            }
-        }
-        result.Sort((Fighter f1, Fighter f2) => {
-            float d1 = (self.transform.position - f1.transform.position).sqrMagnitude;
-            float d2 = (self.transform.position - f2.transform.position).sqrMagnitude;
-            return d1 > d2 ? 1 : (d1 < d2 ? -1 : 0);
-        });
-        return result;
-    }
-
-    public Fighter GetNearestFighter(Fighter selfFighter, Func<Fighter, bool> condition = null) {
-        List<Fighter> sortedFighter = GetSortedFightersByDistance(selfFighter);
-        if (condition == null) return sortedFighter[0];
-        foreach (Fighter f in sortedFighter) {
-            if (condition(f)) {
-                return f;
-            }
-        }
-        return null;
-    }
-
-    public Fighter GetRandomFighter(TargetType type, Func<Fighter, bool> condition = null) {
-        if (IsGameOver) return null;
-        int randomIndex = -1;
-        switch (type) {
-            case TargetType.Hero:
-                randomIndex = UnityEngine.Random.Range(0, this.HeroesInBattle.Count);
-                break;
-            case TargetType.Enemy:
-                randomIndex = UnityEngine.Random.Range(0, this.EnemiesInBattle.Count);
-                break;
-        }
-
-        if (randomIndex == -1) return null;
-        if (condition == null)
-            return type == TargetType.Hero ? this.HeroesInBattle[randomIndex] : this.EnemiesInBattle[randomIndex];
-
-        Fighter fighter = type == TargetType.Hero ? this.HeroesInBattle[randomIndex] : this.EnemiesInBattle[randomIndex];
-        if (condition(fighter)) return fighter;
-        int index = randomIndex + 1;
-        fighter = type == TargetType.Hero ? this.HeroesInBattle[index % this.HeroesInBattle.Count] 
-            : this.EnemiesInBattle[index % this.EnemiesInBattle.Count];
-            
-        while (index % this.HeroesInBattle.Count != randomIndex && !condition(fighter)){
-            index++;
-            fighter = type == TargetType.Hero ? this.HeroesInBattle[index % this.HeroesInBattle.Count] 
-                : this.EnemiesInBattle[index % this.EnemiesInBattle.Count];
-        }
-
-        if (index % this.HeroesInBattle.Count == randomIndex) return null;
-        return fighter;
-    }
-    
-    private void GetNavMeshPosition(Vector3 currentPos, float maxDistance, out Vector3 navMeshPos){
-        if (UnityEngine.AI.NavMesh.SamplePosition(currentPos, out var hit, maxDistance, UnityEngine.AI.NavMesh.AllAreas)){
-            navMeshPos = hit.position;
-            return;
-        }
-        navMeshPos = currentPos;
     }
 
 }

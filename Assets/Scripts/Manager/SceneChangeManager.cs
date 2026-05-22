@@ -56,7 +56,7 @@ public class SceneChangeManager : MonoBehaviour{
         if (this.CurrentScene == SceneType.BigMap && !this.IsLoadSubScene){
             this.IsLoadSubScene = true;
             AudioManager.Instance.SetMainMusic(this.BigMapBGM);
-            BigMapUIManager.Instance.TaskList.UpdateTaskUI();
+            BigMapUIManager.Instance.TaskUI.UpdateTask();
             StartCoroutine(AsyncLoadSceneCallback(this.DungeonScene));
         }
 
@@ -99,7 +99,7 @@ public class SceneChangeManager : MonoBehaviour{
             return;
         }
         this.DungeonScene = dungeonType;
-        if (reloadData) SaveDataManager.Instance.LoadLastAutoSaveData();
+        if (reloadData) SaveDataManager.Instance.LoadLatestSaveData();
         
         SceneType dungeon = SaveDataManager.Instance.PlayerData.CurrentDungeon;
         this.IsNewDungeon = dungeon == SceneType.None || dungeon != this.DungeonScene;

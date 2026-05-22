@@ -11,6 +11,7 @@ public class PlayerSaveData {
     public bool IsCampTrainInstruction = false;
     public int BattleInstructionIndex = 0;
     public float PlayerMoney = -1.0f;
+    public string CurrentFollowTaskName = null;
     public SceneType CurrentDungeon = SceneType.None;
     public SerializableDictionary<SceneType, Vector3> PlayerPos = new();
     [SerializeReference] public List<string> InteractionObjectsEnds = new();
@@ -56,6 +57,8 @@ public class SaveDataManager : MonoBehaviour {
     public bool HasAutoSaveData => AutoSaveDataPaths.Count != 0;
     public bool HasSaveData => HasAutoSaveData || MutualSaveDataPathMap.Count != 0;
 
+    private string LatestLoadPath = null;
+
     private void Awake() {
         if (Instance != null) {
             Destroy(this.gameObject);
@@ -99,12 +102,14 @@ public class SaveDataManager : MonoBehaviour {
     }
 
     private void SaveData(string savePath) {
+        this.LatestLoadPath = savePath;
         if (this.PlayerInBigMap) {
             SceneType currentDungeon = SceneChangeManager.Instance.DungeonScene;
             this.PlayerData.PlayerPos[currentDungeon] = this.PlayerInBigMap.transform.position;
         }
         this.PlayerData.PlayerMoney = GameManager.Instance.Money;
-
+        this.PlayerData.CurrentFollowTaskName = TaskManager.Instance.CurrentFollowTaskName;
+        
         string dataJson = JsonUtility.ToJson(this.PlayerData);
         File.WriteAllText(savePath, dataJson);
     }
@@ -135,6 +140,7 @@ public class SaveDataManager : MonoBehaviour {
     }
 
     public void AutoSaveData() {
+        SceneChangeManager.Instance.AddGameTip("已自动保存！");
         if (this.AutoSaveDataPaths.Count >= this.MaxSaveDataCount) {
             string deleteFileName = this.AutoSaveDataPaths.Dequeue();
             string deletePath = Path.Combine(Application.persistentDataPath, deleteFileName);
@@ -147,6 +153,10 @@ public class SaveDataManager : MonoBehaviour {
         string path = Path.Combine(Application.persistentDataPath, fileName);
         this.AutoSaveDataPaths.Enqueue(fileName);
         this.SaveData(path);
+    }
+
+    public bool HasMutualSaveData(int slot) {
+        return this.MutualSaveDataPathMap.ContainsKey(slot);
     }
 
     public string MutualSaveData(int slot) {
@@ -176,10 +186,12 @@ public class SaveDataManager : MonoBehaviour {
         this.PlayerData = new PlayerSaveData();
         this.AlreadyPlayTime = 0;
         this.LoadTimeStamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        this.LatestLoadPath = null;
         this.OnLoadData?.Invoke();
     }
 
     public void LoadData(string loadPath) {
+        this.LatestLoadPath = loadPath;
         this.LoadTimeStamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         if (!File.Exists(loadPath)) {
             this.AlreadyPlayTime = 0;
@@ -192,10 +204,13 @@ public class SaveDataManager : MonoBehaviour {
         this.OnLoadData?.Invoke();
     }
 
-    public void LoadLastAutoSaveData() {
-        string fileName = this.AutoSaveDataPaths.LastOrDefault();
-        fileName ??= "";
-        string loadPath = Path.Combine(Application.persistentDataPath, fileName);
+    public void LoadLatestSaveData() {
+        string loadPath = this.LatestLoadPath;
+        if (loadPath == null) {
+            string fileName = this.AutoSaveDataPaths.LastOrDefault();
+            fileName ??= "";
+            loadPath = Path.Combine(Application.persistentDataPath, fileName);
+        }
         this.LoadData(loadPath);
     }
 
@@ -212,8 +227,6 @@ public class SaveDataManager : MonoBehaviour {
         }
 
         if (SceneTools.IsBattleScene(SceneChangeManager.Instance.CurrentScene) && BattleManager.Instance) {
-            this.IsInBattle = true;
-            this.DupDungeonHealth.Clear();
             BattleManager.Instance.OnRewindBattle += () => {
                 foreach (var pair in this.DupDungeonHealth) {
                     bool containsKey = this.PlayerData.DungeonHeroHealth.ContainsKey(pair.Key);
@@ -230,11 +243,15 @@ public class SaveDataManager : MonoBehaviour {
                 }
                 this.DupDungeonHealth.Clear();
             };
+            BattleManager.Instance.OnBattleStart += () => {
+                this.IsInBattle = true;
+                this.DupDungeonHealth.Clear();
+            };
         } else {
             this.IsInBattle = false;
         }
     }
-    
+
     public void ShowSaveLoadDataUI(bool isSaveData) {
         this.SaveLoadDataUI.TransitionShow(true, isSaveData);
     }

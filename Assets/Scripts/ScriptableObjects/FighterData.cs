@@ -19,5 +19,6 @@ public class FighterData : ScriptableObject{
     public Sprite WarehouseHeroPortrait;
     public Sprite DetailPortrait;
     public Sprite SkillPortrait;
+    [HideInInspector] public float CooldownPercentage = 1.0f;
 }
 

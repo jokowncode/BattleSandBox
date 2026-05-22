@@ -52,7 +52,7 @@ public class TaskList : MonoBehaviour {
     }
 
     public void UpdateTaskUI() {
-        int index = 0;
+        /*int index = 0;
         foreach (KeyValuePair<string, TaskCurrentData> taskIndexMap in TaskManager.Instance.CurrentTaskDataMap) {
             TaskUI taskUI = null;
             if (this.TaskContainer.childCount - 1 < index) {
@@ -69,34 +69,34 @@ public class TaskList : MonoBehaviour {
             }
             index += 1;
         }
-        UpdateTaskDir();
+        UpdateTaskDir();*/
     }
 
     public void UpdateTask(string taskName, string desc, Transform position) {
-        foreach (Transform child in TaskContainer) {
+        /*foreach (Transform child in TaskContainer) {
             if (child.TryGetComponent(out TaskUI taskUI) && taskUI.TaskName == taskName) {
                 taskUI.SetTask(desc, taskName, position ? position.position : Vector3.zero);
                 break;
             }
         }
-        UpdateTaskDir();
+        UpdateTaskDir();*/
     }
 
     public void AddTask(string taskName, Vector3 position) {
-        TaskUI taskUI = Instantiate(this.TaskUIPrefab, this.TaskContainer);
+        /*TaskUI taskUI = Instantiate(this.TaskUIPrefab, this.TaskContainer);
         TaskData data = TaskManager.Instance.GetTask(taskName);
         taskUI.SetTask(data.TaskDescs[0], taskName, position);
-        UpdateTaskDir();
+        UpdateTaskDir();*/
     }
 
     public void RemoveTask(string taskName) {
-        foreach (Transform child in TaskContainer) {
+        /*foreach (Transform child in TaskContainer) {
             if (child.TryGetComponent(out TaskUI taskUI) && taskUI.TaskName == taskName) {
                 Destroy(child.gameObject);
                 break;
             }
         }
-        UpdateTaskDir();
+        UpdateTaskDir();*/
     }
 }
 

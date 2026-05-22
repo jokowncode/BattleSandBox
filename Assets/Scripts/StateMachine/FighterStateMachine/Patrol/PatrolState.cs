@@ -46,7 +46,7 @@ public class PatrolState : FighterState{
             if (Controller.Type == FighterType.Warrior){
                 condition = (Fighter warrior) => FormationManager.Instance.ValidTarget(warrior);
             }
-            this.PatrolPoint = BattleManager.Instance.GetNearestFighter(Controller, condition);
+            this.PatrolPoint = BattleFindCharacterTools.GetNearestFighter(Controller, condition);
         }
 
         if (!this.PatrolPoint && !this.IsIdle) {

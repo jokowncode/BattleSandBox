@@ -2,12 +2,14 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StoryReviewUI : MonoBehaviour {
 
     [SerializeField] private StoryDialogHistory StoryDialogPrefab;
     [SerializeField] private TextMeshProUGUI DialogOptionPrefab;
     [SerializeField] private Transform StoryDialogContainer;
+    [SerializeField] private ScrollRect StoryReviewScrollRect;
 
     private CanvasGroup StoryReviewCanvasGroup;
     
@@ -21,6 +23,7 @@ public class StoryReviewUI : MonoBehaviour {
         StoryReviewCanvasGroup.alpha = show ? 1.0f : 0.0f;
         StoryReviewCanvasGroup.interactable = show;
         StoryReviewCanvasGroup.blocksRaycasts = show;
+        if (show && this.StoryReviewScrollRect) this.StoryReviewScrollRect.verticalNormalizedPosition = 0.0f;
     }
 
     public void Reset() {

@@ -22,6 +22,8 @@ public class HeroWarehouseManager : MonoBehaviour {
     [SerializeField] private Sprite PriestBorderSprite;
     [field: SerializeField] public Sprite EmptyBorderSprite { get; private set; }
 
+    [SerializeField] private InstructionContainer HeroWarehouseInstruction;
+    
     private List<string> OwnedHeroes = new List<string>();
     
     private Dictionary<string, Hero> AllHeroMap = new Dictionary<string, Hero>();
@@ -56,8 +58,18 @@ public class HeroWarehouseManager : MonoBehaviour {
         this.HeroWarehouseCanvasGroup.alpha = show ? 1.0f : 0.0f;
         this.HeroWarehouseCanvasGroup.blocksRaycasts = show;
         this.HeroWarehouseCanvasGroup.interactable = show;
-        if (show) this.ModeHeroWarehousePanel.Show();
-        else this.ModeHeroWarehousePanel.Hide();
+        if (show) {
+            if (BattleManager.Instance && !BattleManager.Instance.IsBattleStart) {
+                BattleManager.Instance.DupHeroesInBattleData();
+                BattleManager.Instance.AllHeroRecall();
+            }
+            this.ModeHeroWarehousePanel.Show();
+        } else {
+            this.ModeHeroWarehousePanel.Hide();
+            if (BattleManager.Instance && !BattleManager.Instance.IsBattleStart) {
+                BattleManager.Instance.RedeployAllHero();
+            }
+        }
     }
 
     public void ShowBondPanel() {
@@ -147,8 +159,9 @@ public class HeroWarehouseManager : MonoBehaviour {
         return AllHeroMap.GetValueOrDefault(heroRef);
     }
     
-    
-    
-    
+    public void ShowHeroWarehouseInstruction() {
+        if (!this.HeroWarehouseInstruction) return;
+        this.HeroWarehouseInstruction.ActivateInstruction();
+    }
 }
 

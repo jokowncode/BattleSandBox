@@ -8,10 +8,9 @@ public class ExecuteBuffSkillEnd : SkillEnd {
     public BuffData BuffData;
     
     public override void AdditionalProcedure(Fighter influenceFighter, SkillEffect effect, EffectData effectData) {
-        if (!effect.Delivery.Caster) return;
-        BuffManager.Instance.AddBuff(effect.Delivery.Caster.GetComponent<Fighter>(),influenceFighter, BuffData);
-        
-        // Buff buff = influenceFighter.AddComponent<Buff>();
-        // buff.AddBuff(effect.Delivery.Caster.GetComponent<Fighter>(),influenceFighter, BuffData);
+        if (!effect.Delivery || !effect.Delivery.Caster) return;
+        if (effect.Delivery.Caster.TryGetComponent(out Fighter caster)) {
+            BuffManager.Instance.AddBuff(caster,influenceFighter, BuffData);
+        }
     }
 }

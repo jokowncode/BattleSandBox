@@ -236,7 +236,7 @@ public class Fighter : StateMachineController{
         if(this.BloodParticle && !effectData.NotShowParticle) this.BloodParticle.Play();
 
         if (this.CurrentFighterType == TargetType.Enemy) {
-            this.Renderer.ChangeColor(Color.red);    
+            this.Renderer.ChangeColor(Color.red, true);    
         } else{
             this.Renderer.Flash();
 #if DEBUG_MODE
@@ -245,7 +245,7 @@ public class Fighter : StateMachineController{
         }
 
         if (this.BeDamagedSfx) {
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, this.BeDamagedSfx);
+            AudioManager.Instance.PlaySfx(this.BeDamagedSfx);
         }
         
         if (this.InBattleHealth <= 0.0f && !IsDead) {
@@ -334,14 +334,6 @@ public class Fighter : StateMachineController{
         Fighter refFighter = null){
 
         float sign = isUp ? 1.0f : -1.0f;
-        // TODO: Change Speed
-        if (updateProperty == FighterProperty.Speed) {
-            if(sign * value < 0.0f) this.Move.StopMove();
-            else this.Move.StartMove();
-            //Debug.Log("Speed"+value);
-            return sign * value;
-        }
-        
         if (updateProperty == FighterProperty.HealMultiplier) {
             float change = sign * value;
             if (modifyWay == PropertyModifyWay.Percentage) {
@@ -360,16 +352,16 @@ public class Fighter : StateMachineController{
             return change;
         }
         
-        if (updateProperty == FighterProperty.CooldownPercentage){
-            float currentMultiplier = this.AttackSpeed;
-            float change = sign * value;
-            if (modifyWay == PropertyModifyWay.Percentage) {
-                change = sign * value / 100.0f;
-            }
-            float result = Mathf.Clamp(currentMultiplier + change, 0.0f, 3.0f);
-            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, result);
-            return change;
-        }
+        // if (updateProperty == FighterProperty.CooldownPercentage){
+        //     float currentMultiplier = this.AttackSpeed;
+        //     float change = sign * value;
+        //     if (modifyWay == PropertyModifyWay.Percentage) {
+        //         change = sign * value / 100.0f;
+        //     }
+        //     float result = Mathf.Clamp(currentMultiplier + change, 0.0f, 3.0f);
+        //     FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, result);
+        //     return change;
+        // }
 
         string propertyName = updateProperty.ToString();
         float currentValue = ReflectionTools.GetObjectProperty<float>(propertyName, this);
@@ -381,6 +373,19 @@ public class Fighter : StateMachineController{
 
         float finalValue = currentValue + changeValue;
         ReflectionTools.SetObjectProperty(propertyName, this, finalValue);
+
+        if (updateProperty == FighterProperty.CooldownPercentage){
+            FighterAnimator.SetFloat(AnimationParams.AttackAnimSpeedMultiplier, this.EffectiveCooldownPercentage);
+        }
+
+        if (updateProperty == FighterProperty.Speed){
+            if(this.EffectiveSpeed == 0.0f) this.Move.StopMove();
+            else {
+                this.Move.StartMove();
+                this.Move.ChangeSpeed(this.EffectiveSpeed);
+            }
+        }
+
         if (updateProperty == FighterProperty.Shield && IsBattleStart) {
             if (finalValue <= 0.0f) {
                 this.InBattleShield = 0.0f;
@@ -457,6 +462,16 @@ public class Fighter : StateMachineController{
         }
     }
 
+    public float InitialSpeed {
+        get => InitialData.Speed;
+        set => InitialData.Speed=value;
+    }
+
+    public float InitialCooldownPercentage {
+        get => InitialData.CooldownPercentage;
+        set => InitialData.CooldownPercentage=value;
+    }
+
     // Runtime Property
     public float Health{ 
         get => CurrentData.Health;
@@ -492,6 +507,20 @@ public class Fighter : StateMachineController{
         get => CurrentData.Shield;
         set => CurrentData.Shield=value;
     }
+
+    public float Speed{
+        get => CurrentData.Speed;
+        set => CurrentData.Speed = value;
+    }
+
+    public float CooldownPercentage {
+        get => CurrentData.CooldownPercentage;
+        set => CurrentData.CooldownPercentage = value;
+    }
+
+    public float EffectiveSpeed => Mathf.Max(this.Speed, 0.0f);
+    public float EffectiveCooldownPercentage => Mathf.Clamp(this.CooldownPercentage, 0.0f, 3.0f);
+
     public TargetType AttackTargetType => InitialData.AttackTargetType;
 
     public FighterType Type => InitialData.Type;
@@ -499,11 +528,9 @@ public class Fighter : StateMachineController{
     public string Description => InitialData.Description;
     public int StarLevel => InitialData.StarLevel;
     public float AttackRadius => InitialData.AttackRadius;
-    public float Speed => InitialData.Speed;
     public Sprite DetailPortrait => InitialData.DetailPortrait;
     public Sprite WarehouseHeroPortrait => InitialData.WarehouseHeroPortrait;
     public Sprite SkillPortrait => InitialData.SkillPortrait;
-    public float AttackSpeed => FighterAnimator.GetFloat(AnimationParams.AttackAnimSpeedMultiplier);
     
     #endregion
 }

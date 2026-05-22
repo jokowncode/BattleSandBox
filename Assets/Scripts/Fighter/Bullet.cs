@@ -3,6 +3,13 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour {
+
+    [Header("Buff")] 
+    [SerializeField] private BuffData AttackBuff;
+    [SerializeField] private int AttackBuffCount;
+    [SerializeField] private BuffData CriticalBuff;
+    [SerializeField] private int CriticalBuffCount;
+    
     public float speed = 15f;
     public GameObject hit;
     public GameObject flash;
@@ -84,6 +91,12 @@ public class Bullet : MonoBehaviour {
         if (other.gameObject.TryGetComponent(out Fighter fighter)){
             IsHitTarget = true;
             fighter.BeDamaged(this.BulletDamageMsg);
+            
+            if (this.CriticalBuff && this.BulletDamageMsg.IsCritical) {
+                BuffManager.Instance.AddBuff(fighter, fighter, this.CriticalBuff, this.CriticalBuffCount);
+            } else if (this.AttackBuff) {
+                BuffManager.Instance.AddBuff(fighter, fighter, this.AttackBuff, this.AttackBuffCount);
+            }
         }
         foreach (var detachedPrefab in Detached) {
             if (detachedPrefab != null) {

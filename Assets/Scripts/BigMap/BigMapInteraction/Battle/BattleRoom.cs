@@ -2,10 +2,11 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BattleRoom : InteractionObject {
 
-    [SerializeField] protected BattleData Data;
+    [SerializeField] private BattleData[] Datas;
     [SerializeField] private Transform Enemies;
     [SerializeField] private bool IsEnemyMove = false;
     
@@ -37,10 +38,14 @@ public class BattleRoom : InteractionObject {
         if (this.IsEnd && !this.IsEndCanInteract){
             return;
         }
+
+        if (this.Datas.Length == 0) return;
         if (this.IsInteract) return;
         this.IsInteract = true;
         SaveDataManager.Instance.PlayerInBigMap.TransMove(false);
-        GameManager.Instance.GoToBattle(this.Data);
+        // GameManager.Instance.GoToBattle(this.Data);
+        int randomIndex = this.Datas.Length == 1 ? 0 : Random.Range(0, this.Datas.Length);
+        GameManager.Instance.GoToBattle(this.Datas[randomIndex]);
     }
 
     protected override void LoadBigMapData() {
@@ -87,7 +92,10 @@ public class BattleRoom : InteractionObject {
             this.enabled = true;
             foreach (Transform child in this.Enemies) {
                 if (child.TryGetComponent(out BigMapEnemy enemy)) {
-                    enemy.ChasePlayer(this.InAreaPlayer, this.Interaction);
+                    enemy.ChasePlayer(this.InAreaPlayer, () => {
+                        this.OnInteractionPre?.Invoke();
+                        this.Interaction();
+                    });
                 }
             }
         }

@@ -24,7 +24,7 @@ public class FighterMove : MonoBehaviour{
         Obstacle = GetComponent<NavMeshObstacle>();
         
         Agent.updateRotation = false;
-        Agent.speed = Owner.Speed;
+        Agent.speed = Owner.InitialSpeed;
         // Obstacle.carveOnlyStationary = true;
 
         if (!Agent.enabled) {
@@ -47,10 +47,8 @@ public class FighterMove : MonoBehaviour{
 
     public void ChangeSpeed(float speed) {
         this.Agent.speed = speed;
-    }
-
-    public void RecoverSpeed() {
-        this.Agent.speed = Owner.Speed;
+        float per = speed / Mathf.Max(Owner.InitialSpeed, 0.1f);
+        Owner.FighterAnimator.SetFloat(AnimationParams.WalkAnimSpeedMultiplier, per);
     }
 
     public void MoveTo(Vector3 targetPos) {

@@ -8,6 +8,8 @@ using UnityEngine;
 public class BuffManager : MonoBehaviour {
 
     public static BuffManager Instance;
+
+    private readonly Dictionary<Fighter, Dictionary<CascadeBuffType, int>> FighterBuffs = new();
     
     private void Awake() {
         if (Instance != null) {
@@ -17,11 +19,27 @@ public class BuffManager : MonoBehaviour {
         Instance = this;
     }
 
-    public void AddBuff(Fighter caster, Fighter target, BuffData buffData) {
+    public void AddBuff(Fighter caster, Fighter target, BuffData buffData, int count = 1) {
         if (!target || target.IsDead) return;
         if (!caster || caster.IsDead) return;
-        Coroutine coroutine = StartCoroutine(BuffCoroutine(caster, target, buffData));
-        target.OnDead += _ => StopCoroutine(coroutine);
+
+        for (int i = 0; i < count; i++) {
+            if (buffData.CascadeType != CascadeBuffType.None && buffData.LimitCount > 0)  {
+                if (TryGetFighterBuffCount(target, buffData.CascadeType, out int curCount) && curCount >= buffData.LimitCount) {
+                    break;
+                }
+                
+                if (!FighterBuffs.ContainsKey(target)) {
+                    FighterBuffs.Add(target, new Dictionary<CascadeBuffType, int>());
+                }
+
+                if (!FighterBuffs[target].TryAdd(buffData.CascadeType, 1)) {
+                    FighterBuffs[target][buffData.CascadeType] += 1;
+                }
+            }
+            Coroutine coroutine = StartCoroutine(BuffCoroutine(caster, target, buffData));
+            target.OnDead += _ => StopCoroutine(coroutine);
+        }
     }
 
     private IEnumerator BuffCoroutine(Fighter caster, Fighter target, BuffData buffData) {
@@ -79,6 +97,13 @@ public class BuffManager : MonoBehaviour {
         // Apply Last Buff
         foreach (BuffData data in buffData.LastEffectBuff) {
             AddBuff(caster, target, data);
+        }
+
+        if (target && HasFighterBuff(target, buffData.CascadeType)) {
+            FighterBuffs[target][buffData.CascadeType] -= 1;
+            if (FighterBuffs[target][buffData.CascadeType] <= 0) {
+                FighterBuffs[target].Remove(buffData.CascadeType);
+            }
         }
     }
 
@@ -147,6 +172,16 @@ public class BuffManager : MonoBehaviour {
         } else if(value < 0.0f) {
             target.BeDamaged(effect);
         }
+    }
+
+    private bool HasFighterBuff(Fighter fighter, CascadeBuffType type) {
+        return this.FighterBuffs.ContainsKey(fighter) && this.FighterBuffs[fighter].ContainsKey(type);
+    }
+
+    public bool TryGetFighterBuffCount(Fighter fighter, CascadeBuffType type, out int count) {
+        bool result = HasFighterBuff(fighter, type);
+        count = result ? this.FighterBuffs[fighter][type] : -1;
+        return result;
     }
 }
 

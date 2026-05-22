@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using XNode;
@@ -18,6 +19,7 @@ public class DialogManager : MonoBehaviour {
     
     [SerializeField] private Image CharacterPortrait;
     [SerializeField] private TextMeshProUGUI CharacterName;
+    [SerializeField] private GameObject NameGameObject;
     // [SerializeField] private GameObject CharacterNameShadow;
     
     [SerializeField] private CanvasGroup DialogContentCanvasGroup;
@@ -25,12 +27,16 @@ public class DialogManager : MonoBehaviour {
     [SerializeField] private StoryReviewUI StoryReview;
 
     [SerializeField] private Button SkipButton;
+    [SerializeField] private GameObject ClickArea;
     // [SerializeField] private GameTipContainer TipContainer;
     
 	[Header("AutoPlay")]
 	[SerializeField] private Sprite AutoPlaySprite;
+    [SerializeField] private Sprite AutoPlayHighlightSprite;
     [SerializeField] private Sprite NotAutoPlaySprite;
+    [SerializeField] private Sprite NotAutoPlayHighlightSprite;
     [SerializeField] private Image AutoPlayImage;
+    [SerializeField] private Button AutoPlayButton;
     
     [Header("Background Character Portrait")]
     [SerializeField] private Transform CharacterPortraitContainer;
@@ -112,6 +118,7 @@ public class DialogManager : MonoBehaviour {
         DialogEventManager.Instance.AddEvent("GameOver", () => {
             GameManager.Instance.DungeonFail();
         });
+        this.enabled = false;
     }
 
     private IEnumerator Transition(bool show, bool quick) {
@@ -138,7 +145,14 @@ public class DialogManager : MonoBehaviour {
         }
     }
 
+    public void TransitionClickArea(bool show) {
+        if (this.ClickArea) this.ClickArea.SetActive(show);
+    }
+
     private void Update() {
+        if (!this.IsAutoPlay && Input.GetKeyDown(KeyCode.Space)) {
+            this.Next();
+        }
         if (!this.IsAutoPlay) return;
         if (this.CurrentDialogIsFinished) NextDialog();
     }
@@ -152,6 +166,7 @@ public class DialogManager : MonoBehaviour {
     }
     
     public void PlayNewDialog(DialogGraph dialog, bool isFullScreen = true) {
+        this.enabled = true;
         this.IsFullScreen = isFullScreen;
         this.PreBGM = AudioManager.Instance.GetCurrentMainMusic();
         AudioManager.Instance.StopFootstep();
@@ -206,13 +221,16 @@ public class DialogManager : MonoBehaviour {
     }
 
     public void DialogEnd() {
+        this.enabled = false;
         AudioManager.Instance.StopDialog();
         StartCoroutine(Transition(false, false));
         SetAutoPlay(false);
-
-        AudioManager.Instance.StopMainMusic();
-        if(this.PreBGM) AudioManager.Instance.SetMainMusic(this.PreBGM);
         
+        if (this.PreBGM && this.PreBGM != AudioManager.Instance.GetCurrentMainMusic()) {
+            AudioManager.Instance.StopMainMusic();
+            AudioManager.Instance.SetMainMusic(this.PreBGM);
+        }
+
         if (this.IsFullScreen) {
             CameraManager.Instance.MainCamera.cullingMask = ~LayerMask.GetMask("UI", "Map");
         }
@@ -255,11 +273,18 @@ public class DialogManager : MonoBehaviour {
 
     private void SetAutoPlay(bool isAutoPlay) {
         this.IsAutoPlay = isAutoPlay;
+        SpriteState currentSpriteState = AutoPlayButton.spriteState;
         if (this.IsAutoPlay) {
             this.AutoPlayImage.sprite = this.AutoPlaySprite;
+            currentSpriteState.disabledSprite = this.AutoPlaySprite;
+            currentSpriteState.highlightedSprite = this.AutoPlayHighlightSprite;
         } else {
             this.AutoPlayImage.sprite = this.NotAutoPlaySprite;
+            currentSpriteState.disabledSprite = this.NotAutoPlaySprite;
+            currentSpriteState.highlightedSprite = this.NotAutoPlayHighlightSprite;
         }
+        AutoPlayButton.spriteState = currentSpriteState;
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     private IEnumerator BackgroundImageCoroutine(Sprite newBG, bool isFadeIn, bool isFadeOut) {
@@ -314,6 +339,7 @@ public class DialogManager : MonoBehaviour {
         this.CharacterPortrait.color = new Color(1, 1, 1, data.CharacterPortrait ? 1.0f : 0.0f); 
         this.CharacterPortrait.sprite = data.CharacterPortrait;
         this.CharacterName.text = data.CharacterName;
+        this.NameGameObject.SetActive(!String.IsNullOrWhiteSpace(data.CharacterName));
         // this.CharacterNameShadow.SetActive(this.CharacterName.text != "");
 
         this.HasSound = data.DialogAudio;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class HealMinHealthPercentageState : AttackState{
 
-    [SerializeField] private float HealPercentage = 0.3f;
+    // [SerializeField] private float HealPercentage = 0.3f;
     
     protected override void Awake(){
         base.Awake();
@@ -12,11 +12,11 @@ public class HealMinHealthPercentageState : AttackState{
 
     public override bool CanAttack() {
         return base.CanAttack() && 
-               BattleManager.Instance.HasBeDamagedTarget(Controller.AttackTargetType);
+               BattleFindCharacterTools.HasBeDamagedTarget(Controller.AttackTargetType);
     }
 
     protected override void NormalAttack(){
-        Fighter target = BattleManager.Instance.FindMinPercentagePropertyHero(FighterProperty.Health, Controller.AttackTargetType);
+        Fighter target = BattleFindCharacterTools.FindMinHealthPercentageTarget(Controller.AttackTargetType);
         if (!target) return;
         Vector3 moveVec = target.Center.position - transform.position;
         Controller.Move.ChangeForward(moveVec.x);
@@ -26,7 +26,7 @@ public class HealMinHealthPercentageState : AttackState{
         EffectData healMsg = new EffectData{
             TargetType = Controller.AttackTargetType,
             Force = 0.0f,
-            Value = Controller.Health * HealPercentage * critical,
+            Value = Controller.Attack * critical,
             IsCritical = criticalTest
         };
         target.BeHealed(healMsg);

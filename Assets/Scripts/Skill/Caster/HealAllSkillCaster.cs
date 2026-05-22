@@ -7,7 +7,7 @@ public class HealAllSkillCaster : SkillCaster{
     [SerializeField] private TargetType Type;
 
     public override bool CanCastSkill() {
-        return base.CanCastSkill() && BattleManager.Instance.HasBeDamagedTarget(this.Type);
+        return base.CanCastSkill() && BattleFindCharacterTools.HasBeDamagedTarget(this.Type);
     }
 
     protected override void Cast(Transform attackTarget){

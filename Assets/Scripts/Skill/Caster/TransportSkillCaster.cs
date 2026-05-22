@@ -49,13 +49,7 @@ public class TransportSkillCaster : SkillCaster {
 
         Vector3 targetPos = this.OwnedFighter.transform.position;
         if (this.CurrentSkillCastCount <= 1) {
-            Fighter fighter = null;
-            if (OwnedFighter.AttackTargetType == TargetType.Enemy) {
-                fighter = BattleManager.Instance.FindFurthestEnemyTarget(OwnedFighter.transform.position);
-            } else {
-                fighter = BattleManager.Instance.FindFurthestHeroTarget(OwnedFighter.transform.position);
-            }
-        
+            Fighter fighter = BattleFindCharacterTools.FindFurthestTarget(OwnedFighter.AttackTargetType, OwnedFighter.transform.position);        
             Vector3 dir = OwnedFighter.AttackTargetType == TargetType.Enemy ? Vector3.right : Vector3.left;
             targetPos = fighter.transform.position + dir * OwnedFighter.AttackRadius;
             OwnedFighter.ChangePositionWithTrail(targetPos);

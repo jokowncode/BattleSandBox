@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RandomEnemyMagicCircleAttackState : MagicCircleAttackState{
@@ -12,11 +13,10 @@ public class RandomEnemyMagicCircleAttackState : MagicCircleAttackState{
     
     protected override void NormalAttack(){
         if(AttackParticle) AttackParticle.Play();
-        for (int i = 0; i < RandomEnemyCount; i++){
-            Fighter fighter = BattleManager.Instance.GetRandomFighter(Controller.AttackTargetType);
-            if (fighter) {
-                CastMagicCircle(fighter.transform, 1.0f / RandomEnemyCount);
-            }
+        List<Fighter> result = BattleFindCharacterTools.GetRandomCountFighter(Controller.AttackTargetType, this.RandomEnemyCount);
+        foreach (Fighter target in result) {
+            if (!target) continue;
+            CastMagicCircle(target.transform, 1.0f / result.Count);
         }
     }
 }

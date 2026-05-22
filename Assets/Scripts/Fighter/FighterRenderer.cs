@@ -19,9 +19,9 @@ public class FighterRenderer : MonoBehaviour{
         Renderer = GetComponent<SpriteRenderer>();
     }
 
-    public void ChangeColor(Color color){
+    public void ChangeColor(Color color, bool isFade){
         if (IsChangeColor) return;
-        StartCoroutine(ChangeColorCoroutine(color));
+        StartCoroutine(ChangeColorCoroutine(color, isFade));
     }
 
     public void Flash(){
@@ -57,11 +57,15 @@ public class FighterRenderer : MonoBehaviour{
         IsFlashing = false;
     }
     
-    private IEnumerator ChangeColorCoroutine(Color color){
+    private IEnumerator ChangeColorCoroutine(Color color, bool isFade){
         IsChangeColor = true;
         Color originColor = this.Renderer.color;
-        yield return FadeColorCoroutine(color, this.ChangeColorDuration / 2.0f);
-        yield return FadeColorCoroutine(originColor, this.ChangeColorDuration / 2.0f);
+        if (isFade) {
+            yield return FadeColorCoroutine(color, this.ChangeColorDuration / 2.0f);
+            yield return FadeColorCoroutine(originColor, this.ChangeColorDuration / 2.0f);
+        } else {
+            this.Renderer.color = color;
+        }
         IsChangeColor = false;
     }
 

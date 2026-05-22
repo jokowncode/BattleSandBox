@@ -24,21 +24,21 @@ public class ButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     
     public void OnPointerEnter(PointerEventData eventData){
         if (EnterSound){
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, EnterSound);
+            AudioManager.Instance.PlaySfx(EnterSound);
         }
         ButtonText.color = HoverColor;
     }
     
     public void OnPointerExit(PointerEventData eventData){
         if (ExitSound){
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, ExitSound);
+            AudioManager.Instance.PlaySfx(ExitSound);
         }
         ButtonText.color = NormalColor;
     }
 
     public void OnPointerClick(PointerEventData eventData){
         if (ClickSound){
-            AudioManager.Instance.PlaySfxAtPoint(this.transform.position, ClickSound);
+            AudioManager.Instance.PlaySfx(ClickSound);
         }
     }
 }

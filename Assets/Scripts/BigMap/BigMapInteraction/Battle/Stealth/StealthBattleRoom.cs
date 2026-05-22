@@ -25,6 +25,7 @@ public class StealthBattleRoom : BattleRoom {
     }
 
     private void GoToStartPoint() {
+        GameManager.Instance.ResetBattleFlag();
         if (this.InAreaPlayer) {
             this.InAreaPlayer.transform.position = this.CurrentPlayerDir < 0.0f ?
                 this.RightPoint.position : this.LeftPoint.position;
@@ -36,7 +37,7 @@ public class StealthBattleRoom : BattleRoom {
     }
 
     protected override void PlayerEnter() {
-        if (this.InAreaPlayer.Move.HorizontalDir.x == 0.0f) {
+        if (GameManager.Instance.IsBattleEnd) {
             this.CurrentPlayerDir = PlayerPrefs.GetFloat(GetName());
         } else {
             this.CurrentPlayerDir = Mathf.Sign(this.InAreaPlayer.Move.HorizontalDir.x);

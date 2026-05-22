@@ -76,7 +76,7 @@ public class HeroDetailUI : MonoBehaviour {
         PhysicsAttackChange.text = GetPropertyDiff(hero.PhysicsAttack, hero.InitialPhysicsAttack);
         MagicAttackChange.text = GetPropertyDiff(hero.MagicAttack, hero.InitialMagicAttack);
         CriticalChange.text = GetPropertyDiff(hero.Critical, hero.InitialCritical);
-        SpeedChange.text = GetPropertyDiff(hero.AttackSpeed, 1.0f);
+        SpeedChange.text = GetPropertyDiff(hero.EffectiveCooldownPercentage, hero.InitialCooldownPercentage);
         if (hero.FighterSkillCaster) {
             CooldownChange.text = GetPropertyDiff(hero.FighterSkillCaster.GetCurrentData(SkillProperty.Cooldown),
                 hero.FighterSkillCaster.GetInitialData(SkillProperty.Cooldown));
