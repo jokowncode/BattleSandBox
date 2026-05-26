@@ -43,7 +43,7 @@ public class CameraManager : MonoBehaviour {
     }
     
     public void ShakeCamera(float duration, float magnitude, Vector3 magnitudeDir, float late = 0.0f){
-        if (IsShake) return;
+        if (IsShake || !this.MainCamera) return;
         StartCoroutine(ShakeCoroutine(duration, magnitude, late, magnitudeDir));
     }
 }
