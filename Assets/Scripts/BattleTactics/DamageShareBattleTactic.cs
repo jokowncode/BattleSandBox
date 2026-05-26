@@ -6,8 +6,8 @@ public class DamageShareBattleTactic : BattleTactic {
     }
 
     public void StopTactic(Hero hero1, Hero hero2) {
-        if (hero1) hero1.ShareDamage(null);
-        if (hero2) hero2.ShareDamage(null);
+        if (hero1) hero1.RemoveShareDamage(hero2);
+        if (hero2) hero2.RemoveShareDamage(hero1);
     }
 
     public string GetDescription() {

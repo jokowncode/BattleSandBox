@@ -222,11 +222,14 @@ public class Fighter : StateMachineController{
             UpdateShieldBar();
         }
 
-        if (this is Hero hero && hero.ShareDamageHero) {
-            finalDamage /= 2;
-            hero.ShareDamageHero.BeDamaged(new EffectData() {
-                Value = finalDamage
-            });
+        if (this is Hero hero && hero.ShareDamageHeroes && hero.ShareDamageHeroes.Count != 0) {
+            hero.ShareDamageHeroes.RemoveWhere(h => h is null);
+            finalDamage /= hero.ShareDamageHeroes.Count;
+            foreach (Hero h in hero.ShareDamageHeroes) {
+                h.BeDamaged(new EffectData() {
+                    Value = finalDamage
+                });    
+            }
         }
 
         ShowDamage(finalDamage, effectData.IsCritical);

@@ -30,7 +30,8 @@ public class Hero : Fighter {
     // public int MergeGroupIndex { get; set; } = -1;
     public bool IsOriginExist { get; set; } = false;
 
-    public Hero ShareDamageHero { get; private set; } = null;
+    public HashSet<Hero> ShareDamageHeroes {get; private set;} = new();
+    
     public bool IsMerge { get; set; } = false;
 
     protected override void Awake(){
@@ -58,7 +59,13 @@ public class Hero : Fighter {
     }
 
     public void ShareDamage(Hero hero) {
-        this.ShareDamageHero = hero;
+        if (hero == this) return ;
+        this.ShareDamageHeroes.Add(hero);
+    }
+
+    public void RemoveShareDamage(Hero hero) {
+        if (!hero || !this.ShareDamageHeroes.Contains(hero)) return ;
+        this.ShareDamageHeroes.Remove(hero);
     }
 
     public void StartRevengeVow(Hero hero) {
