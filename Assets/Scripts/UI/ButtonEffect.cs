@@ -12,6 +12,9 @@ public class ButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     [SerializeField] private Color NormalColor = Color.white;
     [SerializeField] private Color HoverColor = Color.yellow;
 
+    [SerializeField] private ButtonTheme Theme;
+    private ButtonTheme _Theme => Theme ? Theme : ButtonThemeDefaultProvider.DefaultButtonTheme;
+
     private TextMeshProUGUI ButtonText;
     
     private void Awake(){
@@ -19,26 +22,26 @@ public class ButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     }
 
     void Start(){
-        if (ButtonText) ButtonText.color = NormalColor;
+        if (ButtonText) ButtonText.color = _Theme?.NormalColor;
     }
     
     public void OnPointerEnter(PointerEventData eventData){
-        if (EnterSound){
-            AudioManager.Instance.PlaySfx(EnterSound);
+        if (_Theme?.EnterSound){
+            AudioManager.Instance.PlaySfx(_Theme?.EnterSound);
         }
-        if (ButtonText) ButtonText.color = HoverColor;
+        if (ButtonText) ButtonText.color = _Theme?.HoverColor;
     }
     
     public void OnPointerExit(PointerEventData eventData){
-        if (ExitSound){
-            AudioManager.Instance.PlaySfx(ExitSound);
+        if (_Theme?.ExitSound){
+            AudioManager.Instance.PlaySfx(_Theme?.ExitSound);
         }
-        if (ButtonText) ButtonText.color = NormalColor;
+        if (ButtonText) ButtonText.color = _Theme?.NormalColor;
     }
 
     public void OnPointerClick(PointerEventData eventData){
-        if (ClickSound){
-            AudioManager.Instance.PlaySfx(ClickSound);
+        if (_Theme?.ClickSound){
+            AudioManager.Instance.PlaySfx(_Theme?.ClickSound);
         }
     }
 }
