@@ -10,6 +10,9 @@ public class BuffManager : MonoBehaviour {
     public static BuffManager Instance;
 
     private readonly Dictionary<Fighter, Dictionary<CascadeBuffType, int>> FighterBuffs = new();
+
+    private float DebuffAdditionalPercentage = 0.0f;
+    private int DebuffAdditionalTimes = 0;
     
     private void Awake() {
         if (Instance != null) {
@@ -19,9 +22,19 @@ public class BuffManager : MonoBehaviour {
         Instance = this;
     }
 
+    public void SetDebuffAdditional (float percentage, int times, bool isUp) {
+        int sign = isUp ? 1 : -1;
+        this.DebuffAdditionalPercentage += sign * percentage;
+        this.DebuffAdditionalTimes += sign * times;
+    }
+
     public void AddBuff(Fighter caster, Fighter target, BuffData buffData, int count = 1) {
         if (!target || target.IsDead) return;
         if (!caster || caster.IsDead) return;
+
+        if (buffData.IsDebuff && Unity.Random.value <= Mathf.Clamp(this.DebuffAdditionalPercentage, 0.0f, 1.0f)) {
+            count += count * this.DebuffAdditionalTimes;
+        }
 
         for (int i = 0; i < count; i++) {
             if (buffData.CascadeType != CascadeBuffType.None && buffData.LimitCount > 0)  {

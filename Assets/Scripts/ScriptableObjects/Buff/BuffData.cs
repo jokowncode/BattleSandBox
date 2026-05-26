@@ -7,6 +7,7 @@ public class BuffData : ScriptableObject {
 
     public CascadeBuffType CascadeType = CascadeBuffType.None;
     public int LimitCount = -1; // Buff最大叠加层数（-1表示不限）
+    public bool IsDebuff = false; 
     
     [Header("时间设置")]
     public float Duration = 5f;       // Buff持续时间 （-1表示不限时间）
