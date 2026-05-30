@@ -71,9 +71,10 @@ public class NewbieBattleInstruction : MonoBehaviour {
             return;
         }
 
-        if (IsSatisfyCondition()) {
+        GameObject instructionGo = this.transform.GetChild(CurrentInstructionIndex).gameObject;
+        if (!instructionGo.activeSelf && IsSatisfyCondition()) {
             this.Transition(true);
-            this.transform.GetChild(CurrentInstructionIndex).gameObject.SetActive(true);
+            instructionGo.SetActive(true);
         }
     }
 
