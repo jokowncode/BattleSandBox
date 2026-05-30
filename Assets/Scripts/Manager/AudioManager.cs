@@ -21,6 +21,9 @@ public class AudioManager : MonoBehaviour{
     private float MainMusicVolumeBeforeDialog;
     private bool DialogIsDecreaseMainMusicVolume = false;
 
+    private readonly float SfxCooldownTime = 0.1f;
+    private float LastSfxTime = -1.0f;
+
     public float SettingMainMusicVolume {get; private set;} = 1.0f;
     public float SettingSfxVolume {get; private set;} = 1.0f;
     public float SettingDialogVolume {get; private set;} = 1.0f;
@@ -86,7 +89,7 @@ public class AudioManager : MonoBehaviour{
     }
     
     private IEnumerator FadeCoroutine(float newVolume, float duration = 0.5f){
-        float startVolume = this.MainMusicVolume;
+        float startVolume = this.MainMusicVolume / this.SettingMainMusicVolume; 
         for (float t = 0.0f; t < duration; t += Time.deltaTime){
             this.MainMusicVolume = Mathf.Lerp(startVolume, newVolume, t / duration);
             yield return null;
@@ -149,7 +152,14 @@ public class AudioManager : MonoBehaviour{
     }
 
     public void PlaySfx(AudioClip clip){
-        this.FootstepAudioSource.PlayOneShot(clip, 0.5f);
+        if (this.LastSfxTime >= 0.0f && Time.unscaledTime - this.LastSfxTime < this.SfxCooldownTime) {
+            return;
+        }
+        this.LastSfxTime = Time.unscaledTime;
+        Vector3 pos = CameraManager.Instance && CameraManager.Instance.MainCamera
+            ? CameraManager.Instance.MainCamera.transform.position
+            : this.transform.position;
+        AudioSource.PlayClipAtPoint(clip, pos, this.SfxVolume * 0.7f);
     }
 
     public void PlayFootstep(){
