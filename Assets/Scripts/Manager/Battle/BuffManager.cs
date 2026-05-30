@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BuffManager : MonoBehaviour {
 
@@ -32,7 +33,7 @@ public class BuffManager : MonoBehaviour {
         if (!target || target.IsDead) return;
         if (!caster || caster.IsDead) return;
 
-        if (buffData.IsDebuff && Unity.Random.value <= Mathf.Clamp(this.DebuffAdditionalPercentage, 0.0f, 1.0f)) {
+        if (buffData.IsDebuff && Random.value <= Mathf.Clamp(this.DebuffAdditionalPercentage, 0.0f, 1.0f)) {
             count += count * this.DebuffAdditionalTimes;
         }
 

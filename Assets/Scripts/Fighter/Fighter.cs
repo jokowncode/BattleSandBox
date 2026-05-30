@@ -222,7 +222,7 @@ public class Fighter : StateMachineController{
             UpdateShieldBar();
         }
 
-        if (this is Hero hero && hero.ShareDamageHeroes && hero.ShareDamageHeroes.Count != 0) {
+        if (this is Hero hero && hero.ShareDamageHeroes != null && hero.ShareDamageHeroes.Count != 0) {
             hero.ShareDamageHeroes.RemoveWhere(h => h is null);
             finalDamage /= hero.ShareDamageHeroes.Count;
             foreach (Hero h in hero.ShareDamageHeroes) {
