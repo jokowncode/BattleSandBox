@@ -189,12 +189,8 @@ public class Hero : Fighter {
     }
 
     public string GetPassiveEntryDesc(){
-        string desc = "";
-        foreach (PassiveEntry entry in HeroSelfPassiveEntries){
-            if (!entry) continue;
-            desc += $"·{entry.Data.Description};\n";
-        }
-        return desc;
+        if (this.HeroSelfPassiveEntries.Length == 0) return "";
+        return this.HeroSelfPassiveEntries[0].Data.Description;
     }
     
 }
