@@ -179,7 +179,7 @@ public class GoodsWarehouseManager : MonoBehaviour {
 
         if (!result) {
             if (this.UseConsumeGoodsErrorSfx) {
-                AudioManager.Instance.PlaySfx(this.UseConsumeGoodsErrorSfx);
+                AudioManager.Instance.PlayUI(this.UseConsumeGoodsErrorSfx);
             }
             return false;
         }

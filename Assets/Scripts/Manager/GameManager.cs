@@ -76,8 +76,9 @@ public class GameManager : MonoBehaviour{
         this.IsTrainBattle = isTrain;
         ResetBattleFlag();
         if (showStartUI) {
-            if(GoToBattleSfx)
+            if (GoToBattleSfx) {
                 AudioManager.Instance.PlaySfx(this.GoToBattleSfx);
+            }
             BigMapUIManager.Instance.ShowBattleStartUI(SceneType.BaseBattleScene, battleData.BattleBannarBackground, battleData.BattleImage, battleData.BattleText);
         } else {
             SceneChangeManager.Instance.GoToScene(SceneType.BaseBattleScene);   

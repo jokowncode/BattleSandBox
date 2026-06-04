@@ -75,7 +75,7 @@ public class AudioManager : MonoBehaviour{
     }
 
     public void PlayErrorSfx() {
-        if(this.ErrorSfx) this.PlaySfx(this.ErrorSfx);
+        if(this.ErrorSfx) this.PlayUI(this.ErrorSfx);
     }
 
     public void FadeMainMusic(AudioClip newClip, float duration = 1.0f, float newVolume = 1.0f) {
@@ -151,7 +151,7 @@ public class AudioManager : MonoBehaviour{
         this.DialogAudioSource.Stop();
     }
 
-    public void PlaySfx(AudioClip clip){
+    public void PlayUI(AudioClip clip) {
         if (this.LastSfxTime >= 0.0f && Time.unscaledTime - this.LastSfxTime < this.SfxCooldownTime) {
             return;
         }
@@ -159,7 +159,11 @@ public class AudioManager : MonoBehaviour{
         Vector3 pos = CameraManager.Instance && CameraManager.Instance.MainCamera
             ? CameraManager.Instance.MainCamera.transform.position
             : this.transform.position;
-        AudioSource.PlayClipAtPoint(clip, pos, this.SfxVolume * 0.7f);
+        AudioSource.PlayClipAtPoint(clip, pos, this.SfxVolume * 0.3f);
+    }
+
+    public void PlaySfx(AudioClip clip) {
+        this.FootstepAudioSource.PlayOneShot(clip);
     }
 
     public void PlayFootstep(){
@@ -170,7 +174,7 @@ public class AudioManager : MonoBehaviour{
     }
 
     public void StopFootstep(){
-        this.FootstepAudioSource.Stop();
+        // this.FootstepAudioSource.Stop();
         this.FootstepAudioSource.clip = null;
     }
 
