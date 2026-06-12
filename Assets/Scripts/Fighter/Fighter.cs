@@ -223,9 +223,9 @@ public class Fighter : StateMachineController{
         }
 
         if (this is Hero hero && hero.ShareDamageHeroes != null && hero.ShareDamageHeroes.Count != 0) {
-            hero.ShareDamageHeroes.RemoveWhere(h => h is null);
+            hero.ShareDamageHeroes.ClearNullKey();
             finalDamage /= hero.ShareDamageHeroes.Count;
-            foreach (Hero h in hero.ShareDamageHeroes) {
+            foreach (Hero h in hero.ShareDamageHeroes.Keys) {
                 h.BeDamaged(new EffectData() {
                     Value = finalDamage
                 });    

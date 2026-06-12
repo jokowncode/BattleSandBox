@@ -30,7 +30,7 @@ public class Hero : Fighter {
     // public int MergeGroupIndex { get; set; } = -1;
     public bool IsOriginExist { get; set; } = false;
 
-    public HashSet<Hero> ShareDamageHeroes {get; private set;} = new();
+    public Dictionary<Hero, int> ShareDamageHeroes {get; private set;} = new();
     
     public bool IsMerge { get; set; } = false;
 
@@ -47,7 +47,6 @@ public class Hero : Fighter {
     }
     
     private void OnDestroy() {
-        BattleManager.Instance.OnBattleStart -= UpdateByFighterTypeCountPropertyChange;
         if (!IsSummon) {
             SaveDataManager.Instance.SetHeroHealth(this.Name, Mathf.Max(this.InBattleHealth, 0.0f));
         }
@@ -60,12 +59,17 @@ public class Hero : Fighter {
 
     public void ShareDamage(Hero hero) {
         if (hero == this) return ;
-        this.ShareDamageHeroes.Add(hero);
+        if (!this.ShareDamageHeroes.TryAdd(hero)) {
+            this.ShareDamageHeroes[hero] += 1;
+        }
     }
 
     public void RemoveShareDamage(Hero hero) {
         if (!hero || !this.ShareDamageHeroes.Contains(hero)) return ;
-        this.ShareDamageHeroes.Remove(hero);
+        this.ShareDamageHeroes[hero] -= 1;
+        if (this.ShareDamageHeroes[hero] <= 0) {
+            this.ShareDamageHeroes.Remove(hero);    
+        }
     }
 
     public void StartRevengeVow(Hero hero) {
@@ -152,6 +156,7 @@ public class Hero : Fighter {
     }
 
     public void UpdateByFighterTypeCountPropertyChange() {
+        BattleManager.Instance.OnBattleStart -= UpdateByFighterTypeCountPropertyChange;
         foreach (PassiveEntry passiveEntry in SelfPassiveEntries) {
             if (passiveEntry is not (HeroPropertyByFighterTypeCountPassiveEntry
                 or SkillPropertyByFighterTypeCountPassiveEntry)) continue;
