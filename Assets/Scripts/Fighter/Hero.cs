@@ -58,6 +58,7 @@ public class Hero : Fighter {
     }
 
     public void ShareDamage(Hero hero) {
+        if (!hero) return ;
         if (hero == this) return ;
         if (!this.ShareDamageHeroes.TryAdd(hero)) {
             this.ShareDamageHeroes[hero] += 1;
@@ -69,6 +70,18 @@ public class Hero : Fighter {
         this.ShareDamageHeroes[hero] -= 1;
         if (this.ShareDamageHeroes[hero] <= 0) {
             this.ShareDamageHeroes.Remove(hero);    
+        }
+    }
+
+    public void ShareDamageList(List<Hero> heroes) {
+        foreach (Hero h in heroes) {
+            ShareDamage(h);
+        }
+    }
+
+    public void RemoveShareDamageList(List<Hero> heroes) {
+        foreach (Hero h in heroes) {
+            RemoveShareDamage(h);
         }
     }
 
