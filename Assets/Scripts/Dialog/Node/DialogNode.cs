@@ -3,6 +3,18 @@ using UnityEngine;
 using UnityEngine.Events;
 using XNode;
 
+[Serializable]
+public struct OptionEndingFlagsData{
+    public EndingFlags Flag;
+    public int Value;  
+}
+
+[Serializable]
+public struct OptionData {
+    public string OptionContent;
+    public OptionEndingFlagsData[] EndingFlagsDatas;
+}
+
 public class DialogNode : Node {
 
     [Input] public Node PreNode;
@@ -43,7 +55,7 @@ public class DialogNode : Node {
     public string BeforeDialogInvokeAction;
     public string AfterDialogInvokeAction;
     
-    [Output(dynamicPortList = true)] public string[] Options;
+    [Output(dynamicPortList = true)] public OptionData[] Options;
     [Output] public Node NextDialog;
     
     public override object GetValue(NodePort port) {

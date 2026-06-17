@@ -164,6 +164,43 @@ public class DialogManager : MonoBehaviour {
         }
         return null;
     }
+
+    private bool GetNextDialogNode(NodePort port, out DialogNode dialogNode) {
+        dialogNode = null;
+        if (port == null) return false;
+
+        if (port.node is DialogNode node) {
+            dialogNode = node;
+            return true;
+        }
+
+        if(port.node is EndingFlagsConditionNode conditionNode) {
+            int value = SaveDataManager.Instance.GetCurrentEndingFlagsValue(conditionNode.ReferenceFlags);
+            bool flag;
+            switch (conditionNode.Comparator) {
+            case 等于:
+                flag = value == conditionNode.CompareValue;
+                break;
+            case 小于:
+                flag = value < conditionNode.CompareValue;
+                break;
+            case 小于等于:
+                flag = value <= conditionNode.CompareValue;
+                break;
+            case 大于:
+                flag = value > conditionNode.CompareValue;
+                break;
+            case 大于等于:
+                flag = value >= conditionNode.CompareValue;
+                break;    
+            }
+            NodePort nextPort = conditionNode.GetOutputPort(flag ? "TrueNode" : "FalseNode").Connection;
+            bool result = GetNextDialogNode(nextPort, out DialogNode nextNode);
+            dialogNode = nextNode;
+            return result;
+        }
+        return false;
+    }
     
     public void PlayNewDialog(DialogGraph dialog, bool isFullScreen = true) {
         this.enabled = true;
@@ -178,7 +215,7 @@ public class DialogManager : MonoBehaviour {
         this.SkipButton.gameObject.SetActive(startNode.CanSkip);
 
         NodePort startPort = startNode.GetOutputPort("NextDialog").Connection;
-        if (startPort == null || startPort.node is not DialogNode dialogNode) return;
+        if (startPort == null || !GetNextDialogNode(startPort, out DialogNode dialogNode)) return;
         
         this.CurrentDialogNode = dialogNode;
         this.StoryReview.Reset();
@@ -211,7 +248,7 @@ public class DialogManager : MonoBehaviour {
         }
         
         NodePort nextPort = this.CurrentDialogNode.GetOutputPort("NextDialog").Connection;
-        if (nextPort == null || nextPort.node is not DialogNode dialogNode) {
+        if (nextPort == null || !GetNextDialogNode(nextPort, out DialogNode dialogNode)) {
             DialogEnd();
             return;
         }
@@ -403,19 +440,24 @@ public class DialogManager : MonoBehaviour {
         }
     }
 
-    public void ClickOption(int index, string optionText) {
-        
+    public void ClickOption(int index, OptionData data) {
         NodePort optionPort = this.CurrentDialogNode.GetPort($"Options {index}").Connection;
-        if (optionPort == null || optionPort.node is not DialogNode dialogNode) {
+        if (optionPort == null || !GetNextDialogNode(optionPort, out DialogNode dialogNode)) {
             DialogEnd();
             return;
         }
 
         this.CurrentDialogNode = dialogNode;
         this.IsChooseOption = true;
-        this.StoryReview.AddDialogOptionHistory(optionText);
+        this.StoryReview.AddDialogOptionHistory(data.OptionContent);
         AudioManager.Instance.StopDialog();
         SetDialog();
+
+        if (data.EndingFlagsDatas != null && data.EndingFlagsDatas.Length != 0) {
+            foreach (OptionEndingFlagsData flagDatas in data.EndingFlagsDatas) {
+                SaveDataManager.Instance.AddCurrentEndingFlagsValue(flagDatas.Flag, flagDatas.Value);
+            }
+        }
     }
 
     public void TransitionPause(bool pause) {

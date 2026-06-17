@@ -14,10 +14,10 @@ public class DialogOption : MonoBehaviour {
         this.OptionButton = this.GetComponent<Button>();
     }
 
-    public void SetOptionData(string text, int index) {
-        this.OptionText.text = text;
+    public void SetOptionData(OptionData data, int index) {
+        this.OptionText.text = data.OptionContent;
         this.OptionButton.onClick.AddListener(() => {
-            DialogManager.Instance.ClickOption(index, this.OptionText.text);
+            DialogManager.Instance.ClickOption(index, data);
         });    
     }
     

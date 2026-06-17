@@ -41,6 +41,9 @@ public class SerializableDictionary<TKey, TValue> : ISerializationCallbackReceiv
     public bool ContainsKey(TKey key) => dictionary.ContainsKey(key);
     public bool Remove(TKey key) => dictionary.Remove(key);
     public bool TryGetValue(TKey key, out TValue value) => dictionary.TryGetValue(key, out value);
+
+    public TValue GetValueOrDefault(TKey key, TValue defaultValue) => dictionary.GetValueOrDefault(key, defaultValue);
+
     public void Clear()
     {
         dictionary.Clear();

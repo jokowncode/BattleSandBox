@@ -25,6 +25,7 @@ public class PlayerSaveData {
     public SerializableDictionary<string, int> OwnedConsumedGoods = new();
     [SerializeReference] public List<string> OwnedClues = new();
     public SerializableDictionary<string, string> StoreGoods = new();
+    public SerializableDictionary<EndingFlags, int> EndingFlagsData = new();
 }
 
 
@@ -345,6 +346,16 @@ public class SaveDataManager : MonoBehaviour {
 
     public void RecoverAllHeroHealth() {
         this.PlayerData.DungeonHeroHealth.Clear();
+    }
+
+    public int GetCurrentEndingFlagsValue(EndingFlags flags) {
+        return this.PlayerData.EndingFlagsData.GetValueOrDefault(flags, 0);
+    }
+
+    public void AddCurrentEndingFlagsValue(EndingFlags flags, int value) {
+        if (!this.PlayerData.EndingFlagsData.TryAdd(flags, value)) {
+            this.PlayerData.EndingFlagsData[flags] += value;
+        }
     }
 }
 
