@@ -15,7 +15,7 @@ public struct OptionData {
     public OptionEndingFlagsData[] EndingFlagsDatas;
 }
 
-public class DialogNode : Node {
+public class DialogNode : Node, ISerializationCallbackReceiver {
 
     [Input] public Node PreNode;
 
@@ -55,11 +55,24 @@ public class DialogNode : Node {
     public string BeforeDialogInvokeAction;
     public string AfterDialogInvokeAction;
     
+    [FormerlySerializedAs("Options")]
+    [SerializeField, HideInInspector]
+    private string[] _legacyOptions;
+
     [Output(dynamicPortList = true)] public OptionData[] Options;
     [Output] public Node NextDialog;
     
     public override object GetValue(NodePort port) {
         return null;
+    }
+
+    public void OnBeforeSerialize() { }
+    public void OnAfterDeserialize() {
+        if (_legacyOptions != null && _legacyOptions.Length > 0 &&
+           (Options == null || Options.Length == 0)) {
+            Options = _legacyOptions.Select(s => new OptionData { Text = s }).ToArray();
+            _legacyOptions = null;
+        }
     }
 }
 
