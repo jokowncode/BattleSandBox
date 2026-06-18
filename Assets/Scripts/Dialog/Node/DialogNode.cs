@@ -68,9 +68,8 @@ public class DialogNode : Node, ISerializationCallbackReceiver {
 
     public void OnBeforeSerialize() { }
     public void OnAfterDeserialize() {
-        if (_legacyOptions != null && _legacyOptions.Length > 0 &&
-           (Options == null || Options.Length == 0)) {
-            Options = _legacyOptions.Select(s => new OptionData { Text = s }).ToArray();
+        if (_legacyOptions != null && _legacyOptions.Length > 0) {
+            Options = _legacyOptions.Select(s => new OptionData { OptionContent = s }).ToArray();
             _legacyOptions = null;
         }
     }
