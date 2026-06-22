@@ -37,15 +37,7 @@ public class SummonSkillCaster : SkillCaster{
 
     private Vector3 GetSummonPetPosition(int index) {
         float angle = ((index - 1) * Angle) % 360f;
-        return CalculatePosition(this.OwnedFighter.transform.position, angle, this.Radius);
-    }
-    
-    private Vector3 CalculatePosition(Vector3 center, float angle, float radius) {
-        float rad = angle * Mathf.Deg2Rad;
-        float x = center.x + radius * Mathf.Cos(rad);
-        float z = center.z + radius * Mathf.Sin(rad);
-        NavMeshTools.GetNavMeshPosition(new Vector3(x, center.y, z), 3.0f, out Vector3 finalPos);
-        return finalPos;
+        return MathTools.CalculateCirclePosition(this.OwnedFighter.transform.position, angle, this.Radius);
     }
 
     private void SummonPet() {
