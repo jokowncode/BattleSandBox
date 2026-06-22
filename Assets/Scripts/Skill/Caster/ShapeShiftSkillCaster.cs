@@ -11,34 +11,46 @@ public class ShapeShiftSkillCaster : SkillCaster {
     [SerializeField] private float Duration = 10.0f;
     [SerializeField] private BuffData ShapeShiftBuff;
 
-    private BuffData CurrentBuffData;
     private bool IsShapeShift;
-    
-    protected override void Awake() {
-        base.Awake();
-        if (ShapeShiftBuff) {
-            this.CurrentBuffData = Instantiate(ShapeShiftBuff);
-            this.CurrentBuffData.Duration = this.Duration;
-        }
-    }
+    private float RemainTime;
+    private BuffData CurrentShapeShiftBuffData;
 
     protected override void Cast(Transform attackTarget) {
+        if (IsShapeShift) return ;
+        StopAllCotoutine();
+        StartCoroutine(ShapeShiftCoroutine());
+    }
+
+    private IEnumerator ShapeShiftCoroutine() {
         IsShapeShift = true;
         BeforeShapeShiftRenderer.SetActive(false);
         AfterShapeShiftRenderer.SetActive(true);
         this.OwnedFighter.GetRendererComponent();
         this.OwnedFighter.AnimationEvent.SkillEnd();
-        if(ShapeShiftBuff) BuffManager.Instance.AddBuff(this.OwnedFighter, this.OwnedFighter, this.CurrentBuffData);
-        float delay = ShapeShiftBuff ? 0.2f : 0.0f;
-        Invoke(nameof(Recover), this.Duration + delay);
-    }
+        if(ShapeShiftBuff) {
+            this.CurrentShapeShiftBuffData = Instantiate(ShapeShiftBuff);
+            this.CurrentShapeShiftBuffData.Duration = this.Duration;
+            BuffManager.Instance.AddBuff(this.OwnedFighter, this.OwnedFighter, this.CurrentShapeShiftBuffData);
+        }
 
-    private void Recover() {
-        IsShapeShift = false;
+        this.RemainTime = this.Duration + (this.ShapeShiftBuff ? 0.2f : 0.0f);
+        while (this.RemainTime > 0.0f) {
+            yield return null;    
+            this.RemainTime -= Time.deltaTime;
+        }
+
         AfterShapeShiftRenderer.SetActive(false);
         BeforeShapeShiftRenderer.SetActive(true);
         this.OwnedFighter.GetRendererComponent();
         this.OwnedFighter.ResetCurrentState();
+        IsShapeShift = false;
+    }
+
+    public void ExtendShapeShiftTime(float extendTime) {
+        if (!this.IsShapeShift) return ;
+        extendTime = Mathf.max(extendTime, 0.0f);
+        this.RemainTime += extendTime;
+        if(this.CurrentShapeShiftBuffData) this.CurrentShapeShiftBuffData.Duration += extendTime;
     }
 
     public override bool CanCastSkill() {
