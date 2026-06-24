@@ -32,6 +32,7 @@ public class ShapeShiftSkillCaster : SkillCaster {
             this.CurrentShapeShiftBuffData.Duration = this.Duration;
             BuffManager.Instance.AddBuff(this.OwnedFighter, this.OwnedFighter, this.CurrentShapeShiftBuffData);
         }
+        this.BeforeShapeShift();
 
         this.RemainTime = this.Duration + (this.ShapeShiftBuff ? 0.2f : 0.0f);
         while (this.RemainTime > 0.0f) {
@@ -39,6 +40,7 @@ public class ShapeShiftSkillCaster : SkillCaster {
             this.RemainTime -= Time.deltaTime;
         }
 
+        this.AfterShapeShift();
         AfterShapeShiftRenderer.SetActive(false);
         BeforeShapeShiftRenderer.SetActive(true);
         this.OwnedFighter.GetRendererComponent();
@@ -46,7 +48,10 @@ public class ShapeShiftSkillCaster : SkillCaster {
         IsShapeShift = false;
     }
 
-    public void ExtendShapeShiftTime(float extendTime) {
+    protected virtual void BeforeShapeShift(){}
+    protected virtual void AfterShapeShift(){}
+
+    protected void ExtendShapeShiftTime(float extendTime) {
         if (!this.IsShapeShift) return ;
         extendTime = Mathf.max(extendTime, 0.0f);
         this.RemainTime += extendTime;

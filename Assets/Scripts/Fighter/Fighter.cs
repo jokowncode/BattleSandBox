@@ -66,6 +66,8 @@ public class Fighter : StateMachineController{
     public float TotalDamage {get; set;}    
 #endif
 
+    public Action OnKillOther;
+
     protected virtual void Awake(){
         GetRendererComponent();
         this.OriginFighterSkillCaster = GetComponentInChildren<SkillCaster>();
@@ -182,6 +184,10 @@ public class Fighter : StateMachineController{
 
     private void OnTargetDead(Fighter fighter) {
         this.AttackTarget = null;
+        if (this.CurrentState is AttackState || this.CurrentState is SkillState) {
+            // TODO: Not Absolute
+            this.OnKillOther?.Invoke();
+        }
         if (!this.IsDisappear) {
             this.ChangeState(FighterPatrol);
         }
