@@ -21,14 +21,7 @@ public class HealMinHealthPercentageState : AttackState{
         Vector3 moveVec = target.Center.position - transform.position;
         Controller.Move.ChangeForward(moveVec.x);
 
-        bool criticalTest = Random.value < Controller.Critical / 100.0f;
-        float critical = criticalTest ? 1.5f : 1.0f;
-        EffectData healMsg = new EffectData{
-            TargetType = Controller.AttackTargetType,
-            Force = 0.0f,
-            Value = Controller.Attack * critical,
-            IsCritical = criticalTest
-        };
+        EffectData healMsg = GetEffectData();
         target.BeHealed(healMsg);
 #if DEBUG_MODE
         Debug.Log($"{this.gameObject.name} Heal : {healMsg.Value}");

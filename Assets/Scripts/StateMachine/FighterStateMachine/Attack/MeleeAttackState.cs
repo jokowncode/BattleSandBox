@@ -18,14 +18,7 @@ public class MeleeAttackState : AttackState{
             AttackParticle.Play();
         }
 
-        bool criticalTest = Random.value < Controller.Critical / 100.0f;
-        float critical = criticalTest ? 1.5f : 1.0f;
-        EffectData damageMsg = new EffectData{
-            Value = (Controller.PhysicsAttack + Controller.MagicAttack) * critical,
-            Force = Controller.Force,
-            TargetType = Controller.AttackTargetType,
-            IsCritical = criticalTest
-        };
+        EffectData damageMsg = GetEffectData();
         Controller.AttackTarget?.BeDamaged(damageMsg);
 #if DEBUG_MODE
         Debug.Log($"{this.gameObject.name} Attack(Melee) : {damageMsg.Value}");

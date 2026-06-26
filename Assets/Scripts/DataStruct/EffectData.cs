@@ -6,5 +6,6 @@ public struct EffectData {
     public TargetType TargetType;
     public bool IsCritical;
     public bool NotShowParticle;
+    public Fighter Caster;
 }
 

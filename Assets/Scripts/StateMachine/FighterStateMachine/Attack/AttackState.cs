@@ -1,6 +1,7 @@
 ﻿
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public abstract class AttackState : FighterState{
     
@@ -96,6 +97,18 @@ public abstract class AttackState : FighterState{
             return;
         }
         NormalAttack();
+    }
+
+    protected EffectData GetEffectData() {
+        bool criticalTest = Random.value < Controller.Critical / 100.0f;
+        float critical = criticalTest ? 1.5f : 1.0f;
+        return new EffectData() {
+            Value = Controller.Attack * critical,
+            Force = Controller.Force,
+            TargetType = Controller.AttackTargetType,
+            IsCritical = criticalTest,
+            Caster = this.Controller
+        };
     }
 
     protected virtual void NormalAttack() { }

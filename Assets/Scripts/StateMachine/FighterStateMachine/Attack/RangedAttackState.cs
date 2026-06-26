@@ -24,14 +24,7 @@ public class RangedAttackState : AttackState {
         bullet.transform.position = attackPos;
         bullet.transform.rotation = Quaternion.LookRotation(attackVec);
         
-        bool criticalTest = Random.value < Controller.Critical / 100.0f;
-        float critical = criticalTest ? 1.5f : 1.0f;
-        EffectData damageMsg = new EffectData{
-            Value = (Controller.PhysicsAttack + Controller.MagicAttack) * critical,
-            Force = Controller.Force,
-            TargetType = Controller.AttackTargetType,
-            IsCritical = criticalTest
-        };
+        EffectData damageMsg = GetEffectData();
         bullet.SetDamageMessage(damageMsg);
         bullet.SetTarget(this.AttackTarget.Center);
 #if DEBUG_MODE

@@ -21,7 +21,8 @@ public class SingleTargetSkillCaster : SkillCaster {
             Force = this.Data.Force,
             Value = value,
             Duration = this.Data.Duration,
-            IsCritical = isCritical
+            IsCritical = isCritical,
+            Caster = this.OwnedFighter
         }, OwnedFighter.Type);
         ApplySkillStart(delivery.gameObject, delivery.EffectData.Value);
         delivery.SetPlugins(this.SkillMiddlePlugins, this.SkillEndPlugins, true);

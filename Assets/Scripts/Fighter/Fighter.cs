@@ -67,6 +67,7 @@ public class Fighter : StateMachineController{
 #endif
 
     public Action OnKillOther;
+    public Action<Fighter> OnCastCritical;
 
     protected virtual void Awake(){
         GetRendererComponent();
@@ -184,10 +185,6 @@ public class Fighter : StateMachineController{
 
     private void OnTargetDead(Fighter fighter) {
         this.AttackTarget = null;
-        if (this.CurrentState is AttackState || this.CurrentState is SkillState) {
-            // TODO: Not Absolute
-            this.OnKillOther?.Invoke();
-        }
         if (!this.IsDisappear) {
             this.ChangeState(FighterPatrol);
         }
@@ -258,8 +255,12 @@ public class Fighter : StateMachineController{
         }
         
         if (this.InBattleHealth <= 0.0f && !IsDead) {
+            if (effectData.Caster) effectData.Caster.OnKillOther?.Invoke();
             FighterDead();
+            return ;
         }
+
+        if (effectData.IsCritical && effectData.Caster) effectData.Caster.OnCastCritical?.Invoke(this);
     }
 
     public void FighterDead() {

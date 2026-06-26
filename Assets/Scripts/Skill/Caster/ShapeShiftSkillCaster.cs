@@ -12,6 +12,9 @@ public class ShapeShiftSkillCaster : SkillCaster {
     [Header("Buff")]
     [SerializeField] private float Duration = 10.0f;
     [SerializeField] private BuffData ShapeShiftBuff;
+    
+    [Header("Cast Critical When Shape Shift")]
+    [SerializeField] private BuffData CastCriticalBuff;
 
     private bool IsShapeShift;
     private float RemainTime;
@@ -34,6 +37,7 @@ public class ShapeShiftSkillCaster : SkillCaster {
             this.CurrentShapeShiftBuffData.Duration = this.Duration;
             BuffManager.Instance.AddBuff(this.OwnedFighter, this.OwnedFighter, this.CurrentShapeShiftBuffData);
         }
+        this.OwnedFighter.OnCastCritical += OnCastCritical;
         this.BeforeShapeShift();
 
         this.RemainTime = this.Duration + (this.ShapeShiftBuff ? 0.2f : 0.0f);
@@ -43,11 +47,16 @@ public class ShapeShiftSkillCaster : SkillCaster {
         }
 
         this.AfterShapeShift();
+        this.OwnedFighter.OnCastCritical -= OnCastCritical;
         AfterShapeShiftRenderer.SetActive(false);
         BeforeShapeShiftRenderer.SetActive(true);
         this.OwnedFighter.GetRendererComponent();
         this.OwnedFighter.ResetCurrentState();
         IsShapeShift = false;
+    }
+    
+    private void OnCastCritical(Fighter target) {
+        if(CastCriticalBuff) BuffManager.Instance.AddBuff(this.OwnedFighter, target, this.CastCriticalBuff);
     }
 
     protected virtual void BeforeShapeShift(){}

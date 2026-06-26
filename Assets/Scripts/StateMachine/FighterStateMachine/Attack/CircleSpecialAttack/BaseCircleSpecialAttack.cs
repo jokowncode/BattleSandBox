@@ -23,14 +23,7 @@ public abstract class BaseCircleSpecialAttack : MeleeAttackState {
             bullet.transform.position = pos;
             bullet.transform.rotation = Quaternion.LookRotation(rotVec);
             
-            bool criticalTest = Random.value < Controller.Critical / 100.0f;
-            float critical = criticalTest ? 1.5f : 1.0f;
-            EffectData damageMsg = new EffectData{
-                Value = (Controller.PhysicsAttack + Controller.MagicAttack) * critical,
-                Force = Controller.Force,
-                TargetType = Controller.AttackTargetType,
-                IsCritical = criticalTest
-            };
+            EffectData damageMsg = GetEffectData();
             bullet.SetDamageMessage(damageMsg);
             bullet.SetTargetDir(rotVec);
         }
