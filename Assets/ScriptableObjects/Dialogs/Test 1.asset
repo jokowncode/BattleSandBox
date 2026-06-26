@@ -33,8 +33,8 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: Options
       _node: {fileID: -5563621725492143019}
-      _typeQualifiedName: System.String[], mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
+      _typeQualifiedName: OptionData[], Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 1
       _connectionType: 0
@@ -49,15 +49,30 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 21300000, guid: f45ded7887af4ef4c8cddcbc10b5741e, type: 3}
+  BackgroundCharacterPortraits: []
   NotBackground: 0
   BackgroundIsFadeIn: 0
+  BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
+  DialogBGM: {fileID: 0}
+  IsDialogBGMFade: 1
+  DialogBGMFadeTime: 1
+  CharacterAudioVolume: 1
+  BGMVolume: 1
   DialogText: "\u6218\u6597\u540E\u4EFB\u52A12"
+  IsConstantVelocity: 0
+  DialogTypeWriterDuration: 1
   CharacterName: "\u6307\u5F15"
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
+  _legacyOptions: []
   Options: []
   NextDialog: {fileID: 0}
 --- !u!114 &-1044620234985971782
@@ -89,7 +104,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  DialogBGM: {fileID: 0}
+  CanSkip: 1
   NextDialog: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:

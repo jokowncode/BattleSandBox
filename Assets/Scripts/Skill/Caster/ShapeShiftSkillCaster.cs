@@ -1,4 +1,6 @@
 ﻿
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ShapeShiftSkillCaster : SkillCaster {
@@ -17,7 +19,7 @@ public class ShapeShiftSkillCaster : SkillCaster {
 
     protected override void Cast(Transform attackTarget) {
         if (IsShapeShift) return ;
-        StopAllCotoutine();
+        StopAllCoroutines();
         StartCoroutine(ShapeShiftCoroutine());
     }
 
@@ -53,7 +55,7 @@ public class ShapeShiftSkillCaster : SkillCaster {
 
     protected void ExtendShapeShiftTime(float extendTime) {
         if (!this.IsShapeShift) return ;
-        extendTime = Mathf.max(extendTime, 0.0f);
+        extendTime = Mathf.Max(extendTime, 0.0f);
         this.RemainTime += extendTime;
         if(this.CurrentShapeShiftBuffData) this.CurrentShapeShiftBuffData.Duration += extendTime;
     }

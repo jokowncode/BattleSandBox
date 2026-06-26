@@ -176,21 +176,21 @@ public class DialogManager : MonoBehaviour {
 
         if(port.node is EndingFlagsConditionNode conditionNode) {
             int value = SaveDataManager.Instance.GetCurrentEndingFlagsValue(conditionNode.ReferenceFlags);
-            bool flag;
+            bool flag = false;
             switch (conditionNode.Comparator) {
-            case 等于:
+            case Comparator.等于:
                 flag = value == conditionNode.CompareValue;
                 break;
-            case 小于:
+            case Comparator.小于:
                 flag = value < conditionNode.CompareValue;
                 break;
-            case 小于等于:
+            case Comparator.小于等于:
                 flag = value <= conditionNode.CompareValue;
                 break;
-            case 大于:
+            case Comparator.大于:
                 flag = value > conditionNode.CompareValue;
                 break;
-            case 大于等于:
+            case Comparator.大于等于:
                 flag = value >= conditionNode.CompareValue;
                 break;    
             }

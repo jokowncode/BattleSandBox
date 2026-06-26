@@ -60,13 +60,13 @@ public class Hero : Fighter {
     public void ShareDamage(Hero hero) {
         if (!hero) return ;
         if (hero == this) return ;
-        if (!this.ShareDamageHeroes.TryAdd(hero)) {
+        if (!this.ShareDamageHeroes.TryAdd(hero, 1)) {
             this.ShareDamageHeroes[hero] += 1;
         }
     }
 
     public void RemoveShareDamage(Hero hero) {
-        if (!hero || !this.ShareDamageHeroes.Contains(hero)) return ;
+        if (!hero || !this.ShareDamageHeroes.ContainsKey(hero)) return ;
         this.ShareDamageHeroes[hero] -= 1;
         if (this.ShareDamageHeroes[hero] <= 0) {
             this.ShareDamageHeroes.Remove(hero);    

@@ -33,8 +33,8 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: Options
       _node: {fileID: -5563621725492143019}
-      _typeQualifiedName: System.String[], mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
+      _typeQualifiedName: OptionData[], Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 1
       _connectionType: 0
@@ -52,11 +52,14 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 21300000, guid: f8c3c8ca039788a4398fbd8e755b2e80, type: 3}
   BackgroundCharacterPortraits: []
   NotBackground: 0
   BackgroundIsFadeIn: 0
   BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 8300000, guid: a2e776d0444fc274986b0e93564700c5, type: 3}
   DialogBGM: {fileID: 8300000, guid: 6716b9924894e3145958b01f433fdae3, type: 3}
   IsDialogBGMFade: 0
@@ -68,8 +71,11 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: AAA
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
+  _legacyOptions: []
   Options: []
   NextDialog: {fileID: 0}
 --- !u!114 &-1044620234985971782
@@ -101,6 +107,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+  CanSkip: 1
   NextDialog: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -151,8 +158,8 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: Options
       _node: {fileID: 2324492701170503263}
-      _typeQualifiedName: System.String[], mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
+      _typeQualifiedName: OptionData[], Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections: []
       _direction: 1
       _connectionType: 0
@@ -167,11 +174,14 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
+  ClueNames: []
   Background: {fileID: 21300000, guid: d809af4a1663e8047ab7a688f28f9c30, type: 3}
   BackgroundCharacterPortraits: []
   NotBackground: 0
   BackgroundIsFadeIn: 1
   BackgroundIsFadeOut: 1
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
   DialogAudio: {fileID: 0}
   DialogBGM: {fileID: 8300000, guid: 1abd5d4bcdec7d84e8bb56baf1f56723, type: 3}
   IsDialogBGMFade: 1
@@ -183,7 +193,10 @@ MonoBehaviour:
   DialogTypeWriterDuration: 1
   CharacterName: 
   CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
   BeforeDialogInvokeAction: 
   AfterDialogInvokeAction: 
+  _legacyOptions: []
   Options: []
   NextDialog: {fileID: 0}

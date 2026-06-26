@@ -1,4 +1,5 @@
 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ public class HealAndShareDamageAllSkillCaster : HealAllSkillCaster{
 
         if (this.Type != TargetType.Hero) return ;
         if (this.IsInDamageShare) return ;
-        StopAllCoroutine();
+        StopAllCoroutines();
         StartCoroutine(ShareDamageAllHeroesCoroutine());
     }
 
