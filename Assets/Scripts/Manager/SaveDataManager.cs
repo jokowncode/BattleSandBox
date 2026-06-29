@@ -26,6 +26,8 @@ public class PlayerSaveData {
     [SerializeReference] public List<string> OwnedClues = new();
     public SerializableDictionary<string, string> StoreGoods = new();
     public SerializableDictionary<EndingFlags, int> EndingFlagsData = new();
+    public SerializableDictionary<string, string> HeroPassiveEntries = new();
+    public SerializableDictionary<string, string> BattleHeroDeploy = new();
 }
 
 

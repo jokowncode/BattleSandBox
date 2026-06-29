@@ -255,10 +255,8 @@ public class BattleManager : StateMachineController{
         }
         HeroDeploySaveData saveData = new HeroDeploySaveData { Datas = data };
         string json = JsonUtility.ToJson(saveData);
-        if (PlayerPrefs.HasKey(this.Data.BattleName)) {
-            PlayerPrefs.DeleteKey(this.Data.BattleName);
-        }
-        PlayerPrefs.SetString(this.Data.BattleName, json);
+        SaveDataManager.Instance.PlayerData.BattleHeroDeploy.Remove(this.Data.BattleName);
+        SaveDataManager.Instance.PlayerData.BattleHeroDeploy.Add(this.Data.BattleName, json);
     }
 
     private void DeployHeroThroughDraggable(string heroName, Vector3 position) {
@@ -273,8 +271,9 @@ public class BattleManager : StateMachineController{
 
     public void LoadHeroDeploy() {
         if (!this.Data) return;
-        if (!PlayerPrefs.HasKey(this.Data.BattleName)) return;
-        HeroDeploySaveData saveData = JsonUtility.FromJson<HeroDeploySaveData>(PlayerPrefs.GetString(this.Data.BattleName));
+        if (!SaveDataManager.Instance.PlayerData.BattleHeroDeploy.ContainsKey(this.Data.BattleName)) return;
+        string json = SaveDataManager.Instance.PlayerData.BattleHeroDeploy[this.Data.BattleName];
+        HeroDeploySaveData saveData = JsonUtility.FromJson<HeroDeploySaveData>(json);
         foreach (HeroDeployData data in saveData.Datas) {
             if (IsFullHero) break;
             this.DeployHeroThroughDraggable(data.HeroName, data.HeroPosition);
@@ -285,10 +284,7 @@ public class BattleManager : StateMachineController{
         // TODO: Optimize Speed
         foreach (Hero hero in this.HeroesInBattle) {
             List<PassiveEntry> passiveEntries = hero.GetHeroPassiveEntries();
-            string key = hero.Name + "PassiveEntry";
-            if (PlayerPrefs.HasKey(key)) {
-                PlayerPrefs.DeleteKey(key);
-            }
+            SaveDataManager.Instance.PlayerData.HeroPassiveEntries.Remove(hero.Name);
             if (passiveEntries == null || passiveEntries.Count == 0) {
                 continue;
             }
@@ -296,14 +292,15 @@ public class BattleManager : StateMachineController{
             for (int i = 1; i < passiveEntries.Count; i++) {
                 saveContent += "|" + passiveEntries[i].Data.Name;
             }
-            PlayerPrefs.SetString(key, saveContent);
+            SaveDataManager.Instance.PlayerData.HeroPassiveEntries.Add(hero.Name, saveContent);
         }
     }
 
     public void LoadHeroPassiveEntry(Hero hero) {
         // TODO: Optimize Speed
-        if (!PlayerPrefs.HasKey(hero.Name + "PassiveEntry")) return;
-        string result = PlayerPrefs.GetString(hero.Name + "PassiveEntry", "");
+        if (!hero) return;
+        if (!SaveDataManager.Instance.PlayerData.HeroPassiveEntries.ContainsKey(hero.Name)) return;
+        string result = SaveDataManager.Instance.PlayerData.HeroPassiveEntries.GetValueOrDefault(hero.Name, "");
         if (result == "") {
             return;
         }
