@@ -3,7 +3,9 @@ using UnityEngine;
 using XNode;
 
 public class EndingFlagsConditionNode : Node {
-
+    
+    [Input] public Node PreNode;
+    
     public EndingFlags ReferenceFlags;
     public int CompareValue;
     public Comparator Comparator;
