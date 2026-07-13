@@ -33,7 +33,6 @@ public class StoryVideo : MonoBehaviour {
 	}
 	
 	private void OnVideoPlayEnded(VideoPlayer source) {
-		this.Player.loopPointReached -= OnVideoPlayEnded;
 		this.EndVideo();
 	}
 
@@ -45,6 +44,7 @@ public class StoryVideo : MonoBehaviour {
 	}
 
 	private void EndVideo() {
+		this.Player.loopPointReached -= OnVideoPlayEnded;
 		this.StopVideo();
 		this.OnVideoEnded?.Invoke();
 	}
