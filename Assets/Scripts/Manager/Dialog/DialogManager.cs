@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UnityEngine.Video;
 using XNode;
 
 public class DialogManager : MonoBehaviour {
@@ -29,6 +30,8 @@ public class DialogManager : MonoBehaviour {
     [SerializeField] private Button SkipButton;
     [SerializeField] private GameObject ClickArea;
     // [SerializeField] private GameTipContainer TipContainer;
+
+    [SerializeField] private StoryVideo Video;
     
 	[Header("AutoPlay")]
 	[SerializeField] private Sprite AutoPlaySprite;
@@ -104,6 +107,8 @@ public class DialogManager : MonoBehaviour {
                 }
             };
         }
+
+        if (this.Video) this.Video.OnVideoEnded += this.NextDialog;
     }
 
     private void Start() {
@@ -150,6 +155,7 @@ public class DialogManager : MonoBehaviour {
     }
 
     private void Update() {
+        if (this.Video && this.Video.IsPlayVideo) return;
         if (!this.IsAutoPlay && Input.GetKeyDown(KeyCode.Space)) {
             this.Next();
         }
@@ -277,6 +283,7 @@ public class DialogManager : MonoBehaviour {
         }
         
         this.UnloadSlot();
+        if (this.Video) this.Video.StopVideo();
         // this.TipContainer.EndTip();
 
         if (this.CurrentDialogNode.AfterDialogInvokeAction != "GameOver") {
@@ -348,6 +355,11 @@ public class DialogManager : MonoBehaviour {
 
     private void SetDialog() {
         DialogNode data = this.CurrentDialogNode;
+
+        if (this.Video) {
+            if (data.Video) this.Video.PlayVideo(data.Video);
+            else this.Video.StopVideo();
+        }
         
         this.BackGameObject.SetActive(!data.NotBackground);
         if (!data.NotBackground && data.Background) {

@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using UnityEngine.Video;
 using XNode;
 
 [Serializable]
@@ -42,6 +43,9 @@ public class DialogNode : Node {
     public float DialogBGMFadeTime = 1.0f;
     public float CharacterAudioVolume = 1.0f;
     public float BGMVolume = 1.0f;
+
+    [Header("Video")]
+    public VideoClip Video;
     
     [Header("Text")]
     [TextArea] public string DialogText;
