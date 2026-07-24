@@ -113,7 +113,20 @@ public class DialogManager : MonoBehaviour {
         }
 
         if (this.Video) this.Video.OnVideoEnded += this.NextDialog;
-        if (this.Explore) this.Explore.OnExploreAllGoods += this.NextDialog;
+        if (this.Explore) {
+            this.Explore.OnExploreAllGoods += this.NextDialog;
+            this.Explore.OnClickExplore += this.OnClickExplore;
+        }
+    }
+
+    private void OnClickExplore(ExploreMapping mapping) {
+        if (mapping.Type == ExploreType.Goods) {
+            if (mapping.GoodsData) {
+                if (!GoodsWarehouseManager.Instance || GoodsWarehouseManager.Instance.AddGoods(mapping.GoodsData)) {
+                    SceneChangeManager.Instance.AddGameTip($"获得物品：{mapping.GoodsData.GoodsShowName}");
+                }
+            }
+        }
     }
 
     private void Start() {

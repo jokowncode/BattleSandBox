@@ -12,6 +12,7 @@ public class ExploreArea : MonoBehaviour, IPointerClickHandler {
 	private RectTransform ExploreAreaTrans;
 
 	public Action OnExploreAllGoods;
+	public Action<ExploreMapping> OnClickExplore;
 	
 	private void Awake() {
 		this.ExploreImage = this.GetComponent<Image>();
@@ -37,11 +38,7 @@ public class ExploreArea : MonoBehaviour, IPointerClickHandler {
 			Vector2 location = mapping.Location;
 			location *= new Vector2(this.ExploreAreaTrans.rect.width, this.ExploreAreaTrans.rect.height);
 			if (Vector2.SqrMagnitude(point - location) <= 40.0f * 40.0f) {
-				if (mapping.GoodsData) {
-					if (!GoodsWarehouseManager.Instance || GoodsWarehouseManager.Instance.AddGoods(mapping.GoodsData)) {
-						SceneChangeManager.Instance.AddGameTip($"获得物品：{mapping.GoodsData.GoodsShowName}");
-					}
-				}
+				OnClickExplore?.Invoke(mapping);
 				this.Mappings.Remove(mapping);
 				break;
 			}
