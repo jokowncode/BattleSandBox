@@ -13,7 +13,7 @@ public class CampEquipmentInstruction : CampInstruction {
     protected override void AfterShow() {
         if (DialogManager.Instance && this.InstructionDialog) {
             DialogManager.Instance.OnDialogEnded += this.Disappear;
-            DialogManager.Instance.PlayNewDialog(this.InstructionDialog, false);
+            DialogManager.Instance.PlayNewDialog(this.InstructionDialog);
         }
     }
 }

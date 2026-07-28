@@ -10,7 +10,6 @@ public class Dialogue : InteractionObject {
     [SerializeField] private DialogGraph Dialogs;
     [SerializeField] private bool CanRepeat = true;
     [SerializeField] private bool IsForce = false;
-    [SerializeField] private bool IsFullScreen = true;
     [SerializeField] private bool IsDisappearAfterDialog = false;
     [SerializeField] private bool IsShowIfNotActive = true;
     
@@ -78,7 +77,7 @@ public class Dialogue : InteractionObject {
         IsCurrentConversation = true;
         // ConversationManager.Instance.StartConversation(this.Dialog);
         DialogManager.Instance.OnDialogEnded += OnDialogEnded;
-        DialogManager.Instance.PlayNewDialog(this.Dialogs, this.IsFullScreen);
+        DialogManager.Instance.PlayNewDialog(this.Dialogs);
         this.EnableInteraction(false);
     }
 }

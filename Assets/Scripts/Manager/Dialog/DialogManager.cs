@@ -59,7 +59,6 @@ public class DialogManager : MonoBehaviour {
     public bool IsAutoPlay { get; private set; } = false;
     private bool IsChooseOption = true;
     private bool HasSound = false;
-    private bool IsFullScreen = false;
 
     // private StoryDialogData[] Dialogs;
     private AudioClip PreBGM;
@@ -214,15 +213,15 @@ public class DialogManager : MonoBehaviour {
         return false;
     }
     
-    public void PlayNewDialog(DialogGraph dialog, bool isFullScreen = true) {
+    public void PlayNewDialog(DialogGraph dialog) {
         if (this.IsInDialog) {
             DialogManager newManager = Instantiate(this, null);
-            newManager.PlayNewDialog(dialog, false);
+            newManager.PlayNewDialog(dialog);
             newManager.OnDialogEnded += () => {Destroy(newManager.gameObject);};
             return;
         }
         this.enabled = true;
-        this.IsFullScreen = isFullScreen;
+        
         this.PreBGM = AudioManager.Instance.GetCurrentMainMusic();
         AudioManager.Instance.StopFootstep();
         SetAutoPlay(false);
@@ -240,10 +239,6 @@ public class DialogManager : MonoBehaviour {
         // this.TipContainer.StartTip();
         SetNode();
         StartCoroutine(Transition(true, false));
-        
-        if (this.IsFullScreen) {
-            CameraManager.Instance.MainCamera.cullingMask = 1 << LayerMask.NameToLayer("UI");
-        }
     }
 
     private void SetNode() {
@@ -261,6 +256,7 @@ public class DialogManager : MonoBehaviour {
         ExploreNode data = this.CurrentNode as ExploreNode;
         if (!data) throw new Exception("Node Type is Wrong");
         if (!data.ExploreCG || data.Mappings == null || data.Mappings.Count == 0) throw new Exception("Explore Node is not complete!");
+        CameraManager.Instance.MainCamera.cullingMask = 0;
         this.Explore.Show(data);
     }
 
@@ -305,9 +301,7 @@ public class DialogManager : MonoBehaviour {
             AudioManager.Instance.SetMainMusic(this.PreBGM);
         }
 
-        if (this.IsFullScreen) {
-            CameraManager.Instance.MainCamera.cullingMask = ~LayerMask.GetMask("UI", "Map");
-        }
+        CameraManager.Instance.MainCamera.cullingMask = ~LayerMask.GetMask("UI", "Map");
 
         if (this.ProgressBar) {
             this.ProgressBar.StopProgressBar();
@@ -400,6 +394,12 @@ public class DialogManager : MonoBehaviour {
         if (!data.NotBackground && data.Background) {
             StopAllCoroutines();
             StartCoroutine(BackgroundImageCoroutine(data.Background, data.BackgroundIsFadeIn, data.BackgroundIsFadeOut));
+        }
+
+        if (!data.NotBackground) {
+            CameraManager.Instance.MainCamera.cullingMask = 0;
+        } else {
+            CameraManager.Instance.MainCamera.cullingMask = ~LayerMask.GetMask("UI", "Map");  
         }
 
         foreach (Transform child in this.CharacterPortraitContainer) {
