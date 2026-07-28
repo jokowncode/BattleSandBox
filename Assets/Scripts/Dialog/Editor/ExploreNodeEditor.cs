@@ -10,6 +10,10 @@ public class ExploreNodeEditor : NodeEditor {
 
     public override int GetWidth() => 300;  // 加宽节点，容纳图片
 
+    private bool IsDragging = false;
+    private Vector2 CurrentLeftTop = Vector2.zero;
+    private Vector2 CurrentSize = Vector2.zero;
+
     public override void OnBodyGUI() {
         serializedObject.Update();
 
@@ -52,7 +56,7 @@ public class ExploreNodeEditor : NodeEditor {
         for (int i = 0; i < node.Mappings.Count; i++) {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField($"#{i}", GUILayout.Width(28));
-            EditorGUILayout.LabelField(node.Mappings[i].Location.ToString(), GUILayout.Width(140));
+            EditorGUILayout.LabelField(node.Mappings[i].LeftTop.ToString(), GUILayout.Width(140));
             if (GUILayout.Button("拾取", GUILayout.Width(46))) pickingIndex = i;
             EditorGUILayout.EndHorizontal();
         }
@@ -75,30 +79,58 @@ public class ExploreNodeEditor : NodeEditor {
 
     private void DrawMarkers(Rect rect, ExploreNode node) {
         for (int i = 0; i < node.Mappings.Count; i++) {
-            Vector2 loc = node.Mappings[i].Location;
-            float mx = rect.x + loc.x * rect.width;
-            float my = rect.y + (1f - loc.y) * rect.height; // 翻转回 GUI 坐标
-            Rect dot = new Rect(mx - 4, my - 4, 8, 8);
-            EditorGUI.DrawRect(dot, i == pickingIndex ? Color.yellow : Color.red);
+            Vector2 loc = node.Mappings[i].LeftTop;
+            Rect dot = new Rect(rect.x + loc.x * rect.width, rect.y + loc.y * rect.height, 
+                node.Mappings[i].Size.x * rect.width, node.Mappings[i].Size.y * rect.height);
+            Handles.DrawSolidRectangleWithOutline(dot, Color.clear, i == pickingIndex ? Color.yellow : Color.green);
         }
     }
 
     private void HandlePick(Rect rect, ExploreNode node) {
-        if (pickingIndex < 0 || pickingIndex >= node.Mappings.Count) return;
         Event e = Event.current;
-        if (e.type == EventType.MouseDown && e.button == 0 && rect.Contains(e.mousePosition)) {
+        if (pickingIndex < 0 || pickingIndex >= node.Mappings.Count || e.type == EventType.Layout) {
+            return;
+        }
+        
+        if (e.type == EventType.MouseDown && e.button == 0 && rect.Contains(e.mousePosition) && !this.IsDragging) {
+            this.IsDragging = true;
             float px = (e.mousePosition.x - rect.x) / rect.width;
             float py = (e.mousePosition.y - rect.y) / rect.height;
-            Vector2 loc = new Vector2(px, 1.0f - py); // 相对左下角
-
-            // struct 必须整体写回
-            ExploreMapping m = node.Mappings[pickingIndex];
-            m.Location = loc;
-            node.Mappings[pickingIndex] = m;
-
-            EditorUtility.SetDirty(node);
-            pickingIndex = -1;
-            e.Use();          // 消费事件，防止误触节点拖拽
+            this.CurrentLeftTop = new Vector2(px, py);   //相对左上角
         }
+
+        if (e.type == EventType.MouseUp && e.button == 0 && this.IsDragging) {
+            if (rect.Contains(e.mousePosition) && pickingIndex != -1) {
+                node.Mappings[this.pickingIndex].LeftTop = this.CurrentLeftTop;
+                node.Mappings[this.pickingIndex].Size = this.CurrentSize;
+                EditorUtility.SetDirty(node);
+            }
+            this.Clear();
+        }
+        
+        if (this.IsDragging) {
+            if (!rect.Contains(e.mousePosition)) {
+                this.Clear();
+                return;
+            }
+            float px = (e.mousePosition.x - rect.x) / rect.width;
+            float py = (e.mousePosition.y - rect.y) / rect.height;
+            this.CurrentSize = new Vector2(Mathf.Abs(px - this.CurrentLeftTop.x), Mathf.Abs(py - this.CurrentLeftTop.y));
+
+            Rect r = new Rect(rect.x + this.CurrentLeftTop.x * rect.width, rect.y + this.CurrentLeftTop.y * rect.height, 
+                this.CurrentSize.x * rect.width, this.CurrentSize.y * rect.height);
+            Handles.DrawSolidRectangleWithOutline(r, Color.clear, Color.blue);
+        }
+
+        if (e.type == EventType.MouseUp || e.type == EventType.MouseDown || e.type == EventType.MouseDrag) {
+            e.Use();    
+        }
+    }
+
+    private void Clear() {
+        this.IsDragging = false;
+        this.pickingIndex = -1;
+        this.CurrentLeftTop = Vector2.zero;
+        this.CurrentSize = Vector2.zero;
     }
 }

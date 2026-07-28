@@ -6,7 +6,8 @@ using XNode;
 
 [Serializable]
 public class ExploreMapping {
-	public Vector2 Location;
+	public Vector2 LeftTop;
+	public Vector2 Size;
 	public ScriptableObject ExploreData;
 }
 

@@ -33,11 +33,14 @@ public class ExploreArea : MonoBehaviour, IPointerClickHandler {
 	public void OnPointerClick(PointerEventData eventData) {
 		Vector2 position = eventData.position;
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(this.ExploreAreaTrans, position, null, out var point);
-		
+
+		Vector2 areaSize = new Vector2(this.ExploreAreaTrans.rect.width, this.ExploreAreaTrans.rect.height);
 		foreach (ExploreMapping mapping in this.Mappings) {
-			Vector2 location = mapping.Location;
-			location *= new Vector2(this.ExploreAreaTrans.rect.width, this.ExploreAreaTrans.rect.height);
-			if (Vector2.SqrMagnitude(point - location) <= 40.0f * 40.0f) {
+			Vector2 corner = mapping.LeftTop * areaSize;
+			Vector2 size = mapping.Size * areaSize;
+			corner.y = -corner.y - size.y;
+			Rect rect = new Rect(corner, size);
+			if (rect.Contains(point)) {
 				OnClickExplore?.Invoke(mapping);
 				this.Mappings.Remove(mapping);
 				break;
