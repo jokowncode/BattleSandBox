@@ -74,21 +74,17 @@ public class DialogManager : MonoBehaviour {
     private Node CurrentNode;
 
     private bool Pause = false;
-
-    private Animator DialogAnimator;
-
+    
     public bool IsExplore => this.CurrentNode is ExploreNode;
     public bool IsVideo => this.Video && this.Video.IsPlayVideo;
     
     private void Awake() {
-        if (Instance != null) {
-            Destroy(this.gameObject);
-            return;
+        if (Instance == null) {
+            Instance = this;
         }
-        Instance = this;
+        
         DialogCanvasGroup = GetComponent<CanvasGroup>();
         BackgroundImageCanvasGroup = BackgroundImage.GetComponent<CanvasGroup>();
-        DialogAnimator = GetComponent<Animator>();
         StartCoroutine(Transition(false, true));
 
         if (this.ProgressBar) {
@@ -117,31 +113,18 @@ public class DialogManager : MonoBehaviour {
             this.Explore.OnExploreAllGoods += this.NextDialog;
             this.Explore.OnClickExplore += this.OnClickExplore;
         }
+        this.enabled = false;
     }
 
     private void OnClickExplore(ExploreMapping mapping) {
-        if (mapping.Type == ExploreType.Goods) {
-            if (mapping.GoodsData) {
-                if (!GoodsWarehouseManager.Instance || GoodsWarehouseManager.Instance.AddGoods(mapping.GoodsData)) {
-                    SceneChangeManager.Instance.AddGameTip($"获得物品：{mapping.GoodsData.GoodsShowName}");
-                }
+        if (mapping.ExploreData is StoreGoodsData goodsData) {
+            if (!GoodsWarehouseManager.Instance || GoodsWarehouseManager.Instance.AddGoods(goodsData)) {
+                SceneChangeManager.Instance.AddGameTip($"获得物品：{goodsData.GoodsShowName}");
             }
         }
-    }
-
-    private void Start() {
-        DialogEventManager.Instance.AddEvent("ShakeCamera", () => {
-            this.DialogAnimator.SetTrigger(AnimationParams.Shake);
-        });
-        
-        DialogEventManager.Instance.AddEvent("TurnRed", () => {
-            this.DialogAnimator.SetTrigger(AnimationParams.Red);
-        });
-        
-        DialogEventManager.Instance.AddEvent("GameOver", () => {
-            GameManager.Instance.DungeonFail();
-        });
-        this.enabled = false;
+        if (mapping.ExploreData is DialogGraph dialog) {
+            this.PlayNewDialog(dialog);
+        }
     }
 
     private IEnumerator Transition(bool show, bool quick) {
@@ -232,6 +215,12 @@ public class DialogManager : MonoBehaviour {
     }
     
     public void PlayNewDialog(DialogGraph dialog, bool isFullScreen = true) {
+        if (this.IsInDialog) {
+            DialogManager newManager = Instantiate(this, null);
+            newManager.PlayNewDialog(dialog, false);
+            newManager.OnDialogEnded += () => {Destroy(newManager.gameObject);};
+            return;
+        }
         this.enabled = true;
         this.IsFullScreen = isFullScreen;
         this.PreBGM = AudioManager.Instance.GetCurrentMainMusic();

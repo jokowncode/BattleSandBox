@@ -1,83 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8214142620845244484
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ffc0c38e31844b7976ae8323e75349c, type: 3}
-  m_Name: Dialog
-  m_EditorClassIdentifier: 
-  graph: {fileID: 11400000}
-  position: {x: 24, y: -216}
-  ports:
-    keys:
-    - PreNode
-    - Options
-    - NextDialog
-    values:
-    - _fieldName: PreNode
-      _node: {fileID: -8214142620845244484}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: NextDialog
-        node: {fileID: -1044620234985971782}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: Options
-      _node: {fileID: -8214142620845244484}
-      _typeQualifiedName: OptionData[], Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: NextDialog
-      _node: {fileID: -8214142620845244484}
-      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: PreNode
-        node: {fileID: -5931313858958917219}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  PreNode: {fileID: 0}
-  ClueNames: []
-  Background: {fileID: 21300000, guid: 0a92e2ffc165f1a42879d4da3d2d0c17, type: 3}
-  BackgroundCharacterPortraits: []
-  NotBackground: 0
-  BackgroundIsFadeIn: 0
-  BackgroundIsFadeOut: 0
-  SlotPrefab: {fileID: 0}
-  DialogTipTexts: []
-  DialogAudio: {fileID: 0}
-  DialogBGM: {fileID: 0}
-  IsDialogBGMFade: 1
-  DialogBGMFadeTime: 1
-  CharacterAudioVolume: 1
-  BGMVolume: 1
-  Video: {fileID: 0}
-  DialogText: 123456
-  IsConstantVelocity: 0
-  DialogTypeWriterDuration: 1
-  CharacterName: 
-  CharacterPortrait: {fileID: 0}
-  HasProgressBar: 0
-  AutoPlayIfNotContent: 1
-  BeforeDialogInvokeAction: 
-  AfterDialogInvokeAction: 
-  Options: []
-  NextDialog: {fileID: 0}
 --- !u!114 &-5931313858958917219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,7 +13,7 @@ MonoBehaviour:
   m_Name: Explore
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 440, y: -184}
+  position: {x: -56, y: -200}
   ports:
     keys:
     - PreNode
@@ -102,7 +24,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: NextDialog
-        node: {fileID: -8214142620845244484}
+        node: {fileID: -1044620234985971782}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -119,16 +41,16 @@ MonoBehaviour:
   PreNode: {fileID: 0}
   ExploreCG: {fileID: 21300000, guid: 3c69b295a40e5544488ead2208bc61fd, type: 3}
   Mappings:
-  - Location: {x: 0.11153846, y: 0.89041096}
-    GoodsData: {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
+  - Location: {x: 0.103846155, y: 0.8835616}
+    ExploreData: {fileID: 11400000, guid: 52b8de569eb8a8c4bb7317f9ed2ad3d9, type: 2}
   - Location: {x: 0.86538464, y: 0.84246576}
-    GoodsData: {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
+    ExploreData: {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
   - Location: {x: 0.08461539, y: 0.1438356}
-    GoodsData: {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
+    ExploreData: {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
   - Location: {x: 0.5692308, y: 0.5958904}
-    GoodsData: {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
+    ExploreData: {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
   - Location: {x: 0.8384615, y: 0.15068495}
-    GoodsData: {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
+    ExploreData: {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
   NextDialog: {fileID: 0}
 --- !u!114 &-1044620234985971782
 MonoBehaviour:
@@ -153,7 +75,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: PreNode
-        node: {fileID: -8214142620845244484}
+        node: {fileID: -5931313858958917219}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -176,4 +98,3 @@ MonoBehaviour:
   nodes:
   - {fileID: -1044620234985971782}
   - {fileID: -5931313858958917219}
-  - {fileID: -8214142620845244484}
