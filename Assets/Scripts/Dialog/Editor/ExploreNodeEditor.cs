@@ -91,18 +91,17 @@ public class ExploreNodeEditor : NodeEditor {
             return;
         }
         
+        float px = (e.mousePosition.x - rect.x) / rect.width;
+        float py = (e.mousePosition.y - rect.y) / rect.height;
+        Vector2 currentPoint = new Vector2(px, py);
+        
         if (e.type == EventType.MouseDown && e.button == 0 && rect.Contains(e.mousePosition) && !this.IsDragging) {
             this.IsDragging = true;
-            float px = (e.mousePosition.x - rect.x) / rect.width;
-            float py = (e.mousePosition.y - rect.y) / rect.height;
-            this.DragStartPoint = new Vector2(px, py);
+            this.DragStartPoint = currentPoint;
         }
 
         if (e.type == EventType.MouseUp && e.button == 0 && this.IsDragging) {
             if (rect.Contains(e.mousePosition) && pickingIndex != -1) {
-                float px = (e.mousePosition.x - rect.x) / rect.width;
-                float py = (e.mousePosition.y - rect.y) / rect.height;
-                Vector2 currentPoint = new Vector2(px, py);
                 CalculateLeftTopAndSize(currentPoint, out node.Mappings[this.pickingIndex].LeftTop, out node.Mappings[this.pickingIndex].Size);
                 EditorUtility.SetDirty(node);
             }
@@ -114,9 +113,6 @@ public class ExploreNodeEditor : NodeEditor {
                 this.Clear();
                 return;
             }
-            float px = (e.mousePosition.x - rect.x) / rect.width;
-            float py = (e.mousePosition.y - rect.y) / rect.height;
-            Vector2 currentPoint = new Vector2(px, py);
             CalculateLeftTopAndSize(currentPoint, out Vector2 currentLeftTop, out Vector2 currentSize);
             
             Rect r = new Rect(rect.x + currentLeftTop.x * rect.width, rect.y + currentLeftTop.y * rect.height, 
