@@ -76,12 +76,22 @@ public class ExploreNodeEditor : NodeEditor {
         Handles.EndGUI();
     }
 
+    private GUIStyle indexLabelStyle;
+
     private void DrawMarkers(Rect rect, ExploreNode node) {
+        if (indexLabelStyle == null) {
+            indexLabelStyle = new GUIStyle(EditorStyles.boldLabel) {
+                alignment = TextAnchor.MiddleCenter
+            };
+            indexLabelStyle.normal.textColor = Color.white;
+        }
+
         for (int i = 0; i < node.Mappings.Count; i++) {
             Vector2 loc = node.Mappings[i].LeftTop;
             Rect dot = new Rect(rect.x + loc.x * rect.width, rect.y + loc.y * rect.height, 
                 node.Mappings[i].Size.x * rect.width, node.Mappings[i].Size.y * rect.height);
             Handles.DrawSolidRectangleWithOutline(dot, Color.clear, i == pickingIndex ? Color.yellow : Color.green);
+            GUI.Label(dot, i.ToString(), indexLabelStyle);
         }
     }
 
