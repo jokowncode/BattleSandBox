@@ -56,7 +56,8 @@ public class ExploreNodeEditor : NodeEditor {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField($"#{i}", GUILayout.Width(28));
             EditorGUILayout.LabelField(node.Mappings[i].LeftTop.ToString(), GUILayout.Width(140));
-            if (GUILayout.Button("拾取", GUILayout.Width(46))) pickingIndex = i;
+            if (pickingIndex != i && GUILayout.Button("拾取", GUILayout.Width(46))) pickingIndex = i;
+            if (pickingIndex == i && GUILayout.Button("取消", GUILayout.Width(46))) pickingIndex = -1;
             EditorGUILayout.EndHorizontal();
         }
 
@@ -130,7 +131,8 @@ public class ExploreNodeEditor : NodeEditor {
             Handles.DrawSolidRectangleWithOutline(r, Color.clear, Color.blue);
         }
 
-        if (e.type == EventType.MouseUp || e.type == EventType.MouseDown || e.type == EventType.MouseDrag) {
+        if ((e.type == EventType.MouseUp || e.type == EventType.MouseDown || e.type == EventType.MouseDrag)
+            && rect.Contains(e.mousePosition)) {
             e.Use();    
         }
     }
