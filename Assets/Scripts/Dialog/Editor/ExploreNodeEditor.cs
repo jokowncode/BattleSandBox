@@ -11,8 +11,7 @@ public class ExploreNodeEditor : NodeEditor {
     public override int GetWidth() => 300;  // 加宽节点，容纳图片
 
     private bool IsDragging = false;
-    private Vector2 CurrentLeftTop = Vector2.zero;
-    private Vector2 CurrentSize = Vector2.zero;
+    private Vector2 DragStartPoint = Vector2.zero;
 
     public override void OnBodyGUI() {
         serializedObject.Update();
@@ -96,13 +95,15 @@ public class ExploreNodeEditor : NodeEditor {
             this.IsDragging = true;
             float px = (e.mousePosition.x - rect.x) / rect.width;
             float py = (e.mousePosition.y - rect.y) / rect.height;
-            this.CurrentLeftTop = new Vector2(px, py);   //相对左上角
+            this.DragStartPoint = new Vector2(px, py);
         }
 
         if (e.type == EventType.MouseUp && e.button == 0 && this.IsDragging) {
             if (rect.Contains(e.mousePosition) && pickingIndex != -1) {
-                node.Mappings[this.pickingIndex].LeftTop = this.CurrentLeftTop;
-                node.Mappings[this.pickingIndex].Size = this.CurrentSize;
+                float px = (e.mousePosition.x - rect.x) / rect.width;
+                float py = (e.mousePosition.y - rect.y) / rect.height;
+                Vector2 currentPoint = new Vector2(px, py);
+                CalculateLeftTopAndSize(currentPoint, out node.Mappings[this.pickingIndex].LeftTop, out node.Mappings[this.pickingIndex].Size);
                 EditorUtility.SetDirty(node);
             }
             this.Clear();
@@ -115,10 +116,11 @@ public class ExploreNodeEditor : NodeEditor {
             }
             float px = (e.mousePosition.x - rect.x) / rect.width;
             float py = (e.mousePosition.y - rect.y) / rect.height;
-            this.CurrentSize = new Vector2(Mathf.Abs(px - this.CurrentLeftTop.x), Mathf.Abs(py - this.CurrentLeftTop.y));
-
-            Rect r = new Rect(rect.x + this.CurrentLeftTop.x * rect.width, rect.y + this.CurrentLeftTop.y * rect.height, 
-                this.CurrentSize.x * rect.width, this.CurrentSize.y * rect.height);
+            Vector2 currentPoint = new Vector2(px, py);
+            CalculateLeftTopAndSize(currentPoint, out Vector2 currentLeftTop, out Vector2 currentSize);
+            
+            Rect r = new Rect(rect.x + currentLeftTop.x * rect.width, rect.y + currentLeftTop.y * rect.height, 
+                currentSize.x * rect.width, currentSize.y * rect.height);
             Handles.DrawSolidRectangleWithOutline(r, Color.clear, Color.blue);
         }
 
@@ -127,10 +129,14 @@ public class ExploreNodeEditor : NodeEditor {
         }
     }
 
+    private void CalculateLeftTopAndSize(Vector2 currentPoint, out Vector2 leftTop, out Vector2 size) {
+        size = new Vector2(Mathf.Abs(currentPoint.x - this.DragStartPoint.x), Mathf.Abs(currentPoint.y - this.DragStartPoint.y));
+        leftTop = new Vector2(Mathf.Min(currentPoint.x, this.DragStartPoint.x), Mathf.Min(currentPoint.y, this.DragStartPoint.y));
+    }
+
     private void Clear() {
         this.IsDragging = false;
         this.pickingIndex = -1;
-        this.CurrentLeftTop = Vector2.zero;
-        this.CurrentSize = Vector2.zero;
+        this.DragStartPoint = new Vector2(0.0f, 0.0f);
     }
 }
