@@ -76,6 +76,8 @@ public class DialogManager : MonoBehaviour {
     
     public bool IsExplore => this.CurrentNode is ExploreNode;
     public bool IsVideo => this.Video && this.Video.IsPlayVideo;
+
+    private DialogManager SubDialog;
     
     private void Awake() {
         if (Instance == null) {
@@ -109,21 +111,39 @@ public class DialogManager : MonoBehaviour {
 
         if (this.Video) this.Video.OnVideoEnded += this.NextDialog;
         if (this.Explore) {
-            this.Explore.OnExploreAllGoods += this.NextDialog;
             this.Explore.OnClickExplore += this.OnClickExplore;
         }
         this.enabled = false;
     }
 
     private void OnClickExplore(ExploreMapping mapping) {
+        if (mapping.ExploreData is DialogGraph dialog && !this.SubDialog) {
+            this.SubDialog = Instantiate(this, null);
+            this.SubDialog.PlayNewDialog(dialog);
+            this.SubDialog.OnDialogEnded += this.OnSubDialogEnded;
+            return;
+        }
+        
         if (mapping.ExploreData is StoreGoodsData goodsData) {
             if (!GoodsWarehouseManager.Instance || GoodsWarehouseManager.Instance.AddGoods(goodsData)) {
                 SceneChangeManager.Instance.AddGameTip($"获得物品：{goodsData.GoodsShowName}");
             }
         }
-        if (mapping.ExploreData is DialogGraph dialog) {
-            this.PlayNewDialog(dialog);
+        
+        if (this.Explore.IsEmpty) {
+            this.NextDialog();
+            this.Explore.Hide();
         }
+    }
+
+    private void OnSubDialogEnded() {
+        if (this.IsExplore && this.Explore.IsEmpty) {
+            this.NextDialog();
+            this.Explore.Hide();
+        }
+        
+        Destroy(this.SubDialog.gameObject);
+        this.SubDialog = null;
     }
 
     private IEnumerator Transition(bool show, bool quick) {
@@ -214,14 +234,7 @@ public class DialogManager : MonoBehaviour {
     }
     
     public void PlayNewDialog(DialogGraph dialog) {
-        if (this.IsInDialog) {
-            DialogManager newManager = Instantiate(this, null);
-            newManager.PlayNewDialog(dialog);
-            newManager.OnDialogEnded += () => {Destroy(newManager.gameObject);};
-            return;
-        }
         this.enabled = true;
-        
         this.PreBGM = AudioManager.Instance.GetCurrentMainMusic();
         AudioManager.Instance.StopFootstep();
         SetAutoPlay(false);

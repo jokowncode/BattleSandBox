@@ -11,8 +11,9 @@ public class ExploreArea : MonoBehaviour, IPointerClickHandler {
 	private List<ExploreMapping> Mappings;
 	private RectTransform ExploreAreaTrans;
 
-	public Action OnExploreAllGoods;
 	public Action<ExploreMapping> OnClickExplore;
+
+	public bool IsEmpty => this.Mappings.Count == 0;
 	
 	private void Awake() {
 		this.ExploreImage = this.GetComponent<Image>();
@@ -41,15 +42,10 @@ public class ExploreArea : MonoBehaviour, IPointerClickHandler {
 			corner.y = -corner.y - size.y;
 			Rect rect = new Rect(corner, size);
 			if (rect.Contains(point)) {
-				OnClickExplore?.Invoke(mapping);
 				this.Mappings.Remove(mapping);
-				break;
+				OnClickExplore?.Invoke(mapping);
+				return;
 			}
-		}
-
-		if (this.Mappings.Count == 0) {
-			OnExploreAllGoods?.Invoke();
-			this.Hide();
 		}
 	}
 }
