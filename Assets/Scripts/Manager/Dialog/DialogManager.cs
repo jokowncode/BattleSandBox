@@ -112,6 +112,7 @@ public class DialogManager : MonoBehaviour {
         if (this.Video) this.Video.OnVideoEnded += this.NextDialog;
         if (this.Explore) {
             this.Explore.OnClickExplore += this.OnClickExplore;
+            this.Explore.OnCancelExplore += this.NextDialog;
         }
         this.enabled = false;
     }

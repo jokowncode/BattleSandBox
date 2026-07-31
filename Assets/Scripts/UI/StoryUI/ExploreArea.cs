@@ -12,8 +12,9 @@ public class ExploreArea : MonoBehaviour, IPointerClickHandler {
 	private RectTransform ExploreAreaTrans;
 
 	public Action<ExploreMapping> OnClickExplore;
+	public Action OnCancelExplore;
 
-	public bool IsEmpty => this.Mappings.Count == 0;
+	public bool IsEmpty => this.Mappings == null || this.Mappings.Count == 0;
 	
 	private void Awake() {
 		this.ExploreImage = this.GetComponent<Image>();
@@ -28,6 +29,8 @@ public class ExploreArea : MonoBehaviour, IPointerClickHandler {
 	}
 
 	public void Hide() {
+		this.Mappings?.Clear();
+		this.Mappings = null;
 		this.gameObject.SetActive(false);
 	}
 
@@ -47,6 +50,11 @@ public class ExploreArea : MonoBehaviour, IPointerClickHandler {
 				return;
 			}
 		}
+	}
+
+	public void CancelExplore() {
+		this.Hide();
+		this.OnCancelExplore?.Invoke();
 	}
 }
 
