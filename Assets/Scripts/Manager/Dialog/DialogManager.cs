@@ -32,6 +32,7 @@ public class DialogManager : MonoBehaviour {
     // [SerializeField] private GameTipContainer TipContainer;
 
     [SerializeField] private StoryVideo Video;
+    [SerializeField] private ExploreArea Explore;
     
 	[Header("AutoPlay")]
 	[SerializeField] private Sprite AutoPlaySprite;
@@ -58,7 +59,6 @@ public class DialogManager : MonoBehaviour {
     public bool IsAutoPlay { get; private set; } = false;
     private bool IsChooseOption = true;
     private bool HasSound = false;
-    private bool IsFullScreen = false;
 
     // private StoryDialogData[] Dialogs;
     private AudioClip PreBGM;
@@ -70,21 +70,22 @@ public class DialogManager : MonoBehaviour {
 
     private bool CurrentDialogIsFinished => AudioManager.Instance.DialogIsFinished && this.DialogText.IsDelayEnd;
 
-    private DialogNode CurrentDialogNode;
+    private Node CurrentNode;
 
     private bool Pause = false;
+    
+    public bool IsExplore => this.CurrentNode is ExploreNode;
+    public bool IsVideo => this.Video && this.Video.IsPlayVideo;
 
-    private Animator DialogAnimator;
+    private DialogManager SubDialog;
     
     private void Awake() {
-        if (Instance != null) {
-            Destroy(this.gameObject);
-            return;
+        if (Instance == null) {
+            Instance = this;
         }
-        Instance = this;
+        
         DialogCanvasGroup = GetComponent<CanvasGroup>();
         BackgroundImageCanvasGroup = BackgroundImage.GetComponent<CanvasGroup>();
-        DialogAnimator = GetComponent<Animator>();
         StartCoroutine(Transition(false, true));
 
         if (this.ProgressBar) {
@@ -109,21 +110,41 @@ public class DialogManager : MonoBehaviour {
         }
 
         if (this.Video) this.Video.OnVideoEnded += this.NextDialog;
+        if (this.Explore) {
+            this.Explore.OnClickExplore += this.OnClickExplore;
+            this.Explore.OnCancelExplore += this.NextDialog;
+        }
+        this.enabled = false;
     }
 
-    private void Start() {
-        DialogEventManager.Instance.AddEvent("ShakeCamera", () => {
-            this.DialogAnimator.SetTrigger(AnimationParams.Shake);
-        });
+    private void OnClickExplore(ExploreMapping mapping) {
+        if (mapping.ExploreData is DialogGraph dialog && !this.SubDialog) {
+            this.SubDialog = Instantiate(this, null);
+            this.SubDialog.PlayNewDialog(dialog);
+            this.SubDialog.OnDialogEnded += this.OnSubDialogEnded;
+            return;
+        }
         
-        DialogEventManager.Instance.AddEvent("TurnRed", () => {
-            this.DialogAnimator.SetTrigger(AnimationParams.Red);
-        });
+        if (mapping.ExploreData is StoreGoodsData goodsData) {
+            if (!GoodsWarehouseManager.Instance || GoodsWarehouseManager.Instance.AddGoods(goodsData)) {
+                SceneChangeManager.Instance.AddGameTip($"获得物品：{goodsData.GoodsShowName}");
+            }
+        }
         
-        DialogEventManager.Instance.AddEvent("GameOver", () => {
-            GameManager.Instance.DungeonFail();
-        });
-        this.enabled = false;
+        if (this.Explore.IsEmpty) {
+            this.NextDialog();
+            this.Explore.Hide();
+        }
+    }
+
+    private void OnSubDialogEnded() {
+        if (this.IsExplore && this.Explore.IsEmpty) {
+            this.NextDialog();
+            this.Explore.Hide();
+        }
+        
+        Destroy(this.SubDialog.gameObject);
+        this.SubDialog = null;
     }
 
     private IEnumerator Transition(bool show, bool quick) {
@@ -155,7 +176,7 @@ public class DialogManager : MonoBehaviour {
     }
 
     private void Update() {
-        if (this.Video && this.Video.IsPlayVideo) return;
+        if (this.IsVideo || this.IsExplore) return;
         if (!this.IsAutoPlay && Input.GetKeyDown(KeyCode.Space)) {
             this.Next();
         }
@@ -171,12 +192,17 @@ public class DialogManager : MonoBehaviour {
         return null;
     }
 
-    private bool GetNextDialogNode(NodePort port, out DialogNode dialogNode) {
-        dialogNode = null;
+    private bool GetNextNode(NodePort port, out Node nextNode) {
+        nextNode = null;
         if (port == null) return false;
 
         if (port.node is DialogNode node) {
-            dialogNode = node;
+            nextNode = node;
+            return true;
+        }
+
+        if (port.node is ExploreNode node2) {
+            nextNode = node2;
             return true;
         }
 
@@ -201,16 +227,15 @@ public class DialogManager : MonoBehaviour {
                 break;    
             }
             NodePort nextPort = conditionNode.GetOutputPort(flag ? "TrueNode" : "FalseNode").Connection;
-            bool result = GetNextDialogNode(nextPort, out DialogNode nextNode);
-            dialogNode = nextNode;
+            bool result = GetNextNode(nextPort, out Node resultNode);
+            nextNode = resultNode;
             return result;
         }
         return false;
     }
     
-    public void PlayNewDialog(DialogGraph dialog, bool isFullScreen = true) {
+    public void PlayNewDialog(DialogGraph dialog) {
         this.enabled = true;
-        this.IsFullScreen = isFullScreen;
         this.PreBGM = AudioManager.Instance.GetCurrentMainMusic();
         AudioManager.Instance.StopFootstep();
         SetAutoPlay(false);
@@ -221,17 +246,32 @@ public class DialogManager : MonoBehaviour {
         this.SkipButton.gameObject.SetActive(startNode.CanSkip);
 
         NodePort startPort = startNode.GetOutputPort("NextDialog").Connection;
-        if (startPort == null || !GetNextDialogNode(startPort, out DialogNode dialogNode)) return;
+        if (startPort == null || !GetNextNode(startPort, out Node nextNode)) return;
         
-        this.CurrentDialogNode = dialogNode;
+        this.CurrentNode = nextNode;
         this.StoryReview.Reset();
         // this.TipContainer.StartTip();
-        SetDialog();
+        SetNode();
         StartCoroutine(Transition(true, false));
-        
-        if (this.IsFullScreen) {
-            CameraManager.Instance.MainCamera.cullingMask = 1 << LayerMask.NameToLayer("UI");
+    }
+
+    private void SetNode() {
+        if (this.Explore) this.Explore.Hide();
+        if (this.CurrentNode is DialogNode) {
+            this.SetDialog();
+        } else if (this.CurrentNode is ExploreNode) {
+            this.SetExplore();
+        } else {
+            throw new Exception($"Invalid Node Type：{this.CurrentNode.GetType().Name}");
         }
+    }
+
+    private void SetExplore() {
+        ExploreNode data = this.CurrentNode as ExploreNode;
+        if (!data) throw new Exception("Node Type is Wrong");
+        if (!data.ExploreCG || data.Mappings == null || data.Mappings.Count == 0) throw new Exception("Explore Node is not complete!");
+        CameraManager.Instance.MainCamera.cullingMask = 0;
+        this.Explore.Show(data);
     }
 
     public void Next() {
@@ -249,24 +289,25 @@ public class DialogManager : MonoBehaviour {
             return;
         }
         
-        if (this.CurrentDialogNode.AfterDialogInvokeAction != null) {
-            DialogEventManager.Instance.RaiseEvent(this.CurrentDialogNode.AfterDialogInvokeAction);
+        if (this.CurrentNode is DialogNode { AfterDialogInvokeAction: not null } dialogNode) {
+            DialogEventManager.Instance.RaiseEvent(dialogNode.AfterDialogInvokeAction);
         }
         
-        NodePort nextPort = this.CurrentDialogNode.GetOutputPort("NextDialog").Connection;
-        if (nextPort == null || !GetNextDialogNode(nextPort, out DialogNode dialogNode)) {
+        NodePort nextPort = this.CurrentNode.GetOutputPort("NextDialog").Connection;
+        if (nextPort == null || !GetNextNode(nextPort, out Node nextNode)) {
             DialogEnd();
             return;
         }
 
-        this.CurrentDialogNode = dialogNode;
-        SetDialog();
+        this.CurrentNode = nextNode;
+        SetNode();
     }
 
     public void DialogEnd() {
         this.enabled = false;
         AudioManager.Instance.StopDialog();
-        StartCoroutine(Transition(false, false));
+        bool notQuick = this.CurrentNode is DialogNode dialog && !dialog.Video;
+        StartCoroutine(Transition(false, !notQuick));
         SetAutoPlay(false);
         
         if (this.PreBGM && this.PreBGM != AudioManager.Instance.GetCurrentMainMusic()) {
@@ -274,9 +315,7 @@ public class DialogManager : MonoBehaviour {
             AudioManager.Instance.SetMainMusic(this.PreBGM);
         }
 
-        if (this.IsFullScreen) {
-            CameraManager.Instance.MainCamera.cullingMask = ~LayerMask.GetMask("UI", "Map");
-        }
+        CameraManager.Instance.MainCamera.cullingMask = ~LayerMask.GetMask("UI", "Map");
 
         if (this.ProgressBar) {
             this.ProgressBar.StopProgressBar();
@@ -286,7 +325,7 @@ public class DialogManager : MonoBehaviour {
         if (this.Video) this.Video.StopVideo();
         // this.TipContainer.EndTip();
 
-        if (this.CurrentDialogNode.AfterDialogInvokeAction != "GameOver") {
+        if (this.CurrentNode is DialogNode dialogNode && dialogNode.AfterDialogInvokeAction != "GameOver") {
             this.OnDialogEnded?.Invoke();
         }
     }
@@ -354,10 +393,14 @@ public class DialogManager : MonoBehaviour {
     }
 
     private void SetDialog() {
-        DialogNode data = this.CurrentDialogNode;
+        DialogNode data = this.CurrentNode as DialogNode;
+        if (!data) throw new Exception("Node Type is Wrong");
 
         if (this.Video) {
-            if (data.Video) this.Video.PlayVideo(data.Video);
+            if (data.Video) {
+                this.Video.PlayVideo(data.Video);
+                return;
+            }
             else this.Video.StopVideo();
         }
         
@@ -365,6 +408,12 @@ public class DialogManager : MonoBehaviour {
         if (!data.NotBackground && data.Background) {
             StopAllCoroutines();
             StartCoroutine(BackgroundImageCoroutine(data.Background, data.BackgroundIsFadeIn, data.BackgroundIsFadeOut));
+        }
+
+        if (!data.NotBackground) {
+            CameraManager.Instance.MainCamera.cullingMask = 0;
+        } else {
+            CameraManager.Instance.MainCamera.cullingMask = ~LayerMask.GetMask("UI", "Map");  
         }
 
         foreach (Transform child in this.CharacterPortraitContainer) {
@@ -453,17 +502,17 @@ public class DialogManager : MonoBehaviour {
     }
 
     public void ClickOption(int index, OptionData data) {
-        NodePort optionPort = this.CurrentDialogNode.GetPort($"Options {index}").Connection;
-        if (optionPort == null || !GetNextDialogNode(optionPort, out DialogNode dialogNode)) {
+        NodePort optionPort = this.CurrentNode.GetPort($"Options {index}").Connection;
+        if (optionPort == null || !GetNextNode(optionPort, out Node nextNode)) {
             DialogEnd();
             return;
         }
 
-        this.CurrentDialogNode = dialogNode;
+        this.CurrentNode = nextNode;
         this.IsChooseOption = true;
         this.StoryReview.AddDialogOptionHistory(data.OptionContent);
         AudioManager.Instance.StopDialog();
-        SetDialog();
+        SetNode();
 
         if (data.EndingFlagsDatas != null && data.EndingFlagsDatas.Length != 0) {
             foreach (OptionEndingFlagsData flagDatas in data.EndingFlagsDatas) {

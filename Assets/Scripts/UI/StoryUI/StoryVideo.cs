@@ -19,6 +19,7 @@ public class StoryVideo : MonoBehaviour {
 	private void Awake() {
 		this.Player = this.GetComponent<VideoPlayer>();
 		if (this.VSkipProgressBar) this.VSkipProgressImage = this.VSkipProgressBar.GetComponentInChildren<Image>();
+		this.VSkipProgressBar.SetActive(false);
 		this.enabled = false;
 	}
 

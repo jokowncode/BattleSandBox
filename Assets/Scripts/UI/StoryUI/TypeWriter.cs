@@ -18,6 +18,8 @@ public class TypeWriter : MonoBehaviour {
     private void Awake() {
         this.Text = GetComponent<TextMeshProUGUI>();
         this.EndDelayTimer = new WaitForSeconds(this.EndDelayTime);
+        this.IsPlayEnd = true;
+        this.IsDelayEnd = true;
     }
 
     public void Play(string text, float duration, bool isConstantVelocity, bool autoNextIfNotContent) {

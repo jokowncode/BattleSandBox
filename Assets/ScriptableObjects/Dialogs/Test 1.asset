@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5563621725492143019
+--- !u!114 &-5931313858958917219
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,19 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ffc0c38e31844b7976ae8323e75349c, type: 3}
-  m_Name: Dialog
+  m_Script: {fileID: 11500000, guid: d3528ecf0b604a71ab803cf7a18e0f0b, type: 3}
+  m_Name: Explore
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -104, y: -184}
+  position: {x: -104, y: -264}
   ports:
     keys:
     - PreNode
-    - Options
     - NextDialog
     values:
     - _fieldName: PreNode
-      _node: {fileID: -5563621725492143019}
+      _node: {fileID: -5931313858958917219}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: NextDialog
@@ -31,49 +30,35 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: Options
-      _node: {fileID: -5563621725492143019}
-      _typeQualifiedName: OptionData[], Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
     - _fieldName: NextDialog
-      _node: {fileID: -5563621725492143019}
+      _node: {fileID: -5931313858958917219}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: PreNode
+        node: {fileID: 2652344596177271459}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
   PreNode: {fileID: 0}
-  ClueNames: []
-  Background: {fileID: 21300000, guid: f45ded7887af4ef4c8cddcbc10b5741e, type: 3}
-  BackgroundCharacterPortraits: []
-  NotBackground: 0
-  BackgroundIsFadeIn: 0
-  BackgroundIsFadeOut: 0
-  SlotPrefab: {fileID: 0}
-  DialogTipTexts: []
-  DialogAudio: {fileID: 0}
-  DialogBGM: {fileID: 0}
-  IsDialogBGMFade: 1
-  DialogBGMFadeTime: 1
-  CharacterAudioVolume: 1
-  BGMVolume: 1
-  DialogText: "\u6218\u6597\u540E\u4EFB\u52A12"
-  IsConstantVelocity: 0
-  DialogTypeWriterDuration: 1
-  CharacterName: "\u6307\u5F15"
-  CharacterPortrait: {fileID: 0}
-  HasProgressBar: 0
-  AutoPlayIfNotContent: 1
-  BeforeDialogInvokeAction: 
-  AfterDialogInvokeAction: 
-  _legacyOptions: []
-  Options: []
+  ExploreCG: {fileID: 21300000, guid: 3c69b295a40e5544488ead2208bc61fd, type: 3}
+  Mappings:
+  - LeftTop: {x: 0.053846154, y: 0.047945205}
+    Size: {x: 0.12307693, y: 0.130137}
+    ExploreData: {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
+  - LeftTop: {x: 0.82538486, y: 0.09520565}
+    Size: {x: 0.10153812, y: 0.12054819}
+    ExploreData: {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
+  - LeftTop: {x: 0.7999999, y: 0.765069}
+    Size: {x: 0.08461535, y: 0.16575348}
+    ExploreData: {fileID: 11400000, guid: 2a9319ea81d29964ab29e94bdf426794, type: 2}
+  - LeftTop: {x: 0.046153847, y: 0.80136985}
+    Size: {x: 0.12307693, y: 0.10273975}
+    ExploreData: {fileID: 11400000, guid: 52b8de569eb8a8c4bb7317f9ed2ad3d9, type: 2}
+  - LeftTop: {x: 0.4846154, y: 0.3219178}
+    Size: {x: 0.17307693, y: 0.1780822}
+    ExploreData: {fileID: 11400000, guid: 52b8de569eb8a8c4bb7317f9ed2ad3d9, type: 2}
   NextDialog: {fileID: 0}
 --- !u!114 &-1044620234985971782
 MonoBehaviour:
@@ -98,7 +83,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: PreNode
-        node: {fileID: -5563621725492143019}
+        node: {fileID: -5931313858958917219}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -119,5 +104,81 @@ MonoBehaviour:
   m_Name: Test 1
   m_EditorClassIdentifier: 
   nodes:
-  - {fileID: -5563621725492143019}
   - {fileID: -1044620234985971782}
+  - {fileID: -5931313858958917219}
+  - {fileID: 2652344596177271459}
+--- !u!114 &2652344596177271459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ffc0c38e31844b7976ae8323e75349c, type: 3}
+  m_Name: Dialog
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 355, y: 14}
+  ports:
+    keys:
+    - PreNode
+    - Options
+    - NextDialog
+    values:
+    - _fieldName: PreNode
+      _node: {fileID: 2652344596177271459}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: NextDialog
+        node: {fileID: -5931313858958917219}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: Options
+      _node: {fileID: 2652344596177271459}
+      _typeQualifiedName: OptionData[], Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: NextDialog
+      _node: {fileID: 2652344596177271459}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  PreNode: {fileID: 0}
+  ClueNames: []
+  Background: {fileID: 21300000, guid: 0a92e2ffc165f1a42879d4da3d2d0c17, type: 3}
+  BackgroundCharacterPortraits: []
+  NotBackground: 0
+  BackgroundIsFadeIn: 0
+  BackgroundIsFadeOut: 0
+  SlotPrefab: {fileID: 0}
+  DialogTipTexts: []
+  DialogAudio: {fileID: 0}
+  DialogBGM: {fileID: 0}
+  IsDialogBGMFade: 1
+  DialogBGMFadeTime: 1
+  CharacterAudioVolume: 1
+  BGMVolume: 1
+  Video: {fileID: 0}
+  DialogText: 13565656
+  IsConstantVelocity: 0
+  DialogTypeWriterDuration: 1
+  CharacterName: 
+  CharacterPortrait: {fileID: 0}
+  HasProgressBar: 0
+  AutoPlayIfNotContent: 1
+  BeforeDialogInvokeAction: 
+  AfterDialogInvokeAction: 
+  Options: []
+  NextDialog: {fileID: 0}
