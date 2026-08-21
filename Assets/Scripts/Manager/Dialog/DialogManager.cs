@@ -130,11 +130,6 @@ public class DialogManager : MonoBehaviour {
                 SceneChangeManager.Instance.AddGameTip($"获得物品：{goodsData.GoodsShowName}");
             }
         }
-        
-        if (this.Explore.IsEmpty) {
-            this.NextDialog();
-            this.Explore.Hide();
-        }
     }
 
     private void OnSubDialogEnded() {

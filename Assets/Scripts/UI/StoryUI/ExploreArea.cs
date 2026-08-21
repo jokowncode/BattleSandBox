@@ -35,6 +35,7 @@ public class ExploreArea : MonoBehaviour, IPointerClickHandler {
 	}
 
 	public void OnPointerClick(PointerEventData eventData) {
+		if (this.Mappings == null || this.Mappings.Count == 0) return;
 		Vector2 position = eventData.position;
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(this.ExploreAreaTrans, position, null, out var point);
 
