@@ -393,6 +393,7 @@ public class DialogManager : MonoBehaviour {
 
         if (this.Video) {
             if (data.Video) {
+                AudioManager.Instance.StopMainMusic();
                 this.Video.PlayVideo(data.Video);
                 return;
             }
