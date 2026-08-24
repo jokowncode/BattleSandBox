@@ -71,7 +71,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: PreNode
-        node: {fileID: 2431224744886160841}
+        node: {fileID: 2652344596177271459}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -122,7 +122,7 @@ MonoBehaviour:
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: NextDialog
-        node: {fileID: -1044620234985971782}
+        node: {fileID: 2652344596177271459}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Name: Dialog
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -1400, y: 408}
+  position: {x: -904, y: 328}
   ports:
     keys:
     - PreNode
@@ -198,7 +198,10 @@ MonoBehaviour:
     - _fieldName: PreNode
       _node: {fileID: 2652344596177271459}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: NextDialog
+        node: {fileID: -1044620234985971782}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -215,7 +218,10 @@ MonoBehaviour:
     - _fieldName: NextDialog
       _node: {fileID: 2652344596177271459}
       _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: PreNode
+        node: {fileID: 2431224744886160841}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0

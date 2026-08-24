@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,6 +28,7 @@ public class StoryVideo : MonoBehaviour {
 	private void Start() {
 		this.Player.renderMode = VideoRenderMode.CameraFarPlane;
 		this.Player.targetCamera = CameraManager.Instance.UICamera ? CameraManager.Instance.UICamera : CameraManager.Instance.MainCamera;
+		this.Player.aspectRatio = VideoAspectRatio.FitOutside;
 	}
 
 	public void PlayVideo(VideoClip clip) {
