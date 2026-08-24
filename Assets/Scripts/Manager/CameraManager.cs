@@ -7,7 +7,8 @@ public class CameraManager : MonoBehaviour {
 
     public static CameraManager Instance;
 
-    public Camera MainCamera{ get; private set; }
+    public Camera MainCamera { get; private set; }
+    public Camera UICamera { get; private set; }
 
     private bool IsShake;
 
@@ -23,6 +24,8 @@ public class CameraManager : MonoBehaviour {
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         MainCamera = Camera.main;
+        GameObject uiCam = GameObject.FindGameObjectWithTag("UICamera");
+        if(uiCam) UICamera = uiCam.GetComponent<Camera>();
     }
     
     private IEnumerator ShakeCoroutine(float duration, float magnitude, float late, Vector3 magnitudeDir){

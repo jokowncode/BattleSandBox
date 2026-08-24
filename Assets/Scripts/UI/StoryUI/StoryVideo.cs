@@ -7,10 +7,10 @@ using UnityEngine.Video;
 public class StoryVideo : MonoBehaviour {
 
 	[SerializeField] private GameObject VSkipProgressBar;
+	[SerializeField] private Image VSkipProgressImage;
 	[SerializeField] private float ProgressSpeed = 0.2f;
 	
 	private VideoPlayer Player;
-	private Image VSkipProgressImage;
 	private bool IsSkipVideoClick = false;
 
 	public bool IsPlayVideo => this.enabled;
@@ -18,22 +18,35 @@ public class StoryVideo : MonoBehaviour {
 	
 	private void Awake() {
 		this.Player = this.GetComponent<VideoPlayer>();
-		if (this.VSkipProgressBar) this.VSkipProgressImage = this.VSkipProgressBar.GetComponentInChildren<Image>();
+		this.Player.loopPointReached += OnVideoPlayEnded;
+		this.Player.prepareCompleted += OnVideoPrepare;
+		
 		this.VSkipProgressBar.SetActive(false);
 		this.enabled = false;
+	}
+
+	private void Start() {
+		this.Player.renderMode = VideoRenderMode.CameraFarPlane;
+		this.Player.targetCamera = CameraManager.Instance.UICamera ? CameraManager.Instance.UICamera : CameraManager.Instance.MainCamera;
 	}
 
 	public void PlayVideo(VideoClip clip) {
 		if (!clip) return;
 		this.enabled = true;
 		this.gameObject.SetActive(true);
+		this.VSkipProgressImage.fillAmount = 0.0f;
 		this.Player.clip = clip;
 		this.Player.isLooping = false;
-		this.Player.loopPointReached += OnVideoPlayEnded;
-		this.Player.Play();
+		this.Player.Prepare();
 	}
 	
+	private void OnVideoPrepare(VideoPlayer source) {
+		source.playbackSpeed = 1.0f;
+		source.Play();
+	}
+
 	private void OnVideoPlayEnded(VideoPlayer source) {
+		if (!this.enabled) return;
 		this.EndVideo();
 	}
 

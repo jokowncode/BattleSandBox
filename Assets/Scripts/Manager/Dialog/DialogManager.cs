@@ -394,6 +394,8 @@ public class DialogManager : MonoBehaviour {
         if (this.Video) {
             if (data.Video) {
                 AudioManager.Instance.StopMainMusic();
+                this.BackGameObject.SetActive(false);
+                this.DialogContentCanvasGroup.alpha = 0.0f;
                 this.Video.PlayVideo(data.Video);
                 return;
             }
