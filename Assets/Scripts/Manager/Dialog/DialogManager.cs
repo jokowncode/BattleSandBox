@@ -210,9 +210,23 @@ public class DialogManager : MonoBehaviour {
             return true;
         }
 
+        bool flag = false;
+        Node branchNode = null;
+        if (port.node is StoryPropConditionNode propNode) {
+            int count = GoodsWarehouseManager.Instance.GetGoodsCount(propNode.GoodsName);
+            switch (propNode.Condition) {
+            case GoodsHoldsCondition.拥有:
+                flag = count >= propNode.Count;
+                break;
+            case GoodsHoldsCondition.未拥有:
+                flag = count == 0;
+                break;
+            }
+            branchNode = propNode;
+        }
+
         if(port.node is EndingFlagsConditionNode conditionNode) {
             int value = SaveDataManager.Instance.GetCurrentEndingFlagsValue(conditionNode.ReferenceFlags);
-            bool flag = false;
             switch (conditionNode.Comparator) {
             case Comparator.等于:
                 flag = value == conditionNode.CompareValue;
@@ -230,10 +244,14 @@ public class DialogManager : MonoBehaviour {
                 flag = value >= conditionNode.CompareValue;
                 break;    
             }
-            NodePort nextPort = conditionNode.GetOutputPort(flag ? "TrueNode" : "FalseNode").Connection;
+            branchNode = conditionNode;
+        }
+
+        if (branchNode) {
+            NodePort nextPort = branchNode.GetOutputPort(flag ? "TrueNode" : "FalseNode").Connection;
             bool result = GetNextNode(nextPort, out Node resultNode);
             nextNode = resultNode;
-            return result;
+            return result;    
         }
         return false;
     }

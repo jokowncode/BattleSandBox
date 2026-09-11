@@ -98,6 +98,7 @@ MonoBehaviour:
   - {fileID: 2431224744886160841}
   - {fileID: 5878574772842208301}
   - {fileID: 7196328370968950786}
+  - {fileID: 5726308766486266293}
 --- !u!114 &2431224744886160841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,6 +276,56 @@ MonoBehaviour:
   - OptionContent: BBB
     EndingFlagsDatas: []
   NextDialog: {fileID: 0}
+--- !u!114 &5726308766486266293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ea123fa2d5849e7aaa5e7f1048f4bd0, type: 3}
+  m_Name: Story Prop Condition
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 317.2689, y: -578.657}
+  ports:
+    keys:
+    - PreNode
+    - TrueNode
+    - FalseNode
+    values:
+    - _fieldName: PreNode
+      _node: {fileID: 5726308766486266293}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: TrueNode
+      _node: {fileID: 5726308766486266293}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: FalseNode
+      _node: {fileID: 5726308766486266293}
+      _typeQualifiedName: XNode.Node, XNode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  PreNode: {fileID: 0}
+  GoodsName: "\u4E00\u672C\u65E5\u8BB0"
+  Condition: 0
+  Count: 1
+  TrueNode: {fileID: 0}
+  FalseNode: {fileID: 0}
 --- !u!114 &5878574772842208301
 MonoBehaviour:
   m_ObjectHideFlags: 0

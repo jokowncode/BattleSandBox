@@ -5,3 +5,9 @@ public enum Comparator {
     大于,
     大于等于
 }
+
+public enum GoodsHoldsCondition
+{
+    拥有,
+    未拥有
+}
