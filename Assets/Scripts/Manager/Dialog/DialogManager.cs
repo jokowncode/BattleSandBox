@@ -172,10 +172,19 @@ public class DialogManager : MonoBehaviour {
 
     private void Update() {
         if (this.IsVideo || this.IsExplore) return;
+        if (this.DialogOptionContainer.childCount == 0 && !this.IsChooseOption && this.CurrentDialogIsFinished
+            && this.CurrentNode is DialogNode { Options: not null } data) {
+            for (int i = 0; i < data.Options.Length; i++) {
+                DialogOption option = Instantiate(this.DialogOptionPrefab, this.DialogOptionContainer);
+                option.SetOptionData(data.Options[i], i);
+            }
+            return;
+        }
+
         if (!this.IsAutoPlay && Input.GetKeyDown(KeyCode.Space)) {
             this.Next();
         }
-        if (!this.IsAutoPlay) return;
+        if (!this.IsAutoPlay || !this.IsChooseOption) return;
         if (this.CurrentDialogIsFinished) NextDialog();
     }
 
@@ -483,12 +492,6 @@ public class DialogManager : MonoBehaviour {
             Destroy(option.gameObject);
         }
         this.IsChooseOption = data.Options == null || data.Options.Length == 0;
-        if (data.Options != null) {
-            for (int i = 0; i < data.Options.Length; i++) {
-                DialogOption option = Instantiate(this.DialogOptionPrefab, this.DialogOptionContainer);
-                option.SetOptionData(data.Options[i], i);
-            }
-        }
 
         if (data.DialogText != "") {
             this.StoryReview.AddDialogHistory(data);
