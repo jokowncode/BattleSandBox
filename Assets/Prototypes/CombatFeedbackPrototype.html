@@ -19,12 +19,17 @@
   .feature strong { display:block; font-size:13px; } .feature span { color:var(--muted); font-size:12px; display:block; }
   .presets { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
   .type-switch { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0 4px; }.type-switch button.selected { background:#31596a; border-color:var(--accent); color:#eafff8; }
+  .range-control { display:block; padding:9px 0; color:var(--muted); font-size:12px; }.range-control b { color:var(--ink); float:right; }.range-control input { display:block; width:100%; margin:7px 0 0; }
   button { color:var(--ink); border:1px solid #405268; border-radius:8px; background:#233044; padding:9px 10px; cursor:pointer; font:inherit; }
   button:hover { border-color:var(--accent); background:#2a3b51; } button.primary { background:var(--accent); color:#0d2928; border-color:var(--accent); font-weight:800; }
-  .actions { display:flex; gap:8px; margin-top:16px; }.actions button { flex:1; }
-  .stage-wrap { padding:0; overflow:hidden; } .stage-head { display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid var(--line); }
+  .controls { position:sticky; top:16px; max-height:calc(100vh - 32px); overflow-y:auto; overscroll-behavior:contain; }.controls::-webkit-scrollbar { width:7px; }.controls::-webkit-scrollbar-thumb { background:#405268; border-radius:8px; }
+  .stage-wrap { padding:0; overflow:hidden; } .stage-head { display:flex; justify-content:space-between; gap:10px; align-items:center; padding:10px 14px; border-bottom:1px solid var(--line); }.stage-actions { display:flex; align-items:center; justify-content:flex-end; gap:7px; }.stage-actions button { padding:6px 9px; white-space:nowrap; font-size:12px; }
   .status { color:var(--accent); font-size:12px; font-weight:700; }
   .stage { position:relative; height:430px; overflow:hidden; background:linear-gradient(165deg,#294557 0%,#203846 45%,#172a32 46%,#132027 100%); }
+  .far-hills { position:absolute; left:-10%; right:-10%; bottom:42%; height:100px; opacity:.28; background:radial-gradient(ellipse at 12% 100%,#6a9c97 0 20%,transparent 21%),radial-gradient(ellipse at 43% 100%,#4f8686 0 26%,transparent 27%),radial-gradient(ellipse at 80% 100%,#6e9f91 0 21%,transparent 22%); }.env-parallax .far-hills { animation:drift 9s ease-in-out infinite alternate; }
+  .foreground { position:absolute; left:0; right:0; bottom:0; height:86px; opacity:0; pointer-events:none; background:radial-gradient(ellipse at 5% 100%,#0b2420 0 20%,transparent 21%),radial-gradient(ellipse at 20% 100%,#103c31 0 15%,transparent 16%),radial-gradient(ellipse at 85% 100%,#0b2420 0 22%,transparent 23%),radial-gradient(ellipse at 97% 100%,#103c31 0 18%,transparent 19%); }.env-foreground .foreground { opacity:.85; }
+  .dust { position:absolute; inset:0; opacity:0; pointer-events:none; }.env-dust .dust { opacity:1; }.dust i { position:absolute; width:4px; height:4px; border-radius:50%; background:#d9d2a4; opacity:.65; animation:floatdust 4s linear infinite; }.dust i:nth-child(1){left:10%;bottom:16%;}.dust i:nth-child(2){left:28%;bottom:28%;animation-delay:-1.2s;}.dust i:nth-child(3){left:51%;bottom:14%;animation-delay:-2.4s;}.dust i:nth-child(4){left:72%;bottom:24%;animation-delay:-.7s;}.dust i:nth-child(5){left:89%;bottom:17%;animation-delay:-3.1s;}
+  .ground-pulse { position:absolute; left:50%; top:57%; width:0; height:0; border:2px solid #65ebd0; border-radius:50%; opacity:0; pointer-events:none; }.env-ground .ground-pulse { animation:groundpulse 2.4s ease-out infinite; }
   .stage:before { content:""; position:absolute; inset:0; opacity:.24; background:repeating-linear-gradient(90deg,transparent 0 76px,#b9dfd2 77px 78px),repeating-linear-gradient(0deg,transparent 0 76px,#b9dfd2 77px 78px); transform:perspective(350px) rotateX(53deg) scale(1.6); transform-origin:bottom; }
   .lane { position:absolute; left:7%; right:7%; top:53%; height:2px; background:rgba(255,255,255,.18); box-shadow:0 0 18px rgba(93,235,204,.25); }
   .unit { width:68px; height:102px; position:absolute; top:calc(53% - 85px); transform-origin:50% 82%; z-index:4; transition:filter .08s; }
@@ -35,9 +40,12 @@
   .head { position:absolute; width:32px; height:32px; border-radius:50%; background:#f3c7a7; border:3px solid #ffe2c8; top:4px; left:18px; z-index:1; }.weapon { position:absolute; width:12px; height:65px; background:linear-gradient(90deg,#d9c477,#fff2a8,#987d35); border-radius:8px; right:0; top:24px; transform:rotate(-37deg); transform-origin:bottom; box-shadow:0 0 7px #ffe88466; }
   .target .weapon { display:none; }.hp { position:absolute; top:-16px; left:0; width:68px; height:6px; border-radius:4px; background:#3d1e27; overflow:hidden; }.hp i { display:block; height:100%; width:100%; background:#63e09a; transition:width .25s; }
   .telegraph { position:absolute; width:78px; height:27px; border:2px solid #ffcc64; border-radius:50%; bottom:0; left:-5px; opacity:0; }.trail { position:absolute; height:10px; width:0; top:54px; right:24px; border-radius:10px; background:linear-gradient(90deg,transparent,#ffe497,#fff); opacity:0; }.projectile { position:absolute; z-index:6; width:18px; height:7px; border-radius:6px; background:linear-gradient(90deg,#ffca63,#fff8ba); box-shadow:0 0 12px #ffc45c, -18px 0 9px #ff9d4666; opacity:0; }.impact { position:absolute; top:48%; right:22%; width:0; height:0; border:2px solid #fff2bd; border-radius:50%; opacity:0; z-index:5; }.blood { position:absolute; top:43%; right:20%; opacity:0; color:#ff5671; font-size:30px; z-index:6; text-shadow:12px -8px #ff7481,-8px 10px #b52e4e; }.damage { position:absolute; top:34%; right:20%; color:#fff2ac; font-weight:900; font-size:24px; opacity:0; z-index:7; text-shadow:2px 2px #582532; }
+  .rune { position:absolute; width:92px; height:32px; border:2px solid #9b7cff; border-radius:50%; opacity:0; box-shadow:0 0 14px #9175ff; }.rune:after { content:"✧"; position:absolute; inset:0; text-align:center; color:#d6c9ff; font-size:18px; }.target-mark { position:absolute; color:#ffcb64; font-size:31px; font-weight:900; opacity:0; text-shadow:0 0 12px #ff9b4a; }.charge-glow { position:absolute; width:80px; height:80px; border-radius:50%; background:radial-gradient(circle,#a78aff99,transparent 66%); opacity:0; mix-blend-mode:screen; }.debris { position:absolute; color:#d9bd8d; font-size:22px; opacity:0; z-index:6; }.material-magic .projectile { background:linear-gradient(90deg,#9b7cff,#dcbbff); box-shadow:0 0 14px #a77cff,-18px 0 9px #7657d966; }.material-shield .impact { border-color:#79e9ff; }.material-blunt .impact { border-color:#f2c178; border-width:5px; }.material-blade .impact { border-color:#fff0ad; }
+  .material-arrow .projectile { width:27px; height:4px; background:#e9e5d0; box-shadow:0 0 7px #fff4b2; }.material-arrow .projectile:after { content:""; position:absolute; right:-3px; top:-4px; border-left:8px solid #e9e5d0; border-top:6px solid transparent; border-bottom:6px solid transparent; }.material-shield .projectile { background:#75e6ff; box-shadow:0 0 14px #75e6ff; }
   .camera { position:absolute; inset:0; transform-origin:center; }.log { height:234px; overflow:auto; color:#bed0dd; font-size:12px; }.log p { border-bottom:1px solid rgba(255,255,255,.06); padding:7px 0; margin:0; }.log b { color:var(--warm); }.state { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-bottom:14px; }.state div { border-radius:7px; padding:8px; background:#111923; }.state span { display:block; color:var(--muted); font-size:11px; }.state strong { font-size:13px; }
   .notes { margin-top:16px; }.notes-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }.note { border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:13px; background:#141d28; }.note h3 { margin:0 0 5px; font-size:14px; color:var(--warm); }.note p { font-size:13px; }.note ul { margin:7px 0 0; padding-left:18px; color:var(--muted); font-size:13px; }.note li + li { margin-top:4px; }
   @keyframes anticipate { 0%,100%{transform:translateX(0) scale(1)} 100%{transform:translateX(-11px) scale(.94,1.05)} }
+  @keyframes drift { from{transform:translateX(-12px)} to{transform:translateX(12px)} } @keyframes floatdust { from{transform:translate(0,8px);opacity:0} 20%{opacity:.6} to{transform:translate(42px,-38px);opacity:0} } @keyframes groundpulse { from{width:18px;height:8px;margin-left:-9px;opacity:.5} to{width:280px;height:82px;margin-left:-140px;opacity:0} }
   @keyframes lunge { 0%{transform:translateX(-11px)} 55%{transform:translateX(43px) scale(1.1,.93)} 100%{transform:translateX(0)} }
   @keyframes recoil { 0%{transform:translateX(0)} 35%{transform:translateX(-15px) rotate(-5deg)} 100%{transform:translateX(0)} }
   @keyframes targetHit { 0%{transform:translateX(0)} 22%{transform:translateX(14px) scale(1.17,.82);filter:brightness(2)} 60%{transform:translateX(7px) scale(.94,1.07)} 100%{transform:translateX(0)} }
@@ -48,7 +56,7 @@
   @keyframes number { 0%{opacity:0;transform:translateY(8px) scale(.6)} 20%{opacity:1;transform:translateY(0) scale(1.2)} 100%{opacity:0;transform:translateY(-38px) scale(1)} }
   @keyframes shakeX { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-9px)} 50%{transform:translateX(7px)} 75%{transform:translateX(-3px)} } @keyframes shakeY { 0%,100%{transform:translateY(0)} 20%{transform:translateY(-7px)} 50%{transform:translateY(6px)} 75%{transform:translateY(-2px)} }
   .anticipate { animation:anticipate .16s forwards; }.lunge { animation:lunge .25s ease-out; }.recoil { animation:recoil .22s ease-out; }.hit { animation:targetHit .23s ease-out; }.flash { animation:targetFlash .12s linear; }.trail-go { animation:flyTrail .28s linear; }.impact-go { animation:pop .25s ease-out; }.blood-go { animation:spray .32s ease-out; }.damage-go { animation:number .6s ease-out; }.shake-x { animation:shakeX .18s ease-out; }.shake-y { animation:shakeY .18s ease-out; }
-  @media(max-width:1000px){ .grid{grid-template-columns:1fr}.stage{height:360px}.panel:last-child{order:3}.notes-grid{grid-template-columns:1fr} }
+  @media(max-width:1000px){ .grid{grid-template-columns:1fr}.stage{height:360px}.controls{position:static;max-height:none;overflow:visible}.panel:last-child{order:3}.notes-grid{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -57,7 +65,7 @@
   <h1>自走棋战斗反馈组合实验室</h1>
   <p class="intro">要验证的问题：在不重做序列帧资源的前提下，蓄力、位移、命中停顿、受击、特效与镜头应如何组合，才能让攻击更有重量，同时不让自动战斗画面过于嘈杂。勾选任意组合后点击“播放一次攻击”。</p>
   <div class="grid">
-    <section class="panel">
+    <section class="panel controls">
       <h2>反馈组件</h2>
       <label class="feature"><input type="checkbox" data-feature="anticipation" checked><div><strong>蓄力预备</strong><span>短暂后拉与地面预警；让出手有方向。</span></div></label>
       <label class="feature"><input type="checkbox" data-feature="movement" checked><div><strong>攻击者位移 / 后坐</strong><span>近战前冲；远程后坐，避免原地摆动。</span></div></label>
@@ -67,19 +75,38 @@
       <label class="feature"><input type="checkbox" data-feature="camera"><div><strong>镜头冲击</strong><span>近战上下、远程左右；只建议强攻击触发。</span></div></label>
       <h2 style="margin-top:16px">我方攻击类型</h2>
       <div class="type-switch"><button type="button" data-style="melee">⚔ 近战：贴近挥砍</button><button type="button" data-style="ranged">➶ 远程：发射子弹</button></div>
+      <h2 style="margin-top:16px">攻击材质</h2>
+      <div class="type-switch"><button type="button" data-material="blade">刀剑</button><button type="button" data-material="blunt">钝器</button><button type="button" data-material="arrow">箭矢</button><button type="button" data-material="magic">魔法</button><button type="button" data-material="shield">护盾</button></div>
+      <h2 style="margin-top:16px">技能预警</h2>
+      <label class="feature"><input type="checkbox" data-feature="rune" checked><div><strong>预警法阵</strong><span>攻击者脚下出现施法／蓄力提示。</span></div></label>
+      <label class="feature"><input type="checkbox" data-feature="marker" checked><div><strong>目标标记</strong><span>在被攻击者头顶提示锁定目标。</span></div></label>
+      <label class="feature"><input type="checkbox" data-feature="charge" checked><div><strong>蓄力光效</strong><span>角色周围聚光，强化出手前摇。</span></div></label>
+      <h2 style="margin-top:16px">环境动态</h2>
+      <label class="feature"><input type="checkbox" data-feature="dust" checked><div><strong>环境飘尘</strong><span>低频尘埃持续移动。</span></div></label>
+      <label class="feature"><input type="checkbox" data-feature="ground" checked><div><strong>地面能量波纹</strong><span>场景持续的低强度循环。</span></div></label>
+      <label class="feature"><input type="checkbox" data-feature="parallax" checked><div><strong>背景视差</strong><span>远景缓慢移动，减少静态感。</span></div></label>
+      <label class="feature"><input type="checkbox" data-feature="foreground" checked><div><strong>前景遮挡</strong><span>用低频植被／碎石增加战场层次。</span></div></label>
+      <h2 style="margin-top:16px">攻击节奏与强度</h2>
+      <div class="type-switch"><button type="button" data-tempo="fast">快速</button><button type="button" data-tempo="normal">标准</button><button type="button" data-tempo="heavy">重击</button></div>
+      <label class="range-control">打击力度 <b id="forceValue">100%</b><input id="force" type="range" min="50" max="180" value="100"></label>
+      <label class="feature"><input type="checkbox" data-feature="critical"><div><strong>暴击强化</strong><span>更大数字、更强受击与单次镜头冲击。</span></div></label>
+      <label class="feature"><input type="checkbox" data-feature="finisher"><div><strong>终结一击</strong><span>将目标生命清空，作为高价值演出测试。</span></div></label>
+      <h2 style="margin-top:16px">音效层（点击后可试听）</h2>
+      <label class="feature"><input type="checkbox" data-feature="releaseSfx"><div><strong>出手声</strong><span>挥砍、拉弓或施法的短音。</span></div></label>
+      <label class="feature"><input type="checkbox" data-feature="impactSfx"><div><strong>命中主体声</strong><span>肉体、金属、护盾或元素命中。</span></div></label>
+      <label class="feature"><input type="checkbox" data-feature="bassSfx"><div><strong>低频冲击声</strong><span>只建议重击、暴击、击杀或大招开启。</span></div></label>
       <div class="presets">
         <button type="button" data-preset="plain">当前：基础版</button><button type="button" data-preset="melee">预设：近战重击</button>
         <button type="button" data-preset="ranged">预设：远程射击</button><button type="button" data-preset="critical">预设：暴击终结</button>
       </div>
-      <div class="actions"><button type="button" class="primary" id="play">▶ 播放一次攻击</button><button type="button" id="reset">重置</button></div>
     </section>
     <section class="panel stage-wrap">
-      <div class="stage-head"><h2 id="stageTitle">近战普攻预览</h2><span class="status" id="stageStatus">等待播放</span></div>
-      <div class="stage mode-melee" id="stage"><div class="camera" id="camera"><div class="lane"></div><div class="unit attacker" id="attacker"><div class="hp"><i></i></div><div class="head"></div><div class="body"></div><div class="weapon" id="weapon"></div><div class="telegraph"></div><div class="trail" id="trail"></div><div class="shadow"></div></div><div class="unit target" id="target"><div class="hp"><i id="targetHp"></i></div><div class="head"></div><div class="body"></div><div class="shadow"></div></div><div class="projectile" id="projectile"></div><div class="impact" id="impact"></div><div class="blood" id="blood">✦</div><div class="damage" id="damage">-24</div></div></div>
+      <div class="stage-head"><h2 id="stageTitle">近战普攻预览</h2><div class="stage-actions"><span class="status" id="stageStatus">等待播放</span><button type="button" class="primary" id="play">▶ 播放</button><button type="button" id="reset">重置</button></div></div>
+      <div class="stage mode-melee material-blade env-dust env-ground env-parallax env-foreground" id="stage"><div class="camera" id="camera"><div class="far-hills"></div><div class="dust"><i></i><i></i><i></i><i></i><i></i></div><div class="ground-pulse"></div><div class="lane"></div><div class="unit attacker" id="attacker"><div class="hp"><i></i></div><div class="head"></div><div class="body"></div><div class="weapon" id="weapon"></div><div class="telegraph"></div><div class="trail" id="trail"></div><div class="shadow"></div></div><div class="unit target" id="target"><div class="hp"><i id="targetHp"></i></div><div class="head"></div><div class="body"></div><div class="shadow"></div></div><div class="rune" id="rune"></div><div class="target-mark" id="targetMark">⌖</div><div class="charge-glow" id="chargeGlow"></div><div class="projectile" id="projectile"></div><div class="impact" id="impact"></div><div class="debris" id="debris">✦ · ✦</div><div class="blood" id="blood">✦</div><div class="damage" id="damage">-24</div><div class="foreground"></div></div></div>
     </section>
     <aside class="panel"><h2>当前状态</h2><div class="state" id="state"></div><h2>事件记录</h2><div class="log" id="log"></div></aside>
   </div>
-  <section class="panel notes">
+  <section class="panel notes" hidden>
     <h2>当前未在舞台中直接演示、但应纳入制作的优化项</h2>
     <p>以下项目需要结合实际角色、武器、技能与场景资源制作；它们与上方可勾选的基础反馈共同构成完整的战斗表现。</p>
     <div class="notes-grid">
@@ -97,7 +124,7 @@
 <script>
 // Portable state module: combat feedback selection and preview state; no DOM access.
 const FeedbackModel = (() => {
-  const defaults = { anticipation:true, movement:true, hitstop:true, reaction:true, impact:true, camera:false, style:'melee', hp:100, last:'等待攻击' };
+  const defaults = { anticipation:true, movement:true, hitstop:true, reaction:true, impact:true, camera:false, rune:true, marker:true, charge:true, dust:true, ground:true, parallax:true, foreground:true, critical:false, finisher:false, releaseSfx:false, impactSfx:false, bassSfx:false, style:'melee', material:'blade', tempo:'normal', force:100, hp:100, last:'等待攻击' };
   const presets = {
     plain:{ style:'melee', anticipation:false, movement:false, hitstop:false, reaction:false, impact:true, camera:false },
     melee:{ style:'melee', anticipation:true, movement:true, hitstop:true, reaction:true, impact:true, camera:false },
@@ -108,7 +135,10 @@ const FeedbackModel = (() => {
     if(action.type==='TOGGLE') return {...state,[action.key]:action.value,last:`${action.label}${action.value?' 已开启':' 已关闭'}`};
     if(action.type==='PRESET') return {...defaults,...presets[action.name],hp:100,last:`已载入：${action.label}`};
     if(action.type==='STYLE') return {...state,style:action.style,hp:100,last:`已切换为${action.label}`};
-    if(action.type==='PLAY') return {...state,hp:Math.max(0,state.hp-(action.critical?46:24)),last:action.label};
+    if(action.type==='MATERIAL') return {...state,material:action.material,last:`已切换攻击材质：${action.label}`};
+    if(action.type==='TEMPO') return {...state,tempo:action.tempo,last:`已切换节奏：${action.label}`};
+    if(action.type==='FORCE') return {...state,force:action.value,last:`打击力度：${action.value}%`};
+    if(action.type==='PLAY') return {...state,hp:action.finisher?0:Math.max(0,state.hp-(action.critical?46:24)),last:action.label};
     if(action.type==='RESET') return {...defaults}; return state;
   };
   return { defaults, presets, reduce };
@@ -119,11 +149,19 @@ function dispatch(action){ state=FeedbackModel.reduce(state,action); render(); }
 function render(){
   document.querySelectorAll('[data-feature]').forEach(x=>x.checked=state[x.dataset.feature]);
   document.querySelectorAll('[data-style]').forEach(x=>x.classList.toggle('selected',x.dataset.style===state.style));
-  $('stage').className=`stage mode-${state.style}`;
+  document.querySelectorAll('[data-material]').forEach(x=>x.classList.toggle('selected',x.dataset.material===state.material));
+  document.querySelectorAll('[data-tempo]').forEach(x=>x.classList.toggle('selected',x.dataset.tempo===state.tempo));
+  $('force').value=state.force; $('forceValue').textContent=state.force+'%';
+  $('stage').className=`stage mode-${state.style} material-${state.material}${state.dust?' env-dust':''}${state.ground?' env-ground':''}${state.parallax?' env-parallax':''}${state.foreground?' env-foreground':''}`;
   $('stageTitle').textContent=state.style==='ranged'?'远程射击预览':'近战攻击预览'; $('targetHp').style.width=state.hp+'%';
-  const labels={anticipation:'蓄力',movement:'位移',hitstop:'强调帧',reaction:'受击',impact:'命中点',camera:'镜头'};
+  const labels={anticipation:'蓄力',movement:'位移',hitstop:'强调帧',reaction:'受击',impact:'命中点',camera:'镜头',rune:'法阵',marker:'标记',charge:'蓄力光',dust:'飘尘',ground:'地面波纹',parallax:'视差',foreground:'前景',critical:'暴击',finisher:'终结',releaseSfx:'出手声',impactSfx:'命中声',bassSfx:'低频'};
   const on=Object.entries(state).filter(([k,v])=>v===true && k!=='last').map(([k])=>labels[k]).filter(Boolean);
   $('state').innerHTML=`<div><span>攻击类型</span><strong>${state.style==='ranged'?'远程':'近战'}</strong></div><div><span>目标生命</span><strong>${state.hp}%</strong></div><div style="grid-column:span 2"><span>启用反馈</span><strong>${on.length?on.join(' · '):'无（用于对比）'}</strong></div><div style="grid-column:span 2"><span>最近操作</span><strong>${state.last}</strong></div>`;
+  const attackerX=$('attacker').offsetLeft, targetX=$('target').offsetLeft;
+  $('rune').style.left=(attackerX-12)+'px'; $('rune').style.top=($('attacker').offsetTop+72)+'px';
+  $('chargeGlow').style.left=(attackerX-7)+'px'; $('chargeGlow').style.top=($('attacker').offsetTop+14)+'px';
+  $('targetMark').style.left=(targetX+18)+'px'; $('targetMark').style.top=($('target').offsetTop-36)+'px';
+  $('rune').style.opacity=state.rune?'1':'0'; $('targetMark').style.opacity=state.marker?'1':'0'; $('chargeGlow').style.opacity=state.charge?'.65':'0';
 }
 function log(text){ $('log').innerHTML=`<p><b>${new Date().toLocaleTimeString('zh-CN',{hour12:false})}</b>　${text}</p>`+$('log').innerHTML; }
 function animate(el,klass,ms){ el.classList.remove(klass); void el.offsetWidth; el.classList.add(klass); setTimeout(()=>el.classList.remove(klass),ms); }
@@ -133,6 +171,9 @@ function tween(version,duration,draw,done){
   requestAnimationFrame(frame);
 }
 function setUnitMotion(el,x=0,scaleX=1,scaleY=1,rotation=0){ el.style.transform=`translateX(${x}px) scale(${scaleX},${scaleY}) rotate(${rotation}deg)`; }
+function playTone(frequency,duration,type='sine',volume=.04){
+  try { const Audio=window.AudioContext||window.webkitAudioContext; if(!Audio) return; window.__feedbackAudio??=new Audio(); const ctx=window.__feedbackAudio; const osc=ctx.createOscillator(),gain=ctx.createGain(); osc.type=type; osc.frequency.setValueAtTime(frequency,ctx.currentTime); gain.gain.setValueAtTime(volume,ctx.currentTime); gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration); osc.connect(gain).connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime+duration); } catch(_) { /* audio is optional in a local prototype */ }
+}
 function resetMotion(){
   setUnitMotion($('attacker')); setUnitMotion($('target')); $('target').style.filter=''; $('camera').style.transform='';
   $('weapon').style.transform='rotate(-37deg)'; $('trail').style.cssText=''; $('projectile').style.cssText=''; $('impact').style.cssText=''; $('blood').style.cssText=''; $('damage').style.cssText=''; $('stage').style.filter='';
@@ -140,36 +181,43 @@ function resetMotion(){
 function play(critical=false){
   // Every click owns a fresh timeline. A newer click cancels outstanding callbacks from the prior one.
   const version=++playbackVersion; const s={...state};
+  const speed={fast:.72,normal:1,heavy:1.3}[s.tempo]; const force=s.force/100;
   const later=(ms,fn)=>setTimeout(()=>{ if(version===playbackVersion) fn(); },ms);
   const safe=(fn)=>{ try { fn(); } catch(error) { $('stageStatus').textContent='表现项加载失败，但可继续点击重播'; console.error(error); } };
   resetMotion();
+  $('damage').textContent=s.material==='shield'?'格挡':s.material==='magic'?'-32':s.material==='blunt'?'-28':'-24';
   const targetX=$('target').offsetLeft+34;
   $('impact').style.left=targetX+'px'; $('impact').style.right='auto';
   $('blood').style.left=(targetX-6)+'px'; $('blood').style.right='auto';
   $('damage').style.left=(targetX-3)+'px'; $('damage').style.right='auto';
-  dispatch({type:'PLAY',critical,label:critical?'暴击命中，目标损失 46% 生命':'命中，目标损失 24% 生命'});
+  const special=s.finisher?'终结一击，目标生命归零':s.critical?'暴击命中，目标损失 46% 生命':'命中，目标损失 24% 生命';
+  dispatch({type:'PLAY',critical:s.critical,finisher:s.finisher,label:special});
   $('stageStatus').textContent='蓄力'; log('攻击开始：动画事件将准备阶段与真正命中帧分开。');
-  if(s.anticipation) safe(()=>{ tween(version,160,t=>{ setUnitMotion($('attacker'),-11*t,1-.06*t,1+.05*t); if(s.style==='melee') $('weapon').style.transform=`rotate(${-37-28*t}deg)`; }); $('attacker').querySelector('.telegraph').style.opacity='1'; log('蓄力：后拉、压低，给玩家一个明确预期。'); });
-  later(165,()=>safe(()=>{
+  if(s.anticipation) safe(()=>{ tween(version,160*speed,t=>{ setUnitMotion($('attacker'),-11*t*force,1-.06*t,1+.05*t); if(s.style==='melee') $('weapon').style.transform=`rotate(${-37-28*t}deg)`; }); $('attacker').querySelector('.telegraph').style.opacity='1'; log('蓄力：后拉、压低，给玩家一个明确预期。'); });
+  later(165*speed,()=>safe(()=>{
     $('attacker').querySelector('.telegraph').style.opacity='0'; $('stageStatus').textContent='出手';
+    if(s.releaseSfx) playTone(s.style==='melee'?180:480,.09,s.style==='melee'?'sawtooth':'triangle',.035);
     if(s.movement){
-      tween(version,260,t=>{ const wave=Math.sin(t*Math.PI); if(s.style==='melee') { setUnitMotion($('attacker'),24*wave,1+.1*wave,1-.07*wave); $('weapon').style.transform=`rotate(${-65+120*wave}deg)`; } else setUnitMotion($('attacker'),-15*wave,1,1,-5*wave); },()=>{ $('weapon').style.transform='rotate(-37deg)'; });
+      tween(version,260*speed,t=>{ const wave=Math.sin(t*Math.PI); if(s.style==='melee') { setUnitMotion($('attacker'),24*wave*force,1+.1*wave,1-.07*wave); $('weapon').style.transform=`rotate(${-65+120*wave}deg)`; } else setUnitMotion($('attacker'),-15*wave*force,1,1,-5*wave); },()=>{ $('weapon').style.transform='rotate(-37deg)'; });
       log(s.style==='melee'?'出手：近战前冲后回弹。':'出手：远程角色产生后坐力。');
     }
     if(s.style==='ranged') {
       const start=$('attacker').offsetLeft+54, end=$('target').offsetLeft+19, y=$('attacker').offsetTop+46;
       $('projectile').style.left=start+'px'; $('projectile').style.top=y+'px';
-      tween(version,290,t=>{ $('projectile').style.opacity=String(t<.08?t/.08:1); $('projectile').style.transform=`translateX(${(end-start)*t}px)`; },()=>{ $('projectile').style.opacity='0'; });
+      tween(version,290*speed,t=>{ $('projectile').style.opacity=String(t<.08?t/.08:1); $('projectile').style.transform=`translateX(${(end-start)*t}px)`; },()=>{ $('projectile').style.opacity='0'; });
     }
   }));
-  const impactDelay=s.style==='ranged'?445:275;
+  const impactDelay=(s.style==='ranged'?445:275)*speed;
   later(impactDelay,()=>safe(()=>{
     $('stageStatus').textContent='命中！';
+    if(s.impactSfx) playTone(s.material==='shield'?720:s.material==='magic'?520:105,.13,s.material==='magic'?'sine':'square',.055);
+    if(s.bassSfx && (s.tempo==='heavy'||s.critical||s.finisher)) playTone(55,.22,'sine',.09);
     if(s.hitstop){ $('stage').style.filter='brightness(1.28) contrast(1.1)'; later(55,()=>{ $('stage').style.filter=''; }); log('命中强调帧：极短的视觉停顿让挥击“撞上”目标。'); }
-    if(s.reaction){ tween(version,240,t=>{ const wave=Math.sin(t*Math.PI); setUnitMotion($('target'),14*wave,1+.17*wave,1-.18*wave); $('target').style.filter=t<.35?'brightness(2.4) saturate(.3)':''; },()=>{ setUnitMotion($('target')); $('target').style.filter=''; }); log('受击：沿来力方向击退、压缩，再回弹。'); }
+    if(s.reaction){ tween(version,240*speed,t=>{ const wave=Math.sin(t*Math.PI); setUnitMotion($('target'),14*wave*force*(s.critical?1.35:1),1+.17*wave,1-.18*wave); $('target').style.filter=t<.35?'brightness(2.4) saturate(.3)':''; },()=>{ setUnitMotion($('target')); $('target').style.filter=''; }); log('受击：沿来力方向击退、压缩，再回弹。'); }
     if(s.impact){
       tween(version,260,t=>{ $('impact').style.opacity=String(1-t); $('impact').style.width=(5+78*t)+'px'; $('impact').style.height=(5+78*t)+'px'; $('impact').style.marginTop=(-39*t)+'px'; $('impact').style.marginRight=(-39*t)+'px'; });
-      tween(version,320,t=>{ $('blood').style.opacity=String(1-t); $('blood').style.transform=`translate(${20*t}px,${-22*t}px) scale(${.2+1.3*t})`; });
+      if(s.material!=='shield') tween(version,320,t=>{ $('blood').style.opacity=String(1-t); $('blood').style.transform=`translate(${20*t}px,${-22*t}px) scale(${.2+1.3*t})`; });
+      if(s.material==='blunt') tween(version,330,t=>{ $('debris').style.opacity=String(1-t); $('debris').style.transform=`translate(${26*t}px,${-20*t}px) scale(${.3+t})`; });
       tween(version,620,t=>{ $('damage').style.opacity=String(t<.18?t/.18:1-t); $('damage').style.transform=`translateY(${-38*t}px) scale(${.6+.6*Math.min(t/.2,1)})`; });
       log('命中点：冲击环、血液与伤害数值在同一点爆发。');
     }
@@ -179,8 +227,11 @@ function play(critical=false){
 }
 document.querySelectorAll('[data-feature]').forEach(el=>el.addEventListener('change',e=>dispatch({type:'TOGGLE',key:e.target.dataset.feature,value:e.target.checked,label:e.target.parentElement.querySelector('strong').textContent})));
 document.querySelectorAll('[data-style]').forEach(el=>el.addEventListener('click',()=>{ dispatch({type:'STYLE',style:el.dataset.style,label:el.dataset.style==='melee'?'近战':'远程'}); log(`已切换：${el.dataset.style==='melee'?'近战贴近挥砍':'远程发射子弹'}`); }));
+document.querySelectorAll('[data-material]').forEach(el=>el.addEventListener('click',()=>{ const names={blade:'刀剑',blunt:'钝器',arrow:'箭矢',magic:'魔法',shield:'护盾'}; dispatch({type:'MATERIAL',material:el.dataset.material,label:names[el.dataset.material]}); log(`攻击材质：${names[el.dataset.material]}`); }));
 document.querySelectorAll('[data-preset]').forEach(el=>el.addEventListener('click',()=>{ const n=el.dataset.preset; dispatch({type:'PRESET',name:n,label:el.textContent.replace(/^样例：|^当前：/,'')}); log(`载入预设：${el.textContent}`); }));
-$('play').onclick=()=>play(state.style==='melee'&&state.camera); $('reset').onclick=()=>{ dispatch({type:'RESET'}); $('log').innerHTML=''; $('stageStatus').textContent='等待播放'; };
+document.querySelectorAll('[data-tempo]').forEach(el=>el.addEventListener('click',()=>{ const names={fast:'快速',normal:'标准',heavy:'重击'}; dispatch({type:'TEMPO',tempo:el.dataset.tempo,label:names[el.dataset.tempo]}); }));
+$('force').addEventListener('input',e=>dispatch({type:'FORCE',value:Number(e.target.value)}));
+$('play').onclick=()=>play(); $('reset').onclick=()=>{ dispatch({type:'RESET'}); $('log').innerHTML=''; $('stageStatus').textContent='等待播放'; };
 render();
 </script>
 </body>
