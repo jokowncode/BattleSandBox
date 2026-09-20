@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>战斗反馈组合原型 · Throwaway</title>
+<style>
+  :root { --bg:#10151d; --panel:#19222e; --line:#324050; --ink:#eef4fa; --muted:#a3b2c2; --accent:#55d6bc; --warm:#ffbd63; --danger:#ff6578; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; background:radial-gradient(circle at 50% 0,#26344a 0,#10151d 50%); color:var(--ink); font:14px/1.5 system-ui,-apple-system,"Microsoft YaHei",sans-serif; }
+  main { max-width:1280px; margin:auto; padding:30px 22px 48px; }
+  h1 { margin:0; font-size:28px; letter-spacing:.02em; } h2 { margin:0 0 10px; font-size:16px; } p { margin:6px 0; color:var(--muted); }
+  .eyebrow { color:var(--accent); font-size:12px; letter-spacing:.12em; font-weight:800; }
+  .intro { margin:12px 0 24px; max-width:850px; }
+  .grid { display:grid; grid-template-columns:330px minmax(480px,1fr) 250px; gap:16px; align-items:start; }
+  .panel { background:rgba(25,34,46,.94); border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow:0 14px 40px rgba(0,0,0,.2); }
+  .feature { display:flex; gap:10px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,.07); cursor:pointer; }
+  .feature:last-child { border:0; } input { accent-color:var(--accent); margin-top:3px; }
+  .feature strong { display:block; font-size:13px; } .feature span { color:var(--muted); font-size:12px; display:block; }
+  .presets { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+  .type-switch { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0 4px; }.type-switch button.selected { background:#31596a; border-color:var(--accent); color:#eafff8; }
+  button { color:var(--ink); border:1px solid #405268; border-radius:8px; background:#233044; padding:9px 10px; cursor:pointer; font:inherit; }
+  button:hover { border-color:var(--accent); background:#2a3b51; } button.primary { background:var(--accent); color:#0d2928; border-color:var(--accent); font-weight:800; }
+  .actions { display:flex; gap:8px; margin-top:16px; }.actions button { flex:1; }
+  .stage-wrap { padding:0; overflow:hidden; } .stage-head { display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid var(--line); }
+  .status { color:var(--accent); font-size:12px; font-weight:700; }
+  .stage { position:relative; height:430px; overflow:hidden; background:linear-gradient(165deg,#294557 0%,#203846 45%,#172a32 46%,#132027 100%); }
+  .stage:before { content:""; position:absolute; inset:0; opacity:.24; background:repeating-linear-gradient(90deg,transparent 0 76px,#b9dfd2 77px 78px),repeating-linear-gradient(0deg,transparent 0 76px,#b9dfd2 77px 78px); transform:perspective(350px) rotateX(53deg) scale(1.6); transform-origin:bottom; }
+  .lane { position:absolute; left:7%; right:7%; top:53%; height:2px; background:rgba(255,255,255,.18); box-shadow:0 0 18px rgba(93,235,204,.25); }
+  .unit { width:68px; height:102px; position:absolute; top:calc(53% - 85px); transform-origin:50% 82%; z-index:4; transition:filter .08s; }
+  .attacker { left:18%; } .target { right:18%; }.mode-melee .attacker { left:39%; }.mode-melee .target { right:39%; }.mode-ranged .attacker { left:18%; }.mode-ranged .target { right:18%; }
+  .shadow { position:absolute; bottom:0; left:4px; width:61px; height:13px; background:#07101499; border-radius:50%; filter:blur(3px); }
+  .body { position:absolute; bottom:8px; left:12px; width:45px; height:73px; border-radius:21px 21px 13px 13px; background:linear-gradient(90deg,#3f91e0,#85d4ff 58%,#2f6dab); border:3px solid #b8e8ff; box-shadow:inset -8px -7px #16487988,0 5px 8px #0006; }
+  .target .body { background:linear-gradient(90deg,#c14364,#ff8b89 58%,#91344b); border-color:#ffd0cf; }
+  .head { position:absolute; width:32px; height:32px; border-radius:50%; background:#f3c7a7; border:3px solid #ffe2c8; top:4px; left:18px; z-index:1; }.weapon { position:absolute; width:12px; height:65px; background:linear-gradient(90deg,#d9c477,#fff2a8,#987d35); border-radius:8px; right:0; top:24px; transform:rotate(-37deg); transform-origin:bottom; box-shadow:0 0 7px #ffe88466; }
+  .target .weapon { display:none; }.hp { position:absolute; top:-16px; left:0; width:68px; height:6px; border-radius:4px; background:#3d1e27; overflow:hidden; }.hp i { display:block; height:100%; width:100%; background:#63e09a; transition:width .25s; }
+  .telegraph { position:absolute; width:78px; height:27px; border:2px solid #ffcc64; border-radius:50%; bottom:0; left:-5px; opacity:0; }.trail { position:absolute; height:10px; width:0; top:54px; right:24px; border-radius:10px; background:linear-gradient(90deg,transparent,#ffe497,#fff); opacity:0; }.projectile { position:absolute; z-index:6; width:18px; height:7px; border-radius:6px; background:linear-gradient(90deg,#ffca63,#fff8ba); box-shadow:0 0 12px #ffc45c, -18px 0 9px #ff9d4666; opacity:0; }.impact { position:absolute; top:48%; right:22%; width:0; height:0; border:2px solid #fff2bd; border-radius:50%; opacity:0; z-index:5; }.blood { position:absolute; top:43%; right:20%; opacity:0; color:#ff5671; font-size:30px; z-index:6; text-shadow:12px -8px #ff7481,-8px 10px #b52e4e; }.damage { position:absolute; top:34%; right:20%; color:#fff2ac; font-weight:900; font-size:24px; opacity:0; z-index:7; text-shadow:2px 2px #582532; }
+  .camera { position:absolute; inset:0; transform-origin:center; }.log { height:234px; overflow:auto; color:#bed0dd; font-size:12px; }.log p { border-bottom:1px solid rgba(255,255,255,.06); padding:7px 0; margin:0; }.log b { color:var(--warm); }.state { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-bottom:14px; }.state div { border-radius:7px; padding:8px; background:#111923; }.state span { display:block; color:var(--muted); font-size:11px; }.state strong { font-size:13px; }
+  .notes { margin-top:16px; }.notes-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }.note { border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:13px; background:#141d28; }.note h3 { margin:0 0 5px; font-size:14px; color:var(--warm); }.note p { font-size:13px; }.note ul { margin:7px 0 0; padding-left:18px; color:var(--muted); font-size:13px; }.note li + li { margin-top:4px; }
+  @keyframes anticipate { 0%,100%{transform:translateX(0) scale(1)} 100%{transform:translateX(-11px) scale(.94,1.05)} }
+  @keyframes lunge { 0%{transform:translateX(-11px)} 55%{transform:translateX(43px) scale(1.1,.93)} 100%{transform:translateX(0)} }
+  @keyframes recoil { 0%{transform:translateX(0)} 35%{transform:translateX(-15px) rotate(-5deg)} 100%{transform:translateX(0)} }
+  @keyframes targetHit { 0%{transform:translateX(0)} 22%{transform:translateX(14px) scale(1.17,.82);filter:brightness(2)} 60%{transform:translateX(7px) scale(.94,1.07)} 100%{transform:translateX(0)} }
+  @keyframes targetFlash { 0%,100%{filter:none} 20%{filter:brightness(3) saturate(.2)} }
+  @keyframes flyTrail { 0%{width:0;opacity:0} 15%{opacity:1} 80%{width:190px;opacity:1} 100%{width:205px;opacity:0} }
+  @keyframes pop { 0%{opacity:0;transform:scale(.1)} 35%{opacity:1;transform:scale(1)} 100%{opacity:0;transform:scale(2.3)} }
+  @keyframes spray { 0%{opacity:0;transform:scale(.2)} 20%{opacity:1} 100%{opacity:0;transform:translate(20px,-22px) scale(1.5)} }
+  @keyframes number { 0%{opacity:0;transform:translateY(8px) scale(.6)} 20%{opacity:1;transform:translateY(0) scale(1.2)} 100%{opacity:0;transform:translateY(-38px) scale(1)} }
+  @keyframes shakeX { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-9px)} 50%{transform:translateX(7px)} 75%{transform:translateX(-3px)} } @keyframes shakeY { 0%,100%{transform:translateY(0)} 20%{transform:translateY(-7px)} 50%{transform:translateY(6px)} 75%{transform:translateY(-2px)} }
+  .anticipate { animation:anticipate .16s forwards; }.lunge { animation:lunge .25s ease-out; }.recoil { animation:recoil .22s ease-out; }.hit { animation:targetHit .23s ease-out; }.flash { animation:targetFlash .12s linear; }.trail-go { animation:flyTrail .28s linear; }.impact-go { animation:pop .25s ease-out; }.blood-go { animation:spray .32s ease-out; }.damage-go { animation:number .6s ease-out; }.shake-x { animation:shakeX .18s ease-out; }.shake-y { animation:shakeY .18s ease-out; }
+  @media(max-width:1000px){ .grid{grid-template-columns:1fr}.stage{height:360px}.panel:last-child{order:3}.notes-grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">THROWAWAY PROTOTYPE · 不接入 Unity 运行时代码</div>
+  <h1>自走棋战斗反馈组合实验室</h1>
+  <p class="intro">要验证的问题：在不重做序列帧资源的前提下，蓄力、位移、命中停顿、受击、特效与镜头应如何组合，才能让攻击更有重量，同时不让自动战斗画面过于嘈杂。勾选任意组合后点击“播放一次攻击”。</p>
+  <div class="grid">
+    <section class="panel">
+      <h2>反馈组件</h2>
+      <label class="feature"><input type="checkbox" data-feature="anticipation" checked><div><strong>蓄力预备</strong><span>短暂后拉与地面预警；让出手有方向。</span></div></label>
+      <label class="feature"><input type="checkbox" data-feature="movement" checked><div><strong>攻击者位移 / 后坐</strong><span>近战前冲；远程后坐，避免原地摆动。</span></div></label>
+      <label class="feature"><input type="checkbox" data-feature="hitstop" checked><div><strong>命中强调帧</strong><span>极短暂停顿，视觉上模拟碰撞阻力。</span></div></label>
+      <label class="feature"><input type="checkbox" data-feature="reaction" checked><div><strong>受击反应</strong><span>击退、压缩与回弹；可不依赖受击序列帧。</span></div></label>
+      <label class="feature"><input type="checkbox" data-feature="impact" checked><div><strong>命中点与伤害数字</strong><span>冲击环、血液和数值从命中点爆发。</span></div></label>
+      <label class="feature"><input type="checkbox" data-feature="camera"><div><strong>镜头冲击</strong><span>近战上下、远程左右；只建议强攻击触发。</span></div></label>
+      <h2 style="margin-top:16px">我方攻击类型</h2>
+      <div class="type-switch"><button type="button" data-style="melee">⚔ 近战：贴近挥砍</button><button type="button" data-style="ranged">➶ 远程：发射子弹</button></div>
+      <div class="presets">
+        <button type="button" data-preset="plain">当前：基础版</button><button type="button" data-preset="melee">预设：近战重击</button>
+        <button type="button" data-preset="ranged">预设：远程射击</button><button type="button" data-preset="critical">预设：暴击终结</button>
+      </div>
+      <div class="actions"><button type="button" class="primary" id="play">▶ 播放一次攻击</button><button type="button" id="reset">重置</button></div>
+    </section>
+    <section class="panel stage-wrap">
+      <div class="stage-head"><h2 id="stageTitle">近战普攻预览</h2><span class="status" id="stageStatus">等待播放</span></div>
+      <div class="stage mode-melee" id="stage"><div class="camera" id="camera"><div class="lane"></div><div class="unit attacker" id="attacker"><div class="hp"><i></i></div><div class="head"></div><div class="body"></div><div class="weapon" id="weapon"></div><div class="telegraph"></div><div class="trail" id="trail"></div><div class="shadow"></div></div><div class="unit target" id="target"><div class="hp"><i id="targetHp"></i></div><div class="head"></div><div class="body"></div><div class="shadow"></div></div><div class="projectile" id="projectile"></div><div class="impact" id="impact"></div><div class="blood" id="blood">✦</div><div class="damage" id="damage">-24</div></div></div>
+    </section>
+    <aside class="panel"><h2>当前状态</h2><div class="state" id="state"></div><h2>事件记录</h2><div class="log" id="log"></div></aside>
+  </div>
+  <section class="panel notes">
+    <h2>当前未在舞台中直接演示、但应纳入制作的优化项</h2>
+    <p>以下项目需要结合实际角色、武器、技能与场景资源制作；它们与上方可勾选的基础反馈共同构成完整的战斗表现。</p>
+    <div class="notes-grid">
+      <article class="note"><h3>1. 攻击关键帧事件细化</h3><p>现有攻击/技能事件可从“单一结算点”扩展为表现阶段，伤害仍只在真正命中帧结算。</p><ul><li>预备：武器拖影预热、蓄力音效、法阵亮起。</li><li>释放：近战冲刺、远程生成投射物。</li><li>命中：伤害结算、受击与命中特效。</li><li>收招：回弹、脚步扬尘、取消拖影。</li></ul></article>
+      <article class="note"><h3>2. 按攻击类型替换命中效果</h3><p>不要始终把同一种血液粒子播在角色中心，应使用攻击者到受击者的方向和命中位置。</p><ul><li>刀剑：斩击弧光、火花、短暂切痕。</li><li>钝器：尘土、碎屑、小范围冲击波。</li><li>箭矢 / 子弹：火星、嵌入物或短尾迹。</li><li>护盾：能量波或裂纹，替代血液。</li></ul></article>
+      <article class="note"><h3>3. 音效也要有“撞击层”</h3><p>打击感很大一部分来自声音。每次强命中建议由三层短音组成，而不是只播受击音。</p><ul><li>出手声：挥砍、拉弓、施法或蓄力。</li><li>命中主体：金属、肉体、护盾或元素。</li><li>低频冲击：仅重击、暴击、击杀和大招使用。</li></ul></article>
+      <article class="note"><h3>4. 镜头使用优先级与合并</h3><p>自动战斗中镜头不能为每个命中都摇。镜头请求应可合并，并只保留同一时刻最强的一次。</p><ul><li>普通普攻：通常关闭，强近战可极轻冲击。</li><li>技能：依技能强度分三级。</li><li>群攻：只在主目标或首次命中时触发。</li><li>暴击 / 击杀：叠加一次极短冲击，不延长随机抖动。</li></ul></article>
+      <article class="note"><h3>5. 技能释放前的可读性</h3><p>大招命中前要先让玩家“看懂即将发生什么”，这样命中时才有期待与释放感。</p><ul><li>角色自身亮起、武器附能或聚集粒子。</li><li>地面范围圈、投射物预瞄线、目标标记。</li><li>0.15～0.5 秒的可读蓄力，按技能等级区分。</li></ul></article>
+      <article class="note"><h3>6. 战场持续动态</h3><p>即使没有技能释放，战场也应有低频运动，避免画面像静态棋盘。</p><ul><li>前中后景视差，以及地面阴影的轻微变化。</li><li>尘埃、风、飘叶、火星、薄雾等环境粒子。</li><li>脚步扬尘、移动轨迹、角色脚下法阵波纹。</li><li>高价值击杀可使用极短局部慢放，避免常态化。</li></ul></article>
+      <article class="note"><h3>7. 建议的统一反馈数据</h3><p>把表现从伤害逻辑中抽出，命中时发出一条反馈数据，再由表现层决定具体效果。</p><ul><li>命中类别：普攻、技能、暴击、处决、护盾。</li><li>力度与攻击方向：决定击退、缩放、音量和镜头。</li><li>武器 / 元素标签：决定粒子、音效和颜色。</li><li>优先级：限制同屏特效与镜头震动的数量。</li></ul></article>
+      <article class="note"><h3>8. 推荐的落地顺序</h3><p>先验证高性价比的共性反馈，再为少数高价值技能制作专属资源。</p><ul><li>第一步：攻击者位移、受击反应、短促命中强调帧。</li><li>第二步：攻击类型化命中特效与三层音效。</li><li>第三步：镜头优先级、技能预警与场景动态。</li><li>最后：暴击、击杀、终结技的专属演出。</li></ul></article>
+    </div>
+  </section>
+</main>
+<script>
+// Portable state module: combat feedback selection and preview state; no DOM access.
+const FeedbackModel = (() => {
+  const defaults = { anticipation:true, movement:true, hitstop:true, reaction:true, impact:true, camera:false, style:'melee', hp:100, last:'等待攻击' };
+  const presets = {
+    plain:{ style:'melee', anticipation:false, movement:false, hitstop:false, reaction:false, impact:true, camera:false },
+    melee:{ style:'melee', anticipation:true, movement:true, hitstop:true, reaction:true, impact:true, camera:false },
+    ranged:{ style:'ranged', anticipation:true, movement:true, hitstop:false, reaction:true, impact:true, camera:false },
+    critical:{ style:'melee', anticipation:true, movement:true, hitstop:true, reaction:true, impact:true, camera:true }
+  };
+  const reduce = (state, action) => {
+    if(action.type==='TOGGLE') return {...state,[action.key]:action.value,last:`${action.label}${action.value?' 已开启':' 已关闭'}`};
+    if(action.type==='PRESET') return {...defaults,...presets[action.name],hp:100,last:`已载入：${action.label}`};
+    if(action.type==='STYLE') return {...state,style:action.style,hp:100,last:`已切换为${action.label}`};
+    if(action.type==='PLAY') return {...state,hp:Math.max(0,state.hp-(action.critical?46:24)),last:action.label};
+    if(action.type==='RESET') return {...defaults}; return state;
+  };
+  return { defaults, presets, reduce };
+})();
+let state = {...FeedbackModel.defaults}; let playbackVersion=0;
+const $=id=>document.getElementById(id); const classes=['anticipate','lunge','recoil','hit','flash','trail-go','impact-go','blood-go','damage-go','shake-x','shake-y'];
+function dispatch(action){ state=FeedbackModel.reduce(state,action); render(); }
+function render(){
+  document.querySelectorAll('[data-feature]').forEach(x=>x.checked=state[x.dataset.feature]);
+  document.querySelectorAll('[data-style]').forEach(x=>x.classList.toggle('selected',x.dataset.style===state.style));
+  $('stage').className=`stage mode-${state.style}`;
+  $('stageTitle').textContent=state.style==='ranged'?'远程射击预览':'近战攻击预览'; $('targetHp').style.width=state.hp+'%';
+  const labels={anticipation:'蓄力',movement:'位移',hitstop:'强调帧',reaction:'受击',impact:'命中点',camera:'镜头'};
+  const on=Object.entries(state).filter(([k,v])=>v===true && k!=='last').map(([k])=>labels[k]).filter(Boolean);
+  $('state').innerHTML=`<div><span>攻击类型</span><strong>${state.style==='ranged'?'远程':'近战'}</strong></div><div><span>目标生命</span><strong>${state.hp}%</strong></div><div style="grid-column:span 2"><span>启用反馈</span><strong>${on.length?on.join(' · '):'无（用于对比）'}</strong></div><div style="grid-column:span 2"><span>最近操作</span><strong>${state.last}</strong></div>`;
+}
+function log(text){ $('log').innerHTML=`<p><b>${new Date().toLocaleTimeString('zh-CN',{hour12:false})}</b>　${text}</p>`+$('log').innerHTML; }
+function animate(el,klass,ms){ el.classList.remove(klass); void el.offsetWidth; el.classList.add(klass); setTimeout(()=>el.classList.remove(klass),ms); }
+function tween(version,duration,draw,done){
+  const start=performance.now();
+  const frame=now=>{ if(version!==playbackVersion) return; const t=Math.min(1,(now-start)/duration); draw(t); if(t<1) requestAnimationFrame(frame); else if(done) done(); };
+  requestAnimationFrame(frame);
+}
+function setUnitMotion(el,x=0,scaleX=1,scaleY=1,rotation=0){ el.style.transform=`translateX(${x}px) scale(${scaleX},${scaleY}) rotate(${rotation}deg)`; }
+function resetMotion(){
+  setUnitMotion($('attacker')); setUnitMotion($('target')); $('target').style.filter=''; $('camera').style.transform='';
+  $('weapon').style.transform='rotate(-37deg)'; $('trail').style.cssText=''; $('projectile').style.cssText=''; $('impact').style.cssText=''; $('blood').style.cssText=''; $('damage').style.cssText=''; $('stage').style.filter='';
+}
+function play(critical=false){
+  // Every click owns a fresh timeline. A newer click cancels outstanding callbacks from the prior one.
+  const version=++playbackVersion; const s={...state};
+  const later=(ms,fn)=>setTimeout(()=>{ if(version===playbackVersion) fn(); },ms);
+  const safe=(fn)=>{ try { fn(); } catch(error) { $('stageStatus').textContent='表现项加载失败，但可继续点击重播'; console.error(error); } };
+  resetMotion();
+  const targetX=$('target').offsetLeft+34;
+  $('impact').style.left=targetX+'px'; $('impact').style.right='auto';
+  $('blood').style.left=(targetX-6)+'px'; $('blood').style.right='auto';
+  $('damage').style.left=(targetX-3)+'px'; $('damage').style.right='auto';
+  dispatch({type:'PLAY',critical,label:critical?'暴击命中，目标损失 46% 生命':'命中，目标损失 24% 生命'});
+  $('stageStatus').textContent='蓄力'; log('攻击开始：动画事件将准备阶段与真正命中帧分开。');
+  if(s.anticipation) safe(()=>{ tween(version,160,t=>{ setUnitMotion($('attacker'),-11*t,1-.06*t,1+.05*t); if(s.style==='melee') $('weapon').style.transform=`rotate(${-37-28*t}deg)`; }); $('attacker').querySelector('.telegraph').style.opacity='1'; log('蓄力：后拉、压低，给玩家一个明确预期。'); });
+  later(165,()=>safe(()=>{
+    $('attacker').querySelector('.telegraph').style.opacity='0'; $('stageStatus').textContent='出手';
+    if(s.movement){
+      tween(version,260,t=>{ const wave=Math.sin(t*Math.PI); if(s.style==='melee') { setUnitMotion($('attacker'),24*wave,1+.1*wave,1-.07*wave); $('weapon').style.transform=`rotate(${-65+120*wave}deg)`; } else setUnitMotion($('attacker'),-15*wave,1,1,-5*wave); },()=>{ $('weapon').style.transform='rotate(-37deg)'; });
+      log(s.style==='melee'?'出手：近战前冲后回弹。':'出手：远程角色产生后坐力。');
+    }
+    if(s.style==='ranged') {
+      const start=$('attacker').offsetLeft+54, end=$('target').offsetLeft+19, y=$('attacker').offsetTop+46;
+      $('projectile').style.left=start+'px'; $('projectile').style.top=y+'px';
+      tween(version,290,t=>{ $('projectile').style.opacity=String(t<.08?t/.08:1); $('projectile').style.transform=`translateX(${(end-start)*t}px)`; },()=>{ $('projectile').style.opacity='0'; });
+    }
+  }));
+  const impactDelay=s.style==='ranged'?445:275;
+  later(impactDelay,()=>safe(()=>{
+    $('stageStatus').textContent='命中！';
+    if(s.hitstop){ $('stage').style.filter='brightness(1.28) contrast(1.1)'; later(55,()=>{ $('stage').style.filter=''; }); log('命中强调帧：极短的视觉停顿让挥击“撞上”目标。'); }
+    if(s.reaction){ tween(version,240,t=>{ const wave=Math.sin(t*Math.PI); setUnitMotion($('target'),14*wave,1+.17*wave,1-.18*wave); $('target').style.filter=t<.35?'brightness(2.4) saturate(.3)':''; },()=>{ setUnitMotion($('target')); $('target').style.filter=''; }); log('受击：沿来力方向击退、压缩，再回弹。'); }
+    if(s.impact){
+      tween(version,260,t=>{ $('impact').style.opacity=String(1-t); $('impact').style.width=(5+78*t)+'px'; $('impact').style.height=(5+78*t)+'px'; $('impact').style.marginTop=(-39*t)+'px'; $('impact').style.marginRight=(-39*t)+'px'; });
+      tween(version,320,t=>{ $('blood').style.opacity=String(1-t); $('blood').style.transform=`translate(${20*t}px,${-22*t}px) scale(${.2+1.3*t})`; });
+      tween(version,620,t=>{ $('damage').style.opacity=String(t<.18?t/.18:1-t); $('damage').style.transform=`translateY(${-38*t}px) scale(${.6+.6*Math.min(t/.2,1)})`; });
+      log('命中点：冲击环、血液与伤害数值在同一点爆发。');
+    }
+    if(s.camera){ tween(version,190,t=>{ const wave=Math.sin(t*Math.PI*3)*(1-t); $('camera').style.transform=s.style==='melee'?`translateY(${-9*wave}px)`:`translateX(${9*wave}px)`; },()=>{ $('camera').style.transform=''; }); log(s.style==='melee'?'镜头：近战使用短促上下冲击。':'镜头：远程使用短促左右冲击。'); }
+  }));
+  later(impactDelay+330,()=>{ $('stageStatus').textContent='完成，可继续点击重播'; });
+}
+document.querySelectorAll('[data-feature]').forEach(el=>el.addEventListener('change',e=>dispatch({type:'TOGGLE',key:e.target.dataset.feature,value:e.target.checked,label:e.target.parentElement.querySelector('strong').textContent})));
+document.querySelectorAll('[data-style]').forEach(el=>el.addEventListener('click',()=>{ dispatch({type:'STYLE',style:el.dataset.style,label:el.dataset.style==='melee'?'近战':'远程'}); log(`已切换：${el.dataset.style==='melee'?'近战贴近挥砍':'远程发射子弹'}`); }));
+document.querySelectorAll('[data-preset]').forEach(el=>el.addEventListener('click',()=>{ const n=el.dataset.preset; dispatch({type:'PRESET',name:n,label:el.textContent.replace(/^样例：|^当前：/,'')}); log(`载入预设：${el.textContent}`); }));
+$('play').onclick=()=>play(state.style==='melee'&&state.camera); $('reset').onclick=()=>{ dispatch({type:'RESET'}); $('log').innerHTML=''; $('stageStatus').textContent='等待播放'; };
+render();
+</script>
+</body>
+</html>
